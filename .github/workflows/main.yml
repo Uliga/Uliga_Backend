@@ -23,7 +23,8 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: copy secret
+      - uses: actions/checkout@v2
+        name: copy secret
       - run: touch ./src/main/resources/application.yml
       - run: echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application.yml"
       - run: cat .src/main/resources/application.yml
