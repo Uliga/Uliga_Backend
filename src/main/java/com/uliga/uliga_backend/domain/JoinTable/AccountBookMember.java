@@ -1,27 +1,27 @@
-package com.uliga.uliga_backend.domain.Income.model;
+package com.uliga.uliga_backend.domain.JoinTable;
 
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
-import com.uliga.uliga_backend.domain.Common.Date;
+import com.uliga.uliga_backend.domain.Member.model.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Getter
+@Entity
 @NoArgsConstructor
-public class Income {
+public class AccountBookMember {
     @Id
     @GeneratedValue
-    @Column(name = "income_id")
+    @Column(name = "accountBookMember_id")
     private Long id;
-
-    private Long value;
-
-    @Embedded
-    private Date date;
 
     @ManyToOne
     @JoinColumn(name = "accountBook_id")
     private AccountBook accountBook;
-}
 
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    private Boolean getNotification;
+}

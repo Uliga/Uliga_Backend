@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Like.model;
+package com.uliga.uliga_backend.domain.JoinTable;
 
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Post.model.Post;
@@ -9,18 +9,21 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Like {
+public class PostComment {
     @Id
     @GeneratedValue
-    @Column(name = "like_id")
+    @Column(name = "postComment_id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
+    private String content;
+
 
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member creator;
 }
 
