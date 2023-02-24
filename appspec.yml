@@ -9,3 +9,8 @@ permissions:
     owner: ubuntu
     group: ubuntu
     mode: 755
+hooks:
+  ApplicationStart:
+    - location: deploy.sh
+      timeout: 60
+      runas: ubuntu
