@@ -1,4 +1,4 @@
-ame: UligaBackend server CI/CD
+name: UligaBackend server CI/CD
 
 on:
   push:
