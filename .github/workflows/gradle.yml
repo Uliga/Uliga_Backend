@@ -28,8 +28,8 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+    - uses: actions/checkout@v3
     - name: make application.yml
-      uses: actions/checkout@v3
       run: |
         ## create application-database.yaml
         cd ./src/main/resources
