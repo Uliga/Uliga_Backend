@@ -23,12 +23,48 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Set up JDK 11
+    - name: Set up JDK 17
       uses: actions/setup-java@v3
       with:
-        java-version: '11'
+        java-version: '17'
         distribution: 'temurin'
+    - name: make application.yml
+      run: |
+        ## create application-database.yaml
+        cd ./src/main/resources
+        
+        # application-database.yaml 파일 생성
+        touch ./application.yml
+        
+        # GitHub-Actions 에서 설정한 값을 application-database.yaml 파일에 쓰기
+        echo "${{ secrets.DATABASE }}" >> ./application.yaml
+      shell: bash
+
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      run: ./gradlew bootJar
+#      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+#      with:
+#        arguments: build
+
+      ## 웹 이미지 빌드 및 도커허브에 push
+    - name: web docker build and push
+      run: |
+        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+        docker build -t ${{ secrets.DOCKER_REPO }}/uliga_backend .
+        docker push ${{ secrets.DOCKER_REPO }}/uliga_backend
+
+      ## docker compose up
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
       with:
-        arguments: build
+        host: ${{ secrets.HOST }}
+        username: ubuntu
+        key: ${{ secrets.KEY }}
+        script: |
+          sudo docker rm -f $(docker ps -qa)
+          sudo docker pull ${{ secrets.DOCKER_REPO }}/uliga_backend 
+          sudo docker pull ${{ secrets.DOCKER_REPO }}/uliga_backend_nginx
+          docker-compose up -d
+          docker image prune -f
+
+
