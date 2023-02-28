@@ -42,7 +42,9 @@ jobs:
       shell: bash
 
     - name: Build with Gradle
-      run: ./gradlew bootJar
+      run: |
+        ./gradlew wrapper --gradle-version=8.0
+        ./gradlew bootJar
 #      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
 #      with:
 #        arguments: build
