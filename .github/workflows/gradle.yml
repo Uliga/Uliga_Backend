@@ -62,6 +62,7 @@ jobs:
         username: ubuntu
         key: ${{ secrets.PEM_KEY }}
         port: 22
+        timeout: 60
         script: |
           sudo docker rm -f $(docker ps -qa)
           sudo docker pull ${{ secrets.DOCKER_REPO }}/uliga_backend 
