@@ -3,7 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.0.2'
     id 'io.spring.dependency-management' version '1.1.0'
     // rest docs
-    id "org.asciidoctor.jvm.convert" version "3.3.2"
+//    id "org.asciidoctor.jvm.convert" version "3.3.2"
 
 }
 
@@ -12,7 +12,7 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 configurations {
-    asciidoctorExt
+//    asciidoctorExt
     compileOnly {
         extendsFrom annotationProcessor
     }
@@ -29,7 +29,7 @@ dependencies {
 
 
     // rest docs
-    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+//    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
     compileOnly 'org.projectlombok:lombok'
@@ -38,7 +38,6 @@ dependencies {
 
     annotationProcessor 'org.projectlombok:lombok'
 
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation ('org.springframework.boot:spring-boot-starter-test') {
@@ -53,43 +52,43 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-// 4.
-ext {
-    snippetsDir = file('build/generated-snippets')
-}
-
-test {
-    outputs.dir snippetsDir // 5.
-    useJUnitPlatform()
-}
-
-// 6.
-asciidoctor {
-    inputs.dir snippetsDir // 6-1
-    configurations 'asciidoctorExt' // 6-2
-    dependsOn test
-
-}
-
-// 7.
-task copyDocument(type: Copy) {
-    dependsOn asciidoctor
-    doFirst{
-        delete file('src/main/resources/static/docs')
-    }
-    from file("build/docs/asciidoc")
-    into file("src/main/resources/static/docs")
-}
-
-// 8.
-build {
-    dependsOn copyDocument
-}
-
-// 9.
-bootJar {
-    dependsOn asciidoctor
-    from ("${asciidoctor.outputDir}/html5") {
-        into 'static/docs'
-    }
-}
+//// 4.
+//ext {
+//    snippetsDir = file('build/generated-snippets')
+//}
+//
+//test {
+//    outputs.dir snippetsDir // 5.
+//    useJUnitPlatform()
+//}
+//
+//// 6.
+//asciidoctor {
+//    inputs.dir snippetsDir // 6-1
+//    configurations 'asciidoctorExt' // 6-2
+//    dependsOn test
+//
+//}
+//
+//// 7.
+//task copyDocument(type: Copy) {
+//    dependsOn asciidoctor
+//    doFirst{
+//        delete file('src/main/resources/static/docs')
+//    }
+//    from file("build/docs/asciidoc")
+//    into file("src/main/resources/static/docs")
+//}
+//
+//// 8.
+//build {
+//    dependsOn copyDocument
+//}
+//
+//// 9.
+//bootJar {
+//    dependsOn asciidoctor
+//    from ("${asciidoctor.outputDir}/html5") {
+//        into 'static/docs'
+//    }
+//}
