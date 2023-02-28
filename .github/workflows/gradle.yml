@@ -60,7 +60,7 @@ jobs:
       with:
         host: ${{ secrets.HOST }}
         username: ubuntu
-        key: ${{ secrets.KEY }}
+        key: ${{ secrets.PEM_KEY }}
         script: |
           sudo docker rm -f $(docker ps -qa)
           sudo docker pull ${{ secrets.DOCKER_REPO }}/uliga_backend 
