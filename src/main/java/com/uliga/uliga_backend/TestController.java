@@ -6,6 +6,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
+    @GetMapping(value = "/")
+    public String main() {
+        return "자동 배포 성공";
+    }
+
     @GetMapping(value = "/test")
     public String test() {
         return "test";
