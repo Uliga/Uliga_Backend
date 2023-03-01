@@ -49,8 +49,8 @@ public class Member extends MemberBase{
     private final List<Like> likedPosts = new ArrayList<>();
 
     @Builder
-    public Member(Long id, String email, String password, Authority authority, UserLoginType userLoginType, String userName, String nickname, String avatarUrl) {
-        super(id, email, password, authority, userLoginType);
+    public Member(Long id, String email, String password, Authority authority, UserLoginType userLoginType, String userName, String applicationPassword, String nickname, String avatarUrl) {
+        super(id, email, password, applicationPassword,authority, userLoginType);
         this.userName = userName;
         this.nickname = nickname;
         this.avatarUrl = avatarUrl;
