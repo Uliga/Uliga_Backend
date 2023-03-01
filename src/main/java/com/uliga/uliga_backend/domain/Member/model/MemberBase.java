@@ -21,6 +21,8 @@ public class MemberBase extends BaseTimeEntity {
 
     private String password;
 
+    private String applicationPassword;
+
     @Enumerated(EnumType.STRING)
     protected Authority authority;
 
