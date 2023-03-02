@@ -5,6 +5,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,15 +21,15 @@ import java.util.Date;
 import java.util.stream.Collectors;
 
 import static com.uliga.uliga_backend.global.common.constants.JwtConstants.*;
-import static java.lang.System.getenv;
 
 @Component
 @Slf4j
 public class JwtTokenProvider {
     private final Key key;
 
+
     public JwtTokenProvider() {
-        byte[] keyBytes = Decoders.BASE64.decode(getenv("JWT_SECRET"));
+        byte[] keyBytes = Decoders.BASE64.decode(System.getenv("JWT_SECRET"));
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
