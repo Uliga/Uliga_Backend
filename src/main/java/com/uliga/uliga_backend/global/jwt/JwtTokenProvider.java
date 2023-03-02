@@ -26,12 +26,8 @@ import static com.uliga.uliga_backend.global.common.constants.JwtConstants.*;
 @Slf4j
 public class JwtTokenProvider {
     private final Key key;
-    @Value("${jwt.secret}")
-    private String jwtSecret;
 
     public JwtTokenProvider() {
-        log.info(jwtSecret);
-        log.info(System.getenv("JWT_SECRET"));
         byte[] keyBytes = Decoders.BASE64.decode(System.getenv("JWT_SECRET"));
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
