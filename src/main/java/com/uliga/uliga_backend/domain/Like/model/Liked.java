@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Like {
+public class Liked {
     @Id
     @GeneratedValue
-    @Column(name = "like_id")
+    @Column(name = "liked_id")
     private Long id;
 
     @ManyToOne

@@ -3,7 +3,7 @@ package com.uliga.uliga_backend.domain.Member.model;
 import com.uliga.uliga_backend.domain.JoinTable.AccountBookMember;
 import com.uliga.uliga_backend.domain.JoinTable.PostComment;
 import com.uliga.uliga_backend.domain.JoinTable.RecordComment;
-import com.uliga.uliga_backend.domain.Like.model.Like;
+import com.uliga.uliga_backend.domain.Like.model.Liked;
 import com.uliga.uliga_backend.domain.Post.model.Post;
 import com.uliga.uliga_backend.domain.Record.model.Record;
 import com.uliga.uliga_backend.domain.Schedule.model.Schedule;
@@ -46,7 +46,7 @@ public class Member extends MemberBase{
     private final List<PostComment> postComments = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private final List<Like> likedPosts = new ArrayList<>();
+    private final List<Liked> likedPosts = new ArrayList<>();
 
     @Builder
     public Member(Long id, String email, String password, Authority authority, UserLoginType userLoginType, String userName, String applicationPassword, String nickname, String avatarUrl) {
