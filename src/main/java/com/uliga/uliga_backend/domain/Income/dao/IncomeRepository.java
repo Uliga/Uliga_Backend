@@ -1,4 +1,7 @@
 package com.uliga.uliga_backend.domain.Income.dao;
 
-public interface IncomeRepository {
+import com.uliga.uliga_backend.domain.Income.model.Income;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface IncomeRepository extends JpaRepository<Income, Long> {
 }

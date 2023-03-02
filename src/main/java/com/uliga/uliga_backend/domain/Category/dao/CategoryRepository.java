@@ -1,4 +1,7 @@
 package com.uliga.uliga_backend.domain.Category.dao;
 
-public interface CategoryRepository {
+import com.uliga.uliga_backend.domain.Category.model.Category;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CategoryRepository extends JpaRepository<Category, Long> {
 }

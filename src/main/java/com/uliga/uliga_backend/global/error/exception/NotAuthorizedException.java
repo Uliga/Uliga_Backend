@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Member.exception;
+package com.uliga.uliga_backend.global.error.exception;
 
 public class NotAuthorizedException extends IllegalArgumentException {
     public NotAuthorizedException() {

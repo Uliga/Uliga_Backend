@@ -1,4 +1,6 @@
 package com.uliga.uliga_backend.domain.Record.dao;
 
-public interface RecordRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface RecordRepository extends JpaRepository<Record, Long> {
 }

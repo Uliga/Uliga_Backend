@@ -1,6 +1,6 @@
 package com.uliga.uliga_backend.global.util;
 
-import com.uliga.uliga_backend.domain.Member.exception.NotAuthorizedException;
+import com.uliga.uliga_backend.global.error.exception.NotAuthorizedException;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
