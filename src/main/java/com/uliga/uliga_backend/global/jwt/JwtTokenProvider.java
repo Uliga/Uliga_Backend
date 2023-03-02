@@ -27,7 +27,11 @@ import static com.uliga.uliga_backend.global.common.constants.JwtConstants.*;
 public class JwtTokenProvider {
     private final Key key;
 
+    @Value("${jwt.secret}")
+    private String jwtSecret;
+
     public JwtTokenProvider() {
+
         byte[] keyBytes = Decoders.BASE64.decode(System.getenv("JWT_SECRET"));
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
