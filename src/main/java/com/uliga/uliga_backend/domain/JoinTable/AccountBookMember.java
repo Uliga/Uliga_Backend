@@ -1,6 +1,7 @@
 package com.uliga.uliga_backend.domain.JoinTable;
 
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
+import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -24,4 +25,6 @@ public class AccountBookMember {
     private Member member;
 
     private Boolean getNotification;
+
+    private AccountBookAuthority accountBookAuthority;
 }
