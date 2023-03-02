@@ -39,13 +39,10 @@ jobs:
         
         # GitHub-Actions 에서 설정한 값을 application.yml 파일에 쓰기
         echo "${{ secrets.APPLICATION }}" >> ./application.yml
-      shell: zsh
+      shell: bash
 
     - name: Build with Gradle
       run: ./gradlew bootJar
-#      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-#      with:
-#        arguments: build
 
       ## 웹 이미지 빌드 및 도커허브에 push
     - name: web docker build and push
