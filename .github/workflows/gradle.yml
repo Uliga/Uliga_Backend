@@ -31,15 +31,15 @@ jobs:
     - uses: actions/checkout@v3
     - name: make application.yml
       run: |
-        ## create application-database.yaml
+        ## create application.yml
         cd ./src/main/resources
         
-        # application-database.yaml 파일 생성
+        # application.yml 파일 생성
         touch ./application.yml
         
-        # GitHub-Actions 에서 설정한 값을 application-database.yaml 파일에 쓰기
+        # GitHub-Actions 에서 설정한 값을 application.yml 파일에 쓰기
         echo "${{ secrets.APPLICATION }}" >> ./application.yml
-      shell: bash
+      shell: zsh
 
     - name: Build with Gradle
       run: ./gradlew bootJar
