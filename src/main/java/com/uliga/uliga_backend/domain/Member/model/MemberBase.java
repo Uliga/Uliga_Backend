@@ -28,4 +28,8 @@ public class MemberBase extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private UserLoginType userLoginType;
+
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
 }

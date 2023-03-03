@@ -24,7 +24,7 @@ import java.util.List;
 public class Member extends MemberBase{
     private String userName;
 
-    private String nickname;
+    private String nickName;
 
     private String avatarUrl;
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
@@ -49,10 +49,22 @@ public class Member extends MemberBase{
     private final List<Liked> likedPosts = new ArrayList<>();
 
     @Builder
-    public Member(Long id, String email, String password, Authority authority, UserLoginType userLoginType, String userName, String applicationPassword, String nickname, String avatarUrl) {
+    public Member(Long id, String email, String password, Authority authority, UserLoginType userLoginType, String userName, String applicationPassword, String nickName, String avatarUrl) {
         super(id, email, password, applicationPassword,authority, userLoginType);
         this.userName = userName;
-        this.nickname = nickname;
+        this.nickName = nickName;
         this.avatarUrl = avatarUrl;
+    }
+
+    public void updatePassword(String newPassword) {
+        super.updatePassword(newPassword);
+    }
+
+    public void updateAvatarUrl(String updateUrl) {
+        this.avatarUrl = updateUrl;
+    }
+
+    public void updateNickname(String nickName) {
+        this.nickName = nickName;
     }
 }
