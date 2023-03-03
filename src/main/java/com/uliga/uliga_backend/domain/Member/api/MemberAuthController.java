@@ -1,6 +1,7 @@
 package com.uliga.uliga_backend.domain.Member.api;
 
 import com.uliga.uliga_backend.domain.Member.application.AuthService;
+import com.uliga.uliga_backend.domain.Member.application.EmailCertificationService;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.LoginResult;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SignUpRequest;
@@ -23,6 +24,7 @@ import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
 @RequestMapping("/auth")
 public class MemberAuthController {
     private final AuthService authService;
+    private final EmailCertificationService emailCertificationService;
 
 
     @PostMapping(value = "/signup")
@@ -39,4 +41,21 @@ public class MemberAuthController {
     public ResponseEntity<LoginResult> loginForm(LoginRequest loginRequest) {
         return ResponseEntity.ok(authService.login(loginRequest));
     }
+
+    // 이메일 인증 요청
+    @PostMapping(value = "/mail")
+    public ResponseEntity<EmailSentDto> mailConfirm(@RequestBody ConfirmEmailDto confirmEmailDto) throws Exception {
+
+        emailCertificationService.sendSimpleMessage(confirmEmailDto.getEmail());
+        return ResponseEntity.ok(EmailSentDto.builder().email(confirmEmailDto.getEmail()).success(true).build());
+    }
+
+    // 코드 인증 요청
+    @PostMapping(value = "/mail/code")
+    public ResponseEntity<CodeConfirmDto> codeConfirm(@RequestBody EmailConfirmCodeDto emailConfirmCodeDto) {
+        return ResponseEntity.ok(emailCertificationService.confirmCode(emailConfirmCodeDto));
+
+    }
+
+
 }
