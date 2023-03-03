@@ -1,6 +1,7 @@
 package com.uliga.uliga_backend.global.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.uliga.uliga_backend.domain.Member.exception.LogoutMemberException;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -40,9 +42,13 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             response.setStatus(response.SC_CONFLICT);
         } else if (authException instanceof InternalAuthenticationServiceException) {
             result = objectMapper.writeValueAsString(new ErrorResponse(NOT_FOUND,
-                    "USERDETAIL_NOT_FOUND"));
+                    "USER_DETAIL_NOT_FOUND"));
             response.setStatus(response.SC_NOT_FOUND);
 
+        } else if (authException instanceof InsufficientAuthenticationException) {
+            result = objectMapper.writeValueAsString(new ErrorResponse(BAD_REQUEST,
+                    "이미 로그아웃한 유저 입니다"));
+            response.setStatus(response.SC_BAD_REQUEST);
         } else {
             result = objectMapper.writeValueAsString(new ErrorResponse(UNAUTHORIZED, "INVALID_ACCESS_TOKEN"));
             response.setStatus(response.SC_UNAUTHORIZED);

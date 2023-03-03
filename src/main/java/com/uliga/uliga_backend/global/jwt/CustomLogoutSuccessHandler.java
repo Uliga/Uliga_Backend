@@ -1,5 +1,6 @@
 package com.uliga.uliga_backend.global.jwt;
 
+import com.uliga.uliga_backend.domain.Member.exception.LogoutMemberException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,7 +31,12 @@ public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler im
         String token = request.getHeader("Authorization").split(" ")[1];
         log.info("token = " + token);
 
+
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        if (valueOperations.get(token) == null) {
+            throw new LogoutMemberException();
+        }
+        log.info("레디스에 비어있을때"+valueOperations.get(token));
         valueOperations.getAndDelete(token);
 
         log.info(request.getRequestURI());
@@ -41,6 +47,6 @@ public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler im
 
     @Override
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        return "logout-redirect";
+        return "auth/logout-redirect";
     }
 }

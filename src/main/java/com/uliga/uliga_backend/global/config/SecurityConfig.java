@@ -75,7 +75,7 @@ public class SecurityConfig {
                 .and()
                 .logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/logout-redirect")
+                .logoutSuccessUrl("/auth/logout-redirect")
                 .clearAuthentication(true)
                 .logoutSuccessHandler(customLogoutSuccessHandler);
 

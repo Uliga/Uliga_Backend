@@ -1,6 +1,7 @@
 package com.uliga.uliga_backend.domain.Member.exception.handler;
 
 import com.uliga.uliga_backend.domain.Member.exception.EmailCertificationExpireException;
+import com.uliga.uliga_backend.domain.Member.exception.LogoutMemberException;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
@@ -40,4 +41,5 @@ public class MemberExceptionHandler {
                         ).build()
                 , HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 }

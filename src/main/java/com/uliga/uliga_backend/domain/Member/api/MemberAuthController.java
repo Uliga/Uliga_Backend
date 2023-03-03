@@ -6,15 +6,14 @@ import com.uliga.uliga_backend.domain.Member.dto.MemberDTO;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.LoginResult;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SignUpRequest;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SignUpResult;
+import com.uliga.uliga_backend.domain.Token.dto.TokenDTO;
+import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.AccessTokenDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
 
@@ -40,6 +39,16 @@ public class MemberAuthController {
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<LoginResult> loginForm(LoginRequest loginRequest) {
         return ResponseEntity.ok(authService.login(loginRequest));
+    }
+
+    @GetMapping(value = "/logout-redirect")
+    public ResponseEntity<String> logoutRedirect() {
+        return ResponseEntity.ok("LOGOUT");
+    }
+
+    @PostMapping(value = "/reissue")
+    public ResponseEntity<TokenDTO.TokenIssueDTO> reissue(@RequestBody AccessTokenDTO accessTokenDTO) {
+        return ResponseEntity.ok(authService.reissue(accessTokenDTO));
     }
 
     // 이메일 인증 요청

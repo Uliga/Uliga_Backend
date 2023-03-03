@@ -2,7 +2,11 @@ package com.uliga.uliga_backend.domain.Member.application;
 
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.model.Member;
+import com.uliga.uliga_backend.domain.Token.dto.TokenDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenInfoDTO;
+import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenIssueDTO;
+import com.uliga.uliga_backend.domain.Token.exception.ExpireRefreshTokenException;
+import com.uliga.uliga_backend.domain.Token.exception.InvalidRefreshTokenException;
 import com.uliga.uliga_backend.global.jwt.JwtTokenProvider;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.TimeUnit;
 
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
+import static com.uliga.uliga_backend.domain.Token.dto.TokenDTO.*;
 import static com.uliga.uliga_backend.global.common.constants.JwtConstants.REFRESH_TOKEN_EXPIRE_TIME;
 
 @Slf4j
@@ -56,5 +61,31 @@ public class AuthService {
                 .memberInfo(memberRepository.findMemberInfoById(Long.parseLong(authenticate.getName())))
                 .tokenInfo(tokenInfoDTO.toTokenIssueDTO())
                 .build();
+    }
+
+    @Transactional
+    public TokenIssueDTO reissue(AccessTokenDTO accessTokenDTO) {
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        String refreshByAccess = valueOperations.get(accessTokenDTO.getAccessToken());
+        if (refreshByAccess == null) {
+            throw new ExpireRefreshTokenException();
+        }
+        // refresh token 검증
+        if (!jwtTokenProvider.validateToken(refreshByAccess)) {
+            throw new InvalidRefreshTokenException();
+        }
+
+        // Access Token에서 멤버 아이디 가져오기
+        Authentication authentication = jwtTokenProvider.getAuthentication(accessTokenDTO.getAccessToken());
+
+        // 새로운 토큰 생성
+        TokenInfoDTO tokenInfoDTO = jwtTokenProvider.generateTokenDto(authentication);
+        // 저장소 정보 업데이트
+        valueOperations.set(tokenInfoDTO.getAccessToken(), tokenInfoDTO.getRefreshToken());
+        redisTemplate.expire(tokenInfoDTO.getAccessToken(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
+
+
+        // 토큰 발급
+        return tokenInfoDTO.toTokenIssueDTO();
     }
 }
