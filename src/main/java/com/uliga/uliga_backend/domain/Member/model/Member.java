@@ -1,8 +1,8 @@
 package com.uliga.uliga_backend.domain.Member.model;
 
 import com.uliga.uliga_backend.domain.JoinTable.AccountBookMember;
-import com.uliga.uliga_backend.domain.JoinTable.PostComment;
-import com.uliga.uliga_backend.domain.JoinTable.RecordComment;
+import com.uliga.uliga_backend.domain.PostComment.model.PostComment;
+import com.uliga.uliga_backend.domain.RecordComment.model.RecordComment;
 import com.uliga.uliga_backend.domain.Like.model.Liked;
 import com.uliga.uliga_backend.domain.Post.model.Post;
 import com.uliga.uliga_backend.domain.Record.model.Record;

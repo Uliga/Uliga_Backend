@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.JoinTable;
+package com.uliga.uliga_backend.domain.PostComment.model;
 
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Post.model.Post;

@@ -62,7 +62,12 @@ public class SecurityConfig {
                         .requestMatchers("/logout-redirect").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasRole("USER")
-                        .anyRequest().permitAll()
+                        .requestMatchers("/post/**").authenticated()
+                        .requestMatchers("/accountBook/**").authenticated()
+                        .requestMatchers("/budget/**").authenticated()
+                        .requestMatchers("/income/**").authenticated()
+                        .requestMatchers("/test").permitAll()
+                        .requestMatchers("/test2").authenticated()
                 );
 
         http

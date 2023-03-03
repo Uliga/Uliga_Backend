@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.JoinTable;
+package com.uliga.uliga_backend.domain.RecordComment.model;
 
 import com.uliga.uliga_backend.domain.Common.BaseTimeEntity;
 import com.uliga.uliga_backend.domain.Member.model.Member;

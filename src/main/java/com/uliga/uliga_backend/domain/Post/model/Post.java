@@ -1,7 +1,7 @@
 package com.uliga.uliga_backend.domain.Post.model;
 
 import com.uliga.uliga_backend.domain.Common.BaseTimeEntity;
-import com.uliga.uliga_backend.domain.JoinTable.PostComment;
+import com.uliga.uliga_backend.domain.PostComment.model.PostComment;
 import com.uliga.uliga_backend.domain.Like.model.Liked;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import jakarta.persistence.*;

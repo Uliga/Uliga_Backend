@@ -4,7 +4,7 @@ import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.BaseTimeEntity;
 import com.uliga.uliga_backend.domain.Common.Date;
-import com.uliga.uliga_backend.domain.JoinTable.RecordComment;
+import com.uliga.uliga_backend.domain.RecordComment.model.RecordComment;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
