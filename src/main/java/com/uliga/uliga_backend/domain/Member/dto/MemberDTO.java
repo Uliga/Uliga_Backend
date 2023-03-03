@@ -131,4 +131,11 @@ public class MemberDTO {
         private boolean success;
     }
 
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class ExistsCheckDto{
+        private boolean exists;
+    }
 }

@@ -88,4 +88,10 @@ public class AuthService {
         // 토큰 발급
         return tokenInfoDTO.toTokenIssueDTO();
     }
+
+    @Transactional
+    public ExistsCheckDto emailExists(String email) {
+        return ExistsCheckDto.builder()
+                .exists(memberRepository.existsByEmail(email)).build();
+    }
 }

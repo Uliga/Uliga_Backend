@@ -66,5 +66,11 @@ public class MemberAuthController {
 
     }
 
+    // 이메일 중복 확인
+    @GetMapping(value = "/mail/exists/{email}")
+    public ResponseEntity<ExistsCheckDto> emailExists(@PathVariable("email") String email) {
+        return ResponseEntity.ok(authService.emailExists(email));
+    }
+
 
 }
