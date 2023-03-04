@@ -47,7 +47,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         } else if (authException instanceof InsufficientAuthenticationException) {
             result = objectMapper.writeValueAsString(new ErrorResponse(BAD_REQUEST,
-                    "이미 로그아웃한 유저 입니다"));
+                    "INSUFFICIENT_AUTHENTICATION"));
             response.setStatus(response.SC_BAD_REQUEST);
         } else {
             result = objectMapper.writeValueAsString(new ErrorResponse(UNAUTHORIZED, "INVALID_ACCESS_TOKEN"));

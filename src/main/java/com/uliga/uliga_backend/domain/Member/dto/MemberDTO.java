@@ -157,9 +157,12 @@ public class MemberDTO {
         private String applicationPassword;
     }
 
+    @Builder
+    @AllArgsConstructor
     @NoArgsConstructor
+    @Getter
     public static class UpdateResult {
-        private final String result = "UPDATE";
+        private String result;
     }
 
     @Builder

@@ -30,6 +30,8 @@ public class MemberController {
     @PatchMapping(value = "/applicationPassword")
     public ResponseEntity<UpdateResult> updateApplicationPassword(@RequestBody UpdateApplicationPasswordDto updateApplicationPasswordDto) {
         memberService.updateApplicationPassword(SecurityUtil.getCurrentMemberId(), updateApplicationPasswordDto);
-        return ResponseEntity.ok(new UpdateResult());
+        return ResponseEntity.ok(
+                UpdateResult.builder().result("UPDATE").build()
+        );
     }
 }
