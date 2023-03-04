@@ -20,6 +20,10 @@ public class MemberService {
     @Transactional
     public void updateApplicationPassword(Long id, UpdateApplicationPasswordDto updateApplicationPasswordDto) {
         Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        log.info(Long.toString(id));
+
+        log.info(member.getApplicationPassword());
+        log.info(updateApplicationPasswordDto.getOldPassword());
         if (!member.getApplicationPassword().equals(updateApplicationPasswordDto.getOldPassword())) {
             throw new InvalidApplicationPasswordException("잘못된 현재 애플리케이션 비밀번호로 업데이트 실패");
         }
