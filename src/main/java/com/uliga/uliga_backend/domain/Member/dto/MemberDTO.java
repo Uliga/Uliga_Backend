@@ -146,7 +146,6 @@ public class MemberDTO {
         private String newPassword;
 
         public void encrypt(PasswordEncoder passwordEncoder) {
-            this.oldPassword = passwordEncoder.encode(this.oldPassword);
             this.newPassword = passwordEncoder.encode(this.newPassword);
         }
     }

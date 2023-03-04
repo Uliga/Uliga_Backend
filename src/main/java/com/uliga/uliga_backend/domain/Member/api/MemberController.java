@@ -19,12 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping(value = "/member")
 public class MemberController {
-    private final PasswordEncoder passwordEncoder;
     private final MemberService memberService;
 
     @PatchMapping(value = "/applicationPassword")
     public ResponseEntity<UpdateResult> updateApplicationPassword(@RequestBody UpdateApplicationPasswordDto updateApplicationPasswordDto) {
-        updateApplicationPasswordDto.encrypt(passwordEncoder);
         memberService.updateApplicationPassword(SecurityUtil.getCurrentMemberId(), updateApplicationPasswordDto);
         return ResponseEntity.ok(new UpdateResult());
     }

@@ -9,6 +9,7 @@ import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 public class MemberService {
     private final MemberRepository memberRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Transactional
     public void updateApplicationPassword(Long id, UpdateApplicationPasswordDto updateApplicationPasswordDto) {
         Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
@@ -24,9 +27,10 @@ public class MemberService {
 
         log.info(member.getApplicationPassword());
         log.info(updateApplicationPasswordDto.getOldPassword());
-        if (!member.getApplicationPassword().equals(updateApplicationPasswordDto.getOldPassword())) {
+        if (!passwordEncoder.matches(updateApplicationPasswordDto.getOldPassword(), member.getApplicationPassword())) {
             throw new InvalidApplicationPasswordException("잘못된 현재 애플리케이션 비밀번호로 업데이트 실패");
         }
+        updateApplicationPasswordDto.encrypt(passwordEncoder);
         member.updateApplicationPassword(updateApplicationPasswordDto.getNewPassword());
 
     }
