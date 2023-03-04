@@ -200,6 +200,22 @@ public class MemberDTO {
         private String avatarUrl;
     }
 
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class NicknameCheckDto {
+        private String nickname;
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class UpdateNicknameDto {
+        private String newNickname;
+    }
+
 
 
 }

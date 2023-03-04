@@ -15,6 +15,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     boolean existsByEmail(String email);
 
+    boolean existsByNickName(String nickname);
+
     @Query("select new com.uliga.uliga_backend.domain.Member.dto.NativeQuery.MemberInfoNativeQ(m.id, m.avatarUrl, m.userName, m.nickName, m.email) from Member m where m.id = :id")
     MemberInfoNativeQ findMemberInfoById(@Param("id") Long id);
 }

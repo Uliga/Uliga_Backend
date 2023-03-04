@@ -55,4 +55,20 @@ public class MemberService {
         Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
         member.updateAvatarUrl(avatarUrl.getAvatarUrl());
     }
+
+    @Transactional
+    public boolean nicknameExists(Long id, NicknameCheckDto nicknameCheckDto) {
+        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        if (member.getNickName().equals(nicknameCheckDto.getNickname())) {
+            return true;
+        } else {
+            return memberRepository.existsByNickName(nicknameCheckDto.getNickname());
+        }
+    }
+
+    @Transactional
+    public void updateNickname(Long id, UpdateNicknameDto updateNicknameDto) {
+        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        member.updateNickname(updateNicknameDto.getNewNickname());
+    }
 }

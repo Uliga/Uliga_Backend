@@ -61,5 +61,21 @@ public class MemberController {
         );
     }
 
+    @PostMapping(value = "/nickname")
+    public ResponseEntity<ExistsCheckDto> nicknameExistsCheck(@RequestBody NicknameCheckDto nicknameCheckDto) {
+        return ResponseEntity.ok(
+                ExistsCheckDto.builder()
+                        .exists(memberService.nicknameExists(SecurityUtil.getCurrentMemberId()
+                                , nicknameCheckDto))
+                        .build()
+        );
+    }
 
+    @PatchMapping(value = "/nickname")
+    public ResponseEntity<UpdateResult> updateNickname(@RequestBody UpdateNicknameDto nicknameDto) {
+        memberService.updateNickname(SecurityUtil.getCurrentMemberId(), nicknameDto);
+        return ResponseEntity.ok(
+                UpdateResult.builder().result("UPDATE").build()
+        );
+    }
 }
