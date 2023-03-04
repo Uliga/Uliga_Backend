@@ -161,6 +161,25 @@ public class MemberDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
+    public static class UpdatePasswordDto {
+        private String newPassword;
+        public void encrypt(PasswordEncoder passwordEncoder) {
+            this.newPassword = passwordEncoder.encode(this.newPassword);
+        }
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class PasswordCheck {
+        private String password;
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
     public static class UpdateResult {
         private String result;
     }

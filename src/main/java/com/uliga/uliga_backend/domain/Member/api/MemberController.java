@@ -24,12 +24,30 @@ public class MemberController {
     @PostMapping(value = "/applicationPassword")
     public ResponseEntity<MatchResult> checkApplicationPassword(@RequestBody ApplicationPasswordCheck passwordCheck) {
         return ResponseEntity.ok(MatchResult.builder()
-                .matches(memberService.checkApplicationPassword(SecurityUtil.getCurrentMemberId(), passwordCheck)).build());
+                .matches(
+                        memberService.checkApplicationPassword(SecurityUtil.getCurrentMemberId(), passwordCheck)
+                ).build());
     }
 
     @PatchMapping(value = "/applicationPassword")
     public ResponseEntity<UpdateResult> updateApplicationPassword(@RequestBody UpdateApplicationPasswordDto updateApplicationPasswordDto) {
         memberService.updateApplicationPassword(SecurityUtil.getCurrentMemberId(), updateApplicationPasswordDto);
+        return ResponseEntity.ok(
+                UpdateResult.builder().result("UPDATE").build()
+        );
+    }
+
+    @PostMapping(value = "/password")
+    public ResponseEntity<MatchResult> checkPassword(@RequestBody PasswordCheck passwordCheck) {
+        return ResponseEntity.ok(MatchResult.builder()
+                .matches(
+                        memberService.checkPassword(SecurityUtil.getCurrentMemberId(), passwordCheck)
+                ).build());
+    }
+
+    @PatchMapping(value = "/password")
+    public ResponseEntity<UpdateResult> updatePassword(@RequestBody UpdatePasswordDto passwordDto) {
+        memberService.updatePassword(SecurityUtil.getCurrentMemberId(), passwordDto);
         return ResponseEntity.ok(
                 UpdateResult.builder().result("UPDATE").build()
         );

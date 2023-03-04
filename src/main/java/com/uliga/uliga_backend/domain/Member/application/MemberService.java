@@ -35,4 +35,18 @@ public class MemberService {
         member.updateApplicationPassword(passwordDto.getNewPassword());
 
     }
+
+    @Transactional
+    public boolean checkPassword(Long id, PasswordCheck passwordCheck) {
+        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        return passwordEncoder.matches(passwordCheck.getPassword(), member.getPassword());
+
+    }
+
+    @Transactional
+    public void updatePassword(Long id, UpdatePasswordDto passwordDto) {
+        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        passwordDto.encrypt(passwordEncoder);
+        member.updatePassword(passwordDto.getNewPassword());
+    }
 }
