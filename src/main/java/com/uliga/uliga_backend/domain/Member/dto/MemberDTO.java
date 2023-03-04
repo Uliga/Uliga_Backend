@@ -142,7 +142,6 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class UpdateApplicationPasswordDto {
-        private String oldPassword;
         private String newPassword;
 
         public void encrypt(PasswordEncoder passwordEncoder) {
@@ -150,9 +149,25 @@ public class MemberDTO {
         }
     }
 
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class ApplicationPasswordCheck {
+        private String applicationPassword;
+    }
+
     @NoArgsConstructor
     public static class UpdateResult {
         private final String result = "UPDATE";
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class MatchResult {
+        private boolean matches;
     }
 
 }
