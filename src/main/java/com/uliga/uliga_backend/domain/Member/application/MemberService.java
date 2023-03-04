@@ -49,4 +49,10 @@ public class MemberService {
         passwordDto.encrypt(passwordEncoder);
         member.updatePassword(passwordDto.getNewPassword());
     }
+
+    @Transactional
+    public void updateAvatarUrl(Long id, UpdateAvatarUrl avatarUrl) {
+        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        member.updateAvatarUrl(avatarUrl.getAvatarUrl());
+    }
 }

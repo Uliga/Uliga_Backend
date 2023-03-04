@@ -52,4 +52,14 @@ public class MemberController {
                 UpdateResult.builder().result("UPDATE").build()
         );
     }
+
+    @PatchMapping(value = "/avatarUrl")
+    public ResponseEntity<UpdateResult> updateAvatarUrl(@RequestBody UpdateAvatarUrl avatarUrl) {
+        memberService.updateAvatarUrl(SecurityUtil.getCurrentMemberId(), avatarUrl);
+        return ResponseEntity.ok(
+                UpdateResult.builder().result("UPDATE").build()
+        );
+    }
+
+
 }

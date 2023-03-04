@@ -192,4 +192,14 @@ public class MemberDTO {
         private boolean matches;
     }
 
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class UpdateAvatarUrl {
+        private String avatarUrl;
+    }
+
+
+
 }
