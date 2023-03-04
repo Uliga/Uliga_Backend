@@ -3,14 +3,12 @@ package com.uliga.uliga_backend.domain.Member.dto;
 import com.uliga.uliga_backend.domain.Member.dto.NativeQuery.MemberInfoNativeQ;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Member.model.UserLoginType;
-import com.uliga.uliga_backend.domain.Token.dto.TokenDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenIssueDTO;
 import lombok.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static com.uliga.uliga_backend.domain.Member.model.Authority.ROLE_USER;
-import static com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenInfoDTO;
 
 public class MemberDTO {
     @Builder
@@ -135,7 +133,27 @@ public class MemberDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
-    public static class ExistsCheckDto{
+    public static class ExistsCheckDto {
         private boolean exists;
     }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class UpdateApplicationPasswordDto {
+        private String oldPassword;
+        private String newPassword;
+
+        public void encrypt(PasswordEncoder passwordEncoder) {
+            this.oldPassword = passwordEncoder.encode(this.oldPassword);
+            this.newPassword = passwordEncoder.encode(this.newPassword);
+        }
+    }
+
+    @NoArgsConstructor
+    public static class UpdateResult {
+        private final String result = "UPDATE";
+    }
+
 }

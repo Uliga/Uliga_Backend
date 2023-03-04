@@ -32,4 +32,8 @@ public class MemberBase extends BaseTimeEntity {
     public void updatePassword(String newPassword) {
         this.password = newPassword;
     }
+
+    public void updateApplicationPassword(String newPassword) {
+        this.applicationPassword = newPassword;
+    }
 }

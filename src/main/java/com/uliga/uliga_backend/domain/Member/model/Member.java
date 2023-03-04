@@ -21,7 +21,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Member extends MemberBase{
+public class Member extends MemberBase {
     private String userName;
 
     private String nickName;
@@ -50,7 +50,7 @@ public class Member extends MemberBase{
 
     @Builder
     public Member(Long id, String email, String password, Authority authority, UserLoginType userLoginType, String userName, String applicationPassword, String nickName, String avatarUrl) {
-        super(id, email, password, applicationPassword,authority, userLoginType);
+        super(id, email, password, applicationPassword, authority, userLoginType);
         this.userName = userName;
         this.nickName = nickName;
         this.avatarUrl = avatarUrl;
@@ -58,6 +58,10 @@ public class Member extends MemberBase{
 
     public void updatePassword(String newPassword) {
         super.updatePassword(newPassword);
+    }
+
+    public void updateApplicationPassword(String newPassword) {
+        super.updateApplicationPassword(newPassword);
     }
 
     public void updateAvatarUrl(String updateUrl) {

@@ -61,7 +61,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/logout-redirect").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/user/**").hasRole("USER")
+                        .requestMatchers("/member/**").hasRole("USER")
                         .requestMatchers("/post/**").authenticated()
                         .requestMatchers("/accountBook/**").authenticated()
                         .requestMatchers("/budget/**").authenticated()

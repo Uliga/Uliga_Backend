@@ -1,6 +1,7 @@
 package com.uliga.uliga_backend.domain.Member.exception.handler;
 
 import com.uliga.uliga_backend.domain.Member.exception.EmailCertificationExpireException;
+import com.uliga.uliga_backend.domain.Member.exception.InvalidApplicationPasswordException;
 import com.uliga.uliga_backend.domain.Member.exception.LogoutMemberException;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import jakarta.mail.MessagingException;
@@ -42,4 +43,16 @@ public class MemberExceptionHandler {
                 , HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(InvalidApplicationPasswordException.class)
+    protected final ResponseEntity<ErrorResponse> handleInvalidApplicationPasswordException(
+            InvalidApplicationPasswordException ex, WebRequest request
+    ) {
+        log.info("애플리케이션 비밀번호가 잘못되었습니다");
+        return new ResponseEntity<>(
+                ErrorResponse.builder()
+                        .errorCode(HttpStatus.CONFLICT)
+                        .message(ex.getMessage()).build(),
+                HttpStatus.CONFLICT
+        );
+    }
 }
