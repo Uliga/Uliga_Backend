@@ -196,6 +196,23 @@ public class MemberDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
+    public static class NicknameUpdateResult{
+        private String nickname;
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class AvatarUrlUpdateResult {
+        private String avatarUrl;
+    }
+
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
     public static class UpdateAvatarUrl {
         private String avatarUrl;
     }

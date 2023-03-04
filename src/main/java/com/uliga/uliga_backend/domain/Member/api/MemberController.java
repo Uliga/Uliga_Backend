@@ -54,10 +54,10 @@ public class MemberController {
     }
 
     @PatchMapping(value = "/avatarUrl")
-    public ResponseEntity<UpdateResult> updateAvatarUrl(@RequestBody UpdateAvatarUrl avatarUrl) {
+    public ResponseEntity<AvatarUrlUpdateResult> updateAvatarUrl(@RequestBody UpdateAvatarUrl avatarUrl) {
         memberService.updateAvatarUrl(SecurityUtil.getCurrentMemberId(), avatarUrl);
         return ResponseEntity.ok(
-                UpdateResult.builder().result("UPDATE").build()
+                AvatarUrlUpdateResult.builder().avatarUrl(avatarUrl.getAvatarUrl()).build()
         );
     }
 
@@ -72,10 +72,10 @@ public class MemberController {
     }
 
     @PatchMapping(value = "/nickname")
-    public ResponseEntity<UpdateResult> updateNickname(@RequestBody UpdateNicknameDto nicknameDto) {
+    public ResponseEntity<NicknameUpdateResult> updateNickname(@RequestBody UpdateNicknameDto nicknameDto) {
         memberService.updateNickname(SecurityUtil.getCurrentMemberId(), nicknameDto);
         return ResponseEntity.ok(
-                UpdateResult.builder().result("UPDATE").build()
+                NicknameUpdateResult.builder().nickname(nicknameDto.getNewNickname()).build()
         );
     }
 }
