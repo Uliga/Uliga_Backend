@@ -4,6 +4,9 @@ import com.uliga.uliga_backend.domain.Member.dto.NativeQuery.MemberInfoNativeQ;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Member.model.UserLoginType;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenIssueDTO;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,14 +19,16 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class SignUpRequest {
+        @Email
         private String email;
 
+        @Size(min = 8)
         private String password;
-
+        @Size(min = 2, max = 19)
         private String nickName;
-
+        @NotNull
         private String userName;
-
+        @NotNull
         private String applicationPassword;
 
         public void encrypt(PasswordEncoder passwordEncoder) {
@@ -163,6 +168,7 @@ public class MemberDTO {
     @Getter
     public static class UpdatePasswordDto {
         private String newPassword;
+
         public void encrypt(PasswordEncoder passwordEncoder) {
             this.newPassword = passwordEncoder.encode(this.newPassword);
         }
@@ -196,7 +202,7 @@ public class MemberDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
-    public static class NicknameUpdateResult{
+    public static class NicknameUpdateResult {
         private String nickname;
     }
 
@@ -232,7 +238,6 @@ public class MemberDTO {
     public static class UpdateNicknameDto {
         private String newNickname;
     }
-
 
 
 }

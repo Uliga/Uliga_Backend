@@ -8,6 +8,7 @@ import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SignUpRequest;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SignUpResult;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.AccessTokenDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class MemberAuthController {
 
 
     @PostMapping(value = "/signup")
-    public ResponseEntity<SignUpResult> signUp(@RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<SignUpResult> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
         return ResponseEntity.ok(SignUpResult.builder().result(authService.signUp(signUpRequest)).build());
     }
 

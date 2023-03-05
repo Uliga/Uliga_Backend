@@ -28,6 +28,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     // 이메일 모듈
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+    // Validation 모듈 추가
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     // 스프링 시큐리티
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.security:spring-security-test'
