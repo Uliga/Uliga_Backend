@@ -94,4 +94,10 @@ public class AuthService {
         return ExistsCheckDto.builder()
                 .exists(memberRepository.existsByEmail(email)).build();
     }
+
+    @Transactional
+    public ExistsCheckDto nicknameExists(String nickname) {
+        return ExistsCheckDto.builder()
+                .exists(memberRepository.existsByNickName(nickname)).build();
+    }
 }
