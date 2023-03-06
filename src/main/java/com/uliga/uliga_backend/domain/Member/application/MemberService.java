@@ -7,6 +7,7 @@ import com.uliga.uliga_backend.domain.Member.dto.MemberDTO;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.UpdateApplicationPasswordDto;
 import com.uliga.uliga_backend.domain.Member.dto.NativeQuery.MemberInfoNativeQ;
 import com.uliga.uliga_backend.domain.Member.exception.InvalidApplicationPasswordException;
+import com.uliga.uliga_backend.domain.Member.exception.UserNotFoundByEmail;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import jakarta.transaction.Transactional;
@@ -30,8 +31,12 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public MemberInfoNativeQ getCurrentMemberInfo(Long id) {
-        return memberRepository.findMemberInfoById(id);
+    public GetMemberInfo getCurrentMemberInfo(Long id) {
+
+        MemberInfoNativeQ memberInfoById = memberRepository.findMemberInfoById(id);
+        return GetMemberInfo.builder()
+                .memberInfo(memberInfoById)
+                .invitations(null).build();
     }
 
     @Transactional
@@ -95,5 +100,15 @@ public class MemberService {
             }
         }
         memberRepository.delete(member);
+    }
+
+    @Transactional
+    public SearchEmailResult findMemberByEmail(SearchMemberByEmail byEmail) {
+        Member member = memberRepository.findByEmail(byEmail.getEmail()).orElseThrow(UserNotFoundByEmail::new);
+
+        return SearchEmailResult.builder()
+                .id(member.getId())
+                .nickName(member.getNickName())
+                .userName(member.getUserName()).build();
     }
 }

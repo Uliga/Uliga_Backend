@@ -11,6 +11,8 @@ import lombok.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
+
 import static com.uliga.uliga_backend.domain.Member.model.Authority.ROLE_USER;
 
 public class MemberDTO {
@@ -266,5 +268,48 @@ public class MemberDTO {
         private String newNickname;
     }
 
+
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    public static class InvitationInfo {
+        private Long id;
+
+        private String memberName;
+
+        private String accountBookName;
+
+    }
+
+
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    public static class GetMemberInfo {
+        private MemberInfoNativeQ memberInfo;
+        private List<InvitationInfo> invitations;
+    }
+
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    public static class SearchMemberByEmail {
+        private String email;
+    }
+
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    public static class SearchEmailResult {
+
+        private Long id;
+        private String userName;
+
+        private String nickName;
+    }
 
 }

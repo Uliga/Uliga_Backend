@@ -23,7 +23,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping(value = "")
-    public ResponseEntity<MemberInfoNativeQ> getMemberInfo() {
+    public ResponseEntity<GetMemberInfo> getMemberInfo() {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberService.getCurrentMemberInfo(currentMemberId));
     }
@@ -91,5 +91,10 @@ public class MemberController {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         memberService.deleteMember(currentMemberId);
         return ResponseEntity.ok("DELETED");
+    }
+
+    @PostMapping(value = "/search/email")
+    public ResponseEntity<SearchEmailResult> getMemberByEmail(@RequestBody SearchMemberByEmail searchMemberByEmail) {
+        return ResponseEntity.ok(memberService.findMemberByEmail(searchMemberByEmail));
     }
 }

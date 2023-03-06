@@ -1,9 +1,8 @@
 package com.uliga.uliga_backend.domain.Member.exception.handler;
 
-import com.uliga.uliga_backend.domain.Member.exception.EmailCertificationExpireException;
-import com.uliga.uliga_backend.domain.Member.exception.InvalidApplicationPasswordException;
-import com.uliga.uliga_backend.domain.Member.exception.LogoutMemberException;
-import com.uliga.uliga_backend.domain.Member.exception.UnknownLoginException;
+import com.uliga.uliga_backend.domain.Member.dto.MemberDTO;
+import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SearchEmailResult;
+import com.uliga.uliga_backend.domain.Member.exception.*;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
@@ -84,4 +83,16 @@ public class MemberExceptionHandler {
                 HttpStatus.CONFLICT
         );
     }
+
+    @ExceptionHandler(UserNotFoundByEmail.class)
+    protected final ResponseEntity<SearchEmailResult> handleUserNotFoundByEmail(
+            UserNotFoundByEmail ex, WebRequest request
+    ) {
+        log.info(ex.getMessage());
+        return ResponseEntity.ok(SearchEmailResult.builder()
+                .id(null)
+                .nickName("null")
+                .nickName("null").build());
+    }
+
 }

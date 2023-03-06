@@ -18,8 +18,6 @@ public class AccountBookDTO {
     public static class CreateRequest {
         private String name;
 
-        private List<String> invites;
-
         private List<String> categories;
 
         public AccountBook toEntity() {
@@ -66,6 +64,7 @@ public class AccountBookDTO {
 
 
     }
+
 
 
 }
