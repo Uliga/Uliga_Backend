@@ -33,7 +33,7 @@ public class AccountBookService {
                 .accountBooks(accountBookInfosByMemberId).build();
     }
 
-    public AccountBookInfo createAccountBook(Long id, CreateRequest createRequest) {
+    public AccountBookInfo createAccountBookPrivate(Long id, CreateRequestPrivate createRequest) {
         Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
         AccountBook accountBook = createRequest.toEntity();
         accountBookRepository.save(accountBook);
@@ -44,5 +44,9 @@ public class AccountBookService {
                 .getNotification(true).build();
         accountBookMemberRepository.save(bookMember);
         return accountBook.toInfoDto();
+    }
+
+    public AccountBookInfo createAccountBook(Long id, CreateRequest createRequest) {
+        return null;
     }
 }

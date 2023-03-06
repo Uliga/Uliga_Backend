@@ -1,5 +1,6 @@
 package com.uliga.uliga_backend.domain.Category.model;
 
+import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.Budget.model.Budget;
 import com.uliga.uliga_backend.domain.Record.model.Record;
 import jakarta.persistence.*;
@@ -25,4 +26,8 @@ public class Category {
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Record> records = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "accountBook_id")
+    private AccountBook accountBook;
 }

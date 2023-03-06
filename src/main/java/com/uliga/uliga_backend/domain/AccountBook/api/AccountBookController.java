@@ -4,6 +4,7 @@ import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.AccountBookInfo;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.CreateRequest;
+import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.CreateRequestPrivate;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.GetAccountBookInfos;
 import com.uliga.uliga_backend.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +30,11 @@ public class AccountBookController {
     public ResponseEntity<AccountBookInfo> createAccountBook(@RequestBody CreateRequest createRequest) {
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.createAccountBook(id, createRequest));
+    }
+
+    @PostMapping(value = "/private")
+    public ResponseEntity<AccountBookInfo> createAccountBookPrivate(@RequestBody CreateRequestPrivate createRequest) {
+        Long id = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(accountBookService.createAccountBookPrivate(id, createRequest));
     }
 }

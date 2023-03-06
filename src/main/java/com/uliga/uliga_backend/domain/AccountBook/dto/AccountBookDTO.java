@@ -18,6 +18,24 @@ public class AccountBookDTO {
     public static class CreateRequest {
         private String name;
 
+        private List<String> invites;
+
+        private List<String> categories;
+
+        public AccountBook toEntity() {
+            return AccountBook.builder()
+                    .isPrivate(false)
+                    .name(name).build();
+        }
+    }
+
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    public static class CreateRequestPrivate{
+        private String name;
+
         private Boolean isPrivate;
 
         public AccountBook toEntity() {

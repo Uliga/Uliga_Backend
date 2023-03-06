@@ -3,6 +3,7 @@ package com.uliga.uliga_backend.domain.AccountBook.model;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.AccountBookInfo;
 import com.uliga.uliga_backend.domain.Budget.model.Budget;
+import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.BaseTimeEntity;
 import com.uliga.uliga_backend.domain.Income.model.Income;
 import com.uliga.uliga_backend.domain.JoinTable.model.AccountBookMember;
@@ -50,6 +51,9 @@ public class AccountBook extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "accountBook", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Record> records = new ArrayList<>();
+
+    @OneToMany(mappedBy = "accountBook", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Category> categories = new ArrayList<>();
 
 
     public AccountBookInfo toInfoDto() {

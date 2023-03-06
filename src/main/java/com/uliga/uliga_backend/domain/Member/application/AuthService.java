@@ -2,7 +2,9 @@ package com.uliga.uliga_backend.domain.Member.application;
 
 import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
+import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.CreateRequest;
+import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.CreateRequestPrivate;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
 import com.uliga.uliga_backend.domain.JoinTable.dao.AccountBookMemberRepository;
@@ -49,10 +51,10 @@ public class AuthService {
         signUpRequest.encrypt(passwordEncoder);
         Member member = signUpRequest.toEntity();
         memberRepository.save(member);
-        CreateRequest build = CreateRequest.builder().name(member.getNickName() + " 님의 가계부").isPrivate(true).build();
-        accountBookService.createAccountBook(member.getId(), build);
+        CreateRequestPrivate build = CreateRequestPrivate.builder().name(member.getNickName() + " 님의 가계부").isPrivate(true).build();
+        accountBookService.createAccountBookPrivate(member.getId(), build);
 
-        // 현재 가계부 생성은 안 해놓음, 필요하면 추가할 예정
+
 
         return "CREATED";
     }
@@ -63,15 +65,9 @@ public class AuthService {
         Member member = socialSignUpRequest.toEntity();
         memberRepository.save(member);
 
-        CreateRequest build = CreateRequest.builder().name(member.getNickName() + " 님의 가계부").isPrivate(true).build();
-        AccountBook accountBook = build.toEntity();
-        accountBookRepository.save(accountBook);
-        AccountBookMember bookMember = AccountBookMember.builder()
-                .accountBook(accountBook)
-                .member(member)
-                .accountBookAuthority(AccountBookAuthority.ADMIN)
-                .getNotification(true).build();
-        accountBookMemberRepository.save(bookMember);
+        CreateRequestPrivate build = CreateRequestPrivate.builder().name(member.getNickName() + " 님의 가계부").isPrivate(true).build();
+        accountBookService.createAccountBookPrivate(member.getId(), build);
+
 
     }
 
