@@ -1,5 +1,6 @@
 package com.uliga.uliga_backend.domain.Member.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.uliga.uliga_backend.domain.Member.application.MemberService;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.MatchResult;
@@ -23,7 +24,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping(value = "")
-    public ResponseEntity<GetMemberInfo> getMemberInfo() {
+    public ResponseEntity<GetMemberInfo> getMemberInfo() throws JsonProcessingException {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberService.getCurrentMemberInfo(currentMemberId));
     }

@@ -20,6 +20,8 @@ public class AccountBookDTO {
 
         private List<String> categories;
 
+        private List<String> emails;
+
         public AccountBook toEntity() {
             return AccountBook.builder()
                     .isPrivate(false)

@@ -15,6 +15,7 @@ import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenInfoDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenIssueDTO;
 import com.uliga.uliga_backend.domain.Token.exception.ExpireRefreshTokenException;
 import com.uliga.uliga_backend.domain.Token.exception.InvalidRefreshTokenException;
+import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import com.uliga.uliga_backend.global.jwt.JwtTokenProvider;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +53,15 @@ public class AuthService {
         Member member = signUpRequest.toEntity();
         memberRepository.save(member);
         CreateRequestPrivate build = CreateRequestPrivate.builder().name(member.getNickName() + " 님의 가계부").isPrivate(true).build();
-        accountBookService.createAccountBookPrivate(member.getId(), build);
+
+        AccountBook accountBook = build.toEntity();
+        accountBookRepository.save(accountBook);
+        AccountBookMember bookMember = AccountBookMember.builder()
+                .accountBook(accountBook)
+                .member(member)
+                .accountBookAuthority(AccountBookAuthority.ADMIN)
+                .getNotification(true).build();
+        accountBookMemberRepository.save(bookMember);
 
 
 

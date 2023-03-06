@@ -1,5 +1,6 @@
 package com.uliga.uliga_backend.domain.AccountBook.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
@@ -22,9 +23,9 @@ public class AccountBookController {
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.getMemberAccountBook(id));
     }
-
+    // 이메일로 유저 초대장 여기서 보내야함
     @PostMapping(value = "")
-    public ResponseEntity<AccountBookInfo> createAccountBook(@RequestBody CreateRequest createRequest) {
+    public ResponseEntity<AccountBookInfo> createAccountBook(@RequestBody CreateRequest createRequest) throws JsonProcessingException {
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.createAccountBook(id, createRequest));
     }
@@ -34,6 +35,7 @@ public class AccountBookController {
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.createAccountBookPrivate(id, createRequest));
     }
+
 
 
 }

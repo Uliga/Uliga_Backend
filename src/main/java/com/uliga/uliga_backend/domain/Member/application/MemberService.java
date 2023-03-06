@@ -1,5 +1,8 @@
 package com.uliga.uliga_backend.domain.Member.application;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQuery.AccountBookInfoQ;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
@@ -13,9 +16,13 @@ import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.ListOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
@@ -30,13 +37,31 @@ public class MemberService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final RedisTemplate<String, String> redisTemplate;
+
+    private final ObjectMapper objectMapper;
+
     @Transactional
-    public GetMemberInfo getCurrentMemberInfo(Long id) {
+    public GetMemberInfo getCurrentMemberInfo(Long id) throws JsonProcessingException {
 
         MemberInfoNativeQ memberInfoById = memberRepository.findMemberInfoById(id);
+        ListOperations<String, String> valueOperations = redisTemplate.opsForList();
+        String email = memberInfoById.getEmail();
+        Long size = valueOperations.size(email);
+        if (size == null) {
+            size = 0L;
+        }
+        List<String> stringList = valueOperations.range(email, 0, size);
+        List<InvitationInfo> result = new ArrayList<>();
+        if (stringList != null) {
+
+            for (String o : stringList) {
+                result.add(objectMapper.readValue(o, InvitationInfo.class));
+            }
+        }
         return GetMemberInfo.builder()
                 .memberInfo(memberInfoById)
-                .invitations(null).build();
+                .invitations(result).build();
     }
 
     @Transactional

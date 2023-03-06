@@ -4,6 +4,7 @@ import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.Budget.model.Budget;
 import com.uliga.uliga_backend.domain.Record.model.Record;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,4 +31,11 @@ public class Category {
     @ManyToOne
     @JoinColumn(name = "accountBook_id")
     private AccountBook accountBook;
+
+    @Builder
+    public Category(Long id, String name, AccountBook accountBook) {
+        this.id = id;
+        this.name = name;
+        this.accountBook = accountBook;
+    }
 }
