@@ -77,4 +77,10 @@ public class MemberService {
         Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
         member.updateNickname(updateNicknameDto.getNewNickname());
     }
+
+    @Transactional
+    public void deleteMember(Long id) {
+        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        memberRepository.delete(member);
+    }
 }

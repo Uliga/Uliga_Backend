@@ -85,4 +85,11 @@ public class MemberController {
                 NicknameUpdateResult.builder().nickname(nicknameDto.getNewNickname()).build()
         );
     }
+
+    @DeleteMapping(value = "")
+    public ResponseEntity<String> deleteMember() {
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+
+        return ResponseEntity.ok("DELETED");
+    }
 }
