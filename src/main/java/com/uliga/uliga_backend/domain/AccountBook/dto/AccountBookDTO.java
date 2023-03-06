@@ -35,5 +35,19 @@ public class AccountBookDTO {
         private List<AccountBookInfoQ> accountBooks;
     }
 
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    public static class AccountBookInfo {
+        private Long id;
+
+        private String name;
+
+        private Boolean isPrivate;
+
+
+    }
+
 
 }

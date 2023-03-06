@@ -1,5 +1,6 @@
 package com.uliga.uliga_backend.domain.Member.application;
 
+import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.CreateRequest;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
@@ -35,6 +36,7 @@ import static com.uliga.uliga_backend.global.common.constants.JwtConstants.REFRE
 @RequiredArgsConstructor
 public class AuthService {
     private final MemberRepository memberRepository;
+    private final AccountBookService accountBookService;
     private final AccountBookRepository accountBookRepository;
     private final AccountBookMemberRepository accountBookMemberRepository;
     private final PasswordEncoder passwordEncoder;
@@ -48,14 +50,8 @@ public class AuthService {
         Member member = signUpRequest.toEntity();
         memberRepository.save(member);
         CreateRequest build = CreateRequest.builder().name(member.getNickName() + " 님의 가계부").isPrivate(true).build();
-        AccountBook accountBook = build.toEntity();
-        accountBookRepository.save(accountBook);
-        AccountBookMember bookMember = AccountBookMember.builder()
-                .accountBook(accountBook)
-                .member(member)
-                .accountBookAuthority(AccountBookAuthority.ADMIN)
-                .getNotification(true).build();
-        accountBookMemberRepository.save(bookMember);
+        accountBookService.createAccountBook(member.getId(), build);
+
         // 현재 가계부 생성은 안 해놓음, 필요하면 추가할 예정
 
         return "CREATED";
