@@ -89,7 +89,7 @@ public class MemberController {
     @DeleteMapping(value = "")
     public ResponseEntity<String> deleteMember() {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
-
+        memberService.deleteMember(currentMemberId);
         return ResponseEntity.ok("DELETED");
     }
 }
