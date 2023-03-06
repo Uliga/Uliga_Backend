@@ -24,8 +24,8 @@ public class MemberExceptionHandler {
         log.info("만료된 이메일 인증 코드입니다");
         return new ResponseEntity<>(
                 ErrorResponse.builder()
-                        .errorCode(HttpStatus.CONFLICT)
-                        .message(ex.getMessage())
+                        .errorCode(409L)
+                        .message("만료돤 이메일 인증 코드입니다.")
                         .build()
                 , HttpStatus.CONFLICT
         );
@@ -38,9 +38,9 @@ public class MemberExceptionHandler {
         log.info("이메일 전송중 오류가 발생했습니다");
         return new ResponseEntity<>(
                 ErrorResponse.builder()
-                        .errorCode(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .message(ex.getMessage()
-                        ).build()
+                        .errorCode(500L)
+                        .message("이메일 전송중 오류가 발생했습니다.")
+                        .build()
                 , HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -51,8 +51,8 @@ public class MemberExceptionHandler {
         log.info("애플리케이션 비밀번호가 잘못되었습니다");
         return new ResponseEntity<>(
                 ErrorResponse.builder()
-                        .errorCode(HttpStatus.CONFLICT)
-                        .message(ex.getMessage()).build(),
+                        .errorCode(409L)
+                        .message("애플리케이션 비밀번호가 잘못되었습니다.").build(),
                 HttpStatus.CONFLICT
         );
     }
@@ -64,8 +64,8 @@ public class MemberExceptionHandler {
         log.info(ex.getLocalizedMessage());
         return new ResponseEntity<>(
                 ErrorResponse.builder()
-                        .errorCode(HttpStatus.CONFLICT)
-                        .message(ex.getLocalizedMessage()).build(),
+                        .errorCode(409L)
+                        .message("잘못된 값이 들어왔습니다. 값 형식을 확인해주세요").build(),
                 HttpStatus.CONFLICT
         );
 

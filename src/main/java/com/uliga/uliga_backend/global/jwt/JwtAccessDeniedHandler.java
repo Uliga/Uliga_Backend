@@ -26,7 +26,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
     }
 
     private void sendResponse(HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
-        String result = objectMapper.writeValueAsString(new ErrorResponse(FORBIDDEN, accessDeniedException.getMessage()));
+        String result = objectMapper.writeValueAsString(new ErrorResponse(403L, "접근할 수 있는 권한이 없습니다."));
 
 
         response.setContentType("application/json");
