@@ -1,9 +1,10 @@
-package com.uliga.uliga_backend.domain.JoinTable;
+package com.uliga.uliga_backend.domain.JoinTable.model;
 
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,4 +28,11 @@ public class AccountBookMember {
     private Boolean getNotification;
 
     private AccountBookAuthority accountBookAuthority;
+    @Builder
+    public AccountBookMember(AccountBook accountBook, Member member, Boolean getNotification, AccountBookAuthority accountBookAuthority) {
+        this.accountBook = accountBook;
+        this.member = member;
+        this.getNotification = getNotification;
+        this.accountBookAuthority = accountBookAuthority;
+    }
 }

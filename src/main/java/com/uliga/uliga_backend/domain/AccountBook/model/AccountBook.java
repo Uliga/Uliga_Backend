@@ -3,10 +3,11 @@ package com.uliga.uliga_backend.domain.AccountBook.model;
 import com.uliga.uliga_backend.domain.Budget.model.Budget;
 import com.uliga.uliga_backend.domain.Common.BaseTimeEntity;
 import com.uliga.uliga_backend.domain.Income.model.Income;
-import com.uliga.uliga_backend.domain.JoinTable.AccountBookMember;
+import com.uliga.uliga_backend.domain.JoinTable.model.AccountBookMember;
 import com.uliga.uliga_backend.domain.Record.model.Record;
 import com.uliga.uliga_backend.domain.Schedule.model.Schedule;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,6 +26,13 @@ public class AccountBook extends BaseTimeEntity {
     private Boolean isPrivate;
 
     private String name;
+
+    @Builder
+    public AccountBook(Boolean isPrivate, String name) {
+
+        this.isPrivate = isPrivate;
+        this.name = name;
+    }
 
     @OneToMany(mappedBy = "accountBook", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Budget> budgets = new ArrayList<>();

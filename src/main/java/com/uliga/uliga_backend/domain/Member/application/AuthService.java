@@ -1,5 +1,11 @@
 package com.uliga.uliga_backend.domain.Member.application;
 
+import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
+import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.CreateRequest;
+import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
+import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
+import com.uliga.uliga_backend.domain.JoinTable.dao.AccountBookMemberRepository;
+import com.uliga.uliga_backend.domain.JoinTable.model.AccountBookMember;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenInfoDTO;
@@ -29,6 +35,8 @@ import static com.uliga.uliga_backend.global.common.constants.JwtConstants.REFRE
 @RequiredArgsConstructor
 public class AuthService {
     private final MemberRepository memberRepository;
+    private final AccountBookRepository accountBookRepository;
+    private final AccountBookMemberRepository accountBookMemberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate<String, String> redisTemplate;
@@ -39,6 +47,15 @@ public class AuthService {
         signUpRequest.encrypt(passwordEncoder);
         Member member = signUpRequest.toEntity();
         memberRepository.save(member);
+        CreateRequest build = CreateRequest.builder().name(member.getNickName() + " 님의 가계부").isPrivate(true).build();
+        AccountBook accountBook = build.toEntity();
+        accountBookRepository.save(accountBook);
+        AccountBookMember bookMember = AccountBookMember.builder()
+                .accountBook(accountBook)
+                .member(member)
+                .accountBookAuthority(AccountBookAuthority.ADMIN)
+                .getNotification(true).build();
+        accountBookMemberRepository.save(bookMember);
         // 현재 가계부 생성은 안 해놓음, 필요하면 추가할 예정
 
         return "CREATED";
@@ -49,6 +66,16 @@ public class AuthService {
         socialSignUpRequest.encrypt(passwordEncoder);
         Member member = socialSignUpRequest.toEntity();
         memberRepository.save(member);
+
+        CreateRequest build = CreateRequest.builder().name(member.getNickName() + " 님의 가계부").isPrivate(true).build();
+        AccountBook accountBook = build.toEntity();
+        accountBookRepository.save(accountBook);
+        AccountBookMember bookMember = AccountBookMember.builder()
+                .accountBook(accountBook)
+                .member(member)
+                .accountBookAuthority(AccountBookAuthority.ADMIN)
+                .getNotification(true).build();
+        accountBookMemberRepository.save(bookMember);
 
     }
 
