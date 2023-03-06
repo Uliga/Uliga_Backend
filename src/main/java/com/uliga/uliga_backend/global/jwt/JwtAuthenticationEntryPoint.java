@@ -38,19 +38,19 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     private void sendResponse(HttpServletResponse response, AuthenticationException authException) throws IOException {
         String result;
         if (authException instanceof BadCredentialsException) {
-            result = objectMapper.writeValueAsString(new ErrorResponse(CONFLICT, "INVALID_EMAIL_PASSWORD"));
+            result = objectMapper.writeValueAsString(new ErrorResponse(409L, "잘못된 이메일, 비밀번호 입니다."));
             response.setStatus(response.SC_CONFLICT);
         } else if (authException instanceof InternalAuthenticationServiceException) {
-            result = objectMapper.writeValueAsString(new ErrorResponse(NOT_FOUND,
-                    "USER_DETAIL_NOT_FOUND"));
+            result = objectMapper.writeValueAsString(new ErrorResponse(404L,
+                    "존재하지 않는 멤버입니다."));
             response.setStatus(response.SC_NOT_FOUND);
 
         } else if (authException instanceof InsufficientAuthenticationException) {
-            result = objectMapper.writeValueAsString(new ErrorResponse(BAD_REQUEST,
-                    "INSUFFICIENT_AUTHENTICATION"));
+            result = objectMapper.writeValueAsString(new ErrorResponse(404L,
+                    "인증 조건을 충족하지 않은 요청입니다"));
             response.setStatus(response.SC_BAD_REQUEST);
         } else {
-            result = objectMapper.writeValueAsString(new ErrorResponse(UNAUTHORIZED, "INVALID_ACCESS_TOKEN"));
+            result = objectMapper.writeValueAsString(new ErrorResponse(401L, "유효하지 않은 엑세스 토큰입니다."));
             response.setStatus(response.SC_UNAUTHORIZED);
         }
 
