@@ -5,6 +5,7 @@ import com.uliga.uliga_backend.domain.Member.dto.MemberDTO;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.MatchResult;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.UpdateApplicationPasswordDto;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.UpdateResult;
+import com.uliga.uliga_backend.domain.Member.dto.NativeQuery.MemberInfoNativeQ;
 import com.uliga.uliga_backend.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,12 @@ import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
 @RequestMapping(value = "/member")
 public class MemberController {
     private final MemberService memberService;
+
+    @GetMapping(value = "")
+    public ResponseEntity<MemberInfoNativeQ> getMemberInfo() {
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(memberService.getCurrentMemberInfo(currentMemberId));
+    }
 
     @PostMapping(value = "/applicationPassword")
     public ResponseEntity<MatchResult> checkApplicationPassword(@RequestBody ApplicationPasswordCheck passwordCheck) {

@@ -3,6 +3,7 @@ package com.uliga.uliga_backend.domain.Member.application;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.UpdateApplicationPasswordDto;
+import com.uliga.uliga_backend.domain.Member.dto.NativeQuery.MemberInfoNativeQ;
 import com.uliga.uliga_backend.domain.Member.exception.InvalidApplicationPasswordException;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
@@ -21,6 +22,11 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     private final PasswordEncoder passwordEncoder;
+
+    @Transactional
+    public MemberInfoNativeQ getCurrentMemberInfo(Long id) {
+        return memberRepository.findMemberInfoById(id);
+    }
 
     @Transactional
     public boolean checkApplicationPassword(Long id, ApplicationPasswordCheck passwordCheck) {
