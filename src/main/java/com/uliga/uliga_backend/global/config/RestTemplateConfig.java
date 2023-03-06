@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import java.nio.charset.Charset;
 
 @Configuration
-public class RedisTemplateConfig {
+public class RestTemplateConfig {
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
         return restTemplateBuilder.requestFactory(

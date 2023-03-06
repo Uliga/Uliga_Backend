@@ -2,19 +2,25 @@ package com.uliga.uliga_backend.domain.Member.api;
 
 import com.uliga.uliga_backend.domain.Member.application.AuthService;
 import com.uliga.uliga_backend.domain.Member.application.EmailCertificationService;
+import com.uliga.uliga_backend.domain.Member.application.OAuth2MemberService;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.LoginResult;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SignUpRequest;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SignUpResult;
+import com.uliga.uliga_backend.domain.Member.dto.OAuthDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.AccessTokenDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
 
@@ -25,6 +31,8 @@ import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
 public class MemberAuthController {
     private final AuthService authService;
     private final EmailCertificationService emailCertificationService;
+
+    private final OAuth2MemberService oAuth2MemberService;
 
 
     @PostMapping(value = "/signup")
@@ -40,6 +48,11 @@ public class MemberAuthController {
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<LoginResult> loginForm(LoginRequest loginRequest) {
         return ResponseEntity.ok(authService.login(loginRequest));
+    }
+
+    @PostMapping(value = "/social_login/{loginType}")
+    public ResponseEntity<LoginResult> socialLogin(@Param("loginType") String loginType, @RequestBody OAuthDTO.SocialLoginDto loginDto, @Value("${oAuth.password}") String password) throws IOException {
+        return ResponseEntity.ok(oAuth2MemberService.oAuthLogin(loginType.toUpperCase(), loginDto.getToken(), password));
     }
 
     @GetMapping(value = "/logout-redirect")

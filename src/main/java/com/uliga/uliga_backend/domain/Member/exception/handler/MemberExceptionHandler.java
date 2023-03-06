@@ -3,6 +3,7 @@ package com.uliga.uliga_backend.domain.Member.exception.handler;
 import com.uliga.uliga_backend.domain.Member.exception.EmailCertificationExpireException;
 import com.uliga.uliga_backend.domain.Member.exception.InvalidApplicationPasswordException;
 import com.uliga.uliga_backend.domain.Member.exception.LogoutMemberException;
+import com.uliga.uliga_backend.domain.Member.exception.UnknownLoginException;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
@@ -69,5 +70,18 @@ public class MemberExceptionHandler {
                 HttpStatus.CONFLICT
         );
 
+    }
+
+    @ExceptionHandler(UnknownLoginException.class)
+    protected final ResponseEntity<ErrorResponse> handleUnknownLoginException(
+            UnknownLoginException ex, WebRequest request
+    ) {
+        log.info(ex.getMessage());
+        return new ResponseEntity<>(
+                ErrorResponse.builder()
+                        .errorCode(409L)
+                        .message("알 수 없는 로그인 방식으로 온 요청입니다").build(),
+                HttpStatus.CONFLICT
+        );
     }
 }

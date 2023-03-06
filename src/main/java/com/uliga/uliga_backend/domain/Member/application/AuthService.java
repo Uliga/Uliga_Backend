@@ -2,7 +2,6 @@ package com.uliga.uliga_backend.domain.Member.application;
 
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.model.Member;
-import com.uliga.uliga_backend.domain.Token.dto.TokenDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenInfoDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenIssueDTO;
 import com.uliga.uliga_backend.domain.Token.exception.ExpireRefreshTokenException;
@@ -43,6 +42,14 @@ public class AuthService {
         // 현재 가계부 생성은 안 해놓음, 필요하면 추가할 예정
 
         return "CREATED";
+    }
+
+    @Transactional
+    public void socialSignUp(SocialSignUpRequest socialSignUpRequest) {
+        socialSignUpRequest.encrypt(passwordEncoder);
+        Member member = socialSignUpRequest.toEntity();
+        memberRepository.save(member);
+
     }
 
     @Transactional

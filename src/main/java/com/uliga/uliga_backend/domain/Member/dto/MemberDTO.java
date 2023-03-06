@@ -54,6 +54,33 @@ public class MemberDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
+    public static class SocialSignUpRequest {
+        private String email;
+        private UserLoginType userLoginType;
+
+        private String userName;
+
+        private String password;
+
+        public void encrypt(PasswordEncoder passwordEncoder) {
+            this.password = passwordEncoder.encode(this.password);
+        }
+
+        public Member toEntity() {
+            return Member.builder()
+                    .userName(userName)
+                    .userLoginType(userLoginType)
+                    .authority(ROLE_USER)
+                    .email(email)
+                    .password(password).build();
+        }
+
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
     public static class SignUpResult {
         private String result;
     }
