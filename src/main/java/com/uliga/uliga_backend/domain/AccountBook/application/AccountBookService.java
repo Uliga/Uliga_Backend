@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQuery.AccountBookInfoQ;
+import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookAccessException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
@@ -40,7 +41,7 @@ public class AccountBookService {
     public AccountBookInfo getSingleAccountBookInfo(Long id, Long memberId) {
         AccountBookInfoQ bookInfoById = accountBookRepository.findAccountBookInfoById(id, memberId);
         if (bookInfoById == null) {
-
+            throw new UnauthorizedAccountBookAccessException();
         }
         return AccountBookInfo.builder()
                 .info(bookInfoById)
