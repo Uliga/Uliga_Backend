@@ -68,5 +68,24 @@ public class AccountBookDTO {
     }
 
 
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    public static class GetInvitations{
+        private Long id;
+        private List<String> emails;
+    }
+
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    public static class Invited {
+        private Long invited;
+    }
+
+
+
 
 }

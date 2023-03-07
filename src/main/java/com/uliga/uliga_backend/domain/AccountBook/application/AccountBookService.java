@@ -25,6 +25,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
@@ -89,6 +90,23 @@ public class AccountBookService {
         }
 
         return accountBook.toInfoDto();
+    }
+
+    @Transactional
+    public Invited createInvitation(Long id, GetInvitations invitations) throws JsonProcessingException {
+        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        AccountBook accountBook = accountBookRepository.findById(invitations.getId()).orElseThrow(NotFoundByIdException::new);
+        long result = 0L;
+        for (String email : invitations.getEmails()) {
+            InvitationInfo info = InvitationInfo.builder()
+                    .id(accountBook.getId())
+                    .memberName(member.getUserName())
+                    .accountBookName(accountBook.getName()).build();
+            ListOperations<String, Object> valueOperations = redisTemplate.opsForList();
+            valueOperations.rightPush(email, objectMapper.writeValueAsString(info));
+            result += 1;
+        }
+        return Invited.builder().invited(result).build();
     }
 
 

@@ -23,6 +23,7 @@ public class AccountBookController {
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.getMemberAccountBook(id));
     }
+
     // 이메일로 유저 초대장 여기서 보내야함
     @PostMapping(value = "")
     public ResponseEntity<AccountBookInfo> createAccountBook(@RequestBody CreateRequest createRequest) throws JsonProcessingException {
@@ -36,6 +37,16 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.createAccountBookPrivate(id, createRequest));
     }
 
+    @PostMapping(value = "/invitation")
+    public ResponseEntity<Invited> createInvitation(@RequestBody GetInvitations invitations) throws JsonProcessingException {
+        Long id = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(accountBookService.createInvitation(id, invitations));
+    }
 
+    @PostMapping(value = "/invitation/reply")
+    public ResponseEntity<Object> invitationReply() {
 
+        Long id = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(null);
+    }
 }
