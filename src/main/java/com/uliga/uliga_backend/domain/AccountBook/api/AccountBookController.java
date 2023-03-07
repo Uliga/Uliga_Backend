@@ -71,7 +71,8 @@ public class AccountBookController {
 
     @PostMapping(value = "/category")
     public ResponseEntity<CategoryCreateResult> createCategories(@RequestBody CategoryCreateRequest createRequest) {
-        return ResponseEntity.ok(accountBookService.createCategory(createRequest));
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(accountBookService.createCategory(currentMemberId, createRequest));
     }
 
     @GetMapping(value = "/{id}/category")

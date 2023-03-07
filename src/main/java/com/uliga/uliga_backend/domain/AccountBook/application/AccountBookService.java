@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQuery.AccountBookInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookAccessException;
+import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookCategoryCreateException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
@@ -166,9 +167,12 @@ public class AccountBookService {
 
 
     @Transactional
-    public CategoryCreateResult createCategory(CategoryCreateRequest createRequest) {
+    public CategoryCreateResult createCategory(Long memberId, CategoryCreateRequest createRequest) {
         Long id = createRequest.getId();
         AccountBook accountBook = accountBookRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        if (!accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(memberId, id)) {
+            throw new UnauthorizedAccountBookCategoryCreateException();
+        }
         List<String> result = new ArrayList<>();
         for (String cat : createRequest.getCategories()) {
             if (!categoryRepository.existsByAccountBookIdAndName(id, cat)) {
