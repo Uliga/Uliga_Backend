@@ -26,7 +26,8 @@ public class AccountBookController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<AccountBookInfo> getSingleAccountBookInfo(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(accountBookService.getSingleAccountBookInfo(id));
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(accountBookService.getSingleAccountBookInfo(id, memberId));
     }
 
     // 이메일로 유저 초대장 여기서 보내야함

@@ -37,9 +37,9 @@ public class AccountBookService {
     private final CategoryRepository categoryRepository;
 
     @Transactional
-    public AccountBookInfo getSingleAccountBookInfo(Long id) {
+    public AccountBookInfo getSingleAccountBookInfo(Long id, Long memberId) {
         return AccountBookInfo.builder()
-                .info(accountBookRepository.findAccountBookInfoById(id))
+                .info(accountBookRepository.findAccountBookInfoById(id, memberId))
                 .members(accountBookRepository.findAccountBookMemberInfoById(id))
                 .categories(accountBookRepository.findAccountBookCategoryInfoById(id)).build();
     }
