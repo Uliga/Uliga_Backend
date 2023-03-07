@@ -1,7 +1,6 @@
 package com.uliga.uliga_backend.domain.AccountBook.model;
 
-import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO;
-import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.AccountBookInfo;
+import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.SimpleAccountBookInfo;
 import com.uliga.uliga_backend.domain.Budget.model.Budget;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.BaseTimeEntity;
@@ -56,8 +55,8 @@ public class AccountBook extends BaseTimeEntity {
     private List<Category> categories = new ArrayList<>();
 
 
-    public AccountBookInfo toInfoDto() {
-        return AccountBookInfo.builder()
+    public SimpleAccountBookInfo toInfoDto() {
+        return SimpleAccountBookInfo.builder()
                 .id(id)
                 .isPrivate(isPrivate)
                 .name(name)

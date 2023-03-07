@@ -1,6 +1,8 @@
 package com.uliga.uliga_backend.domain.AccountBook.dto;
 
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQuery.AccountBookCategoryInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQuery.AccountBookInfoQ;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQuery.AccountBookMemberInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -52,12 +54,23 @@ public class AccountBookDTO {
     public static class GetAccountBookInfos{
         private List<AccountBookInfoQ> accountBooks;
     }
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    public static class AccountBookInfo{
+        private AccountBookInfoQ info;
+        private List<AccountBookMemberInfoQ> members;
+        private List<AccountBookCategoryInfoQ> categories;
+    }
+
+
 
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     @Getter
-    public static class AccountBookInfo {
+    public static class SimpleAccountBookInfo {
         private Long id;
 
         private String name;
