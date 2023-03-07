@@ -66,12 +66,21 @@ public class MemberAuthController {
     }
 
     // 이메일 인증 요청
-    @PostMapping(value = "/mail")
-    public ResponseEntity<EmailSentDto> mailConfirm(@RequestBody ConfirmEmailDto confirmEmailDto) throws Exception {
+    @PostMapping(value = "/mail", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<EmailSentDto> mailConfirmJson(@RequestBody ConfirmEmailDto confirmEmailDto) throws Exception {
 
         emailCertificationService.sendSimpleMessage(confirmEmailDto.getEmail());
         return ResponseEntity.ok(EmailSentDto.builder().email(confirmEmailDto.getEmail()).success(true).build());
     }
+
+    @PostMapping(value = "/mail", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public ResponseEntity<EmailSentDto> mailConfirmForm(ConfirmEmailDto confirmEmailDto) throws Exception {
+
+        emailCertificationService.sendSimpleMessage(confirmEmailDto.getEmail());
+        return ResponseEntity.ok(EmailSentDto.builder().email(confirmEmailDto.getEmail()).success(true).build());
+    }
+
+
 
     // 코드 인증 요청
     @PostMapping(value = "/mail/code")
