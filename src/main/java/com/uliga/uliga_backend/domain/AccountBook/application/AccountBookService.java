@@ -4,17 +4,23 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQuery.AccountBookInfoQ;
+import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookAccessException;
 import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookCategoryCreateException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
 import com.uliga.uliga_backend.domain.Category.model.Category;
+import com.uliga.uliga_backend.domain.Common.Date;
+import com.uliga.uliga_backend.domain.Income.dao.IncomeRepository;
+import com.uliga.uliga_backend.domain.Income.model.Income;
 import com.uliga.uliga_backend.domain.JoinTable.dao.AccountBookMemberRepository;
 import com.uliga.uliga_backend.domain.JoinTable.model.AccountBookMember;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.InvitationInfo;
 import com.uliga.uliga_backend.domain.Member.model.Member;
+import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
+import com.uliga.uliga_backend.domain.Record.model.Record;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +40,8 @@ public class AccountBookService {
     private final AccountBookRepository accountBookRepository;
     private final AccountBookMemberRepository accountBookMemberRepository;
     private final MemberRepository memberRepository;
+    private final IncomeRepository incomeRepository;
+    private final RecordRepository recordRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
 
@@ -58,6 +66,7 @@ public class AccountBookService {
         return GetAccountBookInfos.builder()
                 .accountBooks(accountBookInfosByMemberId).build();
     }
+
     @Transactional
     public SimpleAccountBookInfo createAccountBookPrivate(Long id, CreateRequestPrivate createRequest) {
         Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
@@ -71,6 +80,7 @@ public class AccountBookService {
         accountBookMemberRepository.save(bookMember);
         return accountBook.toInfoDto();
     }
+
     @Transactional
     public SimpleAccountBookInfo createAccountBook(Long id, CreateRequest createRequest) throws JsonProcessingException {
         Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
@@ -98,8 +108,6 @@ public class AccountBookService {
 
             SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
             setOperations.add(email, objectMapper.writeValueAsString(info));
-//            ListOperations<String, Object> valueOperations = redisTemplate.opsForList();
-//            valueOperations.rightPush(email, objectMapper.writeValueAsString(info));
         }
 
         return accountBook.toInfoDto();
@@ -117,8 +125,6 @@ public class AccountBookService {
                     .accountBookName(accountBook.getName()).build();
             SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
             setOperations.add(email, objectMapper.writeValueAsString(info));
-//            ListOperations<String, Object> valueOperations = redisTemplate.opsForList();
-//            valueOperations.rightPush(email, objectMapper.writeValueAsString(info));
             result += 1;
         }
         return Invited.builder().invited(result).build();
@@ -150,7 +156,79 @@ public class AccountBookService {
 
     @Transactional
     public CreateResult createItems(Long id, CreateItems createItems) {
-        return null;
+        long r = 0L;
+        long i = 0L;
+        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        AccountBook accountBook = accountBookRepository.findById(createItems.getId()).orElseThrow(NotFoundByIdException::new);
+        for (CreateRecordOrIncomeDto dto : createItems.getCreateRequest()) {
+            String[] split = dto.getDate().split("-");
+            Date date = Date.builder()
+                    .year(Long.parseLong(split[0]))
+                    .month(Long.parseLong(split[1]))
+                    .day(Long.parseLong(split[2])).build();
+            Category category = categoryRepository.findByAccountBookAndName(accountBook, dto.getCategory()).orElseThrow(CategoryNotFoundException::new);
+            if (dto.isIncome()) {
+                // 수입 생성
+                Income build = Income.builder()
+                        .payment(dto.getPayment())
+                        .account(dto.getAccount())
+                        .creator(member)
+                        .accountBook(accountBook)
+                        .value(dto.getValue())
+                        .memo(dto.getMemo())
+                        .date(date)
+                        .category(category).build();
+                incomeRepository.save(build);
+                for (Long accountBookId : dto.getSharedAccountBook()) {
+                    AccountBook sharedAccountBook = accountBookRepository.findById(accountBookId).orElseThrow(NotFoundByIdException::new);
+                    Income sharedIncome = Income.builder()
+                            .payment(dto.getPayment())
+                            .account(dto.getAccount())
+                            .creator(member)
+                            .accountBook(sharedAccountBook)
+                            .value(dto.getValue())
+                            .memo(dto.getMemo())
+                            .date(date)
+                            .category(null).build();
+                    // TODO: 어라 근데 다른 가계부에 해당 카테고리가 없으면 어쩜??? 그냥 일단 비워둘까???
+                    incomeRepository.save(sharedIncome);
+                }
+                i += 1;
+
+            } else {
+                // 지출 생성
+                Record build = Record.builder()
+                        .account(dto.getAccount())
+                        .creator(member)
+                        .accountBook(accountBook)
+                        .spend(dto.getValue())
+                        .payment(dto.getPayment())
+                        .date(date)
+                        .category(category)
+                        .memo(dto.getMemo())
+                        .build();
+                recordRepository.save(build);
+                for (Long accountBookId : dto.getSharedAccountBook()) {
+                    AccountBook sharedAccountBook = accountBookRepository.findById(accountBookId).orElseThrow(NotFoundByIdException::new);
+                    Record sharedRecord = Record.builder()
+                            .account(dto.getAccount())
+                            .creator(member)
+                            .accountBook(sharedAccountBook)
+                            .spend(dto.getValue())
+                            .payment(dto.getPayment())
+                            .date(date)
+                            .category(null)
+                            .memo(dto.getMemo())
+                            .build();
+                    recordRepository.save(sharedRecord);
+                }
+                r += 1;
+            }
+
+        }
+        return CreateResult.builder()
+                .income(i)
+                .record(r).build();
     }
 
     @Transactional

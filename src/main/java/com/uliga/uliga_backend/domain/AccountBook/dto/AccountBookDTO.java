@@ -4,6 +4,7 @@ import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQuery.AccountBookCat
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQuery.AccountBookInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQuery.AccountBookMemberInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
+import com.uliga.uliga_backend.domain.AccountBook.model.PaymentType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -121,11 +122,13 @@ public class AccountBookDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CreateRecordOrIncomeDto{
-        private String type;
+        private boolean isIncome;
 
         private String category;
 
-        private String payment;
+        private PaymentType payment;
+
+        private String date;
 
         private String account;
 
@@ -141,6 +144,7 @@ public class AccountBookDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CreateItems{
+        private Long id;
         private List<CreateRecordOrIncomeDto> createRequest;
     }
 

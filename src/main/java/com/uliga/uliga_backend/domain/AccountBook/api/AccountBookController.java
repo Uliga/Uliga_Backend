@@ -69,14 +69,36 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.createItems(id, items));
     }
 
+
     @PostMapping(value = "/category")
     public ResponseEntity<CategoryCreateResult> createCategories(@RequestBody CategoryCreateRequest createRequest) {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.createCategory(currentMemberId, createRequest));
     }
 
+    @PatchMapping(value = "/category/record")
+    public void addCategoryToRecord() {
+
+    }
+
+    @PatchMapping(value = "/category/income")
+    public void addCategoryToIncome() {
+
+    }
+
+    @PostMapping(value = "/record")
+    public void addRecord() {
+
+    }
+
+    @PostMapping(value = "/income")
+    public void addIncome() {
+
+    }
+
     @GetMapping(value = "/{id}/category")
     public ResponseEntity<AccountBookCategories> getAccountBookCategory(@PathVariable("id") Long id) {
+
         return ResponseEntity.ok(accountBookService.getAccountBookCategories(id));
     }
 

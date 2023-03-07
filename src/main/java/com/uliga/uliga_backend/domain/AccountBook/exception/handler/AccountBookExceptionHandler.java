@@ -1,5 +1,6 @@
 package com.uliga.uliga_backend.domain.AccountBook.exception.handler;
 
+import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookAccessException;
 import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookCategoryCreateException;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
@@ -31,5 +32,15 @@ public class AccountBookExceptionHandler {
         return new ResponseEntity<>(ErrorResponse.builder()
                 .message(ex.getMessage())
                 .errorCode(401L).build(), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    protected final ResponseEntity<ErrorResponse> handleCategoryNotFound(
+            CategoryNotFoundException ex, WebRequest request
+    ) {
+        log.info("가계부에 존재하지 않는 카테고리로 지출 혹은 수입 생성 요청이 들어옴");
+        return new ResponseEntity<>(ErrorResponse.builder()
+                .message(ex.getMessage())
+                .errorCode(404L).build(), HttpStatus.NOT_FOUND);
     }
 }
