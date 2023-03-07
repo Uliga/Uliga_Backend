@@ -87,7 +87,7 @@ public class AuthService {
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(usernamePasswordAuthenticationToken);
 
         TokenInfoDTO tokenInfoDTO = jwtTokenProvider.generateTokenDto(authenticate);
-
+        log.info("로그인 API 중 토큰 생성 로직 실행");
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         valueOperations.set(tokenInfoDTO.getAccessToken(), tokenInfoDTO.getRefreshToken());
         redisTemplate.expire(tokenInfoDTO.getAccessToken(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
@@ -103,10 +103,12 @@ public class AuthService {
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         String refreshByAccess = valueOperations.get(accessTokenDTO.getAccessToken());
         if (refreshByAccess == null) {
+            log.info("토큰 재발급 API 중 리프레쉬 만료 확인");
             throw new ExpireRefreshTokenException();
         }
         // refresh token 검증
         if (!jwtTokenProvider.validateToken(refreshByAccess)) {
+            log.info("토큰 재발급 API 중 유효하지 않은 리프레쉬 확인");
             throw new InvalidRefreshTokenException();
         }
 
@@ -116,6 +118,7 @@ public class AuthService {
         // 새로운 토큰 생성
         TokenInfoDTO tokenInfoDTO = jwtTokenProvider.generateTokenDto(authentication);
         // 저장소 정보 업데이트
+        log.info("토큰 재발급 성공후 레디스에 값 저장");
         valueOperations.set(tokenInfoDTO.getAccessToken(), tokenInfoDTO.getRefreshToken());
         redisTemplate.expire(tokenInfoDTO.getAccessToken(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
 

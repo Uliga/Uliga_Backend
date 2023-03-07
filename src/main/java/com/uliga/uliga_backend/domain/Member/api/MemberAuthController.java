@@ -37,16 +37,19 @@ public class MemberAuthController {
 
     @PostMapping(value = "/signup")
     public ResponseEntity<SignUpResult> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
+        log.info("회원 가입 요청 API 호출");
         return ResponseEntity.ok(SignUpResult.builder().result(authService.signUp(signUpRequest)).build());
     }
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LoginResult> loginJson(@RequestBody LoginRequest loginRequest) {
+        log.info("로그인 요청 API 호출 - json");
         return ResponseEntity.ok(authService.login(loginRequest));
     }
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<LoginResult> loginForm(LoginRequest loginRequest) {
+        log.info("로그인 요청 API 호출 - form");
         return ResponseEntity.ok(authService.login(loginRequest));
     }
 
@@ -62,20 +65,21 @@ public class MemberAuthController {
 
     @PostMapping(value = "/reissue")
     public ResponseEntity<TokenDTO.TokenIssueDTO> reissue(@RequestBody AccessTokenDTO accessTokenDTO) {
+        log.info("토큰 재발급 요청 API 호출");
         return ResponseEntity.ok(authService.reissue(accessTokenDTO));
     }
 
     // 이메일 인증 요청
     @PostMapping(value = "/mail", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EmailSentDto> mailConfirmJson(@RequestBody ConfirmEmailDto confirmEmailDto) throws Exception {
-
+        log.info("이메일 인증 요청 API 호출 - json");
         emailCertificationService.sendSimpleMessage(confirmEmailDto.getEmail());
         return ResponseEntity.ok(EmailSentDto.builder().email(confirmEmailDto.getEmail()).success(true).build());
     }
 
     @PostMapping(value = "/mail", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<EmailSentDto> mailConfirmForm(ConfirmEmailDto confirmEmailDto) throws Exception {
-
+        log.info("이메일 인증 요청 API 호출 - form");
         emailCertificationService.sendSimpleMessage(confirmEmailDto.getEmail());
         return ResponseEntity.ok(EmailSentDto.builder().email(confirmEmailDto.getEmail()).success(true).build());
     }
@@ -85,6 +89,7 @@ public class MemberAuthController {
     // 코드 인증 요청
     @PostMapping(value = "/mail/code")
     public ResponseEntity<CodeConfirmDto> codeConfirm(@RequestBody EmailConfirmCodeDto emailConfirmCodeDto) {
+        log.info("코드 인증 요청 API 호출");
         return ResponseEntity.ok(emailCertificationService.confirmCode(emailConfirmCodeDto));
 
     }
@@ -92,12 +97,14 @@ public class MemberAuthController {
     // 이메일 중복 확인
     @GetMapping(value = "/mail/exists/{email}")
     public ResponseEntity<ExistsCheckDto> emailExists(@PathVariable("email") String email) {
+        log.info("이메일 중복 확인 API 호출");
         return ResponseEntity.ok(authService.emailExists(email));
     }
 
     // 닉네임 중복 확인
     @GetMapping(value = "/nickname/exists/{nickname}")
     public ResponseEntity<ExistsCheckDto> nicknameExists(@PathVariable("nickname") String nickname) {
+        log.info("닉네임 중복 확인 API 호출");
         return ResponseEntity.ok(authService.nicknameExists(nickname));
     }
 }
