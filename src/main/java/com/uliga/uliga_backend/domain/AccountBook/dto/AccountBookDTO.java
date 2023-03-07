@@ -85,6 +85,25 @@ public class AccountBookDTO {
         private Long invited;
     }
 
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    public static class InvitationReply {
+        private Long id;
+        private Boolean join;
+    }
+
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    public static class InvitationReplyResult {
+        private Long id;
+        private Boolean join;
+    }
+
+
 
 
 

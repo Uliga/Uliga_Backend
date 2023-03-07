@@ -44,9 +44,9 @@ public class AccountBookController {
     }
 
     @PostMapping(value = "/invitation/reply")
-    public ResponseEntity<Object> invitationReply() {
+    public ResponseEntity<InvitationReplyResult> invitationReply(@RequestBody InvitationReply invitationReply) throws JsonProcessingException {
 
         Long id = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(accountBookService.invitationReply(id, invitationReply));
     }
 }

@@ -18,12 +18,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
 
@@ -45,20 +47,28 @@ public class MemberService {
     public GetMemberInfo getCurrentMemberInfo(Long id) throws JsonProcessingException {
 
         MemberInfoNativeQ memberInfoById = memberRepository.findMemberInfoById(id);
-        ListOperations<String, String> valueOperations = redisTemplate.opsForList();
+        SetOperations<String, String> setOperations = redisTemplate.opsForSet();
+//        ListOperations<String, String> valueOperations = redisTemplate.opsForList();
         String email = memberInfoById.getEmail();
-        Long size = valueOperations.size(email);
-        if (size == null) {
-            size = 0L;
-        }
-        List<String> stringList = valueOperations.range(email, 0, size);
+        Set<String> strings = setOperations.members(email);
+//        Long size = valueOperations.size(email);
+//        if (size == null) {
+//            size = 0L;
+//        }
         List<InvitationInfo> result = new ArrayList<>();
-        if (stringList != null) {
-
-            for (String o : stringList) {
+        if (strings != null) {
+            for (String o : strings) {
                 result.add(objectMapper.readValue(o, InvitationInfo.class));
             }
         }
+//        List<String> stringList = valueOperations.range(email, 0, size);
+//        if (stringList != null) {
+//
+//
+//            for (String o : stringList) {
+//                result.add(objectMapper.readValue(o, InvitationInfo.class));
+//            }
+//        }
         return GetMemberInfo.builder()
                 .memberInfo(memberInfoById)
                 .invitations(result).build();

@@ -19,10 +19,7 @@ import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.ListOperations;
-import org.springframework.data.redis.core.RedisOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -85,8 +82,11 @@ public class AccountBookService {
                     .id(accountBook.getId())
                     .memberName(member.getUserName())
                     .accountBookName(accountBook.getName()).build();
-            ListOperations<String, Object> valueOperations = redisTemplate.opsForList();
-            valueOperations.rightPush(email, objectMapper.writeValueAsString(info));
+
+            SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
+            setOperations.add(email, objectMapper.writeValueAsString(info));
+//            ListOperations<String, Object> valueOperations = redisTemplate.opsForList();
+//            valueOperations.rightPush(email, objectMapper.writeValueAsString(info));
         }
 
         return accountBook.toInfoDto();
@@ -102,11 +102,37 @@ public class AccountBookService {
                     .id(accountBook.getId())
                     .memberName(member.getUserName())
                     .accountBookName(accountBook.getName()).build();
-            ListOperations<String, Object> valueOperations = redisTemplate.opsForList();
-            valueOperations.rightPush(email, objectMapper.writeValueAsString(info));
+            SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
+            setOperations.add(email, objectMapper.writeValueAsString(info));
+//            ListOperations<String, Object> valueOperations = redisTemplate.opsForList();
+//            valueOperations.rightPush(email, objectMapper.writeValueAsString(info));
             result += 1;
         }
         return Invited.builder().invited(result).build();
+    }
+
+    @Transactional
+    public InvitationReplyResult invitationReply(Long id, InvitationReply invitationReply) throws JsonProcessingException {
+        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        AccountBook accountBook = accountBookRepository.findById(invitationReply.getId()).orElseThrow(NotFoundByIdException::new);
+        if (invitationReply.getJoin()) {
+            AccountBookMember bookMember = AccountBookMember.builder()
+                    .accountBook(accountBook)
+                    .member(member)
+                    .accountBookAuthority(AccountBookAuthority.USER)
+                    .getNotification(true).build();
+            accountBookMemberRepository.save(bookMember);
+        }
+        SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
+        InvitationInfo info = InvitationInfo.builder()
+                .id(accountBook.getId())
+                .memberName(member.getUserName())
+                .accountBookName(accountBook.getName()).build();
+        setOperations.remove(member.getEmail(), objectMapper.writeValueAsString(info));
+        return InvitationReplyResult.builder()
+                .id(invitationReply.getId())
+                .join(invitationReply.getJoin()).build();
+
     }
 
 
