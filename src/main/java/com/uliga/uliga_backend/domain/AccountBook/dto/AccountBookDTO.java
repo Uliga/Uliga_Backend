@@ -116,6 +116,44 @@ public class AccountBookDTO {
         private Boolean join;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CreateRecordOrIncomeDto{
+        private String type;
+
+        private String category;
+
+        private String payment;
+
+        private String account;
+
+        private Long value;
+
+        private String memo;
+
+        private List<Long> sharedAccountBook;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CreateItems{
+        private List<CreateRecordOrIncomeDto> createRequest;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CreateResult {
+        private Long record;
+
+        private Long income;
+    }
+
 
 
 

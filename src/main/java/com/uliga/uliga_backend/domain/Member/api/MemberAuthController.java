@@ -85,14 +85,24 @@ public class MemberAuthController {
     }
 
 
-
     // 코드 인증 요청
-    @PostMapping(value = "/mail/code")
-    public ResponseEntity<CodeConfirmDto> codeConfirm(@RequestBody EmailConfirmCodeDto emailConfirmCodeDto) {
+    @PostMapping(value = "/mail/code", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CodeConfirmDto> codeConfirmJson(@RequestBody EmailConfirmCodeDto emailConfirmCodeDto) {
+
         log.info("코드 인증 요청 API 호출");
         return ResponseEntity.ok(emailCertificationService.confirmCode(emailConfirmCodeDto));
 
     }
+
+    @PostMapping(value = "/mail/code", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public ResponseEntity<CodeConfirmDto> codeConfirmForm(@RequestBody EmailConfirmCodeDto emailConfirmCodeDto) {
+
+        log.info("코드 인증 요청 API 호출");
+        return ResponseEntity.ok(emailCertificationService.confirmCode(emailConfirmCodeDto));
+
+    }
+
+
 
     // 이메일 중복 확인
     @GetMapping(value = "/mail/exists/{email}")

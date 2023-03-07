@@ -26,6 +26,11 @@ public class Record extends BaseTimeEntity {
     private String memo;
     private Long spend;
 
+    private String payment;
+
+    private String account;
+
+
     @Embedded
     private Date date;
 

@@ -60,4 +60,12 @@ public class AccountBookController {
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.invitationReply(id, invitationReply));
     }
+
+    @PostMapping(value = "/item")
+    public ResponseEntity<CreateResult> createItems(@RequestBody CreateItems items) {
+
+        log.info("지출 혹은 수입 생성 API 호출");
+        Long id = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(accountBookService.createItems(id, items));
+    }
 }
