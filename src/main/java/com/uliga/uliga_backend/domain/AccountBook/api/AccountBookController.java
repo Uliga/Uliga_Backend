@@ -68,4 +68,14 @@ public class AccountBookController {
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.createItems(id, items));
     }
+
+    @GetMapping(value = "/{id}/category")
+    public ResponseEntity<AccountBookCategories> getAccountBookCategory(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(accountBookService.getAccountBookCategories(id));
+    }
+
+    @GetMapping(value = "/{id}/member")
+    public ResponseEntity<AccountBookMembers> getAccountBookMembers(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(accountBookService.getAccountBookMembers(id));
+    }
 }

@@ -154,6 +154,23 @@ public class AccountBookDTO {
         private Long income;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AccountBookCategories{
+        private List<AccountBookCategoryInfoQ> categories;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AccountBookMembers{
+        private List<AccountBookMemberInfoQ> members;
+    }
+
+
 
 
 

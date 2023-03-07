@@ -151,5 +151,17 @@ public class AccountBookService {
         return null;
     }
 
+    @Transactional
+    public AccountBookCategories getAccountBookCategories(Long id) {
+        return AccountBookCategories.builder()
+                .categories(accountBookRepository.findAccountBookCategoryInfoById(id)).build();
+    }
+
+    @Transactional
+    public AccountBookMembers getAccountBookMembers(Long id) {
+        return AccountBookMembers.builder()
+                .members(accountBookRepository.findAccountBookMemberInfoById(id)).build();
+    }
+
 
 }
