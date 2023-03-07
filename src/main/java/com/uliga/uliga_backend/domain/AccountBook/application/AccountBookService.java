@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
@@ -163,5 +164,24 @@ public class AccountBookService {
                 .members(accountBookRepository.findAccountBookMemberInfoById(id)).build();
     }
 
+
+    @Transactional
+    public CategoryCreateResult createCategory(CategoryCreateRequest createRequest) {
+        Long id = createRequest.getId();
+        AccountBook accountBook = accountBookRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        List<String> result = new ArrayList<>();
+        for (String cat : createRequest.getCategories()) {
+            if (!categoryRepository.existsByAccountBookIdAndName(id, cat)) {
+                Category newCategory = Category.builder()
+                        .accountBook(accountBook)
+                        .name(cat)
+                        .build();
+                categoryRepository.save(newCategory);
+                result.add(cat);
+            }
+        }
+        return CategoryCreateResult.builder()
+                .created(result).build();
+    }
 
 }

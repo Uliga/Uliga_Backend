@@ -69,6 +69,11 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.createItems(id, items));
     }
 
+    @PostMapping(value = "/category")
+    public ResponseEntity<CategoryCreateResult> createCategories(@RequestBody CategoryCreateRequest createRequest) {
+        return ResponseEntity.ok(accountBookService.createCategory(createRequest));
+    }
+
     @GetMapping(value = "/{id}/category")
     public ResponseEntity<AccountBookCategories> getAccountBookCategory(@PathVariable("id") Long id) {
         return ResponseEntity.ok(accountBookService.getAccountBookCategories(id));

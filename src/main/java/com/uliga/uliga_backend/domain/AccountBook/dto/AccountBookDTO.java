@@ -170,6 +170,24 @@ public class AccountBookDTO {
         private List<AccountBookMemberInfoQ> members;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CategoryCreateRequest {
+        private Long id;
+        private List<String> categories;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CategoryCreateResult {
+        private Long id;
+        private List<String> created;
+    }
+
 
 
 
