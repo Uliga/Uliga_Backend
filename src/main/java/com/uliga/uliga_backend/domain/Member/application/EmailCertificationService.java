@@ -90,6 +90,7 @@ public class EmailCertificationService {
         if (!code.equals(emailConfirmCodeDto.getCode())) {
             return MemberDTO.CodeConfirmDto.builder().matches(false).build();
         }
+        valueOperations.getAndDelete(emailConfirmCodeDto.getEmail());
         return MemberDTO.CodeConfirmDto.builder().matches(true).build();
 
     }

@@ -20,12 +20,14 @@ public class AccountBookController {
 
     @GetMapping(value = "")
     public ResponseEntity<GetAccountBookInfos> getMemberAccountBook() {
+        log.info("멤버 가계부 조회 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.getMemberAccountBook(id));
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<AccountBookInfo> getSingleAccountBookInfo(@PathVariable("id") Long id) {
+        log.info("가계부 아이디로 조회 API 호출");
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.getSingleAccountBookInfo(id, memberId));
     }
@@ -33,25 +35,28 @@ public class AccountBookController {
     // 이메일로 유저 초대장 여기서 보내야함
     @PostMapping(value = "")
     public ResponseEntity<SimpleAccountBookInfo> createAccountBook(@RequestBody CreateRequest createRequest) throws JsonProcessingException {
+        log.info("가계부 생성 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.createAccountBook(id, createRequest));
     }
 
     @PostMapping(value = "/private")
     public ResponseEntity<SimpleAccountBookInfo> createAccountBookPrivate(@RequestBody CreateRequestPrivate createRequest) {
+        log.info("개인 가계부 생성 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.createAccountBookPrivate(id, createRequest));
     }
 
     @PostMapping(value = "/invitation")
     public ResponseEntity<Invited> createInvitation(@RequestBody GetInvitations invitations) throws JsonProcessingException {
+        log.info("멤버 초대 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.createInvitation(id, invitations));
     }
 
     @PostMapping(value = "/invitation/reply")
     public ResponseEntity<InvitationReplyResult> invitationReply(@RequestBody InvitationReply invitationReply) throws JsonProcessingException {
-
+        log.info("초대 응답 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.invitationReply(id, invitationReply));
     }
