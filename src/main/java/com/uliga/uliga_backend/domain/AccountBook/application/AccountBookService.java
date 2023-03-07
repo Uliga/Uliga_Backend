@@ -38,8 +38,12 @@ public class AccountBookService {
 
     @Transactional
     public AccountBookInfo getSingleAccountBookInfo(Long id, Long memberId) {
+        AccountBookInfoQ bookInfoById = accountBookRepository.findAccountBookInfoById(id, memberId);
+        if (bookInfoById == null) {
+
+        }
         return AccountBookInfo.builder()
-                .info(accountBookRepository.findAccountBookInfoById(id, memberId))
+                .info(bookInfoById)
                 .members(accountBookRepository.findAccountBookMemberInfoById(id))
                 .categories(accountBookRepository.findAccountBookCategoryInfoById(id)).build();
     }
