@@ -7,6 +7,8 @@ import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.CreateReque
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.CreateRequestPrivate;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
+import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
+import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.JoinTable.dao.AccountBookMemberRepository;
 import com.uliga.uliga_backend.domain.JoinTable.model.AccountBookMember;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
@@ -42,6 +44,7 @@ public class AuthService {
     private final AccountBookService accountBookService;
     private final AccountBookRepository accountBookRepository;
     private final AccountBookMemberRepository accountBookMemberRepository;
+    private final CategoryRepository categoryRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate<String, String> redisTemplate;
@@ -62,6 +65,10 @@ public class AuthService {
                 .accountBookAuthority(AccountBookAuthority.ADMIN)
                 .getNotification(true).build();
         accountBookMemberRepository.save(bookMember);
+        Category category = Category.builder()
+                .accountBook(accountBook)
+                .name("미지정").build();
+        categoryRepository.save(category);
 
 
 
