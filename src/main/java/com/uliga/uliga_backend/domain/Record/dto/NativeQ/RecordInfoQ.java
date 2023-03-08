@@ -18,13 +18,16 @@ public class RecordInfoQ {
     private String creator;
     private String category;
 
-    public RecordInfoQ(Long id, Long value, String payment, String account, String memo, Date date, String creator, String category) {
+    public RecordInfoQ(Long id, Long value, String payment, String account, String memo, Long year, Long month, Long day, String creator, String category) {
         this.id = id;
         this.value = value;
         this.payment = payment;
         this.account = account;
         this.memo = memo;
-        this.date = date;
+        this.date = Date.builder()
+                .day(day)
+                .month(month)
+                .year(year).build();
         this.creator = creator;
         this.category = category;
     }

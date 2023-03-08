@@ -17,10 +17,16 @@ public class ScheduleInfoQ {
 
     private String creator;
 
-    public ScheduleInfoQ(Long id, Date dueDate, Date notificationDate, Long value, String creator) {
+    public ScheduleInfoQ(Long id, Long dueYear, Long dueMonth, Long dueDay, Long nYear, Long nMonth, Long nDay, Long value, String creator) {
         this.id = id;
-        this.dueDate = dueDate;
-        this.notificationDate = notificationDate;
+        this.dueDate = Date.builder()
+                .day(dueDay)
+                .month(dueMonth)
+                .year(dueYear).build();
+        this.notificationDate = Date.builder()
+                .day(nDay)
+                .month(nMonth)
+                .year(nYear).build();
         this.value = value;
         this.creator = creator;
     }

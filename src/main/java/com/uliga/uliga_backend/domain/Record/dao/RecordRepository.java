@@ -17,7 +17,9 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
                     "r.payment," +
                     "r.account," +
                     "r.memo," +
-                    "r.date," +
+                    "r.date.year," +
+                    "r.date.month," +
+                    "r.date.day," +
                     "m.nickName," +
                     "c.name) from Record r " +
                     "JOIN Member m on m.id = r.creator.id " +

@@ -17,7 +17,9 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
                     "i.payment," +
                     "i.account," +
                     "i.memo," +
-                    "i.date," +
+                    "i.date.year," +
+                    "i.date.month," +
+                    "i.date.day," +
                     "m.nickName," +
                     "c.name) from Income i " +
                     "JOIN Member m on m.id = i.creator.id " +
