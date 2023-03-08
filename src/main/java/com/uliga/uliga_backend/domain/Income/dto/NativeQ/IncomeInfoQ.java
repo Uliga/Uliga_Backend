@@ -1,6 +1,7 @@
 package com.uliga.uliga_backend.domain.Income.dto.NativeQ;
 
 import com.uliga.uliga_backend.domain.Common.Date;
+import jakarta.persistence.Embedded;
 import lombok.Data;
 import lombok.Getter;
 
@@ -12,6 +13,7 @@ public class IncomeInfoQ {
     private String paymentType;
     private String account;
     private String memo;
+    @Embedded
     private Date date;
     private String creator;
     private String category;
