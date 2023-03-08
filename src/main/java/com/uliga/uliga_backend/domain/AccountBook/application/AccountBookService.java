@@ -189,7 +189,7 @@ public class AccountBookService {
                 incomeRepository.save(build);
                 for (Long accountBookId : dto.getSharedAccountBook()) {
                     AccountBook sharedAccountBook = accountBookRepository.findById(accountBookId).orElseThrow(NotFoundByIdException::new);
-                    Category defaultCategory = categoryRepository.findByAccountBookAndName(sharedAccountBook, "미지정").orElseThrow(CategoryNotFoundException::new);
+                    Category defaultCategory = categoryRepository.findByAccountBookAndName(sharedAccountBook, "기타").orElseThrow(CategoryNotFoundException::new);
                     Income sharedIncome = Income.builder()
                             .payment(dto.getPayment())
                             .account(dto.getAccount())
@@ -232,7 +232,7 @@ public class AccountBookService {
                 recordRepository.save(build);
                 for (Long accountBookId : dto.getSharedAccountBook()) {
                     AccountBook sharedAccountBook = accountBookRepository.findById(accountBookId).orElseThrow(NotFoundByIdException::new);
-                    Category defaultCategory = categoryRepository.findByAccountBookAndName(sharedAccountBook, "미지정").orElseThrow(CategoryNotFoundException::new);
+                    Category defaultCategory = categoryRepository.findByAccountBookAndName(sharedAccountBook, "기타").orElseThrow(CategoryNotFoundException::new);
                     Record sharedRecord = Record.builder()
                             .account(dto.getAccount())
                             .creator(member)

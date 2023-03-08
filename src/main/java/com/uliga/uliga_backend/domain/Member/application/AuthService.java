@@ -30,6 +30,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
@@ -50,6 +53,15 @@ public class AuthService {
     private final RedisTemplate<String, String> redisTemplate;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
+    private final List<String> defaultCategories = new ArrayList<>(
+            Arrays.asList("\uD83C\uDF7D️ 식비",
+                    "☕ 카페 · 간식",
+                    "\uD83C\uDFE0 생활",
+                    "\uD83C\uDF59 편의점,마트,잡화",
+                    "\uD83D\uDC55 쇼핑",
+                    "기타")
+    );
+
     @Transactional
     public String signUp(SignUpRequest signUpRequest) {
         signUpRequest.encrypt(passwordEncoder);
@@ -65,12 +77,12 @@ public class AuthService {
                 .accountBookAuthority(AccountBookAuthority.ADMIN)
                 .getNotification(true).build();
         accountBookMemberRepository.save(bookMember);
-        Category category = Category.builder()
-                .accountBook(accountBook)
-                .name("미지정").build();
-        categoryRepository.save(category);
-
-
+        for (String cat : defaultCategories) {
+            Category category = Category.builder()
+                    .accountBook(accountBook)
+                    .name(cat).build();
+            categoryRepository.save(category);
+        }
 
         return "CREATED";
     }
