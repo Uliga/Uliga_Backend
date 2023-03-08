@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface RecordRepository extends JpaRepository<Record, Long> {
-
+    // TODO 기본 카테고리 생성해야할듯??
     @Query(
             "SELECT NEW com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ(" +
                     "r.id," +

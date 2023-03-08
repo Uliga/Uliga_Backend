@@ -95,7 +95,10 @@ public class AccountBookService {
                 .accountBookAuthority(AccountBookAuthority.ADMIN)
                 .getNotification(true).build();
         accountBookMemberRepository.save(bookMember);
-
+        Category defaultCategory = Category.builder()
+                .accountBook(accountBook)
+                .name("미지정").build();
+        categoryRepository.save(defaultCategory);
         for (String category : createRequest.getCategories()) {
             Category newCategory = Category.builder()
                     .accountBook(accountBook)
@@ -184,6 +187,7 @@ public class AccountBookService {
                 incomeRepository.save(build);
                 for (Long accountBookId : dto.getSharedAccountBook()) {
                     AccountBook sharedAccountBook = accountBookRepository.findById(accountBookId).orElseThrow(NotFoundByIdException::new);
+                    Category defaultCategory = categoryRepository.findByAccountBookAndName(sharedAccountBook, "미지정").orElseThrow(CategoryNotFoundException::new);
                     Income sharedIncome = Income.builder()
                             .payment(dto.getPayment())
                             .account(dto.getAccount())
@@ -192,7 +196,7 @@ public class AccountBookService {
                             .value(dto.getValue())
                             .memo(dto.getMemo())
                             .date(date)
-                            .category(null).build();
+                            .category(defaultCategory).build();
                     // TODO: 어라 근데 다른 가계부에 해당 카테고리가 없으면 어쩜??? 그냥 일단 비워둘까???
                     incomeRepository.save(sharedIncome);
                 }
@@ -213,6 +217,7 @@ public class AccountBookService {
                 recordRepository.save(build);
                 for (Long accountBookId : dto.getSharedAccountBook()) {
                     AccountBook sharedAccountBook = accountBookRepository.findById(accountBookId).orElseThrow(NotFoundByIdException::new);
+                    Category defaultCategory = categoryRepository.findByAccountBookAndName(sharedAccountBook, "미지정").orElseThrow(CategoryNotFoundException::new);
                     Record sharedRecord = Record.builder()
                             .account(dto.getAccount())
                             .creator(member)
@@ -220,7 +225,7 @@ public class AccountBookService {
                             .spend(dto.getValue())
                             .payment(dto.getPayment())
                             .date(date)
-                            .category(null)
+                            .category(defaultCategory)
                             .memo(dto.getMemo())
                             .build();
                     recordRepository.save(sharedRecord);
