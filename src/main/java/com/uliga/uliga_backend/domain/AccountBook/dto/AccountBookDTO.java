@@ -286,7 +286,19 @@ public class AccountBookDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class AddIncomeRequest{
+        private String category;
 
+        private String payment;
+
+        private String date;
+
+        private String account;
+
+        private Long value;
+
+        private String memo;
+
+        private List<Long> sharedAccountBook;
     }
 
     @Builder
@@ -294,7 +306,19 @@ public class AccountBookDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class AddRecordRequest{
+        private String category;
 
+        private String payment;
+
+        private String date;
+
+        private String account;
+
+        private Long value;
+
+        private String memo;
+
+        private List<Long> sharedAccountBook;
     }
 
 
