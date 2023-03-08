@@ -13,8 +13,9 @@ public class RecordInfoQ {
     private String payment;
     private String account;
     private String memo;
-    @Embedded
-    private Date date;
+    private Long year;
+    private Long month;
+    private Long day;
     private String creator;
     private String category;
 
@@ -24,10 +25,10 @@ public class RecordInfoQ {
         this.payment = payment;
         this.account = account;
         this.memo = memo;
-        this.date = Date.builder()
-                .day(day)
-                .month(month)
-                .year(year).build();
+        this.year = year;
+        this.month = month;
+        this.day = day;
+
         this.creator = creator;
         this.category = category;
     }

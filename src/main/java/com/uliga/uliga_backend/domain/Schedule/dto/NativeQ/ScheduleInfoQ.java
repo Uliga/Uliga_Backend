@@ -9,24 +9,25 @@ import lombok.Getter;
 @Getter
 public class ScheduleInfoQ {
     private Long id;
-    @Embedded
-    private Date dueDate;
-    @Embedded
-    private Date notificationDate;
+    private Long dueYear;
+    private Long dueMonth;
+    private Long dueDay;
+    private Long notificationYear;
+    private Long notificationMonth;
+    private Long notificationDay;
+
     private Long value;
 
     private String creator;
 
     public ScheduleInfoQ(Long id, Long dueYear, Long dueMonth, Long dueDay, Long nYear, Long nMonth, Long nDay, Long value, String creator) {
         this.id = id;
-        this.dueDate = Date.builder()
-                .day(dueDay)
-                .month(dueMonth)
-                .year(dueYear).build();
-        this.notificationDate = Date.builder()
-                .day(nDay)
-                .month(nMonth)
-                .year(nYear).build();
+        this.dueYear = dueYear;
+        this.dueMonth = dueMonth;
+        this.dueDay = dueDay;
+        this.notificationYear = nYear;
+        this.notificationMonth = nMonth;
+        this.notificationDay = nDay;
         this.value = value;
         this.creator = creator;
     }
