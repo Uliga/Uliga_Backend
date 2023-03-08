@@ -1,7 +1,9 @@
 package com.uliga.uliga_backend.domain.Common;
 
+import jakarta.persistence.Embeddable;
 import lombok.Builder;
 
+@Embeddable
 public class Date {
     private Long year;
 
@@ -13,5 +15,9 @@ public class Date {
         this.year = year;
         this.month = month;
         this.day = day;
+    }
+
+    public Date() {
+
     }
 }

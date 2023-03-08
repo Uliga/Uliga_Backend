@@ -4,7 +4,6 @@ import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategor
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookMemberInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
-import com.uliga.uliga_backend.domain.AccountBook.model.PaymentType;
 import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
 import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleInfoQ;
@@ -125,11 +124,11 @@ public class AccountBookDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CreateRecordOrIncomeDto{
-        private boolean isIncome;
+        private Boolean isIncome;
 
         private String category;
 
-        private PaymentType payment;
+        private String payment;
 
         private String date;
 

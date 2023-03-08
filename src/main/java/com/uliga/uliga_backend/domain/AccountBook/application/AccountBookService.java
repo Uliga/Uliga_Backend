@@ -170,7 +170,7 @@ public class AccountBookService {
                     .month(Long.parseLong(split[1]))
                     .day(Long.parseLong(split[2])).build();
             Category category = categoryRepository.findByAccountBookAndName(accountBook, dto.getCategory()).orElseThrow(CategoryNotFoundException::new);
-            if (dto.isIncome()) {
+            if (dto.getIsIncome()) {
                 // 수입 생성
                 Income build = Income.builder()
                         .payment(dto.getPayment())

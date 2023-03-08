@@ -1,7 +1,6 @@
 package com.uliga.uliga_backend.domain.Income.model;
 
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
-import com.uliga.uliga_backend.domain.AccountBook.model.PaymentType;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.Date;
 import com.uliga.uliga_backend.domain.Member.model.Member;
@@ -21,7 +20,7 @@ public class Income {
 
     private Long value;
 
-    private PaymentType payment;
+    private String payment;
 
     private String account;
 
@@ -41,7 +40,7 @@ public class Income {
     private AccountBook accountBook;
 
     @Builder
-    public Income(Long id, Long value, PaymentType payment, String account, String memo, Date date, Member creator, AccountBook accountBook, Category category) {
+    public Income(Long id, Long value, String payment, String account, String memo, Date date, Member creator, AccountBook accountBook, Category category) {
 
         this.id = id;
         this.value = value;

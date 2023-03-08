@@ -1,6 +1,5 @@
 package com.uliga.uliga_backend.domain.Income.dto;
 
-import com.uliga.uliga_backend.domain.AccountBook.model.PaymentType;
 import com.uliga.uliga_backend.domain.Common.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +14,7 @@ public class IncomeDTO {
     public static class IncomeInfo {
         private Long id;
         private Long value;
-        private PaymentType paymentType;
+        private String payment;
         private String account;
         private String memo;
         private Date date;
