@@ -2,8 +2,10 @@ package com.uliga.uliga_backend.domain.Common;
 
 import jakarta.persistence.Embeddable;
 import lombok.Builder;
+import lombok.Getter;
 
 @Embeddable
+@Getter
 public class Date {
     private Long year;
 

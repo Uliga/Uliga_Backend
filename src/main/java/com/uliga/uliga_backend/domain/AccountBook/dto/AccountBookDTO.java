@@ -145,6 +145,32 @@ public class AccountBookDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class CreateItemResult{
+        private Long id;
+
+        private Boolean isIncome;
+
+        private String category;
+
+        private String payment;
+
+        private Long year;
+        private Long month;
+        private Long day;
+
+
+        private String account;
+
+        private Long value;
+
+        private String memo;
+
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class CreateItems{
         private Long id;
         private List<CreateRecordOrIncomeDto> createRequest;
@@ -158,6 +184,10 @@ public class AccountBookDTO {
         private Long record;
 
         private Long income;
+
+        private List<CreateItemResult> created;
+
+
     }
 
     @Builder
@@ -230,6 +260,41 @@ public class AccountBookDTO {
     public static class UpdateCategoryResult {
         private String category;
         private Long updateItemId;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AddRecordResult {
+        private Long accountBookId;
+        private RecordInfoQ recordInfo;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AddIncomeResult {
+        private Long accountBookId;
+        private IncomeInfoQ incomeInfo;
+
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AddIncomeRequest{
+
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AddRecordRequest{
+
     }
 
 

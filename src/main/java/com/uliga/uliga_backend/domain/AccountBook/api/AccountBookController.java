@@ -93,13 +93,13 @@ public class AccountBookController {
     }
 
     @PostMapping(value = "/record")
-    public void addRecord() {
-
+    public ResponseEntity<AddRecordResult> addRecord(@RequestBody AddRecordRequest request) {
+        return ResponseEntity.ok(accountBookService.addRecord(request));
     }
 
     @PostMapping(value = "/income")
-    public void addIncome() {
-
+    public ResponseEntity<AddIncomeResult> addIncome(@RequestBody AddIncomeRequest request) {
+        return ResponseEntity.ok(accountBookService.addIncome(request));
     }
 
     @GetMapping(value = "/{id}/category")

@@ -166,6 +166,7 @@ public class AccountBookService {
         long i = 0L;
         Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
         AccountBook accountBook = accountBookRepository.findById(createItems.getId()).orElseThrow(NotFoundByIdException::new);
+        List<CreateItemResult> createResult = new ArrayList<>();
         for (CreateRecordOrIncomeDto dto : createItems.getCreateRequest()) {
             String[] split = dto.getDate().split("-");
             Date date = Date.builder()
@@ -201,6 +202,19 @@ public class AccountBookService {
                     incomeRepository.save(sharedIncome);
                 }
                 i += 1;
+                CreateItemResult itemResult = CreateItemResult.builder()
+                        .id(build.getId())
+                        .account(dto.getAccount())
+                        .isIncome(true)
+                        .category(category.getName())
+                        .memo(dto.getMemo())
+                        .payment(dto.getPayment())
+                        .value(dto.getValue())
+                        .year(date.getYear())
+                        .month(date.getMonth())
+                        .day(date.getDay())
+                        .build();
+                createResult.add(itemResult);
 
             } else {
                 // 지출 생성
@@ -231,12 +245,28 @@ public class AccountBookService {
                     recordRepository.save(sharedRecord);
                 }
                 r += 1;
+                CreateItemResult itemResult = CreateItemResult.builder()
+                        .id(build.getId())
+                        .account(dto.getAccount())
+                        .isIncome(false)
+                        .category(category.getName())
+                        .memo(dto.getMemo())
+                        .payment(dto.getPayment())
+                        .value(dto.getValue())
+                        .year(date.getYear())
+                        .month(date.getMonth())
+                        .day(date.getDay())
+                        .build();
+                createResult.add(itemResult);
+
+
             }
 
         }
         return CreateResult.builder()
                 .income(i)
-                .record(r).build();
+                .record(r)
+                .created(createResult).build();
     }
 
     @Transactional
@@ -306,6 +336,16 @@ public class AccountBookService {
                 .category(updateCategory)
                 .updateItemId(income.getId())
                 .build();
+    }
+
+    @Transactional
+    public AddIncomeResult addIncome(AddIncomeRequest request) {
+        return null;
+    }
+
+    @Transactional
+    public AddRecordResult addRecord(AddRecordRequest request) {
+        return null;
     }
 
 
