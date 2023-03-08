@@ -286,6 +286,7 @@ public class AccountBookDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class AddIncomeRequest{
+        private Long id;
         private String category;
 
         private String payment;
@@ -306,6 +307,7 @@ public class AccountBookDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class AddRecordRequest{
+        private Long id;
         private String category;
 
         private String payment;

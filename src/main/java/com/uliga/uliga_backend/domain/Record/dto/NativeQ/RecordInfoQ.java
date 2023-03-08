@@ -2,6 +2,7 @@ package com.uliga.uliga_backend.domain.Record.dto.NativeQ;
 
 import com.uliga.uliga_backend.domain.Common.Date;
 import jakarta.persistence.Embedded;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
@@ -19,6 +20,7 @@ public class RecordInfoQ {
     private String creator;
     private String category;
 
+    @Builder
     public RecordInfoQ(Long id, Long value, String payment, String account, String memo, Long year, Long month, Long day, String creator, String category) {
         this.id = id;
         this.value = value;

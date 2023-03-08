@@ -2,6 +2,7 @@ package com.uliga.uliga_backend.domain.Income.dto.NativeQ;
 
 import com.uliga.uliga_backend.domain.Common.Date;
 import jakarta.persistence.Embedded;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
@@ -10,7 +11,7 @@ import lombok.Getter;
 public class IncomeInfoQ {
     private Long id;
     private Long value;
-    private String paymentType;
+    private String payment;
     private String account;
     private String memo;
     private Long year;
@@ -18,11 +19,11 @@ public class IncomeInfoQ {
     private Long day;
     private String creator;
     private String category;
-
-    public IncomeInfoQ(Long id, Long value, String paymentType, String account, String memo, Long year, Long month, Long day, String creator, String category) {
+    @Builder
+    public IncomeInfoQ(Long id, Long value, String payment, String account, String memo, Long year, Long month, Long day, String creator, String category) {
         this.id = id;
         this.value = value;
-        this.paymentType = paymentType;
+        this.payment = payment;
         this.account = account;
         this.memo = memo;
         this.year = year;

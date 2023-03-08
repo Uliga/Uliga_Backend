@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
 
@@ -339,13 +340,52 @@ public class AccountBookService {
     }
 
     @Transactional
-    public AddIncomeResult addIncome(AddIncomeRequest request) {
-        return null;
+    public AddIncomeResult addIncome(Long memberId, AddIncomeRequest request) {
+        AccountBook accountBook = accountBookRepository.findById(request.getId()).orElseThrow(NotFoundByIdException::new);
+        Category category = categoryRepository.findByAccountBookAndName(accountBook, request.getCategory()).orElseThrow(CategoryNotFoundException::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(NotFoundByIdException::new);
+        String[] split = request.getDate().split("-");
+        Date date = Date.builder()
+                .year(Long.parseLong(split[0]))
+                .month(Long.parseLong(split[1]))
+                .day(Long.parseLong(split[2])).build();
+        Income income = Income.builder()
+                .category(category)
+                .date(date)
+                .accountBook(accountBook)
+                .memo(request.getMemo())
+                .payment(request.getPayment())
+                .creator(member)
+                .build();
+        incomeRepository.save(income);
+        return AddIncomeResult.builder()
+                .accountBookId(accountBook.getId())
+                .incomeInfo(income.toInfoQ()).build();
     }
 
     @Transactional
-    public AddRecordResult addRecord(AddRecordRequest request) {
-        return null;
+    public AddRecordResult addRecord(Long memberId, AddRecordRequest request) {
+        AccountBook accountBook = accountBookRepository.findById(request.getId()).orElseThrow(NotFoundByIdException::new);
+        Category category = categoryRepository.findByAccountBookAndName(accountBook, request.getCategory()).orElseThrow(CategoryNotFoundException::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(NotFoundByIdException::new);
+        String[] split = request.getDate().split("-");
+        Date date = Date.builder()
+                .year(Long.parseLong(split[0]))
+                .month(Long.parseLong(split[1]))
+                .day(Long.parseLong(split[2])).build();
+        Record record = Record.builder()
+                .accountBook(accountBook)
+                .spend(request.getValue())
+                .payment(request.getPayment())
+                .category(category)
+                .creator(member)
+                .memo(request.getMemo())
+                .date(date)
+                .build();
+        recordRepository.save(record);
+        return AddRecordResult.builder()
+                .accountBookId(accountBook.getId())
+                .recordInfo(record.toInfoQ()).build();
     }
 
 

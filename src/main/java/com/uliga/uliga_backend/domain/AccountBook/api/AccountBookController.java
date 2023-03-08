@@ -94,12 +94,14 @@ public class AccountBookController {
 
     @PostMapping(value = "/record")
     public ResponseEntity<AddRecordResult> addRecord(@RequestBody AddRecordRequest request) {
-        return ResponseEntity.ok(accountBookService.addRecord(request));
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(accountBookService.addRecord(currentMemberId, request));
     }
 
     @PostMapping(value = "/income")
     public ResponseEntity<AddIncomeResult> addIncome(@RequestBody AddIncomeRequest request) {
-        return ResponseEntity.ok(accountBookService.addIncome(request));
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(accountBookService.addIncome(currentMemberId, request));
     }
 
     @GetMapping(value = "/{id}/category")

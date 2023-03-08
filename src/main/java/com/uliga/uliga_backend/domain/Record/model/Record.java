@@ -5,6 +5,7 @@ import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.BaseTimeEntity;
 import com.uliga.uliga_backend.domain.Common.Date;
 import com.uliga.uliga_backend.domain.Member.model.Member;
+import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
 import com.uliga.uliga_backend.domain.RecordComment.model.RecordComment;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -65,5 +66,19 @@ public class Record extends BaseTimeEntity {
     public String updateCategory(Category category) {
         this.category = category;
         return category.getName();
+    }
+
+    public RecordInfoQ toInfoQ() {
+        return RecordInfoQ.builder()
+                .id(id)
+                .account(account)
+                .value(spend)
+                .category(category.getName())
+                .payment(payment)
+                .memo(memo)
+                .year(date.getYear())
+                .month(date.getMonth())
+                .day(date.getDay())
+                .build();
     }
 }
