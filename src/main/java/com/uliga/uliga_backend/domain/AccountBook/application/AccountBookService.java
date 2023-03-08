@@ -356,6 +356,9 @@ public class AccountBookService {
                 .memo(request.getMemo())
                 .payment(request.getPayment())
                 .creator(member)
+                .value(request.getValue())
+                .account(request.getAccount())
+                .creator(member)
                 .build();
         incomeRepository.save(income);
         return AddIncomeResult.builder()
@@ -381,6 +384,8 @@ public class AccountBookService {
                 .creator(member)
                 .memo(request.getMemo())
                 .date(date)
+                .account(request.getAccount())
+                .creator(member)
                 .build();
         recordRepository.save(record);
         return AddRecordResult.builder()
