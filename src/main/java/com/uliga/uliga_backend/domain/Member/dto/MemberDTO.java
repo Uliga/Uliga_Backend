@@ -1,6 +1,6 @@
 package com.uliga.uliga_backend.domain.Member.dto;
 
-import com.uliga.uliga_backend.domain.Member.dto.NativeQuery.MemberInfoNativeQ;
+import com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Member.model.UserLoginType;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenIssueDTO;
@@ -11,7 +11,6 @@ import lombok.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.io.Serializable;
 import java.util.List;
 
 import static com.uliga.uliga_backend.domain.Member.model.Authority.ROLE_USER;

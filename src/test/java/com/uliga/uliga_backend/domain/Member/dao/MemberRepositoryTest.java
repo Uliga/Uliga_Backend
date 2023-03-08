@@ -1,6 +1,6 @@
 package com.uliga.uliga_backend.domain.Member.dao;
 
-import com.uliga.uliga_backend.domain.Member.dto.NativeQuery.MemberInfoNativeQ;
+import com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import org.junit.jupiter.api.DisplayName;

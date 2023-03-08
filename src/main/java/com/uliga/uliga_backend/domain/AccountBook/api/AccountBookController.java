@@ -6,6 +6,7 @@ import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
 import com.uliga.uliga_backend.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
@@ -59,6 +60,11 @@ public class AccountBookController {
         log.info("초대 응답 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.invitationReply(id, invitationReply));
+    }
+
+    @PostMapping(value = "/{id}/item")
+    public ResponseEntity<AccountBookItems> getAccountBookItems(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(accountBookService.getAccountBookItems(id));
     }
 
     @PostMapping(value = "/item")

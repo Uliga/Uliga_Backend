@@ -3,7 +3,7 @@ package com.uliga.uliga_backend.domain.AccountBook.application;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQuery.AccountBookInfoQ;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookAccessException;
 import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookCategoryCreateException;
@@ -21,11 +21,13 @@ import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.InvitationInfo;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import com.uliga.uliga_backend.domain.Record.model.Record;
+import com.uliga.uliga_backend.domain.Schedule.dao.ScheduleRepository;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.*;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -42,6 +44,7 @@ public class AccountBookService {
     private final MemberRepository memberRepository;
     private final IncomeRepository incomeRepository;
     private final RecordRepository recordRepository;
+    private final ScheduleRepository scheduleRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
 
@@ -265,6 +268,15 @@ public class AccountBookService {
         return CategoryCreateResult.builder()
                 .id(id)
                 .created(result).build();
+    }
+
+    @Transactional
+    public AccountBookItems getAccountBookItems(Long id) {
+
+        return AccountBookItems.builder()
+                .incomes(incomeRepository.findByAccountBookId(id))
+                .records(recordRepository.findByAccountBookId(id))
+                .schedules(scheduleRepository.findByAccountBookId(id)).build();
     }
 
 }

@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Member.dto.NativeQuery;
+package com.uliga.uliga_backend.domain.Member.dto.NativeQ;
 
 import lombok.Data;
 import lombok.Getter;

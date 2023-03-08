@@ -1,10 +1,13 @@
 package com.uliga.uliga_backend.domain.AccountBook.dto;
 
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQuery.AccountBookCategoryInfoQ;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQuery.AccountBookInfoQ;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQuery.AccountBookMemberInfoQ;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategoryInfoQ;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookMemberInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBook.model.PaymentType;
+import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
+import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
+import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleInfoQ;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -192,7 +195,15 @@ public class AccountBookDTO {
         private List<String> created;
     }
 
-
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AccountBookItems{
+        private List<IncomeInfoQ> incomes;
+        private List<RecordInfoQ> records;
+        private List<ScheduleInfoQ> schedules;
+    }
 
 
 

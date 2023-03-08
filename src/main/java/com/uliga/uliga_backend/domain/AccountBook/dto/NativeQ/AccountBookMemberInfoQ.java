@@ -1,10 +1,8 @@
-package com.uliga.uliga_backend.domain.AccountBook.dto.NativeQuery;
+package com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ;
 
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
 import lombok.Data;
 import lombok.Getter;
-
-import java.util.List;
 
 @Data
 @Getter

@@ -1,6 +1,6 @@
 package com.uliga.uliga_backend.domain.Member.dao;
 
-import com.uliga.uliga_backend.domain.Member.dto.NativeQuery.MemberInfoNativeQ;
+import com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +17,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     boolean existsByNickName(String nickname);
 
-    @Query("select new com.uliga.uliga_backend.domain.Member.dto.NativeQuery.MemberInfoNativeQ(m.id, m.avatarUrl, m.userName, m.nickName, m.email) from Member m where m.id = :id")
+    @Query("select new com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ(m.id, m.avatarUrl, m.userName, m.nickName, m.email) from Member m where m.id = :id")
     MemberInfoNativeQ findMemberInfoById(@Param("id") Long id);
 }
