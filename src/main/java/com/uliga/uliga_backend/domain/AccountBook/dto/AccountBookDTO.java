@@ -203,6 +203,35 @@ public class AccountBookDTO {
         private List<RecordInfoQ> records;
         private List<ScheduleInfoQ> schedules;
     }
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UpdateRecordCategory{
+        private Long accountBookId;
+        private Long recordId;
+        private String category;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UpdateIncomeCategory {
+        private Long accountBookId;
+        private Long incomeId;
+        private String category;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UpdateCategoryResult {
+        private String category;
+        private Long updateItemId;
+    }
+
 
 
 

@@ -52,5 +52,10 @@ public class Income {
         this.accountBook = accountBook;
         this.category = category;
     }
+
+    public String updateCategory(Category category) {
+        this.category = category;
+        return category.getName();
+    }
 }
 

@@ -284,4 +284,30 @@ public class AccountBookService {
                 .schedules(scheduleRepository.findByAccountBookId(id)).build();
     }
 
+    @Transactional
+    public UpdateCategoryResult updateRecordCategory(UpdateRecordCategory recordCategory) {
+        Record record = recordRepository.findById(recordCategory.getRecordId()).orElseThrow(NotFoundByIdException::new);
+        Category category = categoryRepository.findByAccountBookAndName(record.getAccountBook(), recordCategory.getCategory()).orElseThrow(CategoryNotFoundException::new);
+        String updateCategory = record.updateCategory(category);
+
+        return UpdateCategoryResult.builder()
+                .updateItemId(record.getId())
+                .category(updateCategory)
+                .build();
+    }
+
+    @Transactional
+    public UpdateCategoryResult updateIncomeCategory(UpdateIncomeCategory incomeCategory) {
+        Income income = incomeRepository.findById(incomeCategory.getIncomeId()).orElseThrow(NotFoundByIdException::new);
+        Category category = categoryRepository.findByAccountBookAndName(income.getAccountBook(), incomeCategory.getCategory()).orElseThrow(CategoryNotFoundException::new);
+        String updateCategory = income.updateCategory(category);
+
+        return UpdateCategoryResult.builder()
+                .category(updateCategory)
+                .updateItemId(income.getId())
+                .build();
+    }
+
+
+
 }
