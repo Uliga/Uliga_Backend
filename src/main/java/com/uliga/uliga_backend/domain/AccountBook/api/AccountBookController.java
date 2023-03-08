@@ -62,7 +62,7 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.invitationReply(id, invitationReply));
     }
 
-    @PostMapping(value = "/{id}/item")
+    @GetMapping(value = "/{id}/item")
     public ResponseEntity<AccountBookItems> getAccountBookItems(@PathVariable("id") Long id) {
         return ResponseEntity.ok(accountBookService.getAccountBookItems(id));
     }
