@@ -79,6 +79,7 @@ public class Record extends BaseTimeEntity {
                 .year(date.getYear())
                 .month(date.getMonth())
                 .day(date.getDay())
+                .creator(creator.getNickName())
                 .build();
     }
 }

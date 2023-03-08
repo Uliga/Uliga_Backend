@@ -70,6 +70,7 @@ public class Income {
                 .year(date.getYear())
                 .month(date.getMonth())
                 .day(date.getDay())
+                .creator(creator.getNickName())
                 .build();
     }
 }
