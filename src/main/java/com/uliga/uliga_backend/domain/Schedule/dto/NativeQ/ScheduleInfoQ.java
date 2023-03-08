@@ -1,6 +1,7 @@
 package com.uliga.uliga_backend.domain.Schedule.dto.NativeQ;
 
 import com.uliga.uliga_backend.domain.Common.Date;
+import jakarta.persistence.Embedded;
 import lombok.Data;
 import lombok.Getter;
 
@@ -8,7 +9,9 @@ import lombok.Getter;
 @Getter
 public class ScheduleInfoQ {
     private Long id;
+    @Embedded
     private Date dueDate;
+    @Embedded
     private Date notificationDate;
     private Long value;
 
