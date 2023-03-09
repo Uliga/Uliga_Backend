@@ -3,6 +3,7 @@ package com.uliga.uliga_backend.global.error.handler;
 import com.uliga.uliga_backend.global.error.exception.NotAuthorizedException;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
+import io.lettuce.core.RedisCommandTimeoutException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,5 +39,17 @@ public class GlobalExceptionHandler {
                 .message("접근 권한이 없는 요청입니다.")
                 .build()
                 , UNAUTHORIZED);
+    }
+
+
+    @ExceptionHandler(RedisCommandTimeoutException.class)
+    protected final ResponseEntity<ErrorResponse> handleRedisTimeoutException(
+            RedisCommandTimeoutException ex, WebRequest request
+    ) {
+        log.info("레디스 타임아웃 뜸");
+        return new ResponseEntity<>(ErrorResponse.builder()
+                .errorCode(504L)
+                .message("쉬는 시간 당첨 쉬다 오세여")
+                .build(), GATEWAY_TIMEOUT);
     }
 }
