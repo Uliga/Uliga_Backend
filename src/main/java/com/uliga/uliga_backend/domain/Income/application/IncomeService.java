@@ -1,5 +1,6 @@
 package com.uliga.uliga_backend.domain.Income.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.CreateItemResult;
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
@@ -11,6 +12,7 @@ import com.uliga.uliga_backend.domain.Income.dao.IncomeRepository;
 import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
 import com.uliga.uliga_backend.domain.Income.model.Income;
 import com.uliga.uliga_backend.domain.Member.model.Member;
+import com.uliga.uliga_backend.global.error.exception.IdNotFoundException;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
 public class IncomeService {
     private final IncomeRepository incomeRepository;
     private final CategoryRepository categoryRepository;
+    private final ObjectMapper objectMapper;
 
     @Transactional
     public CreateItemResult addItemToAccountBook(CreateRecordOrIncomeDto dto, AccountBook accountBook, Member member, Date date, Category category) {
@@ -98,7 +101,29 @@ public class IncomeService {
                 .incomeInfo(income.toInfoQ()).build();
     }
     @Transactional
-    public IncomeInfoQ updateIncome(Long id, Map<String, Object> updates) {
-        return null;
+    public IncomeInfoQ updateIncome(Map<String, Object> updates) {
+        IncomeInfoQ patchIncome = objectMapper.convertValue(updates, IncomeInfoQ.class);
+        if (patchIncome.getId() == null) {
+            throw new IdNotFoundException();
+        }
+        Income income = incomeRepository.findById(patchIncome.getId()).orElseThrow(NotFoundByIdException::new);
+        if (patchIncome.getAccount() != null) {
+            income.updateAccount(patchIncome.getAccount());
+        }
+        if (patchIncome.getCategory() != null) {
+            Category category = categoryRepository.findByAccountBookAndName(income.getAccountBook(), patchIncome.getCategory()).orElseThrow(CategoryNotFoundException::new);
+            income.updateCategory(category);
+        }
+        if (patchIncome.getMemo() != null) {
+            income.updateMemo(patchIncome.getMemo());
+        }
+        if (patchIncome.getValue() != null) {
+            income.updateValue(patchIncome.getValue());
+        }
+        if (patchIncome.getPayment() != null) {
+            income.updatePayment(patchIncome.getPayment());
+        }
+        // 날짜는 프론트에서 값 받고 변경해야할듯?
+        return patchIncome;
     }
 }

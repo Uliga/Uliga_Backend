@@ -82,4 +82,27 @@ public class Record extends BaseTimeEntity {
                 .creator(creator.getNickName())
                 .build();
     }
+
+    public void updateAccount(String account) {
+        this.account = account;
+    }
+
+    public void updateSpend(Long spend) {
+        this.spend = spend;
+    }
+
+    public void updatePayment(String payment) {
+        this.payment = payment;
+    }
+
+
+    public void updateMemo(String memo) {
+        this.memo = memo;
+    }
+
+    public void updateDate(Date date) {
+        this.date = date;
+    }
+
+
 }

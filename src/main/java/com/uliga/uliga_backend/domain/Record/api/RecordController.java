@@ -20,9 +20,9 @@ public class RecordController {
 
     private final RecordService recordService;
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<RecordInfoQ> updateRecord(@PathVariable("id") Long id, @RequestBody Map<String, Object> updates) {
-        return ResponseEntity.ok(recordService.updateRecord(id, updates));
+    @PatchMapping("")
+    public ResponseEntity<RecordInfoQ> updateRecord(@RequestBody Map<String, Object> updates) {
+        return ResponseEntity.ok(recordService.updateRecord(updates));
     }
 
 }

@@ -1,6 +1,6 @@
 package com.uliga.uliga_backend.domain.Record.application;
 
-import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.AddRecordResult;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.UpdateCategoryResult;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.UpdateRecordCategory;
@@ -9,10 +9,10 @@ import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.Date;
-import com.uliga.uliga_backend.domain.Income.model.Income;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
+import com.uliga.uliga_backend.global.error.exception.IdNotFoundException;
 import com.uliga.uliga_backend.domain.Record.model.Record;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import jakarta.transaction.Transactional;
@@ -32,6 +32,7 @@ public class RecordService {
     private final RecordRepository recordRepository;
 
     private final CategoryRepository categoryRepository;
+    private final ObjectMapper objectMapper;
     @Transactional
     public CreateItemResult addItemToAccountBook(CreateRecordOrIncomeDto dto, AccountBook accountBook, Member member, Date date, Category category) {
         Record build = Record.builder()
@@ -103,7 +104,31 @@ public class RecordService {
     }
 
     @Transactional
-    public RecordInfoQ updateRecord(Long id, Map<String, Object> updates) {
-        return null;
+    public RecordInfoQ updateRecord(Map<String, Object> updates) {
+        RecordInfoQ patchRecord = objectMapper.convertValue(updates, RecordInfoQ.class);
+        if (patchRecord.getId() == null) {
+            throw new IdNotFoundException();
+        }
+        Record record = recordRepository.findById(patchRecord.getId()).orElseThrow(NotFoundByIdException::new);
+
+        if (patchRecord.getAccount() != null) {
+            record.updateAccount(patchRecord.getAccount());
+        }
+        if (patchRecord.getCategory() != null) {
+            Category category = categoryRepository.findByAccountBookAndName(record.getAccountBook(), patchRecord.getCategory()).orElseThrow(CategoryNotFoundException::new);
+            record.updateCategory(category);
+        }
+        if (patchRecord.getMemo() != null) {
+            record.updateMemo(patchRecord.getMemo());
+        }
+        if (patchRecord.getValue() != null) {
+            record.updateSpend(patchRecord.getValue());
+        }
+        if (patchRecord.getPayment() != null) {
+            record.updatePayment(patchRecord.getPayment());
+        }
+        // 날짜는 프론트에서 값 받고 변경해야할듯?
+
+        return patchRecord;
     }
 }

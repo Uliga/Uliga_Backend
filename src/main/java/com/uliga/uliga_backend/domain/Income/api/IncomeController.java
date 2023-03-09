@@ -16,8 +16,8 @@ import java.util.Map;
 public class IncomeController {
     private final IncomeService incomeService;
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<IncomeInfoQ> updateIncome(@PathVariable("id") Long id, @RequestBody Map<String, Object> updates) {
-        return ResponseEntity.ok(incomeService.updateIncome(id, updates));
+    @PatchMapping("")
+    public ResponseEntity<IncomeInfoQ> updateIncome(@RequestBody Map<String, Object> updates) {
+        return ResponseEntity.ok(incomeService.updateIncome(updates));
     }
 }

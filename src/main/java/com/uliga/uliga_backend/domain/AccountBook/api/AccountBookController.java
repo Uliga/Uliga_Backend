@@ -85,12 +85,13 @@ public class AccountBookController {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.createCategory(currentMemberId, createRequest));
     }
-
+    // TODO 이 API 안쓸거임
     @PatchMapping(value = "/record/category")
     public ResponseEntity<UpdateCategoryResult> updateCategoryToRecord(@RequestBody UpdateRecordCategory recordCategory) {
         return ResponseEntity.ok(recordService.updateRecordCategory(recordCategory));
     }
 
+    // TODO 이 API 안 쓸거임
     @PatchMapping(value = "/income/category")
     public ResponseEntity<UpdateCategoryResult> updateCategoryToIncome(@RequestBody UpdateIncomeCategory incomeCategory) {
         return ResponseEntity.ok(incomeService.updateIncomeCategory(incomeCategory));

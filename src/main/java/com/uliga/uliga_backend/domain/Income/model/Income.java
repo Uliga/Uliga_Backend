@@ -73,5 +73,25 @@ public class Income {
                 .creator(creator.getNickName())
                 .build();
     }
+    public void updateAccount(String account) {
+        this.account = account;
+    }
+
+    public void updateValue(Long value) {
+        this.value = value;
+    }
+
+    public void updatePayment(String payment) {
+        this.payment = payment;
+    }
+
+
+    public void updateMemo(String memo) {
+        this.memo = memo;
+    }
+
+    public void updateDate(Date date) {
+        this.date = date;
+    }
 }
 

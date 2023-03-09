@@ -1,5 +1,6 @@
 package com.uliga.uliga_backend.global.error.handler;
 
+import com.uliga.uliga_backend.global.error.exception.IdNotFoundException;
 import com.uliga.uliga_backend.global.error.exception.NotAuthorizedException;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
@@ -51,5 +52,15 @@ public class GlobalExceptionHandler {
                 .errorCode(504L)
                 .message("쉬는 시간 당첨 쉬다 오세여")
                 .build(), GATEWAY_TIMEOUT);
+    }
+    @ExceptionHandler(IdNotFoundException.class)
+    protected final ResponseEntity<ErrorResponse> handleIdNotFoundException(
+            IdNotFoundException ex, WebRequest request
+    ) {
+        log.info("아이디가 없어요");
+        return new ResponseEntity<>(ErrorResponse.builder()
+                .errorCode(404L)
+                .message(ex.getMessage()).build()
+                , HttpStatus.NOT_FOUND);
     }
 }
