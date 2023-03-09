@@ -89,13 +89,11 @@ public class AccountBookController {
     @PatchMapping(value = "/record/category")
     public ResponseEntity<UpdateCategoryResult> updateCategoryToRecord(@RequestBody UpdateRecordCategory recordCategory) {
         return ResponseEntity.ok(recordService.updateRecordCategory(recordCategory));
-//        return ResponseEntity.ok(accountBookService.updateRecordCategory(recordCategory));
     }
 
     @PatchMapping(value = "/income/category")
     public ResponseEntity<UpdateCategoryResult> updateCategoryToIncome(@RequestBody UpdateIncomeCategory incomeCategory) {
         return ResponseEntity.ok(incomeService.updateIncomeCategory(incomeCategory));
-//        return ResponseEntity.ok(accountBookService.updateIncomeCategory(incomeCategory));
     }
 
     @PostMapping(value = "/record")

@@ -45,7 +45,6 @@ import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
 @RequiredArgsConstructor
 public class AccountBookService {
 
-    // TODO AccountBookService 에 너무 많은 코드가 있다, 각 서비스로 코드를 나눠야할듯?
     private final AccountBookRepository accountBookRepository;
     private final AccountBookMemberRepository accountBookMemberRepository;
     private final MemberRepository memberRepository;
@@ -106,7 +105,7 @@ public class AccountBookService {
                 .accountBookAuthority(AccountBookAuthority.ADMIN)
                 .getNotification(true).build();
         accountBookMemberRepository.save(bookMember);
-        // TODO 카테고리 서비스로 이전하자
+
         categoryService.createCategories(createRequest.getCategories(), accountBook);
 
         for (String email : createRequest.getEmails()) {
@@ -197,100 +196,28 @@ public class AccountBookService {
                     .year(Long.parseLong(split[0]))
                     .month(Long.parseLong(split[1]))
                     .day(Long.parseLong(split[2])).build();
-            // TODO 요 부분도, categoryId가 결국 디비에 저장되는데, 조회 쿼리가 안나가도되지 않을까? - 해결
             Category category = categoryDict.get(dto.getCategory());
             if (dto.getIsIncome()) {
                 // 수입 생성
                 CreateItemResult createItemResult = incomeService.addItemToAccountBook(dto, accountBook, member, date, category);
                 createResult.add(createItemResult);
-//                Income build = Income.builder()
-//                        .payment(dto.getPayment())
-//                        .account(dto.getAccount())
-//                        .creator(member)
-//                        .accountBook(accountBook)
-//                        .value(dto.getValue())
-//                        .memo(dto.getMemo())
-//                        .date(date)
-//                        .category(category).build();
-//                incomeRepository.save(build);
                 for (Long accountBookId : dto.getSharedAccountBook()) {
                     AccountBook sharedAccountBook = otherAccountBooks.get(accountBookId);
-                    // TODO 이부분도 고쳐야함, 공통가계부 기타 카테고리를 한번에 가져오기 - 해결
                     Category defaultCategory = defaultCategories.get(accountBookId);
                     incomeService.addItemToSharedAccountBook(dto, sharedAccountBook, member, date, defaultCategory);
-//                    Income sharedIncome = Income.builder()
-//                            .payment(dto.getPayment())
-//                            .account(dto.getAccount())
-//                            .creator(member)
-//                            .accountBook(sharedAccountBook)
-//                            .value(dto.getValue())
-//                            .memo(dto.getMemo())
-//                            .date(date)
-//                            .category(defaultCategory).build();
-//                    incomeRepository.save(sharedIncome);
                 }
                 i += 1;
-//                CreateItemResult itemResult = CreateItemResult.builder()
-//                        .id(build.getId())
-//                        .account(dto.getAccount())
-//                        .isIncome(true)
-//                        .category(category.getName())
-//                        .memo(dto.getMemo())
-//                        .payment(dto.getPayment())
-//                        .value(dto.getValue())
-//                        .year(date.getYear())
-//                        .month(date.getMonth())
-//                        .day(date.getDay())
-//                        .build();
-//                createResult.add(itemResult);
 
             } else {
                 // 지출 생성
                 CreateItemResult createItemResult = recordService.addItemToAccountBook(dto, accountBook, member, date, category);
                 createResult.add(createItemResult);
-//                Record build = Record.builder()
-//                        .account(dto.getAccount())
-//                        .creator(member)
-//                        .accountBook(accountBook)
-//                        .spend(dto.getValue())
-//                        .payment(dto.getPayment())
-//                        .date(date)
-//                        .category(category)
-//                        .memo(dto.getMemo())
-//                        .build();
-//                recordRepository.save(build);
                 for (Long accountBookId : dto.getSharedAccountBook()) {
                     AccountBook sharedAccountBook = otherAccountBooks.get(accountBookId);
-                    // TODO 위랑 같은 이슈 - 해결
                     Category defaultCategory = defaultCategories.get(accountBookId);
                     recordService.addItemToSharedAccountBook(dto, sharedAccountBook, member, date, defaultCategory);
-
-//                    Record sharedRecord = Record.builder()
-//                            .account(dto.getAccount())
-//                            .creator(member)
-//                            .accountBook(sharedAccountBook)
-//                            .spend(dto.getValue())
-//                            .payment(dto.getPayment())
-//                            .date(date)
-//                            .category(defaultCategory)
-//                            .memo(dto.getMemo())
-//                            .build();
-//                    recordRepository.save(sharedRecord);
                 }
                 r += 1;
-//                CreateItemResult itemResult = CreateItemResult.builder()
-//                        .id(build.getId())
-//                        .account(dto.getAccount())
-//                        .isIncome(false)
-//                        .category(category.getName())
-//                        .memo(dto.getMemo())
-//                        .payment(dto.getPayment())
-//                        .value(dto.getValue())
-//                        .year(date.getYear())
-//                        .month(date.getMonth())
-//                        .day(date.getDay())
-//                        .build();
-//                createResult.add(itemResult);
 
 
             }
@@ -342,32 +269,8 @@ public class AccountBookService {
                 .records(recordRepository.findByAccountBookId(id))
                 .schedules(scheduleRepository.findByAccountBookId(id)).build();
     }
-    // TODO record 서비스로 변경하기
-//    @Transactional
-//    public UpdateCategoryResult updateRecordCategory(UpdateRecordCategory recordCategory) {
-//        Record record = recordRepository.findById(recordCategory.getRecordId()).orElseThrow(NotFoundByIdException::new);
-//        Category category = categoryRepository.findByAccountBookAndName(record.getAccountBook(), recordCategory.getCategory()).orElseThrow(CategoryNotFoundException::new);
-//        String updateCategory = record.updateCategory(category);
-//
-//        return UpdateCategoryResult.builder()
-//                .updateItemId(record.getId())
-//                .category(updateCategory)
-//                .build();
-//    }
 
-    // TODO income 서비스로 변경하기
-//    @Transactional
-//    public UpdateCategoryResult updateIncomeCategory(UpdateIncomeCategory incomeCategory) {
-//        Income income = incomeRepository.findById(incomeCategory.getIncomeId()).orElseThrow(NotFoundByIdException::new);
-//        Category category = categoryRepository.findByAccountBookAndName(income.getAccountBook(), incomeCategory.getCategory()).orElseThrow(CategoryNotFoundException::new);
-//        String updateCategory = income.updateCategory(category);
-//
-//        return UpdateCategoryResult.builder()
-//                .category(updateCategory)
-//                .updateItemId(income.getId())
-//                .build();
-//    }
-    // TODO income 서비스 로직 사용하기
+
     @Transactional
     public AddIncomeResult addIncome(Long memberId, AddIncomeRequest request) {
         AccountBook accountBook = accountBookRepository.findById(request.getId()).orElseThrow(NotFoundByIdException::new);
@@ -379,22 +282,8 @@ public class AccountBookService {
                 .month(Long.parseLong(split[1]))
                 .day(Long.parseLong(split[2])).build();
         return incomeService.addSingleIncomeToAccountBook(request, category, date, accountBook, member);
-//        Income income = Income.builder()
-//                .category(category)
-//                .date(date)
-//                .accountBook(accountBook)
-//                .memo(request.getMemo())
-//                .payment(request.getPayment())
-//                .creator(member)
-//                .value(request.getValue())
-//                .account(request.getAccount())
-//                .build();
-//        incomeRepository.save(income);
-//        return AddIncomeResult.builder()
-//                .accountBookId(accountBook.getId())
-//                .incomeInfo(income.toInfoQ()).build();
     }
-    // TODO record 서비스 로직 사용하기
+
     @Transactional
     public AddRecordResult addRecord(Long memberId, AddRecordRequest request) {
         AccountBook accountBook = accountBookRepository.findById(request.getId()).orElseThrow(NotFoundByIdException::new);
@@ -406,20 +295,6 @@ public class AccountBookService {
                 .month(Long.parseLong(split[1]))
                 .day(Long.parseLong(split[2])).build();
         return recordService.addSingleItemToAccountBook(request, category, date, accountBook, member);
-//        Record record = Record.builder()
-//                .accountBook(accountBook)
-//                .spend(request.getValue())
-//                .payment(request.getPayment())
-//                .category(category)
-//                .creator(member)
-//                .memo(request.getMemo())
-//                .date(date)
-//                .account(request.getAccount())
-//                .build();
-//        recordRepository.save(record);
-//        return AddRecordResult.builder()
-//                .accountBookId(accountBook.getId())
-//                .recordInfo(record.toInfoQ()).build();
     }
 
 
