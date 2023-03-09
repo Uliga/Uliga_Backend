@@ -3,6 +3,8 @@ package com.uliga.uliga_backend.domain.AccountBook.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
+import com.uliga.uliga_backend.domain.Income.application.IncomeService;
+import com.uliga.uliga_backend.domain.Record.application.RecordService;
 import com.uliga.uliga_backend.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 public class AccountBookController {
 
     private final AccountBookService accountBookService;
+    private final IncomeService incomeService;
+    private final RecordService recordService;
 
     @GetMapping(value = "")
     public ResponseEntity<GetAccountBookInfos> getMemberAccountBook() {
@@ -84,12 +88,14 @@ public class AccountBookController {
 
     @PatchMapping(value = "/record/category")
     public ResponseEntity<UpdateCategoryResult> updateCategoryToRecord(@RequestBody UpdateRecordCategory recordCategory) {
-        return ResponseEntity.ok(accountBookService.updateRecordCategory(recordCategory));
+        return ResponseEntity.ok(recordService.updateRecordCategory(recordCategory));
+//        return ResponseEntity.ok(accountBookService.updateRecordCategory(recordCategory));
     }
 
     @PatchMapping(value = "/income/category")
     public ResponseEntity<UpdateCategoryResult> updateCategoryToIncome(@RequestBody UpdateIncomeCategory incomeCategory) {
-        return ResponseEntity.ok(accountBookService.updateIncomeCategory(incomeCategory));
+        return ResponseEntity.ok(incomeService.updateIncomeCategory(incomeCategory));
+//        return ResponseEntity.ok(accountBookService.updateIncomeCategory(incomeCategory));
     }
 
     @PostMapping(value = "/record")

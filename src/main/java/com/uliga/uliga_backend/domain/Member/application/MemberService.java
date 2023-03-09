@@ -46,24 +46,12 @@ public class MemberService {
 //        ListOperations<String, String> valueOperations = redisTemplate.opsForList();
         String email = memberInfoById.getEmail();
         Set<String> strings = setOperations.members(email);
-//        Long size = valueOperations.size(email);
-//        if (size == null) {
-//            size = 0L;
-//        }
         List<InvitationInfo> result = new ArrayList<>();
         if (strings != null) {
             for (String o : strings) {
                 result.add(objectMapper.readValue(o, InvitationInfo.class));
             }
         }
-//        List<String> stringList = valueOperations.range(email, 0, size);
-//        if (stringList != null) {
-//
-//
-//            for (String o : stringList) {
-//                result.add(objectMapper.readValue(o, InvitationInfo.class));
-//            }
-//        }
         return GetMemberInfo.builder()
                 .memberInfo(memberInfoById)
                 .invitations(result).build();
