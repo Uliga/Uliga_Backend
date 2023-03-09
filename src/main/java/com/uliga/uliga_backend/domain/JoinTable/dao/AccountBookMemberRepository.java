@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AccountBookMemberRepository extends JpaRepository<AccountBookMember, Long> {
     boolean existsAccountBookMemberByMemberIdAndAccountBookId(Long memberId, Long accountBookId);
+
 }

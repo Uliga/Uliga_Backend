@@ -31,6 +31,7 @@ import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -96,18 +97,15 @@ public class AccountBookService {
                 .accountBookAuthority(AccountBookAuthority.ADMIN)
                 .getNotification(true).build();
         accountBookMemberRepository.save(bookMember);
-        // TODO 이부분 필요한가? 프론트에서 넘어오는 값 확인해야할듯!
-        Category defaultCategory = Category.builder()
-                .accountBook(accountBook)
-                .name("미지정").build();
-        categoryRepository.save(defaultCategory);
+        List<Category> categories = new ArrayList<>();
         for (String category : createRequest.getCategories()) {
             Category newCategory = Category.builder()
                     .accountBook(accountBook)
                     .name(category)
                     .build();
-            categoryRepository.save(newCategory);
+            categories.add(newCategory);
         }
+        categoryRepository.saveAll(categories);
         for (String email : createRequest.getEmails()) {
             InvitationInfo info = InvitationInfo.builder()
                     .id(accountBook.getId())
@@ -166,8 +164,29 @@ public class AccountBookService {
     public CreateResult createItems(Long id, CreateItems createItems) {
         long r = 0L;
         long i = 0L;
+        // 아이템 작성자
         Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        // 현재 작성하고 있는 가계부
         AccountBook accountBook = accountBookRepository.findById(createItems.getId()).orElseThrow(NotFoundByIdException::new);
+        // 현재 작성하고 있는 가계부의 카테고리
+        List<Category> categories = accountBook.getCategories();
+        HashMap<String, Category> categoryDict = new HashMap<>();
+        // 다른 가계부들의 기타 카테고리 객체
+        List<Category> otherAccountBookDefaultCategories = categoryRepository.findCategoriesByMemberIdAndName(id, "기타");
+        // 다른 공유 가계부 객체
+        List<AccountBook> accountBooks = accountBookRepository.findAccountBooksByMemberId(id);
+
+        HashMap<Long, Category> defaultCategories = new HashMap<>();
+        HashMap<Long, AccountBook> otherAccountBooks = new HashMap<>();
+        for (Category cat : categories) {
+            categoryDict.put(cat.getName(), cat);
+        }
+        for (Category cat : otherAccountBookDefaultCategories) {
+            defaultCategories.put(cat.getAccountBook().getId(), cat);
+        }
+        for (AccountBook ab : accountBooks) {
+            otherAccountBooks.put(ab.getId(), ab);
+        }
         List<CreateItemResult> createResult = new ArrayList<>();
         for (CreateRecordOrIncomeDto dto : createItems.getCreateRequest()) {
             String[] split = dto.getDate().split("-");
@@ -175,8 +194,8 @@ public class AccountBookService {
                     .year(Long.parseLong(split[0]))
                     .month(Long.parseLong(split[1]))
                     .day(Long.parseLong(split[2])).build();
-            // TODO 요 부분도, categoryId가 결국 디비에 저장되는데, 조회 쿼리가 안나가도되지 않을까?
-            Category category = categoryRepository.findByAccountBookAndName(accountBook, dto.getCategory()).orElseThrow(CategoryNotFoundException::new);
+            // TODO 요 부분도, categoryId가 결국 디비에 저장되는데, 조회 쿼리가 안나가도되지 않을까? - 해결
+            Category category = categoryDict.get(dto.getCategory());
             if (dto.getIsIncome()) {
                 // 수입 생성
                 Income build = Income.builder()
@@ -190,9 +209,11 @@ public class AccountBookService {
                         .category(category).build();
                 incomeRepository.save(build);
                 for (Long accountBookId : dto.getSharedAccountBook()) {
-                    AccountBook sharedAccountBook = accountBookRepository.findById(accountBookId).orElseThrow(NotFoundByIdException::new);
-                    // TODO 요 부분도, 프론트에서 값을 받으면 쿼리 줄일 수 있음
-                    Category defaultCategory = categoryRepository.findByAccountBookAndName(sharedAccountBook, "기타").orElseThrow(CategoryNotFoundException::new);
+                    AccountBook sharedAccountBook = otherAccountBooks.get(accountBookId);
+//                    AccountBook sharedAccountBook = accountBookRepository.findById(accountBookId).orElseThrow(NotFoundByIdException::new);
+                    // TODO 이부분도 고쳐야함, 공통가계부 기타 카테고리를 한번에 가져오기 - 해결
+                    Category defaultCategory = defaultCategories.get(accountBookId);
+//                    Category defaultCategory = categoryRepository.findByAccountBookAndName(sharedAccountBook, "기타").orElseThrow(CategoryNotFoundException::new);
                     Income sharedIncome = Income.builder()
                             .payment(dto.getPayment())
                             .account(dto.getAccount())
@@ -202,7 +223,6 @@ public class AccountBookService {
                             .memo(dto.getMemo())
                             .date(date)
                             .category(defaultCategory).build();
-                    // TODO: 어라 근데 다른 가계부에 해당 카테고리가 없으면 어쩜??? 그냥 일단 비워둘까??? -> 기타 카테고리로 매핑
                     incomeRepository.save(sharedIncome);
                 }
                 i += 1;
@@ -234,9 +254,11 @@ public class AccountBookService {
                         .build();
                 recordRepository.save(build);
                 for (Long accountBookId : dto.getSharedAccountBook()) {
-                    AccountBook sharedAccountBook = accountBookRepository.findById(accountBookId).orElseThrow(NotFoundByIdException::new);
-                    // TODO 위랑 같은 이슈
-                    Category defaultCategory = categoryRepository.findByAccountBookAndName(sharedAccountBook, "기타").orElseThrow(CategoryNotFoundException::new);
+                    AccountBook sharedAccountBook = otherAccountBooks.get(accountBookId);
+//                    AccountBook sharedAccountBook = accountBookRepository.findById(accountBookId).orElseThrow(NotFoundByIdException::new);
+                    // TODO 위랑 같은 이슈 - 해결
+                    Category defaultCategory = defaultCategories.get(accountBookId);
+//                    Category defaultCategory = categoryRepository.findByAccountBookAndName(sharedAccountBook, "기타").orElseThrow(CategoryNotFoundException::new);
                     Record sharedRecord = Record.builder()
                             .account(dto.getAccount())
                             .creator(member)
@@ -322,7 +344,6 @@ public class AccountBookService {
     @Transactional
     public UpdateCategoryResult updateRecordCategory(UpdateRecordCategory recordCategory) {
         Record record = recordRepository.findById(recordCategory.getRecordId()).orElseThrow(NotFoundByIdException::new);
-        // TODO 요 부분도 ㅇㅇ
         Category category = categoryRepository.findByAccountBookAndName(record.getAccountBook(), recordCategory.getCategory()).orElseThrow(CategoryNotFoundException::new);
         String updateCategory = record.updateCategory(category);
 
@@ -335,7 +356,6 @@ public class AccountBookService {
     @Transactional
     public UpdateCategoryResult updateIncomeCategory(UpdateIncomeCategory incomeCategory) {
         Income income = incomeRepository.findById(incomeCategory.getIncomeId()).orElseThrow(NotFoundByIdException::new);
-        // TODO 요부분도
         Category category = categoryRepository.findByAccountBookAndName(income.getAccountBook(), incomeCategory.getCategory()).orElseThrow(CategoryNotFoundException::new);
         String updateCategory = income.updateCategory(category);
 
@@ -348,7 +368,6 @@ public class AccountBookService {
     @Transactional
     public AddIncomeResult addIncome(Long memberId, AddIncomeRequest request) {
         AccountBook accountBook = accountBookRepository.findById(request.getId()).orElseThrow(NotFoundByIdException::new);
-        // TODO 요부분도
         Category category = categoryRepository.findByAccountBookAndName(accountBook, request.getCategory()).orElseThrow(CategoryNotFoundException::new);
         Member member = memberRepository.findById(memberId).orElseThrow(NotFoundByIdException::new);
         String[] split = request.getDate().split("-");
@@ -376,7 +395,6 @@ public class AccountBookService {
     @Transactional
     public AddRecordResult addRecord(Long memberId, AddRecordRequest request) {
         AccountBook accountBook = accountBookRepository.findById(request.getId()).orElseThrow(NotFoundByIdException::new);
-        // TODO 요부분도
         Category category = categoryRepository.findByAccountBookAndName(accountBook, request.getCategory()).orElseThrow(CategoryNotFoundException::new);
         Member member = memberRepository.findById(memberId).orElseThrow(NotFoundByIdException::new);
         String[] split = request.getDate().split("-");

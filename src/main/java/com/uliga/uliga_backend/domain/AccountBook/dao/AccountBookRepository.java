@@ -43,7 +43,13 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long> 
             "FROM " +
             "AccountBook ab JOIN Category c on c.accountBook.id = ab.id WHERE ab.id = :id")
     List<AccountBookCategoryInfoQ> findAccountBookCategoryInfoById(@Param("id") Long id);
-
+    @Query("SELECT ab " +
+            "FROM AccountBook ab " +
+            "JOIN AccountBookMember abm ON abm.accountBook.id = ab.id " +
+            "WHERE abm.member.id=:id")
+    List<AccountBook> findAccountBooksByMemberId(@Param("id") Long id);
 
     void deleteById(Long id);
+
+
 }
