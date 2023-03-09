@@ -82,12 +82,12 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.createCategory(currentMemberId, createRequest));
     }
 
-    @PatchMapping(value = "/category/record")
+    @PatchMapping(value = "/record/category")
     public ResponseEntity<UpdateCategoryResult> updateCategoryToRecord(@RequestBody UpdateRecordCategory recordCategory) {
         return ResponseEntity.ok(accountBookService.updateRecordCategory(recordCategory));
     }
 
-    @PatchMapping(value = "/category/income")
+    @PatchMapping(value = "/income/category")
     public ResponseEntity<UpdateCategoryResult> updateCategoryToIncome(@RequestBody UpdateIncomeCategory incomeCategory) {
         return ResponseEntity.ok(accountBookService.updateIncomeCategory(incomeCategory));
     }
