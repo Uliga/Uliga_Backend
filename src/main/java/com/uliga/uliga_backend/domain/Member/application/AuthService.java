@@ -75,6 +75,7 @@ public class AuthService {
 
         AccountBook accountBook = build.toEntity();
         accountBookRepository.save(accountBook);
+        member.setPrivateAccountBook(accountBook);
         AccountBookMember bookMember = AccountBookMember.builder()
                 .accountBook(accountBook)
                 .member(member)

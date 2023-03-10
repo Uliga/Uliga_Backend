@@ -1,5 +1,6 @@
 package com.uliga.uliga_backend.domain.Member.model;
 
+import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.Income.model.Income;
 import com.uliga.uliga_backend.domain.JoinTable.model.AccountBookMember;
 import com.uliga.uliga_backend.domain.PostComment.model.PostComment;
@@ -8,10 +9,7 @@ import com.uliga.uliga_backend.domain.Like.model.Liked;
 import com.uliga.uliga_backend.domain.Post.model.Post;
 import com.uliga.uliga_backend.domain.Record.model.Record;
 import com.uliga.uliga_backend.domain.Schedule.model.Schedule;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +26,9 @@ public class Member extends MemberBase {
     private String nickName;
 
     private String avatarUrl;
+    @OneToOne
+    @JoinColumn(name = "accountBook_id")
+    private AccountBook privateAccountBook;
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private final List<AccountBookMember> accountBooks = new ArrayList<>();
 
@@ -74,5 +75,9 @@ public class Member extends MemberBase {
 
     public void updateNickname(String nickName) {
         this.nickName = nickName;
+    }
+
+    public void setPrivateAccountBook(AccountBook accountBook) {
+        this.privateAccountBook = accountBook;
     }
 }

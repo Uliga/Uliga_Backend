@@ -7,13 +7,15 @@ import lombok.Getter;
 @Data
 public class MemberInfoNativeQ {
     private Long id;
+    private Long privateAccountBookId;
     private String avatarUrl;
     private String userName;
     private String nickName;
     private String email;
 
-    public MemberInfoNativeQ(Long id, String avatarUrl, String userName, String nickName, String email) {
+    public MemberInfoNativeQ(Long id,Long privateAccountBookId, String avatarUrl, String userName, String nickName, String email) {
         this.id = id;
+        this.privateAccountBookId = privateAccountBookId;
         this.avatarUrl = avatarUrl;
         this.userName = userName;
         this.nickName = nickName;
