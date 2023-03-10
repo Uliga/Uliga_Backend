@@ -30,6 +30,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+        log.info(request.getLocalAddr());
         log.info(String.valueOf(authException.getClass()));
         log.info(authException.getMessage());
         sendResponse(response, authException);
