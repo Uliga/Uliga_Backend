@@ -38,7 +38,7 @@ public class AccountBookDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     @Getter
-    public static class CreateRequestPrivate{
+    public static class CreateRequestPrivate {
         private String name;
 
         private Boolean isPrivate;
@@ -54,19 +54,19 @@ public class AccountBookDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     @Getter
-    public static class GetAccountBookInfos{
+    public static class GetAccountBookInfos {
         private List<AccountBookInfoQ> accountBooks;
     }
+
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     @Getter
-    public static class AccountBookInfo{
+    public static class AccountBookInfo {
         private AccountBookInfoQ info;
         private List<AccountBookMemberInfoQ> members;
         private List<AccountBookCategoryInfoQ> categories;
     }
-
 
 
     @Builder
@@ -88,7 +88,7 @@ public class AccountBookDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     @Getter
-    public static class GetInvitations{
+    public static class GetInvitations {
         private Long id;
         private List<String> emails;
     }
@@ -123,7 +123,7 @@ public class AccountBookDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CreateRecordOrIncomeDto{
+    public static class CreateRecordOrIncomeDto {
         private Boolean isIncome;
 
         private String category;
@@ -145,7 +145,7 @@ public class AccountBookDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CreateItemResult{
+    public static class CreateItemResult {
         private Long id;
 
         private Boolean isIncome;
@@ -171,7 +171,7 @@ public class AccountBookDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CreateItems{
+    public static class CreateItems {
         private Long id;
         private List<CreateRecordOrIncomeDto> createRequest;
     }
@@ -194,7 +194,7 @@ public class AccountBookDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class AccountBookCategories{
+    public static class AccountBookCategories {
         private List<AccountBookCategoryInfoQ> categories;
     }
 
@@ -202,7 +202,7 @@ public class AccountBookDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class AccountBookMembers{
+    public static class AccountBookMembers {
         private List<AccountBookMemberInfoQ> members;
     }
 
@@ -228,16 +228,17 @@ public class AccountBookDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class AccountBookItems{
+    public static class AccountBookItems {
         private List<IncomeInfoQ> incomes;
         private List<RecordInfoQ> records;
         private List<ScheduleInfoQ> schedules;
     }
+
     @Builder
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class UpdateRecordCategory{
+    public static class UpdateRecordCategory {
         private Long accountBookId;
         private Long recordId;
         private String category;
@@ -285,7 +286,7 @@ public class AccountBookDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class AddIncomeRequest{
+    public static class AddIncomeRequest {
         private Long id;
         private String category;
 
@@ -306,7 +307,7 @@ public class AccountBookDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class AddRecordRequest{
+    public static class AddRecordRequest {
         private Long id;
         private String category;
 
@@ -323,8 +324,15 @@ public class AccountBookDTO {
         private List<Long> sharedAccountBook;
     }
 
-
-
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GetAccountBookAssets {
+        private Long income;
+        private Long record;
+        private Long budget;
+    }
 
 
 }

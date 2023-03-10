@@ -270,6 +270,11 @@ public class AccountBookService {
                 .schedules(scheduleRepository.findByAccountBookId(id, month)).build();
     }
 
+    @Transactional
+    public GetAccountBookAssets getAccountBookAssets(Long id, Long month) {
+        return null;
+    }
+
 
     @Transactional
     public AddIncomeResult addIncome(Long memberId, AddIncomeRequest request) {

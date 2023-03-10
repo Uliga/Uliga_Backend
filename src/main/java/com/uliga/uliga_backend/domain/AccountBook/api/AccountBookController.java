@@ -76,6 +76,14 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.getAccountBookItems(id, month, startDay, endDay));
     }
 
+    @GetMapping(value = "/{id}/asset/{month}")
+    public ResponseEntity<GetAccountBookAssets> getAccountBookAssets(
+            @PathVariable("id") Long id,
+            @PathVariable("month") Long month
+    ) {
+        return ResponseEntity.ok(accountBookService.getAccountBookAssets(id, month));
+    }
+
     @PostMapping(value = "/item")
     public ResponseEntity<CreateResult> createItems(@RequestBody CreateItems items) {
 
