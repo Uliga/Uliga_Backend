@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.*;
 public class AccountBookController {
 
     private final AccountBookService accountBookService;
-    private final IncomeService incomeService;
-    private final RecordService recordService;
 
     @GetMapping(value = "")
     public ResponseEntity<GetAccountBookInfos> getMemberAccountBook() {

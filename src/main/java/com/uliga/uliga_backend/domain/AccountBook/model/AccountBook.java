@@ -29,11 +29,13 @@ public class AccountBook extends BaseTimeEntity {
 
     private String name;
 
+    private String relationShip;
     @Builder
-    public AccountBook(Boolean isPrivate, String name) {
+    public AccountBook(Boolean isPrivate, String name, String relationShip) {
 
         this.isPrivate = isPrivate;
         this.name = name;
+        this.relationShip = relationShip;
     }
 
     @OneToMany(mappedBy = "accountBook", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
@@ -60,6 +62,7 @@ public class AccountBook extends BaseTimeEntity {
                 .id(id)
                 .isPrivate(isPrivate)
                 .name(name)
+                .relationShip(relationShip)
                 .build();
     }
 }

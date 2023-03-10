@@ -70,6 +70,7 @@ public class AccountBookService {
         }
         return AccountBookInfo.builder()
                 .info(bookInfoById)
+                .numberOfMember(accountBookRepository.getMemberNumberByAccountBookId(id))
                 .members(accountBookRepository.findAccountBookMemberInfoById(id))
                 .categories(accountBookRepository.findAccountBookCategoryInfoById(id)).build();
     }

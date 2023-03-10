@@ -1,9 +1,6 @@
 package com.uliga.uliga_backend.domain.AccountBook.dto;
 
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategoryInfoQ;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookMemberInfoQ;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.*;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.Income.dto.IncomeDTO;
 import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
@@ -28,10 +25,12 @@ public class AccountBookDTO {
         private List<String> categories;
 
         private List<String> emails;
+        private String relationship;
 
         public AccountBook toEntity() {
             return AccountBook.builder()
                     .isPrivate(false)
+                    .relationShip(relationship)
                     .name(name).build();
         }
     }
@@ -66,6 +65,7 @@ public class AccountBookDTO {
     @Getter
     public static class AccountBookInfo {
         private AccountBookInfoQ info;
+        private MembersQ numberOfMember;
         private List<AccountBookMemberInfoQ> members;
         private List<AccountBookCategoryInfoQ> categories;
     }
@@ -81,7 +81,7 @@ public class AccountBookDTO {
         private String name;
 
         private Boolean isPrivate;
-
+        private String relationShip;
 
     }
 
