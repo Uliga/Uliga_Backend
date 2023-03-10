@@ -30,12 +30,7 @@ public class JwtFilter extends OncePerRequestFilter {
         // 2. validateToken으로 유효성 검사
         // 정상 토큰이면, Authentication을 가져와서 SecurityContext에 저장
         if (jwt != null) {
-            Boolean hasKey = redisTemplate.hasKey(jwt);
-
-            if (hasKey == null) {
-                hasKey = false;
-            }
-            if (StringUtils.hasText(jwt) && hasKey && jwtTokenProvider.validateToken(jwt)) {
+            if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
                 Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
