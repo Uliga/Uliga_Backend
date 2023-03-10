@@ -68,6 +68,7 @@ public class SecurityConfig {
                         .requestMatchers("/post/**").authenticated()
                         .requestMatchers("/accountBook/**").authenticated()
                         .requestMatchers("/budget/**").authenticated()
+                        .requestMatchers("/record/**").authenticated()
                         .requestMatchers("/income/**").authenticated()
                         .requestMatchers("/test").permitAll()
                         .requestMatchers("/test2").authenticated()
