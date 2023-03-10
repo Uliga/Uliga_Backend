@@ -18,7 +18,7 @@ public class Budget extends BaseTimeEntity {
 
     private Long value;
 
-    private String month;
+    private Long month;
 
     @ManyToOne
     @JoinColumn(name = "category_id")

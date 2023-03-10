@@ -1,5 +1,6 @@
 package com.uliga.uliga_backend.domain.Income.dao;
 
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ;
 import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
 import com.uliga.uliga_backend.domain.Income.model.Income;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -27,5 +28,13 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
                     "where i.accountBook.id=:id and i.date.month=:month"
     )
     List<IncomeInfoQ> findByAccountBookId(@Param("id") Long id, @Param("month") Long month);
+    @Query("select new com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ(" +
+            "SUM(i.value)" +
+            ") FROM AccountBook ab " +
+            "JOIN Income i ON i.accountBook.id = ab.id " +
+            "WHERE i.date.month=:month " +
+            "AND ab.id=:id " +
+            "GROUP BY ab.id")
+    MonthlySumQ getMonthlySumByAccountBookId(@Param("id") Long id, @Param("month") Long month);
 
 }

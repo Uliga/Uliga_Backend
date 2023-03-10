@@ -3,7 +3,9 @@ package com.uliga.uliga_backend.domain.AccountBook.dto;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategoryInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookMemberInfoQ;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
+import com.uliga.uliga_backend.domain.Income.dto.IncomeDTO;
 import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
 import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleInfoQ;
@@ -329,9 +331,9 @@ public class AccountBookDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class GetAccountBookAssets {
-        private Long income;
-        private Long record;
-        private Long budget;
+        private MonthlySumQ income;
+        private MonthlySumQ record;
+        private MonthlySumQ budget;
     }
 
 

@@ -9,6 +9,7 @@ import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountB
 import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookCategoryCreateException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
+import com.uliga.uliga_backend.domain.Budget.dao.BudgetRepository;
 import com.uliga.uliga_backend.domain.Category.application.CategoryService;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
 import com.uliga.uliga_backend.domain.Category.model.Category;
@@ -51,6 +52,7 @@ public class AccountBookService {
     private final IncomeRepository incomeRepository;
     private final RecordRepository recordRepository;
     private final ScheduleRepository scheduleRepository;
+    private final BudgetRepository budgetRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
 
@@ -272,7 +274,11 @@ public class AccountBookService {
 
     @Transactional
     public GetAccountBookAssets getAccountBookAssets(Long id, Long month) {
-        return null;
+        return GetAccountBookAssets.builder()
+                .budget(budgetRepository.getMonthlySumByAccountBookId(id, month))
+                .income(incomeRepository.getMonthlySumByAccountBookId(id, month))
+                .record(recordRepository.getMonthlySumByAccountBookId(id, month))
+                .build();
     }
 
 

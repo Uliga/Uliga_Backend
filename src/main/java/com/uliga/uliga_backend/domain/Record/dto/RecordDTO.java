@@ -39,4 +39,6 @@ public class RecordDTO {
         private String category;
         private String date;
     }
+
+
 }
