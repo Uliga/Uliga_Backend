@@ -23,7 +23,22 @@ public class IncomeDTO {
         private String creator;
         private String category;
 
+    }
 
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class IncomeUpdateRequest {
+        private Long id;
+        private Long value;
+        private String payment;
+        private String account;
+        private String memo;
+        private String category;
+        private String date;
 
     }
+
+
 }

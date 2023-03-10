@@ -26,4 +26,17 @@ public class RecordDTO {
     }
 
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class RecordUpdateRequest {
+        private Long id;
+        private Long value;
+        private String payment;
+        private String account;
+        private String memo;
+        private String category;
+        private String date;
+    }
 }

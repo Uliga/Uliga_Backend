@@ -90,8 +90,12 @@ public class Income {
         this.memo = memo;
     }
 
-    public void updateDate(Date date) {
-        this.date = date;
+    public void updateDate(String date) {
+        String[] split = date.split("-");
+        this.date = Date.builder()
+                .year(Long.parseLong(split[0]))
+                .month(Long.parseLong(split[1]))
+                .day(Long.parseLong(split[2])).build();
     }
 }
 

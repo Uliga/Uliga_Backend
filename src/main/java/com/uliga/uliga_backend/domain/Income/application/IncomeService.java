@@ -9,6 +9,8 @@ import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.Date;
 import com.uliga.uliga_backend.domain.Income.dao.IncomeRepository;
+import com.uliga.uliga_backend.domain.Income.dto.IncomeDTO;
+import com.uliga.uliga_backend.domain.Income.dto.IncomeDTO.IncomeUpdateRequest;
 import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
 import com.uliga.uliga_backend.domain.Income.model.Income;
 import com.uliga.uliga_backend.domain.Member.model.Member;
@@ -101,8 +103,8 @@ public class IncomeService {
                 .incomeInfo(income.toInfoQ()).build();
     }
     @Transactional
-    public IncomeInfoQ updateIncome(Map<String, Object> updates) {
-        IncomeInfoQ patchIncome = objectMapper.convertValue(updates, IncomeInfoQ.class);
+    public IncomeUpdateRequest updateIncome(Map<String, Object> updates) {
+        IncomeUpdateRequest patchIncome = objectMapper.convertValue(updates, IncomeUpdateRequest.class);
         if (patchIncome.getId() == null) {
             throw new IdNotFoundException();
         }
@@ -122,6 +124,9 @@ public class IncomeService {
         }
         if (patchIncome.getPayment() != null) {
             income.updatePayment(patchIncome.getPayment());
+        }
+        if (patchIncome.getDate() != null) {
+            income.updateDate(patchIncome.getDate());
         }
         // 날짜는 프론트에서 값 받고 변경해야할듯?
         return patchIncome;

@@ -12,6 +12,8 @@ import com.uliga.uliga_backend.domain.Common.Date;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
+import com.uliga.uliga_backend.domain.Record.dto.RecordDTO;
+import com.uliga.uliga_backend.domain.Record.dto.RecordDTO.RecordUpdateRequest;
 import com.uliga.uliga_backend.global.error.exception.IdNotFoundException;
 import com.uliga.uliga_backend.domain.Record.model.Record;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
@@ -104,8 +106,8 @@ public class RecordService {
     }
 
     @Transactional
-    public RecordInfoQ updateRecord(Map<String, Object> updates) {
-        RecordInfoQ patchRecord = objectMapper.convertValue(updates, RecordInfoQ.class);
+    public RecordUpdateRequest updateRecord(Map<String, Object> updates) {
+        RecordUpdateRequest patchRecord = objectMapper.convertValue(updates, RecordUpdateRequest.class);
         if (patchRecord.getId() == null) {
             throw new IdNotFoundException();
         }
@@ -126,6 +128,9 @@ public class RecordService {
         }
         if (patchRecord.getPayment() != null) {
             record.updatePayment(patchRecord.getPayment());
+        }
+        if (patchRecord.getDate() != null) {
+            record.updateDate(patchRecord.getDate());
         }
         // 날짜는 프론트에서 값 받고 변경해야할듯?
 

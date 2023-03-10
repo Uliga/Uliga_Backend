@@ -21,7 +21,7 @@ public class RecordController {
     private final RecordService recordService;
 
     @PatchMapping("")
-    public ResponseEntity<RecordInfoQ> updateRecord(@RequestBody Map<String, Object> updates) {
+    public ResponseEntity<RecordUpdateRequest> updateRecord(@RequestBody Map<String, Object> updates) {
         return ResponseEntity.ok(recordService.updateRecord(updates));
     }
 
