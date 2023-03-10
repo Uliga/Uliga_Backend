@@ -9,6 +9,8 @@ import com.uliga.uliga_backend.domain.Member.exception.UnknownLoginException;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Member.model.UserLoginType;
 import com.uliga.uliga_backend.global.common.constants.OAuthConstants;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +32,7 @@ public class OAuth2MemberService {
 
     private final MemberRepository memberRepository;
     @Transactional
-    public LoginResult oAuthLogin(String loginType, String token, String password) throws IOException {
+    public LoginResult oAuthLogin(String loginType, String token, String password, HttpServletResponse response, HttpServletRequest request) throws IOException {
 
         switch (loginType) {
             case OAuthConstants.GOOGLE: {
@@ -63,7 +65,7 @@ public class OAuth2MemberService {
                     authService.socialSignUp(signUpRequest);
 
                 }
-                return authService.login(MemberDTO.LoginRequest.builder().email(googleUser.getEmail()).password(password).build());
+                return authService.login(MemberDTO.LoginRequest.builder().email(googleUser.getEmail()).password(password).build(), response, request);
 
             }
             default: {

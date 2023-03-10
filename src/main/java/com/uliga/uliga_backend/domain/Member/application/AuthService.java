@@ -19,6 +19,10 @@ import com.uliga.uliga_backend.domain.Token.exception.ExpireRefreshTokenExceptio
 import com.uliga.uliga_backend.domain.Token.exception.InvalidRefreshTokenException;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import com.uliga.uliga_backend.global.jwt.JwtTokenProvider;
+import com.uliga.uliga_backend.global.util.CookieUtil;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
 import static com.uliga.uliga_backend.domain.Token.dto.TokenDTO.*;
-import static com.uliga.uliga_backend.global.common.constants.JwtConstants.REFRESH_TOKEN_EXPIRE_TIME;
+import static com.uliga.uliga_backend.global.common.constants.JwtConstants.*;
 
 @Slf4j
 @Service
@@ -100,7 +104,7 @@ public class AuthService {
     }
 
     @Transactional
-    public LoginResult login(LoginRequest loginRequest) {
+    public LoginResult login(LoginRequest loginRequest, HttpServletResponse response, HttpServletRequest request) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = loginRequest.toAuthentication();
 
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(usernamePasswordAuthenticationToken);
@@ -108,8 +112,11 @@ public class AuthService {
         TokenInfoDTO tokenInfoDTO = jwtTokenProvider.generateTokenDto(authenticate);
         log.info("로그인 API 중 토큰 생성 로직 실행");
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-        valueOperations.set(tokenInfoDTO.getAccessToken(), tokenInfoDTO.getRefreshToken());
-        redisTemplate.expire(tokenInfoDTO.getAccessToken(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
+        valueOperations.set(authenticate.getName(), tokenInfoDTO.getRefreshToken());
+//        valueOperations.set(tokenInfoDTO.getAccessToken(), tokenInfoDTO.getRefreshToken());
+        CookieUtil.deleteCookie(request, response, ACCESS_TOKEN);
+        CookieUtil.addCookie(response, ACCESS_TOKEN, tokenInfoDTO.getAccessToken(), ACCESS_TOKEN_COOKIE_EXPIRE_TIME);
+        redisTemplate.expire(authenticate.getName(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
 
         return LoginResult.builder()
                 .memberInfo(memberRepository.findMemberInfoById(Long.parseLong(authenticate.getName())))
@@ -118,9 +125,18 @@ public class AuthService {
     }
 
     @Transactional
-    public TokenIssueDTO reissue(AccessTokenDTO accessTokenDTO) {
+    public TokenIssueDTO reissue(HttpServletResponse response, HttpServletRequest request) {
+        Cookie cookie = CookieUtil.getCookie(request, ACCESS_TOKEN).orElse(null);
+        String accessToken;
+        if (cookie == null) {
+            throw new ExpireRefreshTokenException();
+        } else {
+            accessToken = cookie.getValue();
+        }
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-        String refreshByAccess = valueOperations.get(accessTokenDTO.getAccessToken());
+        // Access Token에서 멤버 아이디 가져오기
+        Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+        String refreshByAccess = valueOperations.get(authentication.getName());
         if (refreshByAccess == null) {
             log.info("토큰 재발급 API 중 리프레쉬 만료 확인");
             throw new ExpireRefreshTokenException();
@@ -131,15 +147,15 @@ public class AuthService {
             throw new InvalidRefreshTokenException();
         }
 
-        // Access Token에서 멤버 아이디 가져오기
-        Authentication authentication = jwtTokenProvider.getAuthentication(accessTokenDTO.getAccessToken());
 
         // 새로운 토큰 생성
         TokenInfoDTO tokenInfoDTO = jwtTokenProvider.generateTokenDto(authentication);
         // 저장소 정보 업데이트
         log.info("토큰 재발급 성공후 레디스에 값 저장");
-        valueOperations.set(tokenInfoDTO.getAccessToken(), tokenInfoDTO.getRefreshToken());
-        redisTemplate.expire(tokenInfoDTO.getAccessToken(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
+        CookieUtil.deleteCookie(request, response, ACCESS_TOKEN);
+        CookieUtil.addCookie(response, ACCESS_TOKEN, tokenInfoDTO.getAccessToken(), ACCESS_TOKEN_COOKIE_EXPIRE_TIME);
+        valueOperations.set(authentication.getName(), tokenInfoDTO.getRefreshToken());
+        redisTemplate.expire(authentication.getName(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
 
 
         // 토큰 발급

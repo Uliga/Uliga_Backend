@@ -10,6 +10,8 @@ import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SignUpResult;
 import com.uliga.uliga_backend.domain.Member.dto.OAuthDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.AccessTokenDTO;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,20 +44,20 @@ public class MemberAuthController {
     }
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<LoginResult> loginJson(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResult> loginJson(@RequestBody LoginRequest loginRequest, HttpServletResponse response, HttpServletRequest request) {
         log.info("로그인 요청 API 호출 - json");
-        return ResponseEntity.ok(authService.login(loginRequest));
+        return ResponseEntity.ok(authService.login(loginRequest, response, request));
     }
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public ResponseEntity<LoginResult> loginForm(LoginRequest loginRequest) {
+    public ResponseEntity<LoginResult> loginForm(LoginRequest loginRequest, HttpServletResponse response,HttpServletRequest request) {
         log.info("로그인 요청 API 호출 - form");
-        return ResponseEntity.ok(authService.login(loginRequest));
+        return ResponseEntity.ok(authService.login(loginRequest, response, request));
     }
 
     @PostMapping(value = "/social_login/{loginType}")
-    public ResponseEntity<LoginResult> socialLogin(@Param("loginType") String loginType, @RequestBody OAuthDTO.SocialLoginDto loginDto, @Value("${oAuth.password}") String password) throws IOException {
-        return ResponseEntity.ok(oAuth2MemberService.oAuthLogin(loginType.toUpperCase(), loginDto.getToken(), password));
+    public ResponseEntity<LoginResult> socialLogin(@Param("loginType") String loginType, @RequestBody OAuthDTO.SocialLoginDto loginDto, @Value("${oAuth.password}") String password, HttpServletResponse response,HttpServletRequest request) throws IOException {
+        return ResponseEntity.ok(oAuth2MemberService.oAuthLogin(loginType.toUpperCase(), loginDto.getToken(), password, response, request));
     }
 
     @GetMapping(value = "/logout-redirect")
@@ -63,10 +65,10 @@ public class MemberAuthController {
         return ResponseEntity.ok("LOGOUT");
     }
 
-    @PostMapping(value = "/reissue")
-    public ResponseEntity<TokenDTO.TokenIssueDTO> reissue(@RequestBody AccessTokenDTO accessTokenDTO) {
+    @GetMapping(value = "/reissue")
+    public ResponseEntity<TokenDTO.TokenIssueDTO> reissue(HttpServletResponse response,HttpServletRequest request) {
         log.info("토큰 재발급 요청 API 호출");
-        return ResponseEntity.ok(authService.reissue(accessTokenDTO));
+        return ResponseEntity.ok(authService.reissue(response, request));
     }
 
     // 이메일 인증 요청
