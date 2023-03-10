@@ -70,7 +70,7 @@ public class AccountBookController {
             @PathVariable("month") Long month,
             @RequestParam(value = "startDay", required = false, defaultValue = "1") Long startDay,
             @RequestParam(value = "endDay", required = false, defaultValue = "31") Long endDay
-            ) {
+    ) {
         return ResponseEntity.ok(accountBookService.getAccountBookItems(id, month, startDay, endDay));
     }
 
@@ -119,5 +119,16 @@ public class AccountBookController {
     @GetMapping(value = "/{id}/member")
     public ResponseEntity<AccountBookMembers> getAccountBookMembers(@PathVariable("id") Long id) {
         return ResponseEntity.ok(accountBookService.getAccountBookMembers(id));
+    }
+
+    // 구현 해야될 기능 틀
+    @PostMapping(value = "/schedule")
+    public void addSchedule() {
+
+    }
+
+    @GetMapping(value = "/category/{name}")
+    public void getCategoryData(@PathVariable("name") String name) {
+
     }
 }

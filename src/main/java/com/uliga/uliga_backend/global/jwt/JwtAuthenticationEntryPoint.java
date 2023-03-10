@@ -29,8 +29,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     private final RedisTemplate<String, String> redisTemplate;
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        log.info(request.getLocalAddr());
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         log.info(String.valueOf(authException.getClass()));
         log.info(authException.getMessage());
         sendResponse(response, authException);
