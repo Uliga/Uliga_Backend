@@ -262,12 +262,12 @@ public class AccountBookService {
     }
 
     @Transactional
-    public AccountBookItems getAccountBookItems(Long id) {
+    public AccountBookItems getAccountBookItems(Long id, Long month, Long startDay, Long endDay) {
 
         return AccountBookItems.builder()
-                .incomes(incomeRepository.findByAccountBookId(id))
-                .records(recordRepository.findByAccountBookId(id))
-                .schedules(scheduleRepository.findByAccountBookId(id)).build();
+                .incomes(incomeRepository.findByAccountBookId(id, month))
+                .records(recordRepository.findByAccountBookId(id, month))
+                .schedules(scheduleRepository.findByAccountBookId(id, month)).build();
     }
 
 

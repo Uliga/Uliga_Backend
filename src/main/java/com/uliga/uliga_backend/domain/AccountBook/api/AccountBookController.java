@@ -66,9 +66,14 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.invitationReply(id, invitationReply));
     }
 
-    @GetMapping(value = "/{id}/item")
-    public ResponseEntity<AccountBookItems> getAccountBookItems(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(accountBookService.getAccountBookItems(id));
+    @GetMapping(value = "/{id}/item/{month}")
+    public ResponseEntity<AccountBookItems> getAccountBookItems(
+            @PathVariable("id") Long id,
+            @PathVariable("month") Long month,
+            @RequestParam(value = "startDay", required = false, defaultValue = "1") Long startDay,
+            @RequestParam(value = "endDay", required = false, defaultValue = "31") Long endDay
+            ) {
+        return ResponseEntity.ok(accountBookService.getAccountBookItems(id, month, startDay, endDay));
     }
 
     @PostMapping(value = "/item")

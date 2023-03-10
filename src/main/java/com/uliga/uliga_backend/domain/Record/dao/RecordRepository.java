@@ -24,7 +24,7 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
                     "c.name) from Record r " +
                     "JOIN Member m on m.id = r.creator.id " +
                     "JOIN Category c on c.id=r.category.id " +
-                    "WHERE r.accountBook.id=:id"
+                    "WHERE r.accountBook.id=:id and r.date.month=:month"
     )
-    List<RecordInfoQ> findByAccountBookId(@Param("id") Long id);
+    List<RecordInfoQ> findByAccountBookId(@Param("id") Long id, @Param("month") Long month);
 }

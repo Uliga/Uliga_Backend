@@ -24,8 +24,8 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
                     "c.name) from Income i " +
                     "JOIN Member m on m.id = i.creator.id " +
                     "JOIN Category c on c.id = i.category.id " +
-                    "where i.accountBook.id=:id"
+                    "where i.accountBook.id=:id and i.date.month=:month"
     )
-    List<IncomeInfoQ> findByAccountBookId(@Param("id") Long id);
+    List<IncomeInfoQ> findByAccountBookId(@Param("id") Long id, @Param("month") Long month);
 
 }
