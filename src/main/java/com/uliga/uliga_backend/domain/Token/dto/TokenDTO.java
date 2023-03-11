@@ -1,5 +1,6 @@
 package com.uliga.uliga_backend.domain.Token.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,8 +35,9 @@ public class TokenDTO {
     @AllArgsConstructor
     @Getter
     public static class TokenIssueDTO {
+        @Schema(description = "엑세스 토큰 정보", defaultValue = "엑세스 토큰")
         private String accessToken;
-
+        @Schema(description = "토큰 타입", defaultValue = "토큰 타입 - Bearer")
         private String grantType;
 
         private Long accessTokenExpiresIn;

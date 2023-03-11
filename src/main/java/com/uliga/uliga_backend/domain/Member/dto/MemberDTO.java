@@ -22,15 +22,19 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class SignUpRequest {
+        @Schema(description = "회원가입 이메일", defaultValue = "test@email.com")
         @Email
         private String email;
-
+        @Schema(description = "회원가입 비밀번호", defaultValue = "12345678")
         @Size(min = 8)
         private String password;
+        @Schema(description = "닉네임", defaultValue = "nickName")
         @Size(min = 2, max = 19)
         private String nickName;
+        @Schema(description = "본명", defaultValue = "userName")
         @NotNull
         private String userName;
+        @Schema(description = "애플리케이션 비밀번호", defaultValue = "1234")
         @NotNull
         private String applicationPassword;
 
@@ -94,7 +98,9 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class LoginRequest {
+        @Schema(description = "로그인할 이메일", defaultValue = "test@email.com")
         private String email;
+        @Schema(description = "비밀번호", defaultValue = "12345678")
         private String password;
 
 

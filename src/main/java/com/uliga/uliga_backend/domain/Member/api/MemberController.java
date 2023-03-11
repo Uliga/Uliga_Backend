@@ -6,6 +6,7 @@ import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.MatchResult;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.UpdateApplicationPasswordDto;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.UpdateResult;
 import com.uliga.uliga_backend.global.util.SecurityUtil;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
 
+@Tag(name = "멤버 관리", description = "멤버 관리 API 입니다")
 @Slf4j
 @RestController
 @RequiredArgsConstructor

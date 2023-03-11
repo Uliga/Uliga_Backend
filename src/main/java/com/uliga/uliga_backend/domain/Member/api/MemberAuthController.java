@@ -3,20 +3,16 @@ package com.uliga.uliga_backend.domain.Member.api;
 import com.uliga.uliga_backend.domain.Member.application.AuthService;
 import com.uliga.uliga_backend.domain.Member.application.EmailCertificationService;
 import com.uliga.uliga_backend.domain.Member.application.OAuth2MemberService;
-import com.uliga.uliga_backend.domain.Member.dto.MemberDTO;
-import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.LoginResult;
-import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SignUpRequest;
-import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SignUpResult;
+import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
 import com.uliga.uliga_backend.domain.Member.dto.OAuthDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO;
-import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.AccessTokenDTO;
+import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.models.annotations.OpenAPI30;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -24,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.query.Param;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,8 +50,14 @@ public class MemberAuthController {
         return ResponseEntity.ok(SignUpResult.builder().result(authService.signUp(signUpRequest)).build());
     }
 
+    @Operation(summary = "로그인 API", description = "로그인 API 입니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "로그인 성공", content = @Content(schema = @Schema(implementation = LoginResult.class))),
+            @ApiResponse(responseCode = "409", description = "로그인 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class )))
+    })
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LoginResult> loginJson(@RequestBody LoginRequest loginRequest, HttpServletResponse response, HttpServletRequest request) {
+
         log.info("로그인 요청 API 호출 - json");
         return ResponseEntity.ok(authService.login(loginRequest, response, request));
     }
