@@ -21,6 +21,8 @@ public class AccountBookController {
 
     private final AccountBookService accountBookService;
 
+
+
     @GetMapping(value = "")
     public ResponseEntity<GetAccountBookInfos> getMemberAccountBook() {
         log.info("멤버 가계부 조회 API 호출");
