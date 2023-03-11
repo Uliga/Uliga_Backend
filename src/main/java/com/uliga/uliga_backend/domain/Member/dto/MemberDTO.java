@@ -4,6 +4,7 @@ import com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Member.model.UserLoginType;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenIssueDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -84,6 +85,7 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class SignUpResult {
+        @Schema(description = "회원가입 결과", defaultValue = "CREATED")
         private String result;
     }
 

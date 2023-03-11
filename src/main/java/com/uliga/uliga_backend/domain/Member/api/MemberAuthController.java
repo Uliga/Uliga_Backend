@@ -10,6 +10,13 @@ import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SignUpResult;
 import com.uliga.uliga_backend.domain.Member.dto.OAuthDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.AccessTokenDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.models.annotations.OpenAPI30;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -26,6 +33,8 @@ import java.io.IOException;
 
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
 
+
+@Tag(name = "사용자 인증", description = "사용자 인증 관련 API 입니다.")
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -36,7 +45,10 @@ public class MemberAuthController {
 
     private final OAuth2MemberService oAuth2MemberService;
 
-
+    @Operation(summary = "회원가입 API", description = "회원가입 API 입니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "회원가입 성공", content = @Content(schema = @Schema(implementation = SignUpResult.class)))
+    })
     @PostMapping(value = "/signup")
     public ResponseEntity<SignUpResult> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
         log.info("회원 가입 요청 API 호출");
