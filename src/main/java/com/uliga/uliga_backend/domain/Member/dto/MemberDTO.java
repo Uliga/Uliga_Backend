@@ -180,7 +180,7 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class ExistsCheckDto {
-        @Schema(name = "존재여부", description = "존재여부", defaultValue = "true")
+        @Schema(description = "존재여부", defaultValue = "true")
         private boolean exists;
     }
 
@@ -229,7 +229,7 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class UpdateResult {
-        @Schema(name = "업데이트 결과", defaultValue = "업데이트한 결과")
+        @Schema(description = "업데이트 결과", defaultValue = "업데이트한 결과")
         private String result;
     }
 
@@ -238,7 +238,7 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class MatchResult {
-        @Schema(name = "일치 여부", defaultValue = "true")
+        @Schema(description = "일치 여부", defaultValue = "true")
         private boolean matches;
     }
 
@@ -247,7 +247,7 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class NicknameUpdateResult {
-        @Schema(description = "업데이트한 닉네임", name = "업데이트할 닉네임", defaultValue = "newNickname")
+        @Schema(description = "업데이트한 닉네임", defaultValue = "newNickname")
         private String nickname;
     }
 
@@ -256,7 +256,7 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class AvatarUrlUpdateResult {
-        @Schema(description = "업데이트한 프사", name = "업데이트할 프사", defaultValue = "newProfile")
+        @Schema(description = "업데이트한 프사", defaultValue = "newProfile")
         private String avatarUrl;
     }
 
@@ -291,11 +291,11 @@ public class MemberDTO {
     @AllArgsConstructor
     @Getter
     public static class InvitationInfo {
-        @Schema(name = "가계부 아이디", description = "초대온 가계부 아이디", defaultValue = "1")
+        @Schema(description = "초대온 가계부 아이디", defaultValue = "1")
         private Long id;
-        @Schema(name = "초대한 멤버 이름", description = "자신을 초대한 사람", defaultValue = "testUser")
+        @Schema(description = "자신을 초대한 사람", defaultValue = "testUser")
         private String memberName;
-        @Schema(name = "초대 받은 가계부 이름", defaultValue = "초대 받은 가계부", description = "testUser님의 가계부")
+        @Schema( defaultValue = "초대 받은 가계부", description = "testUser님의 가계부")
         private String accountBookName;
 
     }
@@ -324,11 +324,11 @@ public class MemberDTO {
     @Getter
     public static class SearchEmailResult {
 
-        @Schema(name = "멤버 아이디", description = "이메일로 찾은 멤버 아이디")
+        @Schema( description = "이메일로 찾은 멤버 아이디")
         private Long id;
-        @Schema(name = "찾은 멤버 유저네임", description = "이메일로 찾은 멤버 이름", defaultValue = "userName")
+        @Schema(description = "이메일로 찾은 멤버 이름", defaultValue = "userName")
         private String userName;
-        @Schema(name = "찾은 멤버 닉네임", defaultValue = "이메일로 찾은 멤버 닉네임", description = "nickName")
+        @Schema(defaultValue = "nickName", description = "이메일로 찾은 멤버 닉네임")
         private String nickName;
     }
 
