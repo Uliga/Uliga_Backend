@@ -151,6 +151,7 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class CodeConfirmDto {
+        @Schema(description = "일치시", example = "true", defaultValue = "false")
         private boolean matches;
     }
 
@@ -159,6 +160,7 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class ConfirmEmailDto {
+        @Schema(description = "인증 요청 보낼 이메일", defaultValue = "test@email.com")
         private String email;
     }
 
@@ -167,7 +169,9 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class EmailSentDto {
+        @Schema(description = "이메일 인증 요청 보낸 이메일", defaultValue = "test@email.com")
         private String email;
+        @Schema(description = "성공 여부", defaultValue = "true")
         private boolean success;
     }
 
