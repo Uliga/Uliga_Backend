@@ -1,6 +1,7 @@
 package com.uliga.uliga_backend.domain.Record.dto.NativeQ;
 
 import com.uliga.uliga_backend.domain.Common.Date;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Embedded;
 import lombok.Builder;
 import lombok.Data;
@@ -10,14 +11,20 @@ import lombok.Getter;
 @Getter
 public class RecordInfoQ {
     private Long id;
+    @Schema(description = "금액")
     private Long value;
+    @Schema(description = "지불/입금 수단", defaultValue = "카드/이체/등등")
     private String payment;
+    @Schema(description = "거래처", defaultValue = "거래처")
     private String account;
+    @Schema(description = "간단한 메모", defaultValue = "simple memo")
     private String memo;
     private Long year;
     private Long month;
     private Long day;
+    @Schema(description = "작성자", defaultValue = "creatorNickname")
     private String creator;
+    @Schema(description = "카테고리", defaultValue = "category")
     private String category;
 
     @Builder

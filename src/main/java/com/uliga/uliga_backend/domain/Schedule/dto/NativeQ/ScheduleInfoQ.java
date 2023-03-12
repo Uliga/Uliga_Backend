@@ -1,6 +1,7 @@
 package com.uliga.uliga_backend.domain.Schedule.dto.NativeQ;
 
 import com.uliga.uliga_backend.domain.Common.Date;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Embedded;
 import lombok.Data;
 import lombok.Getter;
@@ -17,7 +18,7 @@ public class ScheduleInfoQ {
     private Long notificationDay;
 
     private Long value;
-
+    @Schema(description = "작성자", defaultValue = "creatorNickname")
     private String creator;
 
     public ScheduleInfoQ(Long id, Long dueYear, Long dueMonth, Long dueDay, Long nYear, Long nMonth, Long nDay, Long value, String creator) {
