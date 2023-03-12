@@ -180,6 +180,7 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class ExistsCheckDto {
+        @Schema(name = "존재여부", description = "존재여부", defaultValue = "true")
         private boolean exists;
     }
 
@@ -228,6 +229,7 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class UpdateResult {
+        @Schema(name = "업데이트 결과", defaultValue = "업데이트한 결과")
         private String result;
     }
 
@@ -236,6 +238,7 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class MatchResult {
+        @Schema(name = "일치 여부", defaultValue = "true")
         private boolean matches;
     }
 
@@ -244,6 +247,7 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class NicknameUpdateResult {
+        @Schema(description = "업데이트한 닉네임", name = "업데이트할 닉네임", defaultValue = "newNickname")
         private String nickname;
     }
 
@@ -252,6 +256,7 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class AvatarUrlUpdateResult {
+        @Schema(description = "업데이트한 프사", name = "업데이트할 프사", defaultValue = "newProfile")
         private String avatarUrl;
     }
 
@@ -319,9 +324,11 @@ public class MemberDTO {
     @Getter
     public static class SearchEmailResult {
 
+        @Schema(name = "멤버 아이디", description = "이메일로 찾은 멤버 아이디")
         private Long id;
+        @Schema(name = "찾은 멤버 유저네임", description = "이메일로 찾은 멤버 이름", defaultValue = "userName")
         private String userName;
-
+        @Schema(name = "찾은 멤버 닉네임", defaultValue = "이메일로 찾은 멤버 닉네임", description = "nickName")
         private String nickName;
     }
 

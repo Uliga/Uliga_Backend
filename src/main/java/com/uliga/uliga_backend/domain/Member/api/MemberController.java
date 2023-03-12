@@ -5,6 +5,7 @@ import com.uliga.uliga_backend.domain.Member.application.MemberService;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.MatchResult;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.UpdateApplicationPasswordDto;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.UpdateResult;
+import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import com.uliga.uliga_backend.global.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -28,16 +29,21 @@ import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
 @RequestMapping(value = "/member")
 public class MemberController {
     private final MemberService memberService;
-    @Operation(summary = "로그인한 멤버 정보 조회 API", description = "로그인한 멤버 정보 조회 API 입니다", security = @SecurityRequirement(name = "bearer-key"))
+    @Operation(summary = "로그인한 멤버 정보 조회 API", description = "로그인한 멤버 정보 조회 API 입니다", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "정보 조회 성공시", content = @Content(schema = @Schema(implementation = GetMemberInfo.class)))
+            @ApiResponse(responseCode = "200", description = "정보 조회 성공시", content = @Content(schema = @Schema(implementation = GetMemberInfo.class))),
+            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "")
     public ResponseEntity<GetMemberInfo> getMemberInfo() throws JsonProcessingException {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberService.getCurrentMemberInfo(currentMemberId));
     }
-
+    @Operation(summary = "멤버 애플리케이션 비밀번호 확인", description = "로그인한 멤버 애플리케이션 비밀번호 확인 API", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "비밀번호 확인 성공시", content = @Content(schema = @Schema(implementation = MatchResult.class))),
+            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping(value = "/applicationPassword")
     public ResponseEntity<MatchResult> checkApplicationPassword(@RequestBody ApplicationPasswordCheck passwordCheck) {
         return ResponseEntity.ok(MatchResult.builder()
@@ -45,7 +51,11 @@ public class MemberController {
                         memberService.checkApplicationPassword(SecurityUtil.getCurrentMemberId(), passwordCheck)
                 ).build());
     }
-
+    @Operation(summary = "멤버 애플리케이션 비밀번호 업데이트", description = "멤버 애플리케이션 비밀번호 업데이트 API", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "업데이트 성공시", content = @Content(schema = @Schema(implementation = UpdateResult.class))),
+            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PatchMapping(value = "/applicationPassword")
     public ResponseEntity<UpdateResult> updateApplicationPassword(@RequestBody UpdateApplicationPasswordDto updateApplicationPasswordDto) {
         memberService.updateApplicationPassword(SecurityUtil.getCurrentMemberId(), updateApplicationPasswordDto);
@@ -53,7 +63,11 @@ public class MemberController {
                 UpdateResult.builder().result("UPDATE").build()
         );
     }
-
+    @Operation(summary = "멤버 비밀번호 확인", description = "로그인한 멤버 비밀번호 확인 API", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "비밀번호 확인 성공시", content = @Content(schema = @Schema(implementation = MatchResult.class))),
+            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping(value = "/password")
     public ResponseEntity<MatchResult> checkPassword(@RequestBody PasswordCheck passwordCheck) {
         return ResponseEntity.ok(MatchResult.builder()
@@ -61,7 +75,11 @@ public class MemberController {
                         memberService.checkPassword(SecurityUtil.getCurrentMemberId(), passwordCheck)
                 ).build());
     }
-
+    @Operation(summary = "멤버 비밀번호 업데이트", description = "멤버 비밀번호 업데이트 API", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "업데이트 성공시", content = @Content(schema = @Schema(implementation = UpdateResult.class))),
+            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PatchMapping(value = "/password")
     public ResponseEntity<UpdateResult> updatePassword(@RequestBody UpdatePasswordDto passwordDto) {
         memberService.updatePassword(SecurityUtil.getCurrentMemberId(), passwordDto);
@@ -69,7 +87,11 @@ public class MemberController {
                 UpdateResult.builder().result("UPDATE").build()
         );
     }
-
+    @Operation(summary = "멤버 프사 업데이트", description = "멤버 프사 업데이트 API", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "업데이트 성공시", content = @Content(schema = @Schema(implementation = AvatarUrlUpdateResult.class))),
+            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PatchMapping(value = "/avatarUrl")
     public ResponseEntity<AvatarUrlUpdateResult> updateAvatarUrl(@RequestBody UpdateAvatarUrl avatarUrl) {
         memberService.updateAvatarUrl(SecurityUtil.getCurrentMemberId(), avatarUrl);
@@ -77,7 +99,11 @@ public class MemberController {
                 AvatarUrlUpdateResult.builder().avatarUrl(avatarUrl.getAvatarUrl()).build()
         );
     }
-
+    @Operation(summary = "닉네임 존재 여부 확인", description = "닉네임 존재 확인 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "닉네임 존재 여부 확인", content = @Content(schema = @Schema(implementation = ExistsCheckDto.class))),
+            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping(value = "/nickname")
     public ResponseEntity<ExistsCheckDto> nicknameExistsCheck(@RequestBody NicknameCheckDto nicknameCheckDto) {
         return ResponseEntity.ok(
@@ -87,7 +113,11 @@ public class MemberController {
                         .build()
         );
     }
-
+    @Operation(summary = "멤버 닉네임 업데이트", description = "멤버 닉네임 업데이트 API", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "업데이트 성공시", content = @Content(schema = @Schema(implementation = NicknameUpdateResult.class))),
+            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PatchMapping(value = "/nickname")
     public ResponseEntity<NicknameUpdateResult> updateNickname(@RequestBody UpdateNicknameDto nicknameDto) {
         memberService.updateNickname(SecurityUtil.getCurrentMemberId(), nicknameDto);
@@ -95,14 +125,18 @@ public class MemberController {
                 NicknameUpdateResult.builder().nickname(nicknameDto.getNewNickname()).build()
         );
     }
-
+    @Operation(summary = "멤버 탈퇴", description = "멤버 탈퇴 API")
     @DeleteMapping(value = "")
     public ResponseEntity<String> deleteMember() {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         memberService.deleteMember(currentMemberId);
         return ResponseEntity.ok("DELETED");
     }
-
+    @Operation(summary = "이메일로 존재하는 멤버 찾기", description = "이메일로 존재하는 멤버 찾는 API", security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "이메일로 존재하는 멤버 존재시", content = @Content(schema = @Schema(implementation = SearchEmailResult.class))),
+            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping(value = "/search/email")
     public ResponseEntity<SearchEmailResult> getMemberByEmail(@RequestBody SearchMemberByEmail searchMemberByEmail) {
         return ResponseEntity.ok(memberService.findMemberByEmail(searchMemberByEmail));
