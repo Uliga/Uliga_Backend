@@ -286,10 +286,11 @@ public class MemberDTO {
     @AllArgsConstructor
     @Getter
     public static class InvitationInfo {
+        @Schema(name = "가계부 아이디", description = "초대온 가계부 아이디", defaultValue = "1")
         private Long id;
-
+        @Schema(name = "초대한 멤버 이름", description = "자신을 초대한 사람", defaultValue = "testUser")
         private String memberName;
-
+        @Schema(name = "초대 받은 가계부 이름", defaultValue = "초대 받은 가계부", description = "testUser님의 가계부")
         private String accountBookName;
 
     }

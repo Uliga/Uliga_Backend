@@ -6,6 +6,13 @@ import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.MatchResult;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.UpdateApplicationPasswordDto;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.UpdateResult;
 import com.uliga.uliga_backend.global.util.SecurityUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.headers.Header;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +28,10 @@ import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
 @RequestMapping(value = "/member")
 public class MemberController {
     private final MemberService memberService;
-
+    @Operation(summary = "로그인한 멤버 정보 조회 API", description = "로그인한 멤버 정보 조회 API 입니다", security = @SecurityRequirement(name = "bearer-key"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "정보 조회 성공시", content = @Content(schema = @Schema(implementation = GetMemberInfo.class)))
+    })
     @GetMapping(value = "")
     public ResponseEntity<GetMemberInfo> getMemberInfo() throws JsonProcessingException {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
