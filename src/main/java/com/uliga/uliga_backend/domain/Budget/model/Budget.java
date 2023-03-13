@@ -18,6 +18,7 @@ public class Budget extends BaseTimeEntity {
 
     private Long value;
 
+    private Long year;
     private Long month;
 
     @ManyToOne
