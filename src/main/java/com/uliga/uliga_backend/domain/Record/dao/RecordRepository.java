@@ -52,7 +52,7 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
                     "c.name) from Record r " +
                     "JOIN Member m on m.id = r.creator.id " +
                     "JOIN Category c on c.id=r.category.id " +
-                    "WHERE m.id = :id order by r.createTime DESC"
+                    "WHERE m.id = :id AND r.accountBook.id = :accountBookId order by r.createTime DESC"
     )
-    Page<RecordInfoQ> getMemberRecords(@Param("id") Long id, Pageable pageable);
+    Page<RecordInfoQ> getMemberRecords(@Param("id") Long id,@Param("accountBookId") Long accountBookId, Pageable pageable);
 }

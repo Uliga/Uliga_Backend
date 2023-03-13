@@ -38,9 +38,9 @@ public class IncomeController {
         return ResponseEntity.ok(incomeService.updateIncome(updates));
     }
     @Operation(summary = "멤버 수입 전체 조회 API", description = "멤버 수입 전체 조회 API 입니다")
-    @GetMapping("")
-    public ResponseEntity<Page<IncomeInfoQ>> getMemberIncomes(Pageable pageable) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Page<IncomeInfoQ>> getMemberIncomes(@PathVariable("id") Long id, Pageable pageable) {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(incomeService.getMemberIncomes(currentMemberId, pageable));
+        return ResponseEntity.ok(incomeService.getMemberIncomes(currentMemberId, id, pageable));
     }
 }

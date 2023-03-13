@@ -140,7 +140,7 @@ public class RecordService {
     }
 
     @Transactional
-    public Page<RecordInfoQ> getMemberRecords(Long id, Pageable pageable) {
-        return recordRepository.getMemberRecords(id, pageable);
+    public Page<RecordInfoQ> getMemberRecords(Long id, Long accountBookId, Pageable pageable) {
+        return recordRepository.getMemberRecords(id, accountBookId, pageable);
     }
 }

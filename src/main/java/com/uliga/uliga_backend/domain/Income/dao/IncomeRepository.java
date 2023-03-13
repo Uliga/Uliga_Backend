@@ -51,7 +51,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
             "c.name) from Income i " +
             "JOIN Member m on m.id = i.creator.id " +
             "JOIN Category c on c.id = i.category.id " +
-            "WHERE m.id=:id ORDER BY i.createTime DESC ")
-    Page<IncomeInfoQ> getMemberIncomes(@Param("id") Long id, Pageable pageable);
+            "WHERE m.id=:id AND i.accountBook.id = :accountBookId ORDER BY i.createTime DESC ")
+    Page<IncomeInfoQ> getMemberIncomes(@Param("id") Long id, @Param("accountBookId") Long accountBookId, Pageable pageable);
 
 }

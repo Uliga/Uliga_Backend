@@ -135,7 +135,7 @@ public class IncomeService {
     }
 
     @Transactional
-    public Page<IncomeInfoQ> getMemberIncomes(Long id, Pageable pageable) {
-        return incomeRepository.getMemberIncomes(id, pageable);
+    public Page<IncomeInfoQ> getMemberIncomes(Long id, Long accountBookId, Pageable pageable) {
+        return incomeRepository.getMemberIncomes(id, accountBookId, pageable);
     }
 }
