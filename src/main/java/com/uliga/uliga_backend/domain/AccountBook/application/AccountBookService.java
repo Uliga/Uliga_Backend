@@ -274,7 +274,7 @@ public class AccountBookService {
         return AccountBookItems.builder()
                 .incomes(incomeRepository.findByAccountBookId(id, month))
                 .records(recordRepository.findByAccountBookId(id, month))
-                .schedules(scheduleRepository.findByAccountBookId(id, month)).build();
+                .schedules(scheduleRepository.findByAccountBookId(id)).build();
     }
 
     @Transactional
