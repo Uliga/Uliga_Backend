@@ -100,26 +100,28 @@ public class AccountBookController {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountBookItems.class))),
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @GetMapping(value = "/{id}/item/{month}")
+    @GetMapping(value = "/{id}/item/{year}/{month}")
     public ResponseEntity<AccountBookItems> getAccountBookItems(
             @PathVariable("id") Long id,
+            @PathVariable("year") Long year,
             @PathVariable("month") Long month,
             @RequestParam(value = "startDay", required = false, defaultValue = "1") Long startDay,
             @RequestParam(value = "endDay", required = false, defaultValue = "31") Long endDay
     ) {
-        return ResponseEntity.ok(accountBookService.getAccountBookItems(id, month, startDay, endDay));
+        return ResponseEntity.ok(accountBookService.getAccountBookItems(id, year, month, startDay, endDay));
     }
     @Operation(summary = "한달 가계부 지출/수입/예산 총합 조회 API", description = "한달 동안의 가계부 수입/지출/예산 총합 조회 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = GetAccountBookAssets.class))),
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @GetMapping(value = "/{id}/asset/{month}")
+    @GetMapping(value = "/{id}/asset/{year}/{month}")
     public ResponseEntity<GetAccountBookAssets> getAccountBookAssets(
             @PathVariable("id") Long id,
+            @PathVariable("year") Long year,
             @PathVariable("month") Long month
     ) {
-        return ResponseEntity.ok(accountBookService.getAccountBookAssets(id, month));
+        return ResponseEntity.ok(accountBookService.getAccountBookAssets(id, year, month));
     }
     @Operation(summary = "수입/지출 추가 API", description = "수입/지출 한번에 추가 API")
     @ApiResponses(value = {

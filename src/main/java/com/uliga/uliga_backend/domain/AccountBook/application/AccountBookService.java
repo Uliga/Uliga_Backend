@@ -269,20 +269,20 @@ public class AccountBookService {
     }
 
     @Transactional
-    public AccountBookItems getAccountBookItems(Long id, Long month, Long startDay, Long endDay) {
+    public AccountBookItems getAccountBookItems(Long id, Long year, Long month, Long startDay, Long endDay) {
 
         return AccountBookItems.builder()
-                .incomes(incomeRepository.findByAccountBookId(id, month))
-                .records(recordRepository.findByAccountBookId(id, month))
+                .incomes(incomeRepository.findByAccountBookId(id, year, month))
+                .records(recordRepository.findByAccountBookId(id, year, month))
                 .schedules(scheduleRepository.findByAccountBookId(id)).build();
     }
 
     @Transactional
-    public GetAccountBookAssets getAccountBookAssets(Long id, Long month) {
+    public GetAccountBookAssets getAccountBookAssets(Long id,Long year, Long month) {
         return GetAccountBookAssets.builder()
-                .budget(budgetRepository.getMonthlySumByAccountBookId(id, month))
-                .income(incomeRepository.getMonthlySumByAccountBookId(id, month))
-                .record(recordRepository.getMonthlySumByAccountBookId(id, month))
+                .budget(budgetRepository.getMonthlySumByAccountBookId(id, year, month))
+                .income(incomeRepository.getMonthlySumByAccountBookId(id, year, month))
+                .record(recordRepository.getMonthlySumByAccountBookId(id, year, month))
                 .build();
     }
 

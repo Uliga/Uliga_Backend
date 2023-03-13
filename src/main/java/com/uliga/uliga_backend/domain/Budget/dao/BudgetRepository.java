@@ -13,6 +13,7 @@ public interface BudgetRepository extends JpaRepository<Budget, Long> {
             "JOIN Budget b ON b.accountBook.id = ab.id " +
             "WHERE ab.id=:id " +
             "AND b.month=:month " +
+            "AND b.year = :year " +
             "GROUP BY ab.id")
-    MonthlySumQ getMonthlySumByAccountBookId(@Param("id") Long id, @Param("month") Long month);
+    MonthlySumQ getMonthlySumByAccountBookId(@Param("id") Long id, @Param("year") Long year, @Param("month") Long month);
 }
