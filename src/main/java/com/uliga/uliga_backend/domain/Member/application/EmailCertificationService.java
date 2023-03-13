@@ -19,6 +19,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
 import static com.uliga.uliga_backend.global.common.constants.EmailConstants.EMAIL_CERTIFICATION_TIME;
 
 @Slf4j
@@ -81,17 +82,21 @@ public class EmailCertificationService {
     }
 
     // 코드 검증
-    public MemberDTO.CodeConfirmDto confirmCode(MemberDTO.EmailConfirmCodeDto emailConfirmCodeDto) {
+    public CodeConfirmDto confirmCode(EmailConfirmCodeDto emailConfirmCodeDto) {
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         String code = valueOperations.get(emailConfirmCodeDto.getEmail());
         if (code == null) {
             throw new EmailCertificationExpireException();
         }
         if (!code.equals(emailConfirmCodeDto.getCode())) {
-            return MemberDTO.CodeConfirmDto.builder().matches(false).build();
+            return CodeConfirmDto.builder().matches(false).build();
         }
         valueOperations.getAndDelete(emailConfirmCodeDto.getEmail());
-        return MemberDTO.CodeConfirmDto.builder().matches(true).build();
+        return CodeConfirmDto.builder().matches(true).build();
 
+    }
+
+    public String getePw() {
+        return ePw;
     }
 }
