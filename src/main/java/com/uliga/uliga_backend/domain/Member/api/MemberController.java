@@ -36,6 +36,7 @@ public class MemberController {
     })
     @GetMapping(value = "")
     public ResponseEntity<GetMemberInfo> getMemberInfo() throws JsonProcessingException {
+        log.info("로그인한 멤버 정보조회 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberService.getCurrentMemberInfo(currentMemberId));
     }
@@ -46,6 +47,7 @@ public class MemberController {
     })
     @PostMapping(value = "/applicationPassword")
     public ResponseEntity<MatchResult> checkApplicationPassword(@RequestBody ApplicationPasswordCheck passwordCheck) {
+        log.info("멤버 애플리케이션 비밀번호 확인 API 호출");
         return ResponseEntity.ok(MatchResult.builder()
                 .matches(
                         memberService.checkApplicationPassword(SecurityUtil.getCurrentMemberId(), passwordCheck)
@@ -58,6 +60,7 @@ public class MemberController {
     })
     @PatchMapping(value = "/applicationPassword")
     public ResponseEntity<UpdateResult> updateApplicationPassword(@RequestBody UpdateApplicationPasswordDto updateApplicationPasswordDto) {
+        log.info("멤버 애플리케이션 비밀번호 업데이트 API 호출");
         memberService.updateApplicationPassword(SecurityUtil.getCurrentMemberId(), updateApplicationPasswordDto);
         return ResponseEntity.ok(
                 UpdateResult.builder().result("UPDATE").build()
@@ -70,6 +73,7 @@ public class MemberController {
     })
     @PostMapping(value = "/password")
     public ResponseEntity<MatchResult> checkPassword(@RequestBody PasswordCheck passwordCheck) {
+        log.info("멤버 비밀번호 확인 API 호출");
         return ResponseEntity.ok(MatchResult.builder()
                 .matches(
                         memberService.checkPassword(SecurityUtil.getCurrentMemberId(), passwordCheck)
@@ -82,6 +86,7 @@ public class MemberController {
     })
     @PatchMapping(value = "/password")
     public ResponseEntity<UpdateResult> updatePassword(@RequestBody UpdatePasswordDto passwordDto) {
+        log.info("멤버 비밀번호 업데이트 API 호출");
         memberService.updatePassword(SecurityUtil.getCurrentMemberId(), passwordDto);
         return ResponseEntity.ok(
                 UpdateResult.builder().result("UPDATE").build()
@@ -94,6 +99,7 @@ public class MemberController {
     })
     @PatchMapping(value = "/avatarUrl")
     public ResponseEntity<AvatarUrlUpdateResult> updateAvatarUrl(@RequestBody UpdateAvatarUrl avatarUrl) {
+        log.info("멤버 프사 업데이트 API 호출");
         memberService.updateAvatarUrl(SecurityUtil.getCurrentMemberId(), avatarUrl);
         return ResponseEntity.ok(
                 AvatarUrlUpdateResult.builder().avatarUrl(avatarUrl.getAvatarUrl()).build()
@@ -106,6 +112,7 @@ public class MemberController {
     })
     @PostMapping(value = "/nickname")
     public ResponseEntity<ExistsCheckDto> nicknameExistsCheck(@RequestBody NicknameCheckDto nicknameCheckDto) {
+        log.info("닉네임 존재 여부 확인 API 호출");
         return ResponseEntity.ok(
                 ExistsCheckDto.builder()
                         .exists(memberService.nicknameExists(SecurityUtil.getCurrentMemberId()
@@ -120,6 +127,7 @@ public class MemberController {
     })
     @PatchMapping(value = "/nickname")
     public ResponseEntity<NicknameUpdateResult> updateNickname(@RequestBody UpdateNicknameDto nicknameDto) {
+        log.info("멤버 닉네임 업데이트 호출");
         memberService.updateNickname(SecurityUtil.getCurrentMemberId(), nicknameDto);
         return ResponseEntity.ok(
                 NicknameUpdateResult.builder().nickname(nicknameDto.getNewNickname()).build()
@@ -139,6 +147,7 @@ public class MemberController {
     })
     @PostMapping(value = "/search/email")
     public ResponseEntity<SearchEmailResult> getMemberByEmail(@RequestBody SearchMemberByEmail searchMemberByEmail) {
+        log.info("이메일로 존재하는 멤버 찾기 API 호출");
         return ResponseEntity.ok(memberService.findMemberByEmail(searchMemberByEmail));
     }
 }

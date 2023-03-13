@@ -108,6 +108,7 @@ public class AccountBookController {
             @RequestParam(value = "startDay", required = false, defaultValue = "1") Long startDay,
             @RequestParam(value = "endDay", required = false, defaultValue = "31") Long endDay
     ) {
+        log.info("한달 가계부 수입/지출/금융 일정 조회 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookItems(id, year, month, startDay, endDay));
     }
     @Operation(summary = "한달 가계부 지출/수입/예산 총합 조회 API", description = "한달 동안의 가계부 수입/지출/예산 총합 조회 API 입니다")
@@ -121,6 +122,7 @@ public class AccountBookController {
             @PathVariable("year") Long year,
             @PathVariable("month") Long month
     ) {
+        log.info("한달 가계부 지출/수입/예산 총합 조회 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookAssets(id, year, month));
     }
     @Operation(summary = "수입/지출 추가 API", description = "수입/지출 한번에 추가 API")
@@ -143,6 +145,7 @@ public class AccountBookController {
     })
     @PostMapping(value = "/category")
     public ResponseEntity<CategoryCreateResult> createCategories(@RequestBody CategoryCreateRequest createRequest) {
+        log.info("가계부에 카테고리 추가 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.createCategory(currentMemberId, createRequest));
     }
@@ -154,6 +157,7 @@ public class AccountBookController {
     })
     @PostMapping(value = "/record")
     public ResponseEntity<AddRecordResult> addRecord(@RequestBody AddRecordRequest request) {
+        log.info("가계부에 지출 한개 추가 api 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.addRecord(currentMemberId, request));
     }
@@ -164,6 +168,7 @@ public class AccountBookController {
     })
     @PostMapping(value = "/income")
     public ResponseEntity<AddIncomeResult> addIncome(@RequestBody AddIncomeRequest request) {
+        log.info("가계부에 수입 한개 추가 api 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.addIncome(currentMemberId, request));
     }
@@ -174,7 +179,7 @@ public class AccountBookController {
     })
     @GetMapping(value = "/{id}/category")
     public ResponseEntity<AccountBookCategories> getAccountBookCategory(@PathVariable("id") Long id) {
-
+        log.info("가계부 카테고리 조회 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookCategories(id));
     }
     @Operation(summary = "가계부 멤버 조회 API", description = "가계부 멤버 조회 API 입니다")
@@ -184,6 +189,7 @@ public class AccountBookController {
     })
     @GetMapping(value = "/{id}/member")
     public ResponseEntity<AccountBookMembers> getAccountBookMembers(@PathVariable("id") Long id) {
+        log.info("가계부 멤버 조회 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookMembers(id));
     }
 

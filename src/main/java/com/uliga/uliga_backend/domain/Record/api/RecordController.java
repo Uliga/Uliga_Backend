@@ -36,12 +36,14 @@ public class RecordController {
     })
     @PatchMapping(value = "")
     public ResponseEntity<RecordUpdateRequest> updateRecord(@RequestBody Map<String, Object> updates) {
+        log.info("지출 업데이트 API 호출");
         return ResponseEntity.ok(recordService.updateRecord(updates));
     }
 
     @Operation(summary = "멤버 지출 전체 조회 API", description = "멤버 지출 전체 조회 API 입니다")
     @GetMapping(value = "/{id}")
     public ResponseEntity<Page<RecordInfoQ>> getMemberRecords(@PathVariable("id") Long id, Pageable pageable) {
+        log.info("멤버 지출 전체 조회 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(recordService.getMemberRecords(currentMemberId, id, pageable));
     }
@@ -49,6 +51,7 @@ public class RecordController {
     @Operation(summary = "멤버 지출 카테고리 별 전체 조회 API", description = "멤버 지출 카테고리별 전체 조회 API 입니다")
     @GetMapping(value = "/{id}/{category}")
     public ResponseEntity<Page<RecordInfoQ>> getMemberRecordsByCategory(@PathVariable("id") Long id, @PathVariable("category") String category, Pageable pageable) {
+        log.info("멤버 지출 카테고리 별 전체 조회 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(recordService.getMemberRecordsByCategory(currentMemberId, id, category, pageable));
     }

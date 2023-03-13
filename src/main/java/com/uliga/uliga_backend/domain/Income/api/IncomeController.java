@@ -36,12 +36,14 @@ public class IncomeController {
     })
     @PatchMapping(value = "")
     public ResponseEntity<IncomeUpdateRequest> updateIncome(@RequestBody Map<String, Object> updates) {
+        log.info("수입 업데이트 API 호출");
         return ResponseEntity.ok(incomeService.updateIncome(updates));
     }
 
     @Operation(summary = "멤버 수입 전체 조회 API", description = "멤버 수입 전체 조회 API 입니다")
     @GetMapping("/{id}")
     public ResponseEntity<Page<IncomeInfoQ>> getMemberIncomes(@PathVariable("id") Long id, Pageable pageable) {
+        log.info("멤버 수입 전체 조회 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(incomeService.getMemberIncomes(currentMemberId, id, pageable));
     }
@@ -49,6 +51,7 @@ public class IncomeController {
     @Operation(summary = "멤버 수입 카테고리별 전체 조회 API", description = "멤버 수입 카테고리 별 전체 조회 API 입니다")
     @GetMapping(value = "/{id}/{category}")
     public ResponseEntity<Page<IncomeInfoQ>> getMemberIncomesByCategory(@PathVariable("id") Long id, @PathVariable("category") String category, Pageable pageable) {
+        log.info("멤버 수입 카테고리별 전체 조회 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(incomeService.getMemberIncomesByCategory(currentMemberId, id, category, pageable));
     }
