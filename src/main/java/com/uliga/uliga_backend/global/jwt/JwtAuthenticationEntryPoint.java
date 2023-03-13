@@ -17,6 +17,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -32,6 +33,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         log.info(String.valueOf(authException.getClass()));
         log.info(authException.getMessage());
+        log.info(Arrays.toString(authException.getStackTrace()));
         sendResponse(response, authException);
     }
 
