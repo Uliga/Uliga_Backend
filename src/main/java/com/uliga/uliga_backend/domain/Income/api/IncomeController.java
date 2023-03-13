@@ -37,7 +37,7 @@ public class IncomeController {
     public ResponseEntity<IncomeUpdateRequest> updateIncome(@RequestBody Map<String, Object> updates) {
         return ResponseEntity.ok(incomeService.updateIncome(updates));
     }
-
+    @Operation(summary = "멤버 수입 전체 조회 API", description = "멤버 수입 전체 조회 API 입니다")
     @GetMapping("")
     public ResponseEntity<Page<IncomeInfoQ>> getMemberIncomes(Pageable pageable) {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();

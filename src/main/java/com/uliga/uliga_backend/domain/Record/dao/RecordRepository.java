@@ -3,6 +3,8 @@ package com.uliga.uliga_backend.domain.Record.dao;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
 import com.uliga.uliga_backend.domain.Record.model.Record;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -36,4 +38,21 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
             "AND r.date.month=:month " +
             "AND r.date.year = :year GROUP BY ab.id")
     MonthlySumQ getMonthlySumByAccountBookId(@Param("id") Long id,@Param("year") Long year, @Param("month") Long month);
+    @Query(
+            "SELECT NEW com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ(" +
+                    "r.id," +
+                    "r.spend," +
+                    "r.payment," +
+                    "r.account," +
+                    "r.memo," +
+                    "r.date.year," +
+                    "r.date.month," +
+                    "r.date.day," +
+                    "m.nickName," +
+                    "c.name) from Record r " +
+                    "JOIN Member m on m.id = r.creator.id " +
+                    "JOIN Category c on c.id=r.category.id " +
+                    "WHERE m.id = :id order by r.createTime DESC"
+    )
+    Page<RecordInfoQ> getMemberRecords(@Param("id") Long id, Pageable pageable);
 }
