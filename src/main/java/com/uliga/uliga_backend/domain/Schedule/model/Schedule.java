@@ -17,21 +17,8 @@ public class Schedule extends BaseTimeEntity {
     @Column(name = "schedule_id")
     private Long id;
 
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "year", column = @Column(name = "due_year")),
-            @AttributeOverride(name = "month", column = @Column(name = "due_month")),
-            @AttributeOverride(name="day", column = @Column(name = "due_day"))
-    })
-    private Date dueDate;
-
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "year", column = @Column(name = "notification_year")),
-            @AttributeOverride(name = "month", column = @Column(name = "notification_month")),
-            @AttributeOverride(name="day", column = @Column(name = "notification_day"))
-    })
-    private Date notificationDate;
+    private Long notificationDate;
+    private Long dueDate;
 
     private Long value;
 
