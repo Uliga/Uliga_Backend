@@ -33,8 +33,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         log.info(String.valueOf(authException.getClass()));
         log.info(authException.getMessage());
-//        log.info(Arrays.toString(authException.getStackTrace()));
-        log.info(authException.getCause().getMessage());
         sendResponse(response, authException);
     }
 
