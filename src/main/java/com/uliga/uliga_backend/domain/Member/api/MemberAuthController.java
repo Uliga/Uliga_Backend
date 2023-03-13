@@ -50,7 +50,8 @@ public class MemberAuthController {
     @PostMapping(value = "/signup")
     public ResponseEntity<SignUpResult> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
         log.info("회원 가입 요청 API 호출");
-        return ResponseEntity.ok(SignUpResult.builder().result(authService.signUp(signUpRequest)).build());
+        authService.signUp(signUpRequest);
+        return ResponseEntity.ok(SignUpResult.builder().result("CREATED").build());
     }
 
     @Operation(summary = "로그인 API", description = "로그인 API 입니다")

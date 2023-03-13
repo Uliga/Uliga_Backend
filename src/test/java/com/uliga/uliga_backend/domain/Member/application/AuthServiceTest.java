@@ -32,8 +32,6 @@ class AuthServiceTest {
     @Autowired
     AccountBookRepository accountBookRepository;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
     private final List<String> defaultCategories = new ArrayList<>(
             Arrays.asList("\uD83C\uDF7D️ 식비",
                     "☕ 카페 · 간식",

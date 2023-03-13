@@ -67,7 +67,7 @@ public class AuthService {
     );
 
     @Transactional
-    public String signUp(SignUpRequest signUpRequest) {
+    public Long signUp(SignUpRequest signUpRequest) {
         signUpRequest.encrypt(passwordEncoder);
         Member member = signUpRequest.toEntity();
         memberRepository.save(member);
@@ -89,7 +89,7 @@ public class AuthService {
             categoryRepository.save(category);
         }
 
-        return "CREATED";
+        return member.getId();
     }
 
     @Transactional
