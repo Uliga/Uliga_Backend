@@ -1,6 +1,7 @@
 package com.uliga.uliga_backend.domain.Member.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.uliga.uliga_backend.UligaBackendApplication;
 import com.uliga.uliga_backend.domain.Member.application.AuthService;
 import com.uliga.uliga_backend.domain.Member.application.EmailCertificationService;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO;
@@ -11,6 +12,7 @@ import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SignUpRequest;
 import com.uliga.uliga_backend.domain.Member.exception.CannotLoginException;
 import com.uliga.uliga_backend.global.common.annotation.WithMockCustomUser;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +27,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.LoginRequest;
@@ -38,6 +41,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @MockBean(JpaMetamodelMappingContext.class)
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
+@Transactional
+@ContextConfiguration(classes = UligaBackendApplication.class)
 class MemberAuthControllerTest {
     @Autowired
     ObjectMapper mapper;

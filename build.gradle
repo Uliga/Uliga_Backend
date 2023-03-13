@@ -68,6 +68,11 @@ dependencies {
     // 스프링 시큐리티 테스트
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    // Mockito
+    testImplementation 'org.mockito:mockito-core'
+    testImplementation 'org.mockito:mockito-junit-jupiter'
+    // Hamcrest
+    testImplementation 'org.hamcrest:hamcrest-library'
 }
 
 tasks.named('test') {
