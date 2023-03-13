@@ -121,7 +121,7 @@ public class MemberAuthController {
             @ApiResponse(responseCode = "200", description = "코드 일치 여부 확인", content = @Content(schema = @Schema(implementation = CodeConfirmDto.class), examples = {
                     @ExampleObject(name = "일치시", summary = "일치시",value = "'matches':true", description = "코드 일치시"),
                     @ExampleObject(name="불일치시", summary = "불일치시", value = "'matches':false", description = "코드 불일치시")
-            })),
+            }))
 
     })
     // 코드 인증 요청

@@ -95,4 +95,12 @@ public class MemberExceptionHandler {
                 .nickName("null").build());
     }
 
+    @ExceptionHandler(CannotLoginException.class)
+    protected final ResponseEntity<ErrorResponse> handleCannotLoginException(
+            CannotLoginException ex, WebRequest request
+    ) {
+        log.info("로그인 불가");
+        return new ResponseEntity<>(ErrorResponse.builder()
+                .errorCode(409L).message(ex.getMessage()).build(), HttpStatus.CONFLICT);
+    }
 }
