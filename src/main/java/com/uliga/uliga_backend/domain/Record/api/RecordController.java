@@ -46,4 +46,10 @@ public class RecordController {
         return ResponseEntity.ok(recordService.getMemberRecords(currentMemberId, id, pageable));
     }
 
+    @Operation(summary = "멤버 지출 카테고리 별 전체 조회 API", description = "멤버 지출 카테고리별 전체 조회 API 입니다")
+    @GetMapping(value = "/{id}/{category}")
+    public ResponseEntity<Page<RecordInfoQ>> getMemberRecordsByCategory(@PathVariable("id") Long id, @PathVariable("category") String category, Pageable pageable) {
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(recordService.getMemberRecordsByCategory(currentMemberId, id, category, pageable));
+    }
 }

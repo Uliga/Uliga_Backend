@@ -143,4 +143,9 @@ public class RecordService {
     public Page<RecordInfoQ> getMemberRecords(Long id, Long accountBookId, Pageable pageable) {
         return recordRepository.getMemberRecords(id, accountBookId, pageable);
     }
+
+    @Transactional
+    public Page<RecordInfoQ> getMemberRecordsByCategory(Long id, Long accountBookId, String category, Pageable pageable) {
+        return recordRepository.getMemberRecordsByCategory(id, accountBookId, category, pageable);
+    }
 }

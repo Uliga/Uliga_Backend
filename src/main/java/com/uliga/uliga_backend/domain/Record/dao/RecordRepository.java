@@ -38,6 +38,7 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
             "AND r.date.month=:month " +
             "AND r.date.year = :year GROUP BY ab.id")
     MonthlySumQ getMonthlySumByAccountBookId(@Param("id") Long id,@Param("year") Long year, @Param("month") Long month);
+
     @Query(
             "SELECT NEW com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ(" +
                     "r.id," +
@@ -54,5 +55,22 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
                     "JOIN Category c on c.id=r.category.id " +
                     "WHERE m.id = :id AND r.accountBook.id = :accountBookId order by r.createTime DESC"
     )
-    Page<RecordInfoQ> getMemberRecords(@Param("id") Long id,@Param("accountBookId") Long accountBookId, Pageable pageable);
+    Page<RecordInfoQ> getMemberRecords(@Param("id") Long id, @Param("accountBookId") Long accountBookId, Pageable pageable);
+    @Query(
+            "SELECT NEW com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ(" +
+                    "r.id," +
+                    "r.spend," +
+                    "r.payment," +
+                    "r.account," +
+                    "r.memo," +
+                    "r.date.year," +
+                    "r.date.month," +
+                    "r.date.day," +
+                    "m.nickName," +
+                    "c.name) from Record r " +
+                    "JOIN Member m on m.id = r.creator.id " +
+                    "JOIN Category c on c.id=r.category.id " +
+                    "WHERE m.id = :id AND r.accountBook.id = :accountBookId AND c.name = :category order by r.createTime DESC"
+    )
+    Page<RecordInfoQ> getMemberRecordsByCategory(@Param("id") Long id, @Param("accountBookId") Long accountBookId, @Param("category") String category, Pageable pageable);
 }

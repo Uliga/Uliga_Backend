@@ -138,4 +138,9 @@ public class IncomeService {
     public Page<IncomeInfoQ> getMemberIncomes(Long id, Long accountBookId, Pageable pageable) {
         return incomeRepository.getMemberIncomes(id, accountBookId, pageable);
     }
+
+    @Transactional
+    public Page<IncomeInfoQ> getMemberIncomesByCategory(Long id, Long accountBookId, String category, Pageable pageable) {
+        return incomeRepository.getMemberIncomesByCategory(id, accountBookId, category, pageable);
+    }
 }
