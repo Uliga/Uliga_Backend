@@ -19,6 +19,8 @@ import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -130,5 +132,10 @@ public class IncomeService {
         }
         // 날짜는 프론트에서 값 받고 변경해야할듯?
         return patchIncome;
+    }
+
+    @Transactional
+    public Page<IncomeInfoQ> getMemberIncomes(Long id, Pageable pageable) {
+        return incomeRepository.getMemberIncomes(id, pageable);
     }
 }

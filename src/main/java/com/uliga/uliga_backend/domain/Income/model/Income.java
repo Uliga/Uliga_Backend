@@ -2,6 +2,7 @@ package com.uliga.uliga_backend.domain.Income.model;
 
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.Category.model.Category;
+import com.uliga.uliga_backend.domain.Common.BaseTimeEntity;
 import com.uliga.uliga_backend.domain.Common.Date;
 import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
 import com.uliga.uliga_backend.domain.Member.model.Member;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Income {
+public class Income extends BaseTimeEntity {
     @Id
     @GeneratedValue
     @Column(name = "income_id")

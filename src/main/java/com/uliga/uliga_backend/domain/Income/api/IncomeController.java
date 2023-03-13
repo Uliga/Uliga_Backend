@@ -4,6 +4,7 @@ import com.uliga.uliga_backend.domain.Income.application.IncomeService;
 import com.uliga.uliga_backend.domain.Income.dto.IncomeDTO;
 import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
 import com.uliga.uliga_backend.domain.Record.dto.RecordDTO;
+import com.uliga.uliga_backend.global.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,6 +13,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,5 +36,11 @@ public class IncomeController {
     @PatchMapping("")
     public ResponseEntity<IncomeUpdateRequest> updateIncome(@RequestBody Map<String, Object> updates) {
         return ResponseEntity.ok(incomeService.updateIncome(updates));
+    }
+
+    @GetMapping("")
+    public ResponseEntity<Page<IncomeInfoQ>> getMemberIncomes(Pageable pageable) {
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(incomeService.getMemberIncomes(currentMemberId, pageable));
     }
 }
