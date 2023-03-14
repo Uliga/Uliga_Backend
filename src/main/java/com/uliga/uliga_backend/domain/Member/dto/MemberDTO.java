@@ -140,6 +140,17 @@ public class MemberDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
+    public static class MemberInfoUpdateRequest {
+        private String nickName;
+        private String avatarUrl;
+        private String applicationPassword;
+        private String password;
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
     public static class EmailConfirmCodeDto {
 
         private String email;
@@ -209,6 +220,7 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class UpdatePasswordDto {
+        @Size(min = 8)
         private String newPassword;
 
         public void encrypt(PasswordEncoder passwordEncoder) {

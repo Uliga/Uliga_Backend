@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
@@ -128,5 +129,26 @@ public class MemberService {
                 .id(member.getId())
                 .nickName(member.getNickName())
                 .userName(member.getUserName()).build();
+    }
+
+    @Transactional
+    public MemberInfoUpdateRequest updateMemberInfo(Long id, Map<String, Object> updates) {
+        MemberInfoUpdateRequest memberInfoUpdateRequest = objectMapper.convertValue(updates, MemberInfoUpdateRequest.class);
+        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        if (memberInfoUpdateRequest.getApplicationPassword() != null) {
+            String encode = passwordEncoder.encode(memberInfoUpdateRequest.getApplicationPassword());
+            member.updateApplicationPassword(encode);
+        }
+        if (memberInfoUpdateRequest.getAvatarUrl() != null) {
+            member.updateAvatarUrl(memberInfoUpdateRequest.getAvatarUrl());
+        }
+        if (memberInfoUpdateRequest.getPassword() != null) {
+            String encode = passwordEncoder.encode(memberInfoUpdateRequest.getPassword());
+            member.updatePassword(encode);
+        }
+        if (memberInfoUpdateRequest.getNickName() != null) {
+            member.updateNickname(memberInfoUpdateRequest.getNickName());
+        }
+        return memberInfoUpdateRequest;
     }
 }
