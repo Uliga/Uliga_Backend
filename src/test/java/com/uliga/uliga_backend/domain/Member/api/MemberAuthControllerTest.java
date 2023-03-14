@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.UligaBackendApplication;
 import com.uliga.uliga_backend.domain.Member.application.AuthService;
 import com.uliga.uliga_backend.domain.Member.application.EmailCertificationService;
+import com.uliga.uliga_backend.domain.Member.application.OAuth2MemberService;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.CodeConfirmDto;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.ConfirmEmailDto;
@@ -22,27 +23,27 @@ import static org.mockito.BDDMockito.given;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.LoginRequest;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+@ExtendWith(SpringExtension.class)
+@WebMvcTest(MemberAuthController.class)
 @MockBean(JpaMetamodelMappingContext.class)
-@ExtendWith(MockitoExtension.class)
-@AutoConfigureMockMvc
-@Transactional
-@ContextConfiguration(classes = UligaBackendApplication.class)
 class MemberAuthControllerTest {
     @Autowired
     ObjectMapper mapper;
@@ -50,6 +51,8 @@ class MemberAuthControllerTest {
     MockMvc mvc;
     @MockBean
     private AuthService authService;
+    @MockBean
+    private OAuth2MemberService oAuth2MemberService;
     @MockBean
     private EmailCertificationService emailCertificationService;
 
@@ -73,6 +76,7 @@ class MemberAuthControllerTest {
 
 
     @Test
+    @WithMockCustomUser
     @DisplayName("회원가입 성공 테스트")
     public void signUpTestToSuccess() throws Exception{
         //given
@@ -80,15 +84,17 @@ class MemberAuthControllerTest {
 
         // when
         String body = mapper.writeValueAsString(mvctest);
-        
+        doReturn(1L).when(authService).signUp(mvctest);
         // then
         mvc.perform(post(BASE_URL + "/signup")
+                        .with(csrf())
                         .content(body)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
     
     @Test
+    @WithMockCustomUser
     @DisplayName("이메일 - 잘못된 값 형식으로 회원가입 실패 테스트")
     public void signUpTestToFailByInvalidEmail() throws Exception{
         //given
@@ -99,12 +105,14 @@ class MemberAuthControllerTest {
 
         // then
         mvc.perform(post(BASE_URL + "/signup")
+                        .with(csrf())
                         .content(body)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isConflict());
     }
     
     @Test
+    @WithMockCustomUser
     @DisplayName("비밀번호 - 잘못된 값 형식으로 회원가입 실패 테스트")
     public void signUpTestToFailByInvalidPassword() throws Exception{
         //given
@@ -121,12 +129,14 @@ class MemberAuthControllerTest {
 
         // then
         mvc.perform(post(BASE_URL + "/signup")
+                        .with(csrf())
                         .content(body)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isConflict());
     }
 
     @Test
+    @WithMockCustomUser
     @DisplayName("닉네임 - 잘못된 값 형식으로 회원가입 실패 테스트")
     public void signUpTestToFailByInvalidNickname() throws Exception{
         //given
@@ -143,12 +153,14 @@ class MemberAuthControllerTest {
 
         // then
         mvc.perform(post(BASE_URL + "/signup")
+                        .with(csrf())
                         .content(body)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isConflict());
     }
 
     @Test
+    @WithMockCustomUser
     @DisplayName("유저네임 - 잘못된 값 형식으로 회원가입 실패 테스트")
     public void signUpTestToFailByNullUsername() throws Exception{
         //given
@@ -164,12 +176,14 @@ class MemberAuthControllerTest {
 
         // then
         mvc.perform(post(BASE_URL + "/signup")
+                        .with(csrf())
                         .content(body)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isConflict());
     }
 
     @Test
+    @WithMockCustomUser
     @DisplayName("애플리케이션 비밀번호 - 잘못된 값 형식으로 회원가입 실패 테스트")
     public void signUpTestToFailByNullApplicationPassword() throws Exception{
         //given
@@ -185,12 +199,14 @@ class MemberAuthControllerTest {
 
         // then
         mvc.perform(post(BASE_URL + "/signup")
+                        .with(csrf())
                         .content(body)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isConflict());
     }
 
     @Test
+    @WithMockCustomUser
     @DisplayName("로그인 성공 테스트")
     public void loginTestToSuccess() throws Exception{
         //given
@@ -204,12 +220,14 @@ class MemberAuthControllerTest {
 
         // then
         mvc.perform(post(BASE_URL + "/login")
+                        .with(csrf())
                         .content(s)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     @Test
+    @WithMockCustomUser
     @DisplayName("잘못된 이메일 - 로그인 실패")
     public void loginTestToFailByInvalidEmail() throws Exception{
         //given
@@ -224,6 +242,7 @@ class MemberAuthControllerTest {
 
         // then
         mvc.perform(post(BASE_URL + "/login")
+                        .with(csrf())
                         .content(s)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isConflict())
@@ -231,6 +250,7 @@ class MemberAuthControllerTest {
     }
 
     @Test
+    @WithMockCustomUser
     @DisplayName("잘못된 비밀번호 - 로그인 실패")
     public void loginTestToFailByInvalidPassword() throws Exception{
         //given
@@ -245,6 +265,7 @@ class MemberAuthControllerTest {
 
         // then
         mvc.perform(post(BASE_URL + "/login")
+                        .with(csrf())
                         .content(s)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isConflict())
@@ -252,6 +273,7 @@ class MemberAuthControllerTest {
     }
 
    @Test
+   @WithMockCustomUser
    @DisplayName("이메일 전송 성공 테스트")
    public void sendEmailTestToSuccess() throws Exception{
        //given
@@ -264,6 +286,7 @@ class MemberAuthControllerTest {
 
        // then
        mvc.perform(post(BASE_URL + "/mail")
+                       .with(csrf())
                        .content(body)
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isOk())
@@ -271,6 +294,7 @@ class MemberAuthControllerTest {
    }
 
     @Test
+    @WithMockCustomUser
     @DisplayName("코드 검증 성공 테스트")
     public void confirmCodeTestToSuccess() throws Exception{
         //given
@@ -285,6 +309,7 @@ class MemberAuthControllerTest {
 
         // then
         mvc.perform(post(BASE_URL + "/mail/code")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andExpect(status().isOk())
