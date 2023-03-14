@@ -17,6 +17,7 @@ import java.util.List;
 public class CategoryService {
     private final CategoryRepository categoryRepository;
 
+
     @Transactional
     public void createCategories(List<String> categoryNames, AccountBook accountBook) {
 

@@ -47,9 +47,12 @@ public class AccountBookDTO {
 
         private Boolean isPrivate;
 
+        private String relationship;
+
         public AccountBook toEntity() {
             return AccountBook.builder()
                     .isPrivate(isPrivate)
+                    .relationShip(relationship)
                     .name(name).build();
         }
     }

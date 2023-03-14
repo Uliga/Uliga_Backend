@@ -98,6 +98,7 @@ public class AccountBookService {
                 .accountBookAuthority(AccountBookAuthority.ADMIN)
                 .getNotification(true).build();
         accountBookMemberRepository.save(bookMember);
+        // 카테고리 생성 authService에서 해줌
         return accountBook.toInfoDto();
     }
 
@@ -124,7 +125,6 @@ public class AccountBookService {
             SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
             setOperations.add(email, objectMapper.writeValueAsString(info));
         }
-
         return accountBook.toInfoDto();
     }
 

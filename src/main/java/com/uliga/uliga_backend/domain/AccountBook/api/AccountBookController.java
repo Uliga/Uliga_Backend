@@ -199,9 +199,4 @@ public class AccountBookController {
     public void addSchedule() {
 
     }
-    @Operation(summary = "미구현")
-    @GetMapping(value = "/category/{name}")
-    public void getCategoryData(@PathVariable("name") String name) {
-
-    }
 }

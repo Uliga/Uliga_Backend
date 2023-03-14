@@ -2,8 +2,6 @@ package com.uliga.uliga_backend.domain.Member.application;
 
 import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
-import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO;
-import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.CreateRequest;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.CreateRequestPrivate;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
@@ -17,7 +15,6 @@ import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenInfoDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenIssueDTO;
 import com.uliga.uliga_backend.domain.Token.exception.ExpireRefreshTokenException;
 import com.uliga.uliga_backend.domain.Token.exception.InvalidRefreshTokenException;
-import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import com.uliga.uliga_backend.global.jwt.JwtTokenProvider;
 import com.uliga.uliga_backend.global.util.CookieUtil;
 import jakarta.servlet.http.Cookie;
@@ -40,7 +37,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
-import static com.uliga.uliga_backend.domain.Token.dto.TokenDTO.*;
 import static com.uliga.uliga_backend.global.common.constants.JwtConstants.*;
 
 @Slf4j
@@ -71,7 +67,7 @@ public class AuthService {
         signUpRequest.encrypt(passwordEncoder);
         Member member = signUpRequest.toEntity();
         memberRepository.save(member);
-        CreateRequestPrivate build = CreateRequestPrivate.builder().name(member.getNickName() + " 님의 가계부").isPrivate(true).build();
+        CreateRequestPrivate build = CreateRequestPrivate.builder().name(member.getNickName() + " 님의 가계부").isPrivate(true).relationship("개인").build();
 
         AccountBook accountBook = build.toEntity();
         accountBookRepository.save(accountBook);
@@ -88,7 +84,6 @@ public class AuthService {
                     .name(cat).build();
             categoryRepository.save(category);
         }
-
         return member.getId();
     }
 
@@ -114,7 +109,6 @@ public class AuthService {
         log.info("로그인 API 중 토큰 생성 로직 실행");
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         valueOperations.set(authenticate.getName(), tokenInfoDTO.getRefreshToken());
-//        valueOperations.set(tokenInfoDTO.getAccessToken(), tokenInfoDTO.getRefreshToken());
         CookieUtil.deleteCookie(request, response, ACCESS_TOKEN);
         CookieUtil.addCookie(response, ACCESS_TOKEN, tokenInfoDTO.getAccessToken(), ACCESS_TOKEN_COOKIE_EXPIRE_TIME);
         redisTemplate.expire(authenticate.getName(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
