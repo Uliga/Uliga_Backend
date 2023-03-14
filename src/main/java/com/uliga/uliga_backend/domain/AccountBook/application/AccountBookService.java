@@ -11,6 +11,9 @@ import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
 import com.uliga.uliga_backend.domain.Budget.application.BudgetService;
 import com.uliga.uliga_backend.domain.Budget.dao.BudgetRepository;
+import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO;
+import com.uliga.uliga_backend.domain.Budget.dto.NativeQ.BudgetInfoQ;
+import com.uliga.uliga_backend.domain.Budget.model.Budget;
 import com.uliga.uliga_backend.domain.Category.application.CategoryService;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
 import com.uliga.uliga_backend.domain.Category.model.Category;
@@ -36,12 +39,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
+import static com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO.*;
 
 @Slf4j
 @Service
@@ -113,6 +114,7 @@ public class AccountBookService {
                 .accountBookAuthority(AccountBookAuthority.ADMIN)
                 .getNotification(true).build();
         accountBookMemberRepository.save(bookMember);
+
 
         categoryService.createCategories(createRequest.getCategories(), accountBook);
 
@@ -313,5 +315,12 @@ public class AccountBookService {
         return recordService.addSingleItemToAccountBook(request, category, date, accountBook, member);
     }
 
+
+    @Transactional
+    public BudgetInfoQ addBudget(Map<String, Object> dto) {
+        CreateBudgetDto createBudgetDto = objectMapper.convertValue(dto, CreateBudgetDto.class);
+
+        return budgetService.addBudgetToAccountBook(createBudgetDto);
+    }
 
 }

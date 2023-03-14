@@ -1,6 +1,7 @@
 package com.uliga.uliga_backend.domain.Budget.model;
 
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
+import com.uliga.uliga_backend.domain.Budget.dto.NativeQ.BudgetInfoQ;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -34,5 +35,14 @@ public class Budget extends BaseTimeEntity {
         this.month = month;
         this.category = category;
         this.accountBook = accountBook;
+    }
+
+    public BudgetInfoQ toInfoQ() {
+        return BudgetInfoQ.builder()
+                .categoryName(category.getName())
+                .id(id)
+                .value(value)
+                .month(month)
+                .year(year).build();
     }
 }
