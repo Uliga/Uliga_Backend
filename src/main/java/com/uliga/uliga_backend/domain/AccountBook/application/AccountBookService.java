@@ -160,11 +160,7 @@ public class AccountBookService {
             accountBookMemberRepository.save(bookMember);
         }
         SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
-        InvitationInfo info = InvitationInfo.builder()
-                .id(accountBook.getId())
-                .memberName(member.getUserName())
-                .accountBookName(accountBook.getName()).build();
-        setOperations.remove(member.getEmail(), objectMapper.writeValueAsString(info));
+        setOperations.remove(member.getEmail(), objectMapper.writeValueAsString(invitationReply));
         return InvitationReplyResult.builder()
                 .id(invitationReply.getId())
                 .join(invitationReply.getJoin()).build();

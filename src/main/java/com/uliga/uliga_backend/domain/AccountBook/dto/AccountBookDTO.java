@@ -122,6 +122,8 @@ public class AccountBookDTO {
     @Getter
     public static class InvitationReply {
         private Long id;
+        private String memberName;
+        private String accountBookName;
         private Boolean join;
     }
 
