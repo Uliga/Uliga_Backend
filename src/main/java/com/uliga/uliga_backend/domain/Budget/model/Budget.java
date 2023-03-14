@@ -39,7 +39,6 @@ public class Budget extends BaseTimeEntity {
 
     public BudgetInfoQ toInfoQ() {
         return BudgetInfoQ.builder()
-                .categoryName(category.getName())
                 .id(id)
                 .value(value)
                 .month(month)

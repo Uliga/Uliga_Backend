@@ -16,14 +16,11 @@ public class BudgetInfoQ {
     private Long month;
     @Schema(description = "해당 예산 값")
     private Long value;
-    @Schema(description = "해당 예산 카테고리")
-    private String categoryName;
     @Builder
-    public BudgetInfoQ(Long id, Long year, Long month, Long value, String categoryName) {
+    public BudgetInfoQ(Long id, Long year, Long month, Long value) {
         this.id = id;
         this.year = year;
         this.month = month;
         this.value = value;
-        this.categoryName = categoryName;
     }
 }
