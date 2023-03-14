@@ -56,7 +56,7 @@ class MemberControllerTest {
 
 
         // when
-        doReturn(memberInfo).when(memberService).getCurrentMemberInfo(any());
+        doReturn(memberInfo).when(memberService).getCurrentMemberInfo(any(), any());
 
         // then
         mvc.perform(get(BASE_URL))

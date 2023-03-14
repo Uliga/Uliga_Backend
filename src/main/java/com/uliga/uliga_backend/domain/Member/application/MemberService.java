@@ -13,6 +13,8 @@ import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,7 +42,7 @@ public class MemberService {
     private final ObjectMapper objectMapper;
 
     @Transactional
-    public GetMemberInfo getCurrentMemberInfo(Long id) throws JsonProcessingException {
+    public GetMemberInfo getCurrentMemberInfo(Long id, Pageable pageable) throws JsonProcessingException {
 
         MemberInfoNativeQ memberInfoById = memberRepository.findMemberInfoById(id);
         SetOperations<String, String> setOperations = redisTemplate.opsForSet();
@@ -52,6 +54,9 @@ public class MemberService {
                 result.add(objectMapper.readValue(o, InvitationInfo.class));
             }
         }
+        // 나중에 페이징 도입하면 여기 고치면된다
+//        List<InvitationInfo> invitationInfos = result.subList((int) pageable.getOffset(), pageable.getPageSize());
+//        new PageImpl<>(invitationInfos, pageable, result.size());
         return GetMemberInfo.builder()
                 .memberInfo(memberInfoById)
                 .invitations(result).build();

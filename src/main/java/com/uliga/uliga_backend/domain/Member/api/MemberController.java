@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,16 +33,18 @@ import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
 @RequestMapping(value = "/member")
 public class MemberController {
     private final MemberService memberService;
+
     @Operation(summary = "로그인한 멤버 정보 조회 API", description = "로그인한 멤버 정보 조회 API 입니다", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "정보 조회 성공시", content = @Content(schema = @Schema(implementation = GetMemberInfo.class))),
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "")
-    public ResponseEntity<GetMemberInfo> getMemberInfo() throws JsonProcessingException {
+    public ResponseEntity<GetMemberInfo> getMemberInfo(Pageable pageable) throws JsonProcessingException {
+
         log.info("로그인한 멤버 정보조회 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(memberService.getCurrentMemberInfo(currentMemberId));
+        return ResponseEntity.ok(memberService.getCurrentMemberInfo(currentMemberId, pageable));
     }
 
     @Operation(summary = "멤버 정보 업데이트 API", description = "멤버 정보 업데이트 API 입니다", security = @SecurityRequirement(name = "bearerAuth"))
