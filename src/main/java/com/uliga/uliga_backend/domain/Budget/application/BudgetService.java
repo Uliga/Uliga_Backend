@@ -37,6 +37,7 @@ public class BudgetService {
                     .year(dto.getYear())
                     .month(dto.getMonth())
                     .accountBook(accountBook)
+                    .value(dto.getValue())
                     .category(category).build();
             budgetRepository.save(build);
             return build.toInfoQ();
