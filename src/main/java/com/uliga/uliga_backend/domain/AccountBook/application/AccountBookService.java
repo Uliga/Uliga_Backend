@@ -159,8 +159,11 @@ public class AccountBookService {
                     .getNotification(true).build();
             accountBookMemberRepository.save(bookMember);
         }
+        InvitationInfo build = InvitationInfo.builder().accountBookName(invitationReply.getAccountBookName())
+                .memberName(invitationReply.getMemberName())
+                .id(invitationReply.getId()).build();
         SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
-        setOperations.remove(member.getEmail(), objectMapper.writeValueAsString(invitationReply));
+        setOperations.remove(member.getEmail(), objectMapper.writeValueAsString(build));
         return InvitationReplyResult.builder()
                 .id(invitationReply.getId())
                 .join(invitationReply.getJoin()).build();
