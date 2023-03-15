@@ -152,12 +152,14 @@ public class AccountBookService {
         Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
         AccountBook accountBook = accountBookRepository.findById(invitationReply.getId()).orElseThrow(NotFoundByIdException::new);
         if (invitationReply.getJoin()) {
-            AccountBookMember bookMember = AccountBookMember.builder()
-                    .accountBook(accountBook)
-                    .member(member)
-                    .accountBookAuthority(AccountBookAuthority.USER)
-                    .getNotification(true).build();
-            accountBookMemberRepository.save(bookMember);
+            if (!accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(member.getId(), accountBook.getId())) {
+                AccountBookMember bookMember = AccountBookMember.builder()
+                        .accountBook(accountBook)
+                        .member(member)
+                        .accountBookAuthority(AccountBookAuthority.USER)
+                        .getNotification(true).build();
+                accountBookMemberRepository.save(bookMember);
+            }
         }
         InvitationInfo build = InvitationInfo.builder().accountBookName(invitationReply.getAccountBookName())
                 .memberName(invitationReply.getMemberName())
