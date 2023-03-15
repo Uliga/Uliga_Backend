@@ -27,9 +27,11 @@ public class MemberDTO {
         @Email
         private String email;
         @Schema(description = "회원가입 비밀번호", defaultValue = "12345678")
+        @NotNull
         @Size(min = 8)
         private String password;
         @Schema(description = "닉네임", defaultValue = "nickName")
+        @NotNull
         @Size(min = 2, max = 19)
         private String nickName;
         @Schema(description = "본명", defaultValue = "userName")
@@ -99,9 +101,11 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class LoginRequest {
+        @NotNull
         @Email
         @Schema(description = "로그인할 이메일", defaultValue = "test@email.com")
         private String email;
+        @NotNull
         @Size(min = 8)
         @Schema(description = "비밀번호", defaultValue = "12345678")
         private String password;
@@ -155,8 +159,10 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class EmailConfirmCodeDto {
+        @NotNull
         @Email
         private String email;
+        @NotNull
         @Size(min = 6)
         private String code;
     }
@@ -175,6 +181,7 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class ConfirmEmailDto {
+        @NotNull
         @Email
         @Schema(description = "인증 요청 보낼 이메일", defaultValue = "test@email.com")
         private String email;
@@ -217,6 +224,7 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class ApplicationPasswordCheck {
+        @NotNull
         @Size(min = 4)
         private String applicationPassword;
     }
@@ -293,6 +301,7 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class NicknameCheckDto {
+        @NotNull
         @Size(min = 2)
         private String nickname;
     }
@@ -335,6 +344,7 @@ public class MemberDTO {
     @AllArgsConstructor
     @Getter
     public static class SearchMemberByEmail {
+        @NotNull
         @Email
         private String email;
     }
