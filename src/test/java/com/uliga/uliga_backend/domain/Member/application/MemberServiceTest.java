@@ -236,7 +236,7 @@ class MemberServiceTest {
 
         SearchMemberByEmail searchMemberByEmail = createSearchMemberByEmail("nouser@email.com");
         // when
-        SearchEmailResult memberByEmail = memberService.findMemberByEmail(searchMemberByEmail);
+        SearchEmailResult memberByEmail = memberService.findMemberByEmail(null, searchMemberByEmail);
 
         // then
         assertAll(

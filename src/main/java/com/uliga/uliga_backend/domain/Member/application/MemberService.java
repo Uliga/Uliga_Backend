@@ -4,9 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
+import com.uliga.uliga_backend.domain.JoinTable.dao.AccountBookMemberRepository;
+import com.uliga.uliga_backend.domain.JoinTable.model.AccountBookMember;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.UpdateApplicationPasswordDto;
 import com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ;
+import com.uliga.uliga_backend.domain.Member.exception.UserExistsInAccountBook;
 import com.uliga.uliga_backend.domain.Member.exception.UserNotFoundByEmail;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
@@ -32,13 +35,10 @@ import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
-
     private final AccountBookRepository accountBookRepository;
-
+    private final AccountBookMemberRepository accountBookMemberRepository;
     private final PasswordEncoder passwordEncoder;
-
     private final RedisTemplate<String, String> redisTemplate;
-
     private final ObjectMapper objectMapper;
 
     @Transactional
@@ -127,8 +127,13 @@ public class MemberService {
     }
 
     @Transactional
-    public SearchEmailResult findMemberByEmail(SearchMemberByEmail byEmail) {
+    public SearchEmailResult findMemberByEmail(Long accountBookId, SearchMemberByEmail byEmail) {
         Member member = memberRepository.findByEmail(byEmail.getEmail()).orElseThrow(UserNotFoundByEmail::new);
+        if (accountBookId != null) {
+            if (accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(member.getId(), accountBookId)) {
+                throw new UserExistsInAccountBook(member.getUserName());
+            }
+        }
 
         return SearchEmailResult.builder()
                 .id(member.getId())

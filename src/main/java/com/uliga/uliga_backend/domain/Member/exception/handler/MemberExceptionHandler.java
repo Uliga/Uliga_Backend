@@ -95,6 +95,17 @@ public class MemberExceptionHandler {
                 .nickName("null").build());
     }
 
+    @ExceptionHandler(UserExistsInAccountBook.class)
+    protected final ResponseEntity<SearchEmailResult> handleUserExistsInAccountBook(
+            UserExistsInAccountBook ex, WebRequest request
+    ) {
+        log.info(ex.getMessage()+"이미 존재하는 유저입니다");
+        return ResponseEntity.ok(SearchEmailResult.builder()
+                .id(null)
+                .userName(ex.getMessage()+"는/은 이미 존재하는 유저입니다")
+                .nickName(ex.getMessage()+"는/은 이미 존재하는 유저입니다").build());
+    }
+
     @ExceptionHandler(CannotLoginException.class)
     protected final ResponseEntity<ErrorResponse> handleCannotLoginException(
             CannotLoginException ex, WebRequest request

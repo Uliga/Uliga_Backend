@@ -110,9 +110,10 @@ public class MemberController {
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/search/email")
-    public ResponseEntity<SearchEmailResult> getMemberByEmail(@RequestBody SearchMemberByEmail searchMemberByEmail) {
+    public ResponseEntity<SearchEmailResult> getMemberByEmail(@RequestParam(name = "accountBook", required = false, defaultValue = "") Long accountBookId, @RequestBody SearchMemberByEmail searchMemberByEmail) {
         log.info("이메일로 존재하는 멤버 찾기 API 호출");
-        return ResponseEntity.ok(memberService.findMemberByEmail(searchMemberByEmail));
+        log.info(String.valueOf(accountBookId));
+        return ResponseEntity.ok(memberService.findMemberByEmail(accountBookId, searchMemberByEmail));
     }
 
 
