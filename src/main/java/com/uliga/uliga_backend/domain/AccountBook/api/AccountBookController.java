@@ -212,7 +212,7 @@ public class AccountBookController {
 
     @Operation(summary = "가계부에 금융 일정 추가")
     @PostMapping(value = "/schedule")
-    public ResponseEntity<AddScheduleResult> addSchedule(@RequestBody AddSchedules addSchedules) {
+    public ResponseEntity<AddScheduleResult> addSchedule(@Valid @RequestBody AddSchedules addSchedules) {
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.addSchedule(memberId, addSchedules));
     }

@@ -15,10 +15,7 @@ public class ScheduleDTO {
     @NoArgsConstructor
     public static class ScheduleInfo {
         private Long id;
-        @Embedded
-        private Date dueDate;
-        @Embedded
-        private Date notificationDate;
+        private Long notificationDate;
         private Long value;
         private String creator;
 
@@ -34,6 +31,18 @@ public class ScheduleDTO {
         @NotNull
         private Boolean isIncome;
         @NotNull
+        private Long notificationDate;
+        private Long value;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UpdateScheduleRequest {
+        private Long id;
+        private String name;
+        private Boolean isIncome;
         private Long notificationDate;
         private Long value;
     }

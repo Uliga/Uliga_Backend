@@ -51,4 +51,20 @@ public class Schedule extends BaseTimeEntity {
                 .isIncome(isIncome)
                 .creator(creator.getNickName()).build();
     }
+
+    public void updateName(String name) {
+        this.name = name;
+    }
+
+    public void updateValue(Long value) {
+        this.value = value;
+    }
+
+    public void updateDate(Long notificationDate) {
+        this.notificationDate = notificationDate;
+    }
+
+    public void updateIsIncome(Boolean isIncome) {
+        this.isIncome = isIncome;
+    }
 }
