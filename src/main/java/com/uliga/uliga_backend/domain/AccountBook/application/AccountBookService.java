@@ -150,9 +150,9 @@ public class AccountBookService {
     @Transactional
     public InvitationReplyResult invitationReply(Long id, InvitationReply invitationReply) throws JsonProcessingException {
         Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
-        AccountBook accountBook = accountBookRepository.findById(invitationReply.getId()).orElseThrow(NotFoundByIdException::new);
         if (invitationReply.getJoin()) {
-            if (!accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(member.getId(), accountBook.getId())) {
+            if (!accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(member.getId(), invitationReply.getId())) {
+                AccountBook accountBook = accountBookRepository.findById(invitationReply.getId()).orElseThrow(NotFoundByIdException::new);
                 AccountBookMember bookMember = AccountBookMember.builder()
                         .accountBook(accountBook)
                         .member(member)
