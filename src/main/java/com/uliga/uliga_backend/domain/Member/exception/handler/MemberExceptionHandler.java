@@ -57,19 +57,7 @@ public class MemberExceptionHandler {
         );
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected final ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(
-            MethodArgumentNotValidException ex, WebRequest request
-    ) {
-        log.info(ex.getLocalizedMessage());
-        return new ResponseEntity<>(
-                ErrorResponse.builder()
-                        .errorCode(409L)
-                        .message("잘못된 값이 들어왔습니다. 값 형식을 확인해주세요").build(),
-                HttpStatus.CONFLICT
-        );
 
-    }
 
     @ExceptionHandler(UnknownLoginException.class)
     protected final ResponseEntity<ErrorResponse> handleUnknownLoginException(
