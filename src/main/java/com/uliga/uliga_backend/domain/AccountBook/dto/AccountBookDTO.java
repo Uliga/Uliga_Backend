@@ -6,6 +6,8 @@ import com.uliga.uliga_backend.domain.Income.dto.IncomeDTO;
 import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
 import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleInfoQ;
+import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO;
+import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.CreateScheduleRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -405,6 +407,23 @@ public class AccountBookDTO {
         private MonthlySumQ income;
         private MonthlySumQ record;
         private MonthlySumQ budget;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AddSchedules {
+        private Long id;
+        private List<CreateScheduleRequest> schedules;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AddScheduleResult {
+        private List<ScheduleInfoQ> result;
     }
 
 

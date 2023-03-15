@@ -209,11 +209,11 @@ public class AccountBookController {
         log.info("가계부 예산 추가 API 호출");
         return ResponseEntity.ok(accountBookService.addBudget(createBudgetDto));
     }
-    // 구현 해야될 기능 틀
 
-    @Operation(summary = "가계부에 금융 일정 추가 - 미구현")
+    @Operation(summary = "가계부에 금융 일정 추가")
     @PostMapping(value = "/schedule")
-    public void addSchedule() {
-
+    public ResponseEntity<AddScheduleResult> addSchedule(@RequestBody AddSchedules addSchedules) {
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(accountBookService.addSchedule(memberId, addSchedules));
     }
 }

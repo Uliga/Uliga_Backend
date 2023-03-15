@@ -324,4 +324,11 @@ public class AccountBookService {
         return budgetService.addBudgetToAccountBook(createBudgetDto);
     }
 
+    @Transactional
+    public AddScheduleResult addSchedule(Long memberId, AddSchedules addSchedules) {
+        Member member = memberRepository.findById(memberId).orElseThrow(NotFoundByIdException::new);
+        AccountBook accountBook = accountBookRepository.findById(addSchedules.getId()).orElseThrow(NotFoundByIdException::new);
+        return scheduleService.addSchedule(member, accountBook, addSchedules.getSchedules());
+    }
+
 }

@@ -12,7 +12,8 @@ import java.util.List;
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     @Query("SELECT NEW com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleInfoQ(" +
             "s.id, " +
-            "s.dueDate, " +
+            "s.isIncome, "+
+            "s.name, "+
             "s.notificationDate, " +
             "s.value, " +
             "m.nickName) " +
