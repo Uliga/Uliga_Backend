@@ -102,8 +102,8 @@ public class MemberExceptionHandler {
         log.info(ex.getMessage()+"이미 존재하는 유저입니다");
         return ResponseEntity.ok(SearchEmailResult.builder()
                 .id(null)
-                .userName(ex.getMessage()+"는/은 이미 존재하는 유저입니다")
-                .nickName(ex.getMessage()+"는/은 이미 존재하는 유저입니다").build());
+                .userName(ex.getMessage()+" 는/은 이미 존재하는 유저입니다")
+                .nickName(ex.getMessage()+" 는/은 이미 존재하는 유저입니다").build());
     }
 
     @ExceptionHandler(CannotLoginException.class)
