@@ -115,59 +115,6 @@ public class MemberController {
         return ResponseEntity.ok(memberService.findMemberByEmail(searchMemberByEmail));
     }
 
-    @Operation(summary = "멤버 애플리케이션 비밀번호 업데이트 - 삭제", description = "멤버 애플리케이션 비밀번호 업데이트 API", security = @SecurityRequirement(name = "bearerAuth"))
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "업데이트 성공시", content = @Content(schema = @Schema(implementation = UpdateResult.class))),
-            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-    })
-    @PatchMapping(value = "/applicationPassword")
-    public ResponseEntity<UpdateResult> updateApplicationPassword(@RequestBody UpdateApplicationPasswordDto updateApplicationPasswordDto) {
-        log.info("멤버 애플리케이션 비밀번호 업데이트 API 호출");
-        memberService.updateApplicationPassword(SecurityUtil.getCurrentMemberId(), updateApplicationPasswordDto);
-        return ResponseEntity.ok(
-                UpdateResult.builder().result("UPDATE").build()
-        );
-    }
 
-    @Operation(summary = "멤버 비밀번호 업데이트 - 삭제", description = "멤버 비밀번호 업데이트 API", security = @SecurityRequirement(name = "bearerAuth"))
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "업데이트 성공시", content = @Content(schema = @Schema(implementation = UpdateResult.class))),
-            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-    })
-    @PatchMapping(value = "/password")
-    public ResponseEntity<UpdateResult> updatePassword(@Valid @RequestBody UpdatePasswordDto passwordDto) {
-        log.info("멤버 비밀번호 업데이트 API 호출");
-        memberService.updatePassword(SecurityUtil.getCurrentMemberId(), passwordDto);
-        return ResponseEntity.ok(
-                UpdateResult.builder().result("UPDATE").build()
-        );
-    }
-    @Operation(summary = "멤버 프사 업데이트 - 삭제", description = "멤버 프사 업데이트 API", security = @SecurityRequirement(name = "bearerAuth"))
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "업데이트 성공시", content = @Content(schema = @Schema(implementation = AvatarUrlUpdateResult.class))),
-            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-    })
-    @PatchMapping(value = "/avatarUrl")
-    public ResponseEntity<AvatarUrlUpdateResult> updateAvatarUrl(@RequestBody UpdateAvatarUrl avatarUrl) {
-        log.info("멤버 프사 업데이트 API 호출");
-        memberService.updateAvatarUrl(SecurityUtil.getCurrentMemberId(), avatarUrl);
-        return ResponseEntity.ok(
-                AvatarUrlUpdateResult.builder().avatarUrl(avatarUrl.getAvatarUrl()).build()
-        );
-    }
-
-    @Operation(summary = "멤버 닉네임 업데이트 - 삭제", description = "멤버 닉네임 업데이트 API", security = @SecurityRequirement(name = "bearerAuth"))
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "업데이트 성공시", content = @Content(schema = @Schema(implementation = NicknameUpdateResult.class))),
-            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-    })
-    @PatchMapping(value = "/nickname")
-    public ResponseEntity<NicknameUpdateResult> updateNickname(@RequestBody UpdateNicknameDto nicknameDto) {
-        log.info("멤버 닉네임 업데이트 호출");
-        memberService.updateNickname(SecurityUtil.getCurrentMemberId(), nicknameDto);
-        return ResponseEntity.ok(
-                NicknameUpdateResult.builder().nickname(nicknameDto.getNewNickname()).build()
-        );
-    }
 
 }
