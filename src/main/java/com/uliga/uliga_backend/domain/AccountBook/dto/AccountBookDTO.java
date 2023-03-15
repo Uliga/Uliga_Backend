@@ -23,7 +23,7 @@ public class AccountBookDTO {
     @AllArgsConstructor
     @Getter
     public static class CreateRequest {
-        @Size(min = 2)
+        @NotNull
         @Schema(description = "가계부 이름", defaultValue = "acountBookName")
         private String name;
         @NotNull
