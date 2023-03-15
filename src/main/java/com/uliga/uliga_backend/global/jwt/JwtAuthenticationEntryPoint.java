@@ -47,9 +47,9 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             response.setStatus(response.SC_NOT_FOUND);
 
         } else if (authException instanceof InsufficientAuthenticationException) {
-            result = objectMapper.writeValueAsString(new ErrorResponse(404L,
-                    "인증 조건을 충족하지 않은 요청입니다"));
-            response.setStatus(response.SC_BAD_REQUEST);
+            result = objectMapper.writeValueAsString(new ErrorResponse(503L,
+                    "인증 조건을 충족하지 않은 요청입니다 혹은 서버 내부 오류가 발생하였습니다"));
+            response.setStatus(response.SC_SERVICE_UNAVAILABLE);
         } else {
             result = objectMapper.writeValueAsString(new ErrorResponse(401L, "유효하지 않은 엑세스 토큰입니다."));
             response.setStatus(response.SC_UNAUTHORIZED);
