@@ -60,7 +60,7 @@ public class MemberController {
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/applicationPassword")
-    public ResponseEntity<MatchResult> checkApplicationPassword(@RequestBody ApplicationPasswordCheck passwordCheck) {
+    public ResponseEntity<MatchResult> checkApplicationPassword(@Valid @RequestBody ApplicationPasswordCheck passwordCheck) {
         log.info("멤버 애플리케이션 비밀번호 확인 API 호출");
         return ResponseEntity.ok(MatchResult.builder()
                 .matches(
@@ -73,7 +73,7 @@ public class MemberController {
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/password")
-    public ResponseEntity<MatchResult> checkPassword(@RequestBody PasswordCheck passwordCheck) {
+    public ResponseEntity<MatchResult> checkPassword(@Valid @RequestBody PasswordCheck passwordCheck) {
         log.info("멤버 비밀번호 확인 API 호출");
         return ResponseEntity.ok(MatchResult.builder()
                 .matches(
@@ -87,7 +87,7 @@ public class MemberController {
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/nickname")
-    public ResponseEntity<ExistsCheckDto> nicknameExistsCheck(@RequestBody NicknameCheckDto nicknameCheckDto) {
+    public ResponseEntity<ExistsCheckDto> nicknameExistsCheck(@Valid @RequestBody NicknameCheckDto nicknameCheckDto) {
         log.info("닉네임 존재 여부 확인 API 호출");
         return ResponseEntity.ok(
                 ExistsCheckDto.builder()
@@ -110,7 +110,7 @@ public class MemberController {
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/search/email")
-    public ResponseEntity<SearchEmailResult> getMemberByEmail(@RequestParam(name = "accountBook", required = false, defaultValue = "") Long accountBookId, @RequestBody SearchMemberByEmail searchMemberByEmail) {
+    public ResponseEntity<SearchEmailResult> getMemberByEmail(@RequestParam(name = "accountBook", required = false, defaultValue = "") Long accountBookId,@Valid @RequestBody SearchMemberByEmail searchMemberByEmail) {
         log.info("이메일로 존재하는 멤버 찾기 API 호출");
         log.info(String.valueOf(accountBookId));
         return ResponseEntity.ok(memberService.findMemberByEmail(accountBookId, searchMemberByEmail));

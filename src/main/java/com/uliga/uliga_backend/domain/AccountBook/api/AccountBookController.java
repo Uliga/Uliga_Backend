@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -62,7 +63,7 @@ public class AccountBookController {
     })
 
     @PostMapping(value = "")
-    public ResponseEntity<SimpleAccountBookInfo> createAccountBook(@RequestBody CreateRequest createRequest) throws JsonProcessingException {
+    public ResponseEntity<SimpleAccountBookInfo> createAccountBook(@Valid @RequestBody CreateRequest createRequest) throws JsonProcessingException {
         log.info("가계부 생성 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.createAccountBook(id, createRequest));
@@ -81,7 +82,7 @@ public class AccountBookController {
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/invitation")
-    public ResponseEntity<Invited> createInvitation(@RequestBody GetInvitations invitations) throws JsonProcessingException {
+    public ResponseEntity<Invited> createInvitation(@Valid @RequestBody GetInvitations invitations) throws JsonProcessingException {
         log.info("멤버 초대 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.createInvitation(id, invitations));
@@ -93,7 +94,7 @@ public class AccountBookController {
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/invitation/reply")
-    public ResponseEntity<InvitationReplyResult> invitationReply(@RequestBody InvitationReply invitationReply) throws JsonProcessingException {
+    public ResponseEntity<InvitationReplyResult> invitationReply(@Valid @RequestBody InvitationReply invitationReply) throws JsonProcessingException {
         log.info("초대 응답 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.invitationReply(id, invitationReply));
@@ -137,7 +138,7 @@ public class AccountBookController {
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/item")
-    public ResponseEntity<CreateResult> createItems(@RequestBody CreateItems items) {
+    public ResponseEntity<CreateResult> createItems(@Valid @RequestBody CreateItems items) {
 
         log.info("지출 혹은 수입 생성 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
@@ -150,31 +151,31 @@ public class AccountBookController {
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/category")
-    public ResponseEntity<CategoryCreateResult> createCategories(@RequestBody CategoryCreateRequest createRequest) {
+    public ResponseEntity<CategoryCreateResult> createCategories(@Valid @RequestBody CategoryCreateRequest createRequest) {
         log.info("가계부에 카테고리 추가 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.createCategory(currentMemberId, createRequest));
     }
 
-    @Operation(summary = "가계부에 지출 추가 API", description = "가계부에 카테고리 추가하는 API 입니다")
+    @Operation(summary = "가계부에 지출 추가 API", description = "가계부에 지출 추가하는 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = AddRecordResult.class))),
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/record")
-    public ResponseEntity<AddRecordResult> addRecord(@RequestBody AddRecordRequest request) {
+    public ResponseEntity<AddRecordResult> addRecord(@Valid @RequestBody AddRecordRequest request) {
         log.info("가계부에 지출 한개 추가 api 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.addRecord(currentMemberId, request));
     }
 
-    @Operation(summary = "가계부에 수입 추가 API", description = "가계부에 카테고리 추가하는 API 입니다")
+    @Operation(summary = "가계부에 수입 추가 API", description = "가계부에 수입 추가하는 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = AddIncomeResult.class))),
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/income")
-    public ResponseEntity<AddIncomeResult> addIncome(@RequestBody AddIncomeRequest request) {
+    public ResponseEntity<AddIncomeResult> addIncome(@Valid @RequestBody AddIncomeRequest request) {
         log.info("가계부에 수입 한개 추가 api 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.addIncome(currentMemberId, request));

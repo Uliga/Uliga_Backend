@@ -7,6 +7,8 @@ import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
 import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleInfoQ;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,10 +23,13 @@ public class AccountBookDTO {
     @AllArgsConstructor
     @Getter
     public static class CreateRequest {
+        @Size(min = 2)
         @Schema(description = "가계부 이름", defaultValue = "acountBookName")
         private String name;
+        @NotNull
         @Schema(description = "생성할 카테고리들")
         private List<String> categories;
+        @NotNull
         @Schema(description = "초대할 이메일들")
         private List<String> emails;
         @Schema(description = "가계부 별칭", defaultValue = "relationship")
@@ -103,7 +108,9 @@ public class AccountBookDTO {
     @AllArgsConstructor
     @Getter
     public static class GetInvitations {
+        @NotNull
         private Long id;
+        @NotNull
         @Schema(description = "초대한 사람 이메일", defaultValue = "invited@email.com")
         private List<String> emails;
     }
@@ -121,9 +128,13 @@ public class AccountBookDTO {
     @AllArgsConstructor
     @Getter
     public static class InvitationReply {
+        @NotNull
         private Long id;
+        @NotNull
         private String memberName;
+        @NotNull
         private String accountBookName;
+        @NotNull
         private Boolean join;
     }
 
@@ -142,20 +153,26 @@ public class AccountBookDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CreateRecordOrIncomeDto {
+        @NotNull
         @Schema(description = "수입인지 아닌지")
         private Boolean isIncome;
+        @NotNull
         @Schema(description = "카테고리 이름", defaultValue = "category name")
         private String category;
+        @NotNull
         @Schema(description = "금융 수단", defaultValue = "payment")
         private String payment;
+        @NotNull
         @Schema(description = "날짜", defaultValue = "yyyy-mm-dd")
         private String date;
+        @NotNull
         @Schema(description = "거래처", defaultValue = "거래처")
         private String account;
-
+        @NotNull
         private Long value;
         @Schema(description = "간단한 메모", defaultValue = "simple memo")
         private String memo;
+        @NotNull
         @Schema(description = "추가할 공유 가계부들")
         private List<Long> sharedAccountBook;
     }
@@ -188,8 +205,10 @@ public class AccountBookDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CreateItems {
+        @NotNull
         @Schema(description = "가계부 아이디")
         private Long id;
+        @NotNull
         @Schema(description = "추가할 아이템들")
         private List<CreateRecordOrIncomeDto> createRequest;
     }
@@ -233,8 +252,10 @@ public class AccountBookDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CategoryCreateRequest {
+        @NotNull
         @Schema(description = "가계부 아이디")
         private Long id;
+        @NotNull
         @Schema(description = "생성할 카테고리들")
         private List<String> categories;
     }
@@ -320,20 +341,27 @@ public class AccountBookDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class AddIncomeRequest {
+        @NotNull
         @Schema(description = "가계부 아이디")
         private Long id;
+        @NotNull
         @Schema(description = "카테고리", defaultValue = "category")
         private String category;
+        @NotNull
         @Schema(description = "결제 수단", defaultValue = "현금/카드/이체 등등")
         private String payment;
+        @NotNull
         @Schema(description = "날짜", defaultValue = "yyyy-mm-dd")
         private String date;
+        @NotNull
         @Schema(description = "거래처")
         private String account;
+        @NotNull
         @Schema(description = "값")
         private Long value;
         @Schema(description = "간단한 메모", defaultValue = "simple memo")
         private String memo;
+        @NotNull
         @Schema(description = "추가할 다른 가계부들")
         private List<Long> sharedAccountBook;
     }
@@ -343,20 +371,27 @@ public class AccountBookDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class AddRecordRequest {
+        @NotNull
         @Schema(description = "가계부 아이디")
         private Long id;
+        @NotNull
         @Schema(description = "카테고리", defaultValue = "category")
         private String category;
+        @NotNull
         @Schema(description = "결제 수단", defaultValue = "현금/카드/이체 등등")
         private String payment;
+        @NotNull
         @Schema(description = "날짜", defaultValue = "yyyy-mm-dd")
         private String date;
+        @NotNull
         @Schema(description = "거래처")
         private String account;
+        @NotNull
         @Schema(description = "값")
         private Long value;
         @Schema(description = "간단한 메모", defaultValue = "simple memo")
         private String memo;
+        @NotNull
         @Schema(description = "추가할 다른 가계부들")
         private List<Long> sharedAccountBook;
     }

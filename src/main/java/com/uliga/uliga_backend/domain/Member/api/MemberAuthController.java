@@ -60,7 +60,7 @@ public class MemberAuthController {
             @ApiResponse(responseCode = "409", description = "로그인 실패", content = @Content(schema = @Schema(implementation = ErrorResponse.class )))
     })
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<LoginResult> loginJson(@RequestBody LoginRequest loginRequest, HttpServletResponse response, HttpServletRequest request) {
+    public ResponseEntity<LoginResult> loginJson(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response, HttpServletRequest request) {
 
         log.info("로그인 요청 API 호출 - json");
         return ResponseEntity.ok(authService.login(loginRequest, response, request));
@@ -103,7 +103,7 @@ public class MemberAuthController {
     })
     // 이메일 인증 요청
     @PostMapping(value = "/mail", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EmailSentDto> mailConfirmJson(@RequestBody ConfirmEmailDto confirmEmailDto) throws Exception {
+    public ResponseEntity<EmailSentDto> mailConfirmJson(@Valid @RequestBody ConfirmEmailDto confirmEmailDto) throws Exception {
         log.info("이메일 인증 요청 API 호출 - json");
         emailCertificationService.sendSimpleMessage(confirmEmailDto.getEmail());
         return ResponseEntity.ok(EmailSentDto.builder().email(confirmEmailDto.getEmail()).success(true).build());
@@ -126,7 +126,7 @@ public class MemberAuthController {
     })
     // 코드 인증 요청
     @PostMapping(value = "/mail/code", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CodeConfirmDto> codeConfirmJson(@RequestBody EmailConfirmCodeDto emailConfirmCodeDto) {
+    public ResponseEntity<CodeConfirmDto> codeConfirmJson(@Valid @RequestBody EmailConfirmCodeDto emailConfirmCodeDto) {
         log.info("코드 인증 요청 API 호출");
         return ResponseEntity.ok(emailCertificationService.confirmCode(emailConfirmCodeDto));
 

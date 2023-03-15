@@ -6,6 +6,7 @@ import com.uliga.uliga_backend.domain.Member.model.UserLoginType;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenIssueDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -98,8 +99,10 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class LoginRequest {
+        @Email
         @Schema(description = "로그인할 이메일", defaultValue = "test@email.com")
         private String email;
+        @Size(min = 8)
         @Schema(description = "비밀번호", defaultValue = "12345678")
         private String password;
 
@@ -152,8 +155,9 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class EmailConfirmCodeDto {
-
+        @Email
         private String email;
+        @Size(min = 6)
         private String code;
     }
 
@@ -171,6 +175,7 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class ConfirmEmailDto {
+        @Email
         @Schema(description = "인증 요청 보낼 이메일", defaultValue = "test@email.com")
         private String email;
     }
@@ -212,6 +217,7 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class ApplicationPasswordCheck {
+        @Size(min = 4)
         private String applicationPassword;
     }
 
@@ -233,6 +239,7 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class PasswordCheck {
+        @Size(min = 8)
         private String password;
     }
 
@@ -286,6 +293,7 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class NicknameCheckDto {
+        @Size(min = 2)
         private String nickname;
     }
 
@@ -327,6 +335,7 @@ public class MemberDTO {
     @AllArgsConstructor
     @Getter
     public static class SearchMemberByEmail {
+        @Email
         private String email;
     }
 
