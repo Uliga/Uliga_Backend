@@ -21,7 +21,7 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long> 
             "abm.getNotification," +
             "ab.relationShip) from " +
             "AccountBook ab join AccountBookMember abm on ab.id = abm.accountBook.id " +
-            "WHERE abm.member.id=:id ORDER BY ab.createTime")
+            "WHERE abm.member.id=:id ORDER BY ab.isPrivate DESC")
     List<AccountBookInfoQ> findAccountBookInfosByMemberId(@Param("id") Long id);
     @Query("select new com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ(" +
             "abm.accountBook.id, " +

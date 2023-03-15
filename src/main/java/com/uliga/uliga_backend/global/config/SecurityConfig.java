@@ -70,6 +70,7 @@ public class SecurityConfig {
                         .requestMatchers("/budget/**").authenticated()
                         .requestMatchers("/record/**").authenticated()
                         .requestMatchers("/income/**").authenticated()
+                        .requestMatchers("/schedule/**").authenticated()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v1/api-docs/**").permitAll()
                         .requestMatchers("/test").permitAll()
