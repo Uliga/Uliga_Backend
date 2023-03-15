@@ -1,9 +1,7 @@
 package com.uliga.uliga_backend.global.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.Member.exception.LogoutMemberException;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +15,6 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Arrays;
-
-import static org.springframework.http.HttpStatus.*;
 
 @Slf4j
 @Component
@@ -33,6 +28,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         log.info(String.valueOf(authException.getClass()));
         log.info(authException.getMessage());
+        log.info(authException.getLocalizedMessage());
         sendResponse(response, authException);
     }
 
@@ -46,14 +42,15 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
                     "존재하지 않는 멤버입니다."));
             response.setStatus(response.SC_NOT_FOUND);
 
-        } else if (authException instanceof InsufficientAuthenticationException) {
-            result = objectMapper.writeValueAsString(new ErrorResponse(503L,
-                    "인증 조건을 충족하지 않은 요청입니다 혹은 서버 내부 오류가 발생하였습니다"));
-            response.setStatus(response.SC_SERVICE_UNAVAILABLE);
-        } else {
+        }  else if (authException instanceof InsufficientAuthenticationException){
             result = objectMapper.writeValueAsString(new ErrorResponse(401L, "유효하지 않은 엑세스 토큰입니다."));
             response.setStatus(response.SC_UNAUTHORIZED);
+        } else {
+            result = objectMapper.writeValueAsString(new ErrorResponse(500L,
+                    "서버 내부 오류가 발생하였습니다"));
+            response.setStatus(response.SC_INTERNAL_SERVER_ERROR);
         }
+
 
 
 

@@ -1,6 +1,7 @@
 package com.uliga.uliga_backend.global.error.handler;
 
 import com.uliga.uliga_backend.global.error.exception.IdNotFoundException;
+import com.uliga.uliga_backend.global.error.exception.InvalidDataValueException;
 import com.uliga.uliga_backend.global.error.exception.NotAuthorizedException;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
@@ -53,6 +54,7 @@ public class GlobalExceptionHandler {
                 .message("쉬는 시간 당첨 쉬다 오세여")
                 .build(), GATEWAY_TIMEOUT);
     }
+
     @ExceptionHandler(IdNotFoundException.class)
     protected final ResponseEntity<ErrorResponse> handleIdNotFoundException(
             IdNotFoundException ex, WebRequest request
@@ -62,5 +64,16 @@ public class GlobalExceptionHandler {
                 .errorCode(404L)
                 .message(ex.getMessage()).build()
                 , HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvalidDataValueException.class)
+    protected final ResponseEntity<ErrorResponse> handleInvalidDataValue(
+            InvalidDataValueException ex, WebRequest request
+    ) {
+        log.info(ex.getMessage());
+        return new ResponseEntity<>(ErrorResponse.builder()
+                .errorCode(500L)
+                .message(ex.getMessage()).build()
+                , INTERNAL_SERVER_ERROR);
     }
 }
