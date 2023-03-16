@@ -27,7 +27,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             "m.email) from Member m where m.id = :id")
     MemberInfoNativeQ findMemberInfoById(@Param("id") Long id);
 
-    @Query("SELECT Member " +
+    @Query("SELECT m " +
             "FROM AccountBook ab " +
             "JOIN AccountBookMember abm ON ab.id = abm.accountBook.id " +
             "JOIN Member m ON abm.member.id = m.id " +
