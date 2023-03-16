@@ -40,7 +40,7 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final ScheduleMemberRepository scheduleMemberRepository;
     private final MemberRepository memberRepository;
-    private final RedisTemplate<Long, Object> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper mapper;
 
     @Transactional
@@ -51,7 +51,7 @@ public class ScheduleService {
 
     @Transactional
     public AddScheduleResult addSchedule(Member member, AccountBook accountBook, List<CreateScheduleRequest> scheduleRequests) throws JsonProcessingException {
-        SetOperations<Long, Object> setOperations = redisTemplate.opsForSet();
+        SetOperations<String, String> setOperations = redisTemplate.opsForSet();
         List<CreateScheduleRequest> result = new ArrayList<>();
         List<Member> memberByAccountBookId = memberRepository.findMemberByAccountBookId(accountBook.getId());
         LocalDateTime now = LocalDateTime.now();
@@ -81,8 +81,8 @@ public class ScheduleService {
                         .createdTime(now)
                         .creatorName(member.getNickName())
                         .value(assignment.getValue()).build();
-                setOperations.add(assignment.getId(), mapper.writeValueAsString(notificationInfo));
-                redisTemplate.expire(assignment.getId(), NOTIFICATION_EXPIRE_TIME, TimeUnit.MILLISECONDS);
+                setOperations.add(memberMap.get(assignment.getId()).getNickName(), mapper.writeValueAsString(notificationInfo));
+                redisTemplate.expire(memberMap.get(assignment.getId()).getNickName(), NOTIFICATION_EXPIRE_TIME, TimeUnit.MILLISECONDS);
             }
             result.add(scheduleRequest);
         }

@@ -39,7 +39,6 @@ public class MemberService {
     private final AccountBookMemberRepository accountBookMemberRepository;
     private final PasswordEncoder passwordEncoder;
     private final RedisTemplate<String, String> redisTemplate;
-    private final RedisTemplate<Long, String> rt;
     private final ObjectMapper objectMapper;
 
     @Transactional
@@ -47,12 +46,11 @@ public class MemberService {
 
         MemberInfoNativeQ memberInfoById = memberRepository.findMemberInfoById(id);
         SetOperations<String, String> setOperations = redisTemplate.opsForSet();
-        SetOperations<Long, String> operations = rt.opsForSet();
         String email = memberInfoById.getEmail();
         Set<String> strings = setOperations.members(email);
         List<InvitationInfo> result = new ArrayList<>();
         List<NotificationInfo> notificationInfos = new ArrayList<>();
-        Set<String> stringSet = operations.members(id);
+        Set<String> stringSet = setOperations.members(memberInfoById.getNickName());
         if (strings != null) {
             for (String o : strings) {
                 result.add(objectMapper.readValue(o, InvitationInfo.class));
