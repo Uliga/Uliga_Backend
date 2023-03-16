@@ -22,13 +22,16 @@ public class ScheduleInfoQ {
     private Long value;
     @Schema(description = "작성자", defaultValue = "creatorNickname")
     private String creator;
+    @Schema(description = "가계부 이름",defaultValue = "accountBookName")
+    private String accountBookName;
     @Builder
-    public ScheduleInfoQ(Long id, Boolean isIncome, String name, Long nDay, Long value, String creator) {
+    public ScheduleInfoQ(Long id, Boolean isIncome, String name, Long nDay, Long value, String creator, String accountBookName) {
         this.id = id;
         this.isIncome = isIncome;
         this.name = name;
         this.notificationDay = nDay;
         this.value = value;
         this.creator = creator;
+        this.accountBookName = accountBookName;
     }
 }

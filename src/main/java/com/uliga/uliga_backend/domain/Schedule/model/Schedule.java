@@ -3,12 +3,16 @@ package com.uliga.uliga_backend.domain.Schedule.model;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.Common.BaseTimeEntity;
 import com.uliga.uliga_backend.domain.Common.Date;
+import com.uliga.uliga_backend.domain.JoinTable.model.ScheduleMember;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleInfoQ;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,6 +27,8 @@ public class Schedule extends BaseTimeEntity {
     private Long notificationDate;
 
     private Long value;
+    @OneToMany(mappedBy = "schedule", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<ScheduleMember> scheduleMembers = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "member_id")

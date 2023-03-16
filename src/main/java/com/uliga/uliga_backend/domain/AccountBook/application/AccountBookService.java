@@ -279,12 +279,6 @@ public class AccountBookService {
                 .records(accountBookRepository.getMonthlyRecord(id, year, month)).build();
     }
 
-    @Transactional
-    public AccountBookSchedules getAccountBookSchedules(Long id, Long year, Long month) {
-
-        return AccountBookSchedules.builder()
-                .schedules(scheduleRepository.findByAccountBookId(id)).build();
-    }
 
     @Transactional
     public RecordAndIncomeDetails getAccountBookItemDetails(Long id, Long year, Long month, Long day) {

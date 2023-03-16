@@ -1,6 +1,7 @@
 package com.uliga.uliga_backend.domain.Schedule.dto;
 
 import com.uliga.uliga_backend.domain.Common.Date;
+import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleInfoQ;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Embedded;
 import jakarta.validation.constraints.NotNull;
@@ -8,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 public class ScheduleDTO {
     @Builder
@@ -26,15 +29,34 @@ public class ScheduleDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    @Schema(description = "금융 일정 생성 요청")
     public static class CreateScheduleRequest {
+        @Schema(description = "금융 일정 이름")
         @NotNull
         private String name;
+        @Schema(description = "수입인지 지출인지")
         @NotNull
         private Boolean isIncome;
+        @Schema(description = "일정 날짜")
         @NotNull
         private Long notificationDate;
+        @Schema(description = "일정 값")
+        private Long value;
+        @Schema(description = "금액 할당에 대한 정보")
+        private List<Assignment> assignments;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Assignment {
+        @Schema(description = "멤버아이디")
+        private Long id;
+        @Schema(description = "할당량")
         private Long value;
     }
+
 
     @Builder
     @Getter
@@ -51,5 +73,14 @@ public class ScheduleDTO {
         private Long notificationDate;
         @Schema(description = "금액")
         private Long value;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GetMemberSchedules {
+        @Schema(description = "금융 일정들")
+        private List<ScheduleInfoQ> schedules;
     }
 }

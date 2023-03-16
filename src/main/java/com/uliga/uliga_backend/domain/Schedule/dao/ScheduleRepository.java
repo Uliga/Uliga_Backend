@@ -15,10 +15,9 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             "s.isIncome, "+
             "s.name, "+
             "s.notificationDate, " +
-            "s.value, " +
-            "m.nickName) " +
-            "FROM Schedule s " +
-            "JOIN Member m ON m.id = s.creator.id " +
-            "WHERE s.accountBook.id=:id")
-    List<ScheduleInfoQ> findByAccountBookId(@Param("id") Long id);
+            "sm.value, " +
+            "m.nickName," +
+            "s.accountBook.name) " +
+            "FROM Schedule s JOIN ScheduleMember sm ON s.id = sm.schedule.id JOIN Member m on sm.member.id = m.id WHERE m.id = :id")
+    List<ScheduleInfoQ> findByMemberId(@Param("id") Long id);
 }
