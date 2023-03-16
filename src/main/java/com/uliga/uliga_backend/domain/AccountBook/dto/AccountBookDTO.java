@@ -128,14 +128,19 @@ public class AccountBookDTO {
     @AllArgsConstructor
     @Getter
     public static class InvitationReply {
+        @Schema(description = "가계부 아이디")
         @NotNull
         private Long id;
+        @Schema(description = "초대자 이름")
         @NotNull
         private String memberName;
+        @Schema(description = "가계부 이름")
         @NotNull
         private String accountBookName;
+        @Schema(description = "생성 시간, 레디스에서 초대 지우려면 이 값도 필요해염..")
         @NotNull
         private LocalDateTime createdTime;
+        @Schema(description = "조인 여부")
         @NotNull
         private Boolean join;
     }

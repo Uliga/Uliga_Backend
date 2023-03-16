@@ -323,7 +323,7 @@ public class MemberDTO {
         private String memberName;
         @Schema( defaultValue = "초대 받은 가계부", description = "testUser님의 가계부")
         private String accountBookName;
-        @Schema(description = "생성 시간")
+        @Schema(description = "생성 시간, 삭제할때도 보내줘야행")
         private LocalDateTime createdTime;
 
     }
@@ -333,9 +333,13 @@ public class MemberDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     @Getter
+    @Schema(description = "로그인한 멤버 정보 조회")
     public static class GetMemberInfo {
+        @Schema(description = "멤버 정보")
         private MemberInfoNativeQ memberInfo;
+        @Schema(description = "초대 정보")
         private List<InvitationInfo> invitations;
+        @Schema(description = "금융 일정 알림")
 
         private List<NotificationInfo> notifications;
     }
