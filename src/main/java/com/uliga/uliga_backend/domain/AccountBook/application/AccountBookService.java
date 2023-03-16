@@ -119,11 +119,14 @@ public class AccountBookService {
 
         categoryService.createCategories(createRequest.getCategories(), accountBook);
 
+        LocalDateTime now = LocalDateTime.now();
+
         for (String email : createRequest.getEmails()) {
             InvitationInfo info = InvitationInfo.builder()
                     .id(accountBook.getId())
                     .memberName(member.getUserName())
-                    .accountBookName(accountBook.getName()).build();
+                    .accountBookName(accountBook.getName())
+                    .createdTime(now).build();
 
             SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
             setOperations.add(email, objectMapper.writeValueAsString(info));
