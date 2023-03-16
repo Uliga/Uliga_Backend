@@ -10,6 +10,7 @@ import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenIssueDTO;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -45,7 +46,8 @@ public class MemberAuthController {
 
     @Operation(summary = "회원가입 API", description = "회원가입 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "회원가입 성공", content = @Content(schema = @Schema(implementation = SignUpResult.class)))
+            @ApiResponse(responseCode = "200", description = "회원가입 성공", content = @Content(schema = @Schema(implementation = SignUpResult.class))),
+            @ApiResponse(responseCode = "409", description = "잘못된 값 형식이 넘어왔을때", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/signup")
     public ResponseEntity<SignUpResult> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
@@ -99,7 +101,8 @@ public class MemberAuthController {
 
     @Operation(summary = "이메일 인증 요청 API", description = "이메일 인증 요청 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "이메일 인증 성공", content = @Content(schema = @Schema(implementation = EmailSentDto.class)))
+            @ApiResponse(responseCode = "200", description = "이메일 인증 성공", content = @Content(schema = @Schema(implementation = EmailSentDto.class))),
+            @ApiResponse(responseCode = "409", description = "잘못된 값 형식이 넘어왔을때", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     // 이메일 인증 요청
     @PostMapping(value = "/mail", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -121,7 +124,8 @@ public class MemberAuthController {
             @ApiResponse(responseCode = "200", description = "코드 일치 여부 확인", content = @Content(schema = @Schema(implementation = CodeConfirmDto.class), examples = {
                     @ExampleObject(name = "일치시", summary = "일치시",value = "'matches':true", description = "코드 일치시"),
                     @ExampleObject(name="불일치시", summary = "불일치시", value = "'matches':false", description = "코드 불일치시")
-            }))
+            })),
+            @ApiResponse(responseCode = "409", description = "잘못된 값 형식이 넘어왔을때", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 
     })
     // 코드 인증 요청
@@ -146,11 +150,12 @@ public class MemberAuthController {
             @ApiResponse(responseCode = "200", description = "중복여부 확인", content = @Content(schema = @Schema(implementation = ExistsCheckDto.class), examples = {
                     @ExampleObject(name = "중복시", summary = "중복시",value = "'exists':true", description = "중복하는 이메일 존재할때"),
                     @ExampleObject(name="중복 아닐시", summary = "중복 아닐시", value = "'exists':false", description = "중복하는 이메일 존재하지 않을때")
-            }))
+            })),
+            @ApiResponse(responseCode = "409", description = "잘못된 값 형식시 넘어왔을때", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     // 이메일 중복 확인
     @GetMapping(value = "/mail/exists/{email}")
-    public ResponseEntity<ExistsCheckDto> emailExists(@PathVariable("email") String email) {
+    public ResponseEntity<ExistsCheckDto> emailExists(@Parameter(name = "email",description = "중복 확인 하려는 이메일", in = ParameterIn.PATH) @PathVariable("email") String email) {
 
         log.info("이메일 중복 확인 API 호출");
         return ResponseEntity.ok(authService.emailExists(email));
@@ -164,7 +169,7 @@ public class MemberAuthController {
     })
     // 닉네임 중복 확인
     @GetMapping(value = "/nickname/exists/{nickname}")
-    public ResponseEntity<ExistsCheckDto> nicknameExists(@PathVariable("nickname") String nickname) {
+    public ResponseEntity<ExistsCheckDto> nicknameExists(@Parameter(name = "nickname", description = "중복 확인하려는 닉네임", in = ParameterIn.PATH) @PathVariable("nickname") String nickname) {
         log.info("닉네임 중복 확인 API 호출");
         return ResponseEntity.ok(authService.nicknameExists(nickname));
     }
