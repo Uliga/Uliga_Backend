@@ -108,7 +108,7 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.invitationReply(id, invitationReply));
     }
 
-    @Operation(summary = "한달 가계부 수입/지출/금융일정 조회 API", description = "한달동안의 가계부 수입/지출/금융일정 조회 API 입니다")
+    @Operation(summary = "한달 가계부 수입/지출 조회 API", description = "한달동안의 가계부 수입/지출조회 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountBookIncomesAndRecords.class))),
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
@@ -128,7 +128,7 @@ public class AccountBookController {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountBookSchedules.class))),
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @GetMapping(value = "/{id}/item/{year}/{month}")
+    @GetMapping(value = "/{id}/schedule/{year}/{month}")
     public ResponseEntity<AccountBookSchedules> getAccountBookSchedules(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
                                                                             @Parameter(name = "year", description = "년도", in = PATH) @PathVariable("year") Long year,
                                                                             @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month) {
