@@ -272,12 +272,17 @@ public class AccountBookService {
     }
 
     @Transactional
-    public AccountBookItems getAccountBookItems(Long id, Long year, Long month) {
+    public AccountBookIncomesAndRecords getAccountBookItems(Long id, Long year, Long month) {
 
-
-        return AccountBookItems.builder()
+        return AccountBookIncomesAndRecords.builder()
                 .incomes(accountBookRepository.getMonthlyIncome(id, year, month))
-                .records(accountBookRepository.getMonthlyRecord(id, year, month))
+                .records(accountBookRepository.getMonthlyRecord(id, year, month)).build();
+    }
+
+    @Transactional
+    public AccountBookSchedules getAccountBookSchedules(Long id, Long year, Long month) {
+
+        return AccountBookSchedules.builder()
                 .schedules(scheduleRepository.findByAccountBookId(id)).build();
     }
 

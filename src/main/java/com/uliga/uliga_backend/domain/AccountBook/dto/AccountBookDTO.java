@@ -270,19 +270,31 @@ public class AccountBookDTO {
         private List<String> created;
     }
 
+
+
     @Builder
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    @Schema(description = "한달 대략적 수입/지출, 금융 일정 조회")
-    public static class AccountBookItems {
+    @Schema(description = "한달 대략적 수입/지출조회")
+    public static class AccountBookIncomesAndRecords {
         @Schema(description = "날짜별 수입들")
         private List<DailyValueQ> incomes;
         @Schema(description = "날짜별 지출들")
         private List<DailyValueQ> records;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema(description = "한달 금융 일정 조회")
+    public static class AccountBookSchedules {
         @Schema(description = "금융 일정들")
         private List<ScheduleInfoQ> schedules;
     }
+
+
 
 
 
