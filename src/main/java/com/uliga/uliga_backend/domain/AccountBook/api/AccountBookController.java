@@ -43,6 +43,7 @@ public class AccountBookController {
     })
     @GetMapping(value = "")
     public ResponseEntity<GetAccountBookInfos> getMemberAccountBook() {
+
         log.info("멤버 가계부 조회 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.getMemberAccountBook(id));
@@ -54,7 +55,8 @@ public class AccountBookController {
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "/{id}")
-    public ResponseEntity<AccountBookInfo> getSingleAccountBookInfo(@PathVariable("id") Long id) {
+    public ResponseEntity<AccountBookInfo> getSingleAccountBookInfo(@Parameter(name = "id", description = "가계부 아이디", in = PATH)
+                                                                    @PathVariable("id") Long id) {
         log.info("가계부 아이디로 조회 API 호출");
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.getSingleAccountBookInfo(id, memberId));
@@ -65,9 +67,9 @@ public class AccountBookController {
             @ApiResponse(responseCode = "200", description = "가계부 생성시", content = @Content(schema = @Schema(implementation = SimpleAccountBookInfo.class))),
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-
     @PostMapping(value = "")
     public ResponseEntity<SimpleAccountBookInfo> createAccountBook(@Valid @RequestBody CreateRequest createRequest) throws JsonProcessingException {
+
         log.info("가계부 생성 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.createAccountBook(id, createRequest));
@@ -87,6 +89,7 @@ public class AccountBookController {
     })
     @PostMapping(value = "/invitation")
     public ResponseEntity<Invited> createInvitation(@Valid @RequestBody GetInvitations invitations) throws JsonProcessingException {
+
         log.info("멤버 초대 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.createInvitation(id, invitations));
@@ -99,6 +102,7 @@ public class AccountBookController {
     })
     @PostMapping(value = "/invitation/reply")
     public ResponseEntity<InvitationReplyResult> invitationReply(@Valid @RequestBody InvitationReply invitationReply) throws JsonProcessingException {
+
         log.info("초대 응답 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.invitationReply(id, invitationReply));
@@ -110,11 +114,10 @@ public class AccountBookController {
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "/{id}/item/{year}/{month}")
-    public ResponseEntity<AccountBookItems> getAccountBookItems(
-            @Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
-            @Parameter(name = "year", description = "년도", in = PATH) @PathVariable("year") Long year,
-            @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month
-    ) {
+    public ResponseEntity<AccountBookItems> getAccountBookItems(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
+                                                                @Parameter(name = "year", description = "년도", in = PATH) @PathVariable("year") Long year,
+                                                                @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month) {
+
         log.info("한달 가계부 수입/지출/금융 일정 조회 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookItems(id, year, month));
     }
@@ -125,12 +128,11 @@ public class AccountBookController {
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "/{id}/item/{year}/{month}/{day}")
-    public ResponseEntity<RecordAndIncomeDetails> getAccountBookItemDetailsByDay(
-            @Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
-            @Parameter(name = "year", description = "년도", in = PATH) @PathVariable("year") Long year,
-            @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month,
-            @Parameter(name = "day", description = "하루", in = PATH)@PathVariable("day") Long day
-    ) {
+    public ResponseEntity<RecordAndIncomeDetails> getAccountBookItemDetailsByDay(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
+                                                                                 @Parameter(name = "year", description = "년도", in = PATH) @PathVariable("year") Long year,
+                                                                                 @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month,
+                                                                                 @Parameter(name = "day", description = "하루", in = PATH) @PathVariable("day") Long day) {
+
         log.info("하루 수입/지출 내역 상세 조회");
         return ResponseEntity.ok(accountBookService.getAccountBookItemDetails(id, year, month, day));
     }
@@ -141,11 +143,10 @@ public class AccountBookController {
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "/{id}/asset/{year}/{month}")
-    public ResponseEntity<GetAccountBookAssets> getAccountBookAssets(
-            @PathVariable("id") Long id,
-            @PathVariable("year") Long year,
-            @PathVariable("month") Long month
-    ) {
+    public ResponseEntity<GetAccountBookAssets> getAccountBookAssets(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
+                                                                     @Parameter(name = "year", description = "년도", in = PATH) @PathVariable("year") Long year,
+                                                                     @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month) {
+
         log.info("한달 가계부 지출/수입/예산 총합 조회 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookAssets(id, year, month));
     }
@@ -170,6 +171,7 @@ public class AccountBookController {
     })
     @PostMapping(value = "/category")
     public ResponseEntity<CategoryCreateResult> createCategories(@Valid @RequestBody CategoryCreateRequest createRequest) {
+
         log.info("가계부에 카테고리 추가 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.createCategory(currentMemberId, createRequest));
@@ -182,6 +184,7 @@ public class AccountBookController {
     })
     @PostMapping(value = "/record")
     public ResponseEntity<AddRecordResult> addRecord(@Valid @RequestBody AddRecordRequest request) {
+
         log.info("가계부에 지출 한개 추가 api 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.addRecord(currentMemberId, request));
@@ -194,6 +197,7 @@ public class AccountBookController {
     })
     @PostMapping(value = "/income")
     public ResponseEntity<AddIncomeResult> addIncome(@Valid @RequestBody AddIncomeRequest request) {
+
         log.info("가계부에 수입 한개 추가 api 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.addIncome(currentMemberId, request));
@@ -205,7 +209,8 @@ public class AccountBookController {
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "/{id}/category")
-    public ResponseEntity<AccountBookCategories> getAccountBookCategory(@PathVariable("id") Long id) {
+    public ResponseEntity<AccountBookCategories> getAccountBookCategory(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id) {
+
         log.info("가계부 카테고리 조회 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookCategories(id));
     }
@@ -216,7 +221,8 @@ public class AccountBookController {
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "/{id}/member")
-    public ResponseEntity<AccountBookMembers> getAccountBookMembers(@PathVariable("id") Long id) {
+    public ResponseEntity<AccountBookMembers> getAccountBookMembers(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id) {
+
         log.info("가계부 멤버 조회 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookMembers(id));
     }
@@ -226,7 +232,11 @@ public class AccountBookController {
             @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = BudgetInfoQ.class)))
     })
     @PostMapping(value = "/budget")
-    public ResponseEntity<BudgetInfoQ> addBudget(@RequestBody Map<String, Object> createBudgetDto) {
+    public ResponseEntity<BudgetInfoQ> addBudget(@io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "예산 생성 요청",
+            content = @Content(schema = @Schema(implementation = CreateBudgetDto.class)))
+                                                 @RequestBody Map<String, Object> createBudgetDto) {
+
         log.info("가계부 예산 추가 API 호출");
         return ResponseEntity.ok(accountBookService.addBudget(createBudgetDto));
     }

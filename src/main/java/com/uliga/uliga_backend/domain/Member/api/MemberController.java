@@ -51,13 +51,14 @@ public class MemberController {
 
     @Operation(summary = "멤버 정보 업데이트 API", description = "멤버 정보 업데이트 API 입니다", security = @SecurityRequirement(name = "bearerAuth"))
     @PatchMapping(value = "")
-    public ResponseEntity<MemberInfoUpdateRequest> updateMemberInfo(
-            @Parameter(name = "authorization", description = "토큰 정보", in = ParameterIn.HEADER)
-            @RequestBody Map<String, Object> updates) {
+    public ResponseEntity<MemberInfoUpdateRequest> updateMemberInfo(@Parameter(name = "authorization", description = "토큰 정보", in = ParameterIn.HEADER)
+                                                                    @RequestBody Map<String, Object> updates) {
+
         log.info("멤버 정보 업데이트 API 호출됌");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberService.updateMemberInfo(currentMemberId, updates));
     }
+
     @Operation(summary = "멤버 애플리케이션 비밀번호 확인", description = "로그인한 멤버 애플리케이션 비밀번호 확인 API", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "비밀번호 확인 성공시", content = @Content(schema = @Schema(implementation = MatchResult.class))),
@@ -71,6 +72,7 @@ public class MemberController {
                         memberService.checkApplicationPassword(SecurityUtil.getCurrentMemberId(), passwordCheck)
                 ).build());
     }
+
     @Operation(summary = "멤버 비밀번호 확인", description = "로그인한 멤버 비밀번호 확인 API", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "비밀번호 확인 성공시", content = @Content(schema = @Schema(implementation = MatchResult.class))),
@@ -92,12 +94,10 @@ public class MemberController {
     })
     @PostMapping(value = "/nickname")
     public ResponseEntity<ExistsCheckDto> nicknameExistsCheck(@Valid @RequestBody NicknameCheckDto nicknameCheckDto) {
+
         log.info("닉네임 존재 여부 확인 API 호출");
         return ResponseEntity.ok(
-                ExistsCheckDto.builder()
-                        .exists(memberService.nicknameExists(SecurityUtil.getCurrentMemberId()
-                                , nicknameCheckDto))
-                        .build()
+                ExistsCheckDto.builder().exists(memberService.nicknameExists(SecurityUtil.getCurrentMemberId(), nicknameCheckDto)).build()
         );
     }
 
@@ -108,18 +108,20 @@ public class MemberController {
         memberService.deleteMember(currentMemberId);
         return ResponseEntity.ok("DELETED");
     }
+
     @Operation(summary = "이메일로 존재하는 멤버 찾기", description = "이메일로 존재하는 멤버 찾는 API", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "이메일로 존재하는 멤버 존재시", content = @Content(schema = @Schema(implementation = SearchEmailResult.class))),
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/search/email")
-    public ResponseEntity<SearchEmailResult> getMemberByEmail(@RequestParam(name = "accountBook", required = false, defaultValue = "") Long accountBookId,@Valid @RequestBody SearchMemberByEmail searchMemberByEmail) {
+    public ResponseEntity<SearchEmailResult> getMemberByEmail(@RequestParam(name = "accountBook", required = false, defaultValue = "") Long accountBookId,
+                                                              @Valid @RequestBody SearchMemberByEmail searchMemberByEmail) {
+
         log.info("이메일로 존재하는 멤버 찾기 API 호출");
         log.info(String.valueOf(accountBookId));
         return ResponseEntity.ok(memberService.findMemberByEmail(accountBookId, searchMemberByEmail));
     }
-
 
 
 }

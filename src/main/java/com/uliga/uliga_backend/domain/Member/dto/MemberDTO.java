@@ -138,10 +138,15 @@ public class MemberDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
+    @Schema(description = "멤버 정보 업데이트 요청시 들어갈 수 있는 값")
     public static class MemberInfoUpdateRequest {
+        @Schema(description = "변경할 닉네임")
         private String nickName;
+        @Schema(description = "변경할 프로필")
         private String avatarUrl;
+        @Schema(description = "변경할 애플리케이션 비밀번호")
         private String applicationPassword;
+        @Schema(description = "변경할 비밀번호")
         private String password;
     }
 
