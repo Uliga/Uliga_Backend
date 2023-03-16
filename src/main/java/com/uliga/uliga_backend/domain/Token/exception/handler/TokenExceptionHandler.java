@@ -1,7 +1,6 @@
 package com.uliga.uliga_backend.domain.Token.exception.handler;
 
 import com.uliga.uliga_backend.domain.Token.exception.ExpireRefreshTokenException;
-import com.uliga.uliga_backend.domain.Token.exception.InvalidAccessTokenException;
 import com.uliga.uliga_backend.domain.Token.exception.InvalidRefreshTokenException;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -41,16 +40,5 @@ public class TokenExceptionHandler {
         );
     }
 
-    @ExceptionHandler(InvalidAccessTokenException.class)
-    protected final ResponseEntity<ErrorResponse> handleInvalidAccessTokenException(
-            InvalidAccessTokenException ex, WebRequest request
-    ) {
-        log.info("만료된 엑세스 토큰입니다");
-        return new ResponseEntity<>(
-                ErrorResponse.builder()
-                        .errorCode(401L)
-                        .message("만료된 엑세스 토큰입니다").build(),
-                HttpStatus.UNAUTHORIZED
-        );
-    }
+
 }

@@ -66,7 +66,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ErrorResponse.builder()
                 .errorCode(404L)
                 .message(ex.getMessage()).build()
-                , HttpStatus.NOT_FOUND);
+                , NOT_FOUND);
     }
 
     @ExceptionHandler(InvalidDataValueException.class)
@@ -75,9 +75,9 @@ public class GlobalExceptionHandler {
     ) {
         log.info(ex.getMessage());
         return new ResponseEntity<>(ErrorResponse.builder()
-                .errorCode(500L)
+                .errorCode(409L)
                 .message(ex.getMessage()).build()
-                , INTERNAL_SERVER_ERROR);
+                , CONFLICT);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

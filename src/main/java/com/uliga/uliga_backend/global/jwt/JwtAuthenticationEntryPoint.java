@@ -22,13 +22,11 @@ import java.io.IOException;
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     private final ObjectMapper objectMapper;
-    private final RedisTemplate<String, String> redisTemplate;
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         log.info(String.valueOf(authException.getClass()));
         log.info(authException.getMessage());
-        log.info(authException.getLocalizedMessage());
         sendResponse(response, authException);
     }
 
@@ -41,10 +39,9 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             result = objectMapper.writeValueAsString(new ErrorResponse(404L,
                     "존재하지 않는 멤버입니다."));
             response.setStatus(response.SC_NOT_FOUND);
-
-        }  else if (authException instanceof InsufficientAuthenticationException){
-            result = objectMapper.writeValueAsString(new ErrorResponse(401L, "유효하지 않은 엑세스 토큰입니다."));
-            response.setStatus(response.SC_UNAUTHORIZED);
+        } else if (authException instanceof InsufficientAuthenticationException){
+            result = objectMapper.writeValueAsString(new ErrorResponse(503L, "사용자 인증 과정 중 오류가 발생하였거나, 서버 내부 오류가 발생하였습니다. 오류 지속시 재로그인을 해주세요."));
+            response.setStatus(response.SC_SERVICE_UNAVAILABLE);
         } else {
             result = objectMapper.writeValueAsString(new ErrorResponse(500L,
                     "서버 내부 오류가 발생하였습니다"));

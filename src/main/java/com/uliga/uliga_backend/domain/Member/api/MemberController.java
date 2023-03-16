@@ -37,7 +37,7 @@ public class MemberController {
     @Operation(summary = "로그인한 멤버 정보 조회 API", description = "로그인한 멤버 정보 조회 API 입니다", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "정보 조회 성공시", content = @Content(schema = @Schema(implementation = GetMemberInfo.class))),
-            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "")
     public ResponseEntity<GetMemberInfo> getMemberInfo(Pageable pageable) throws JsonProcessingException {
@@ -57,7 +57,7 @@ public class MemberController {
     @Operation(summary = "멤버 애플리케이션 비밀번호 확인", description = "로그인한 멤버 애플리케이션 비밀번호 확인 API", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "비밀번호 확인 성공시", content = @Content(schema = @Schema(implementation = MatchResult.class))),
-            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/applicationPassword")
     public ResponseEntity<MatchResult> checkApplicationPassword(@Valid @RequestBody ApplicationPasswordCheck passwordCheck) {
@@ -70,7 +70,7 @@ public class MemberController {
     @Operation(summary = "멤버 비밀번호 확인", description = "로그인한 멤버 비밀번호 확인 API", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "비밀번호 확인 성공시", content = @Content(schema = @Schema(implementation = MatchResult.class))),
-            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/password")
     public ResponseEntity<MatchResult> checkPassword(@Valid @RequestBody PasswordCheck passwordCheck) {
@@ -84,7 +84,7 @@ public class MemberController {
     @Operation(summary = "닉네임 존재 여부 확인", description = "닉네임 존재 확인 API")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "닉네임 존재 여부 확인", content = @Content(schema = @Schema(implementation = ExistsCheckDto.class))),
-            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/nickname")
     public ResponseEntity<ExistsCheckDto> nicknameExistsCheck(@Valid @RequestBody NicknameCheckDto nicknameCheckDto) {
@@ -107,7 +107,7 @@ public class MemberController {
     @Operation(summary = "이메일로 존재하는 멤버 찾기", description = "이메일로 존재하는 멤버 찾는 API", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "이메일로 존재하는 멤버 존재시", content = @Content(schema = @Schema(implementation = SearchEmailResult.class))),
-            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/search/email")
     public ResponseEntity<SearchEmailResult> getMemberByEmail(@RequestParam(name = "accountBook", required = false, defaultValue = "") Long accountBookId,@Valid @RequestBody SearchMemberByEmail searchMemberByEmail) {

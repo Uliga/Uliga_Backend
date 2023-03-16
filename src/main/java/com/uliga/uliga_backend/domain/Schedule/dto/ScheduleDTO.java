@@ -1,6 +1,7 @@
 package com.uliga.uliga_backend.domain.Schedule.dto;
 
 import com.uliga.uliga_backend.domain.Common.Date;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Embedded;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -40,10 +41,15 @@ public class ScheduleDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class UpdateScheduleRequest {
+        @Schema(description = "아이디")
         private Long id;
+        @Schema(description = "금융 일정 이름")
         private String name;
+        @Schema(description = "수입/지출 여부")
         private Boolean isIncome;
+        @Schema(description = "알림받을 날짜")
         private Long notificationDate;
+        @Schema(description = "금액")
         private Long value;
     }
 }

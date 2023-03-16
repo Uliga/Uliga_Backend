@@ -3,6 +3,7 @@ package com.uliga.uliga_backend.domain.Budget.api;
 import com.uliga.uliga_backend.domain.Budget.application.BudgetService;
 import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO;
 import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO.BudgetUpdateRequest;
+import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,7 +28,8 @@ public class BudgetController {
 
     @Operation(summary = "예산 업데이트")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "업데이트 성공시", content = @Content(schema = @Schema(implementation = BudgetUpdateRequest.class)))
+            @ApiResponse(responseCode = "200", description = "업데이트 성공시", content = @Content(schema = @Schema(implementation = BudgetUpdateRequest.class))),
+            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PatchMapping(value = "")
     public ResponseEntity<BudgetUpdateRequest> updateBudget(@RequestBody Map<String, Object> updates) {

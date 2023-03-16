@@ -3,6 +3,7 @@ package com.uliga.uliga_backend.domain.Record.api;
 import com.uliga.uliga_backend.domain.Record.application.RecordService;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
 import com.uliga.uliga_backend.domain.Record.dto.RecordDTO;
+import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import com.uliga.uliga_backend.global.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,7 +33,8 @@ public class RecordController {
 
     @Operation(summary = "지출 업데이트 API", description = "지출 업데이트 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "지출 업데이트시", content = @Content(schema = @Schema(implementation = RecordUpdateRequest.class)))
+            @ApiResponse(responseCode = "200", description = "지출 업데이트시", content = @Content(schema = @Schema(implementation = RecordUpdateRequest.class))),
+            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PatchMapping(value = "")
     public ResponseEntity<RecordUpdateRequest> updateRecord(@RequestBody Map<String, Object> updates) {
@@ -41,6 +43,10 @@ public class RecordController {
     }
 
     @Operation(summary = "멤버 지출 전체 조회 API", description = "멤버 지출 전체 조회 API 입니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = RecordInfoQ.class))),
+            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @GetMapping(value = "/{id}")
     public ResponseEntity<Page<RecordInfoQ>> getMemberRecords(@PathVariable("id") Long id, Pageable pageable) {
         log.info("멤버 지출 전체 조회 API 호출");
@@ -49,6 +55,10 @@ public class RecordController {
     }
 
     @Operation(summary = "멤버 지출 카테고리 별 전체 조회 API", description = "멤버 지출 카테고리별 전체 조회 API 입니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = RecordInfoQ.class))),
+            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @GetMapping(value = "/{id}/{category}")
     public ResponseEntity<Page<RecordInfoQ>> getMemberRecordsByCategory(@PathVariable("id") Long id, @PathVariable("category") String category, Pageable pageable) {
         log.info("멤버 지출 카테고리 별 전체 조회 API 호출");
