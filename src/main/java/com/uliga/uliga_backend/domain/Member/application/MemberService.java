@@ -39,6 +39,7 @@ public class MemberService {
     private final AccountBookMemberRepository accountBookMemberRepository;
     private final PasswordEncoder passwordEncoder;
     private final RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<Long, String> rt;
     private final ObjectMapper objectMapper;
 
     @Transactional
@@ -46,12 +47,20 @@ public class MemberService {
 
         MemberInfoNativeQ memberInfoById = memberRepository.findMemberInfoById(id);
         SetOperations<String, String> setOperations = redisTemplate.opsForSet();
+        SetOperations<Long, String> operations = rt.opsForSet();
         String email = memberInfoById.getEmail();
         Set<String> strings = setOperations.members(email);
         List<InvitationInfo> result = new ArrayList<>();
+        List<NotificationInfo> notificationInfos = new ArrayList<>();
+        Set<String> stringSet = operations.members(id);
         if (strings != null) {
             for (String o : strings) {
                 result.add(objectMapper.readValue(o, InvitationInfo.class));
+            }
+        }
+        if (stringSet != null) {
+            for (String o : stringSet) {
+                notificationInfos.add(objectMapper.readValue(o, NotificationInfo.class));
             }
         }
         // 나중에 페이징 도입하면 여기 고치면된다
@@ -59,7 +68,8 @@ public class MemberService {
 //        new PageImpl<>(invitationInfos, pageable, result.size());
         return GetMemberInfo.builder()
                 .memberInfo(memberInfoById)
-                .invitations(result).build();
+                .invitations(result)
+                .notifications(notificationInfos).build();
     }
 
     @Transactional

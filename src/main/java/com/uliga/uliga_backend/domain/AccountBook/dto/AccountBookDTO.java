@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class AccountBookDTO {
@@ -133,6 +134,8 @@ public class AccountBookDTO {
         private String memberName;
         @NotNull
         private String accountBookName;
+        @NotNull
+        private LocalDateTime createdTime;
         @NotNull
         private Boolean join;
     }

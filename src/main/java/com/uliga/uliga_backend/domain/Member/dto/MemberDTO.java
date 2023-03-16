@@ -13,6 +13,7 @@ import lombok.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.uliga.uliga_backend.domain.Member.model.Authority.ROLE_USER;
@@ -322,6 +323,8 @@ public class MemberDTO {
         private String memberName;
         @Schema( defaultValue = "초대 받은 가계부", description = "testUser님의 가계부")
         private String accountBookName;
+        @Schema(description = "생성 시간")
+        private LocalDateTime createdTime;
 
     }
 
@@ -333,7 +336,25 @@ public class MemberDTO {
     public static class GetMemberInfo {
         private MemberInfoNativeQ memberInfo;
         private List<InvitationInfo> invitations;
+
+        private List<NotificationInfo> notifications;
     }
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    public static class NotificationInfo {
+        @Schema(description = "금융일정 이름")
+        private String scheduleName;
+        @Schema(description = "금융 일정 생성자 이름")
+        private String creatorName;
+        @Schema(description = "할당 받은 값")
+        private Long value;
+        @Schema(description = "생성 시간")
+        private LocalDateTime createdTime;
+    }
+
+
 
     @Builder
     @NoArgsConstructor

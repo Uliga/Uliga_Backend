@@ -39,6 +39,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
@@ -134,12 +135,14 @@ public class AccountBookService {
     public Invited createInvitation(Long id, GetInvitations invitations) throws JsonProcessingException {
         Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
         AccountBook accountBook = accountBookRepository.findById(invitations.getId()).orElseThrow(NotFoundByIdException::new);
+        LocalDateTime now = LocalDateTime.now();
         long result = 0L;
         for (String email : invitations.getEmails()) {
             InvitationInfo info = InvitationInfo.builder()
                     .id(accountBook.getId())
                     .memberName(member.getUserName())
-                    .accountBookName(accountBook.getName()).build();
+                    .accountBookName(accountBook.getName())
+                    .createdTime(now).build();
             SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
             setOperations.add(email, objectMapper.writeValueAsString(info));
             result += 1;
@@ -163,7 +166,8 @@ public class AccountBookService {
         }
         InvitationInfo build = InvitationInfo.builder().accountBookName(invitationReply.getAccountBookName())
                 .memberName(invitationReply.getMemberName())
-                .id(invitationReply.getId()).build();
+                .id(invitationReply.getId())
+                .createdTime(invitationReply.getCreatedTime()).build();
         SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
         setOperations.remove(member.getEmail(), objectMapper.writeValueAsString(build));
         return InvitationReplyResult.builder()
@@ -334,7 +338,7 @@ public class AccountBookService {
     }
 
     @Transactional
-    public AddScheduleResult addSchedule(Long memberId, AddSchedules addSchedules) {
+    public AddScheduleResult addSchedule(Long memberId, AddSchedules addSchedules) throws JsonProcessingException {
         Member member = memberRepository.findById(memberId).orElseThrow(NotFoundByIdException::new);
         AccountBook accountBook = accountBookRepository.findById(addSchedules.getId()).orElseThrow(NotFoundByIdException::new);
         return scheduleService.addSchedule(member, accountBook, addSchedules.getSchedules());
