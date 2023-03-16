@@ -8,6 +8,8 @@ import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.UpdateResult;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import com.uliga.uliga_backend.global.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -40,7 +42,7 @@ public class MemberController {
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "")
-    public ResponseEntity<GetMemberInfo> getMemberInfo(Pageable pageable) throws JsonProcessingException {
+    public ResponseEntity<GetMemberInfo> getMemberInfo(@Parameter(in = ParameterIn.PATH, name = "pageable", description = "페이징할때 필요한 정보") Pageable pageable) throws JsonProcessingException {
 
         log.info("로그인한 멤버 정보조회 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
@@ -49,7 +51,9 @@ public class MemberController {
 
     @Operation(summary = "멤버 정보 업데이트 API", description = "멤버 정보 업데이트 API 입니다", security = @SecurityRequirement(name = "bearerAuth"))
     @PatchMapping(value = "")
-    public ResponseEntity<MemberInfoUpdateRequest> updateMemberInfo(@RequestBody Map<String, Object> updates) {
+    public ResponseEntity<MemberInfoUpdateRequest> updateMemberInfo(
+            @Parameter(name = "authorization", description = "토큰 정보", in = ParameterIn.HEADER)
+            @RequestBody Map<String, Object> updates) {
         log.info("멤버 정보 업데이트 API 호출됌");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(memberService.updateMemberInfo(currentMemberId, updates));

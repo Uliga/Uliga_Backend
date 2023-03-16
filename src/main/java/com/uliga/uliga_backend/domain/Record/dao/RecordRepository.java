@@ -27,9 +27,12 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
                     "c.name) from Record r " +
                     "JOIN Member m on m.id = r.creator.id " +
                     "JOIN Category c on c.id=r.category.id " +
-                    "WHERE r.accountBook.id=:id and r.date.month=:month and r.date.year = :year"
+                    "WHERE r.accountBook.id=:id and r.date.month=:month and r.date.year = :year and r.date.day = :day"
     )
-    List<RecordInfoQ> findByAccountBookId(@Param("id") Long id, @Param("year") Long year, @Param("month") Long month);
+    List<RecordInfoQ> findByAccountBookId(@Param("id") Long id,
+                                          @Param("year") Long year,
+                                          @Param("month") Long month,
+                                          @Param("day") Long day);
     @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ(" +
             "SUM(r.spend)" +
             ") FROM AccountBook ab " +

@@ -1,9 +1,6 @@
 package com.uliga.uliga_backend.domain.AccountBook.dao;
 
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategoryInfoQ;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookMemberInfoQ;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MembersQ;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.*;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -60,6 +57,31 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long> 
     MembersQ getMemberNumberByAccountBookId(@Param("id") Long id);
 
     void deleteById(Long id);
-
+    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.DailyValueQ(" +
+            "i.date.day, " +
+            "SUM(i.value)) " +
+            "FROM AccountBook ab " +
+            "JOIN Income i ON i.accountBook.id = ab.id " +
+            "WHERE i.date.year = :year " +
+            "AND i.date.month = :month " +
+            "AND ab.id = :id " +
+            "GROUP BY i.date " +
+            "ORDER BY i.date.day ASC")
+    List<DailyValueQ> getMonthlyIncome(@Param("id") Long id,
+                                       @Param("year") Long year,
+                                       @Param("month") Long month);
+    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.DailyValueQ(" +
+            "r.date.day, " +
+            "SUM(r.spend)) " +
+            "FROM AccountBook ab " +
+            "JOIN Record r ON r.accountBook.id = ab.id " +
+            "WHERE r.date.year = :year " +
+            "AND r.date.month = :month " +
+            "AND ab.id = :id " +
+            "GROUP BY r.date " +
+            "ORDER BY r.date.day ASC")
+    List<DailyValueQ> getMonthlyRecord(@Param("id") Long id,
+                                       @Param("year") Long year,
+                                       @Param("month") Long month);
 
 }

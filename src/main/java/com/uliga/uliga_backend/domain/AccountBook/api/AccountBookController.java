@@ -9,6 +9,8 @@ import com.uliga.uliga_backend.domain.Budget.dto.NativeQ.BudgetInfoQ;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import com.uliga.uliga_backend.global.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,6 +23,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+
+import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
 
 @Tag(name = "가계부", description = "가계부 관련 API 입니다")
 @Slf4j
@@ -107,14 +111,28 @@ public class AccountBookController {
     })
     @GetMapping(value = "/{id}/item/{year}/{month}")
     public ResponseEntity<AccountBookItems> getAccountBookItems(
-            @PathVariable("id") Long id,
-            @PathVariable("year") Long year,
-            @PathVariable("month") Long month,
-            @RequestParam(value = "startDay", required = false, defaultValue = "1") Long startDay,
-            @RequestParam(value = "endDay", required = false, defaultValue = "31") Long endDay
+            @Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
+            @Parameter(name = "year", description = "년도", in = PATH) @PathVariable("year") Long year,
+            @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month
     ) {
         log.info("한달 가계부 수입/지출/금융 일정 조회 API 호출");
-        return ResponseEntity.ok(accountBookService.getAccountBookItems(id, year, month, startDay, endDay));
+        return ResponseEntity.ok(accountBookService.getAccountBookItems(id, year, month));
+    }
+
+    @Operation(summary = "하루 수입/지출 내역 상세 조회", description = "하루 가계부 수입/지출 조회 API 입니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = RecordAndIncomeDetails.class))),
+            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @GetMapping(value = "/{id}/item/{year}/{month}/{day}")
+    public ResponseEntity<RecordAndIncomeDetails> getAccountBookItemDetailsByDay(
+            @Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
+            @Parameter(name = "year", description = "년도", in = PATH) @PathVariable("year") Long year,
+            @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month,
+            @Parameter(name = "day", description = "하루", in = PATH)@PathVariable("day") Long day
+    ) {
+        log.info("하루 수입/지출 내역 상세 조회");
+        return ResponseEntity.ok(accountBookService.getAccountBookItemDetails(id, year, month, day));
     }
 
     @Operation(summary = "한달 가계부 지출/수입/예산 총합 조회 API", description = "한달 동안의 가계부 수입/지출/예산 총합 조회 API 입니다")

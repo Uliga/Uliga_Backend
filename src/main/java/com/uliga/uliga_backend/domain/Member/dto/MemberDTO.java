@@ -22,6 +22,7 @@ public class MemberDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
+    @Schema(description = "회원가입 요청")
     public static class SignUpRequest {
         @Schema(description = "회원가입 이메일", defaultValue = "test@email.com")
         @Email
@@ -91,6 +92,7 @@ public class MemberDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
+    @Schema(name = "회원가입 결과")
     public static class SignUpResult {
         @Schema(description = "회원가입 결과", defaultValue = "CREATED")
         private String result;
@@ -100,6 +102,7 @@ public class MemberDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
+    @Schema(name = "로그인 요청")
     public static class LoginRequest {
         @NotNull
         @Email
@@ -121,27 +124,15 @@ public class MemberDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
+    @Schema(name = "로그인 후 리턴 데이터")
     public static class LoginResult {
+        @Schema(name = "멤버 정보")
         private MemberInfoNativeQ memberInfo;
-
+        @Schema(name = "토큰 정보")
         private TokenIssueDTO tokenInfo;
     }
 
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Getter
-    public static class MemberInfo {
-        private Long id;
-        private String avatarUrl;
-        private String userName;
-        private String nickName;
-        private String email;
-        private String applicationPassword;
 
-
-    }
 
     @Builder
     @AllArgsConstructor

@@ -2,15 +2,12 @@ package com.uliga.uliga_backend.domain.AccountBook.dto;
 
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.*;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
-import com.uliga.uliga_backend.domain.Income.dto.IncomeDTO;
 import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
 import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleInfoQ;
-import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.CreateScheduleRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -277,13 +274,27 @@ public class AccountBookDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    @Schema(description = "한달 대략적 수입/지출, 금융 일정 조회")
     public static class AccountBookItems {
+        @Schema(description = "날짜별 수입들")
+        private List<DailyValueQ> incomes;
+        @Schema(description = "날짜별 지출들")
+        private List<DailyValueQ> records;
+        @Schema(description = "금융 일정들")
+        private List<ScheduleInfoQ> schedules;
+    }
+
+
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class RecordAndIncomeDetails {
         @Schema(description = "수입들")
         private List<IncomeInfoQ> incomes;
         @Schema(description = "지출들")
         private List<RecordInfoQ> records;
-        @Schema(description = "금융 일정들")
-        private List<ScheduleInfoQ> schedules;
     }
 
     @Builder
