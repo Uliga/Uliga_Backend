@@ -204,6 +204,9 @@ public class AccountBookController {
     }
 
     @Operation(summary = "가계부 예산 추가")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = BudgetInfoQ.class)))
+    })
     @PostMapping(value = "/budget")
     public ResponseEntity<BudgetInfoQ> addBudget(@RequestBody Map<String, Object> createBudgetDto) {
         log.info("가계부 예산 추가 API 호출");
@@ -211,6 +214,9 @@ public class AccountBookController {
     }
 
     @Operation(summary = "가계부에 금융 일정 추가")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = AddScheduleResult.class)))
+    })
     @PostMapping(value = "/schedule")
     public ResponseEntity<AddScheduleResult> addSchedule(@Valid @RequestBody AddSchedules addSchedules) {
         Long memberId = SecurityUtil.getCurrentMemberId();

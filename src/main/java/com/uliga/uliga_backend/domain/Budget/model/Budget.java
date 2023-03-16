@@ -44,4 +44,12 @@ public class Budget extends BaseTimeEntity {
                 .month(month)
                 .year(year).build();
     }
+
+    public void updateValue(Long value) {
+        this.value = value;
+    }
+
+    public void updateCategory(Category category) {
+        this.category = category;
+    }
 }

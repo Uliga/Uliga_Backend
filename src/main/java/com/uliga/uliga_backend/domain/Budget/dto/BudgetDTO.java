@@ -25,4 +25,23 @@ public class BudgetDTO {
 
     }
 
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class BudgetUpdateRequest {
+        @Schema(description = "가계부 아이디")
+        private Long id;
+        @Schema(description = "예산 년도")
+        private Long year;
+        @Schema(description = "예산 달")
+        private Long month;
+        @Schema(description = "예산 값")
+        private Long value;
+        @Schema(description = "예산 카테고리")
+        private String category;
+    }
+
+
+
 }
