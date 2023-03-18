@@ -330,7 +330,8 @@ public class MemberDTO {
         @Override
         public int compareTo(Object o) {
             InvitationInfo o1 = (InvitationInfo) o;
-            return (int) o1.createdTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+            return (int) (o1.createdTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+                    - this.createdTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
         }
     }
 
@@ -366,7 +367,7 @@ public class MemberDTO {
         @Override
         public int compareTo(Object o) {
             NotificationInfo info = (NotificationInfo) o;
-            return Math.toIntExact(info.day);
+            return Math.toIntExact(info.day - this.day);
         }
     }
 
