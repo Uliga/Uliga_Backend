@@ -117,4 +117,12 @@ public class ScheduleService {
         }
         return scheduleRequest;
     }
+
+    @Transactional
+    public ScheduleDetail getScheduleDetails(Long id) {
+
+        return ScheduleDetail.builder()
+                .info(scheduleRepository.findScheduleInfoById(id))
+                .assignments(scheduleRepository.findScheduleMemberInfoById(id)).build();
+    }
 }

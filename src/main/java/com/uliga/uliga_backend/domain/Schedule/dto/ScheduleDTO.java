@@ -2,6 +2,7 @@ package com.uliga.uliga_backend.domain.Schedule.dto;
 
 import com.uliga.uliga_backend.domain.Common.Date;
 import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleInfoQ;
+import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleMemberInfoQ;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Embedded;
 import jakarta.validation.constraints.NotNull;
@@ -51,6 +52,7 @@ public class ScheduleDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    @Schema(description = "멤버 금액 할당")
     public static class Assignment {
         @Schema(description = "멤버아이디")
         private Long id;
@@ -85,5 +87,17 @@ public class ScheduleDTO {
     public static class GetMemberSchedules {
         @Schema(description = "금융 일정들")
         private List<ScheduleInfoQ> schedules;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ScheduleDetail {
+        @Schema(description = "금융 일정 정보")
+        private ScheduleInfoQ info;
+
+        @Schema(description = "멤버 할당 정보")
+        private List<ScheduleMemberInfoQ> assignments;
     }
 }

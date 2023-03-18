@@ -5,6 +5,7 @@ import com.uliga.uliga_backend.domain.Schedule.application.ScheduleService;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.CreateScheduleRequest;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.GetMemberSchedules;
+import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.ScheduleDetail;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import com.uliga.uliga_backend.global.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,13 +45,25 @@ public class ScheduleController {
         return ResponseEntity.ok(scheduleService.getMemberSchedule(currentMemberId));
     }
 
+    @Operation(summary = "금융일정 세부 내용 조회 API", description = "금융 일정 세부 내용 조회 API 입니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = ScheduleDetail.class))),
+            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<ScheduleDetail> getScheduleDetail(@PathVariable("id") Long id) {
+
+        log.info("금융 일정 세부 내용 조회 API 호출");
+        return ResponseEntity.ok(scheduleService.getScheduleDetails(id));
+    }
+
     @Operation(summary = "금융 일정 업데이트 API")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "업데이트 성공시", content = @Content(schema = @Schema(implementation = ScheduleDTO.UpdateScheduleRequest.class))),
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PatchMapping(value = "")
-    public ResponseEntity<ScheduleDTO.UpdateScheduleRequest> updateSchedule(@RequestBody Map<String, Object> updates) {
+    public ResponseEntity<ScheduleDTO.UpdateScheduleRequest> updateSchedule(@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "금융일정 업데이트 요청", content = @Content(schema = @Schema(implementation = ScheduleDTO.UpdateScheduleRequest.class))) @RequestBody Map<String, Object> updates) {
         return ResponseEntity.ok(scheduleService.updateSchedule(updates));
     }
 }
