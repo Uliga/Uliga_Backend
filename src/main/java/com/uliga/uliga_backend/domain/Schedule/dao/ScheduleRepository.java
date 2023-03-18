@@ -33,6 +33,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     ScheduleInfoQ findScheduleInfoById(@Param("id") Long id);
 
     @Query("SELECT NEW com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleMemberInfoQ(" +
+            "sm.member.id," +
             "sm.member.nickName, " +
             "sm.value) FROM ScheduleMember sm WHERE sm.schedule.id = :id")
     List<ScheduleMemberInfoQ> findScheduleMemberInfoById(@Param("id") Long id);
