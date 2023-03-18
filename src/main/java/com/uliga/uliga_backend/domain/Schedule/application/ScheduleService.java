@@ -108,6 +108,13 @@ public class ScheduleService {
         if (scheduleRequest.getName() != null) {
             schedule.updateName(scheduleRequest.getName());
         }
+        if (scheduleRequest.getAssignments() != null) {
+            List<ScheduleMember> byScheduleId = scheduleMemberRepository.findByScheduleId(schedule.getId());
+            for (ScheduleMember sm : byScheduleId) {
+                sm.updateValue(scheduleRequest.getAssignments().get(sm.getMember().getId()));
+            }
+
+        }
         return scheduleRequest;
     }
 }

@@ -33,4 +33,8 @@ public class ScheduleMember {
         this.schedule = schedule;
         this.value = value;
     }
+
+    public void updateValue(Long value) {
+        this.value = value;
+    }
 }

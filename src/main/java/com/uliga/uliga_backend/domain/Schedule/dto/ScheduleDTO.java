@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 public class ScheduleDTO {
     @Builder
@@ -73,6 +74,8 @@ public class ScheduleDTO {
         private Long notificationDate;
         @Schema(description = "금액")
         private Long value;
+        @Schema(description = "멤버들 할당 금액")
+        private Map<Long, Long> assignments;
     }
 
     @Builder
