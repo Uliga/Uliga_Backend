@@ -53,13 +53,13 @@ public class MemberService {
                 result.add(objectMapper.readValue(o, InvitationInfo.class));
             }
         }
-        Collections.sort(result);
+        Collections.sort(result, Collections.reverseOrder());
         if (stringSet != null) {
             for (String o : stringSet) {
                 notificationInfos.add(objectMapper.readValue(o, NotificationInfo.class));
             }
         }
-        Collections.sort(notificationInfos);
+        Collections.sort(notificationInfos, Collections.reverseOrder());
         // 나중에 페이징 도입하면 여기 고치면된다
 //        List<InvitationInfo> invitationInfos = result.subList((int) pageable.getOffset(), pageable.getPageSize());
 //        new PageImpl<>(invitationInfos, pageable, result.size());
