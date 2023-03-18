@@ -111,7 +111,7 @@ public class ScheduleService {
         if (scheduleRequest.getAssignments() != null) {
             List<ScheduleMember> byScheduleId = scheduleMemberRepository.findByScheduleId(schedule.getId());
             for (ScheduleMember sm : byScheduleId) {
-                sm.updateValue(scheduleRequest.getAssignments().get(sm.getMember().getId()));
+                sm.updateValue(scheduleRequest.getAssignments().get(Long.toString(sm.getMember().getId())));
             }
 
         }
