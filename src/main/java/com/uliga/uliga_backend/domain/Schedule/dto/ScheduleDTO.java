@@ -77,7 +77,7 @@ public class ScheduleDTO {
         @Schema(description = "금액")
         private Long value;
         @Schema(description = "멤버들 할당 금액")
-        private Map<Long, Long> assignments;
+        private Map<String, Long> assignments;
     }
 
     @Builder
