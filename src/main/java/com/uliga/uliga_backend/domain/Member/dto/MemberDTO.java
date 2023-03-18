@@ -354,8 +354,8 @@ public class MemberDTO {
         private String creatorName;
         @Schema(description = "할당 받은 값")
         private Long value;
-        @Schema(description = "생성 시간")
-        private LocalDateTime createdTime;
+        @Schema(description = "금융 일정 날짜")
+        private Long day;
     }
 
 

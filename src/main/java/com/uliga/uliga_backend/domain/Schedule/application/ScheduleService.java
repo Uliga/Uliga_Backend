@@ -54,7 +54,6 @@ public class ScheduleService {
         SetOperations<String, String> setOperations = redisTemplate.opsForSet();
         List<CreateScheduleRequest> result = new ArrayList<>();
         List<Member> memberByAccountBookId = memberRepository.findMemberByAccountBookId(accountBook.getId());
-        LocalDateTime now = LocalDateTime.now();
         Map<Long, Member> memberMap = new HashMap<>();
         List<ScheduleMember> toSave = new ArrayList<>();
         for (Member m : memberByAccountBookId) {
@@ -78,7 +77,7 @@ public class ScheduleService {
                 toSave.add(build);
                 NotificationInfo notificationInfo = NotificationInfo.builder()
                         .scheduleName(scheduleRequest.getName())
-                        .createdTime(now)
+                        .day(scheduleRequest.getNotificationDate())
                         .creatorName(member.getNickName())
                         .value(assignment.getValue()).build();
                 setOperations.add(memberMap.get(assignment.getId()).getNickName(), mapper.writeValueAsString(notificationInfo));
