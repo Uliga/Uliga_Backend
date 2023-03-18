@@ -14,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 import static com.uliga.uliga_backend.domain.Member.model.Authority.ROLE_USER;
@@ -316,7 +317,7 @@ public class MemberDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     @Getter
-    public static class InvitationInfo {
+    public static class InvitationInfo implements Comparable{
         @Schema(description = "초대온 가계부 아이디", defaultValue = "1")
         private Long id;
         @Schema(description = "자신을 초대한 사람", defaultValue = "testUser")
@@ -326,6 +327,11 @@ public class MemberDTO {
         @Schema(description = "생성 시간, 삭제할때도 보내줘야행")
         private LocalDateTime createdTime;
 
+        @Override
+        public int compareTo(Object o) {
+            InvitationInfo o1 = (InvitationInfo) o;
+            return (int) o1.createdTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        }
     }
 
 
@@ -347,7 +353,7 @@ public class MemberDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     @Getter
-    public static class NotificationInfo {
+    public static class NotificationInfo implements Comparable{
         @Schema(description = "금융일정 이름")
         private String scheduleName;
         @Schema(description = "금융 일정 생성자 이름")
@@ -356,6 +362,12 @@ public class MemberDTO {
         private Long value;
         @Schema(description = "금융 일정 날짜")
         private Long day;
+
+        @Override
+        public int compareTo(Object o) {
+            NotificationInfo info = (NotificationInfo) o;
+            return Math.toIntExact(info.day);
+        }
     }
 
 
