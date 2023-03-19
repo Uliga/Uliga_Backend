@@ -53,7 +53,7 @@ public class EmailCertificationService {
 //        msg += "CODE: <strong>";
 //        msg += ePw + "</strong><div><br/>";
 //        msg += "</div>";
-        msg += "meta charset='UTF-8'>\n" +
+        msg += "<meta charset='UTF-8'>\n" +
                 "<table align='center' border='0' cellpadding='0' cellspacing='0' width='100%'\n" +
                 "       style='padding:60px 0 60px 0;color:#555;font-size:16px;word-break:keep-all;'>\n" +
                 "    <tbody>\n" +
