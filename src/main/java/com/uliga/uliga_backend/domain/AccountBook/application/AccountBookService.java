@@ -5,22 +5,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
+import com.uliga.uliga_backend.domain.AccountBook.exception.InvalidAccountBookDeleteRequest;
 import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookAccessException;
 import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookCategoryCreateException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
 import com.uliga.uliga_backend.domain.Budget.application.BudgetService;
 import com.uliga.uliga_backend.domain.Budget.dao.BudgetRepository;
-import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO;
 import com.uliga.uliga_backend.domain.Budget.dto.NativeQ.BudgetInfoQ;
-import com.uliga.uliga_backend.domain.Budget.model.Budget;
 import com.uliga.uliga_backend.domain.Category.application.CategoryService;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.Date;
 import com.uliga.uliga_backend.domain.Income.application.IncomeService;
 import com.uliga.uliga_backend.domain.Income.dao.IncomeRepository;
-import com.uliga.uliga_backend.domain.Income.model.Income;
 import com.uliga.uliga_backend.domain.JoinTable.dao.AccountBookMemberRepository;
 import com.uliga.uliga_backend.domain.JoinTable.model.AccountBookMember;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
@@ -28,7 +26,6 @@ import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.InvitationInfo;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Record.application.RecordService;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
-import com.uliga.uliga_backend.domain.Record.model.Record;
 import com.uliga.uliga_backend.domain.Schedule.application.ScheduleService;
 import com.uliga.uliga_backend.domain.Schedule.dao.ScheduleRepository;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
@@ -348,6 +345,17 @@ public class AccountBookService {
         Member member = memberRepository.findById(memberId).orElseThrow(NotFoundByIdException::new);
         AccountBook accountBook = accountBookRepository.findById(addSchedules.getId()).orElseThrow(NotFoundByIdException::new);
         return scheduleService.addSchedule(member, accountBook, addSchedules.getSchedules());
+    }
+
+    @Transactional
+    public String deleteAccountBook(AccountBookDeleteRequest deleteRequest, Long memberId) {
+        AccountBook accountBook = accountBookRepository.findById(deleteRequest.getAccountBookId()).orElseThrow(NotFoundByIdException::new);
+        if (accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(memberId, deleteRequest.getAccountBookId())) {
+            accountBookRepository.delete(accountBook);
+        } else {
+            throw new InvalidAccountBookDeleteRequest();
+        }
+        return "DELETED";
     }
 
 }

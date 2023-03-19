@@ -457,5 +457,12 @@ public class AccountBookDTO {
         private List<CreateScheduleRequest> result;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AccountBookDeleteRequest {
+        private Long accountBookId;
+    }
 
 }

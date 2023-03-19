@@ -253,4 +253,11 @@ public class AccountBookController {
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.addSchedule(memberId, addSchedules));
     }
+
+    @Operation(summary = "가계부 삭제 요청")
+    @DeleteMapping(value = "")
+    public ResponseEntity<String> deleteAccountBook(@RequestBody AccountBookDeleteRequest deleteRequest) {
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(accountBookService.deleteAccountBook(deleteRequest, currentMemberId));
+    }
 }

@@ -1,6 +1,7 @@
 package com.uliga.uliga_backend.domain.AccountBook.exception.handler;
 
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
+import com.uliga.uliga_backend.domain.AccountBook.exception.InvalidAccountBookDeleteRequest;
 import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookAccessException;
 import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookCategoryCreateException;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
@@ -43,4 +44,16 @@ public class AccountBookExceptionHandler {
                 .message(ex.getMessage())
                 .errorCode(404L).build(), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(InvalidAccountBookDeleteRequest.class)
+    protected final ResponseEntity<ErrorResponse> handleInvalidAccountBookDeleteRequest(
+            InvalidAccountBookDeleteRequest ex, WebRequest request
+    ) {
+        log.info("해당 가계부에 속하지 않아서 삭제할 수 없습니다");
+        return new ResponseEntity<>(ErrorResponse.builder()
+                .errorCode(409L)
+                .message(ex.getMessage()).build(),
+                HttpStatus.CONFLICT);
+    }
+
 }
