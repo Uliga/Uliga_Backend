@@ -254,7 +254,10 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.addSchedule(memberId, addSchedules));
     }
 
-    @Operation(summary = "가계부 삭제 요청")
+    @Operation(summary = "가계부 삭제 요청 - 실제 서비스할때는 멤버 권한 검사 추가되야할듯")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "삭제 성공시")
+    })
     @DeleteMapping(value = "")
     public ResponseEntity<String> deleteAccountBook(@RequestBody AccountBookDeleteRequest deleteRequest) {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
