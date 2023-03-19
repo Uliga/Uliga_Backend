@@ -110,7 +110,7 @@ class MemberControllerTest {
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString().equals(result);
     }
-
+    // TODO 변경해야된다
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 애플리케이션 비밀번호 업데이트 성공 테스트")
@@ -173,7 +173,7 @@ class MemberControllerTest {
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString().equals(result);
     }
-
+    // TODO 재작성해야함
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 비밀번호 업데이트 성공 테스트")
@@ -192,7 +192,7 @@ class MemberControllerTest {
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString().equals(body);
     }
-
+    // TODO 재작성해야함
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 프사 변경 성공 테스트")
@@ -212,7 +212,7 @@ class MemberControllerTest {
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString().equals(body);
     }
-
+    // TODO 다시
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 닉네임 변경 성공 테스트")

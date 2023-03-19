@@ -111,7 +111,7 @@ class MemberServiceTest {
         // then
         assertFalse(passwordEncoder.matches("12345", member.getApplicationPassword()));
     }
-
+    // TODO
     @Test
     @DisplayName("멤버 애플리케이션 비밀번호 업데이트 테스트")
     public void updateApplicationPasswordTestToSuccess() throws Exception{
@@ -153,7 +153,7 @@ class MemberServiceTest {
         // then
         assertFalse(passwordEncoder.matches("123456789", member.getPassword()));
     }
-
+    // TODO
     @Test
     @DisplayName("멤버 비밀번호 업데이트 성공 테스트")
     public void updateMemberPasswordToSuccess() throws Exception{
@@ -167,7 +167,7 @@ class MemberServiceTest {
         // then
         assertTrue(passwordEncoder.matches("123456789", member.getPassword()));
     }
-
+    // TODO
     @Test
     @DisplayName("멤버 프사 변경 테스트")
     public void updateAvatarUrlTestToSuccess() throws Exception{
@@ -209,7 +209,7 @@ class MemberServiceTest {
         // then
         assertFalse(memberService.nicknameExists(signUp, nouser));
     }
-
+    // TODO
     @Test
     @DisplayName("멤버 닉네임 업데이트 테스트")
     public void updateNicknameTestToSuccess() throws Exception{
