@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Map;
+
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,30 +40,29 @@ class MemberServiceTest {
                 .build();
     }
 
-    public UpdatePasswordDto createUpdatePassword(String newPwd) {
-        return UpdatePasswordDto.builder()
-                .newPassword(newPwd).build();
+    public Map<String, Object> createUpdateApplicationPassword(String applicationPassword) {
+        return null;
     }
 
-    public UpdateAvatarUrl createUpdateAvatarUrl(String newUrl) {
-        return UpdateAvatarUrl.builder()
-                .avatarUrl(newUrl).build();
+    public Map<String, Object> createUpdatePassword(String password) {
+        return null;
     }
 
-    public UpdateApplicationPasswordDto createUpdateApplicationPassword(String newPwd) {
-        return UpdateApplicationPasswordDto.builder()
-                .newPassword(newPwd).build();
+    public Map<String, Object> createUpdateNickname(String nickname) {
+        return null;
     }
+
+    public Map<String, Object> createUpdateAvatarUrl(String avatarUrl) {
+        return null;
+    }
+
 
     public NicknameCheckDto createNicknameCheck(String nickname) {
         return NicknameCheckDto.builder()
                 .nickname(nickname).build();
     }
 
-    public UpdateNicknameDto createUpdateNickname(String newNickname) {
-        return UpdateNicknameDto.builder()
-                .newNickname(newNickname).build();
-    }
+
 
     public SearchMemberByEmail createSearchMemberByEmail(String email) {
         return SearchMemberByEmail.builder()
@@ -118,9 +119,10 @@ class MemberServiceTest {
         //given
         SignUpRequest signUpRequest = createSignUpRequest("nouser@email.com", "nouser");
         Long signUp = authService.signUp(signUpRequest);
-        UpdateApplicationPasswordDto updateApplicationPassword = createUpdateApplicationPassword("12345");
+
+        Map<String, Object> updateApplicationPassword = createUpdateApplicationPassword("12345");
         // when
-        memberService.updateApplicationPassword(signUp, updateApplicationPassword);
+        memberService.updateMemberInfo(signUp, updateApplicationPassword);
         Member member = memberRepository.findById(signUp).orElseThrow(NotAuthorizedException::new);
 
         // then
@@ -160,9 +162,9 @@ class MemberServiceTest {
         //given
         SignUpRequest signUpRequest = createSignUpRequest("nouser@email.com", "nouser");
         Long signUp = authService.signUp(signUpRequest);
-        UpdatePasswordDto updatePassword = createUpdatePassword("123456789");
+        Map<String, Object> updatePassword = createUpdatePassword("123456789");
         // when
-        memberService.updatePassword(signUp, updatePassword);
+        memberService.updateMemberInfo(signUp, updatePassword);
         Member member = memberRepository.findById(signUp).orElseThrow(NotAuthorizedException::new);
         // then
         assertTrue(passwordEncoder.matches("123456789", member.getPassword()));
@@ -176,8 +178,8 @@ class MemberServiceTest {
         Long signUp = authService.signUp(signUpRequest);
 
         // when
-        UpdateAvatarUrl newUrl = createUpdateAvatarUrl("newUrl");
-        memberService.updateAvatarUrl(signUp, newUrl);
+        Map<String, Object> newUrl = createUpdateAvatarUrl("newUrl");
+        memberService.updateMemberInfo(signUp, newUrl);
         Member member = memberRepository.findById(signUp).orElseThrow(NotAuthorizedException::new);
         // then
         assertEquals("newUrl", member.getAvatarUrl());
@@ -218,9 +220,9 @@ class MemberServiceTest {
 
         Long signUp = authService.signUp(signUpRequest);
 
-        UpdateNicknameDto newNickname = createUpdateNickname("newNickname");
+        Map<String, Object> newNickname = createUpdateNickname("newNickname");
         // when
-        memberService.updateNickname(signUp, newNickname);
+        memberService.updateMemberInfo(signUp, newNickname);
         Member member = memberRepository.findById(signUp).orElseThrow(NotAuthorizedException::new);
         // then
         assertEquals("newNickname", member.getNickName());

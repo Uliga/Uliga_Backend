@@ -76,31 +76,10 @@ public class MemberService {
     }
 
     @Transactional
-    public void updateApplicationPassword(Long id, UpdateApplicationPasswordDto passwordDto) {
-        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
-        passwordDto.encrypt(passwordEncoder);
-        member.updateApplicationPassword(passwordDto.getNewPassword());
-
-    }
-
-    @Transactional
     public boolean checkPassword(Long id, PasswordCheck passwordCheck) {
         Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
         return passwordEncoder.matches(passwordCheck.getPassword(), member.getPassword());
 
-    }
-
-    @Transactional
-    public void updatePassword(Long id, UpdatePasswordDto passwordDto) {
-        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
-        passwordDto.encrypt(passwordEncoder);
-        member.updatePassword(passwordDto.getNewPassword());
-    }
-
-    @Transactional
-    public void updateAvatarUrl(Long id, UpdateAvatarUrl avatarUrl) {
-        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
-        member.updateAvatarUrl(avatarUrl.getAvatarUrl());
     }
 
     @Transactional
@@ -111,12 +90,6 @@ public class MemberService {
         } else {
             return memberRepository.existsByNickName(nicknameCheckDto.getNickname());
         }
-    }
-
-    @Transactional
-    public void updateNickname(Long id, UpdateNicknameDto updateNicknameDto) {
-        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
-        member.updateNickname(updateNicknameDto.getNewNickname());
     }
     // JPQL로 리팩터링해야할듯? 공유 가계부가 좀 걸림, 개인 가계부는 다 지우면 되는데, 회원이 탈퇴했는데, 공유 가계부에 다른 사람들이 있으면
     // 지우면 안되고, 공유 가계부에 사람이 없으면 지워야하니까 ㅇㅇ

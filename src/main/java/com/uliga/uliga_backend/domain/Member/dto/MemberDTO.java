@@ -325,13 +325,13 @@ public class MemberDTO {
         @Schema( defaultValue = "초대 받은 가계부", description = "testUser님의 가계부")
         private String accountBookName;
         @Schema(description = "생성 시간, 삭제할때도 보내줘야행")
-        private LocalDateTime createdTime;
+        private String createdTime;
 
         @Override
         public int compareTo(Object o) {
             InvitationInfo o1 = (InvitationInfo) o;
-            return (int) (o1.createdTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
-                    - this.createdTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+            return (int) (LocalDateTime.parse(o1.createdTime).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+                    - LocalDateTime.parse(this.createdTime).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
         }
     }
 

@@ -40,6 +40,7 @@ import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
@@ -120,13 +121,14 @@ public class AccountBookService {
         categoryService.createCategories(createRequest.getCategories(), accountBook);
 
         LocalDateTime now = LocalDateTime.now();
+        String createdTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(now);
 
         for (String email : createRequest.getEmails()) {
             InvitationInfo info = InvitationInfo.builder()
                     .id(accountBook.getId())
                     .memberName(member.getUserName())
                     .accountBookName(accountBook.getName())
-                    .createdTime(now).build();
+                    .createdTime(createdTime).build();
 
             SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
             setOperations.add(email, objectMapper.writeValueAsString(info));
@@ -139,13 +141,14 @@ public class AccountBookService {
         Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
         AccountBook accountBook = accountBookRepository.findById(invitations.getId()).orElseThrow(NotFoundByIdException::new);
         LocalDateTime now = LocalDateTime.now();
+        String createdTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(now);
         long result = 0L;
         for (String email : invitations.getEmails()) {
             InvitationInfo info = InvitationInfo.builder()
                     .id(accountBook.getId())
                     .memberName(member.getUserName())
                     .accountBookName(accountBook.getName())
-                    .createdTime(now).build();
+                    .createdTime(createdTime).build();
             SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
             setOperations.add(email, objectMapper.writeValueAsString(info));
             result += 1;
