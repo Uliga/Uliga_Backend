@@ -156,6 +156,7 @@ public class AccountBookService {
     @Transactional
     public InvitationReplyResult invitationReply(Long id, InvitationReply invitationReply) throws JsonProcessingException {
         Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        log.info(invitationReply.toString());
         if (invitationReply.getJoin()) {
             if (!accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(member.getId(), invitationReply.getId())) {
                 AccountBook accountBook = accountBookRepository.findById(invitationReply.getId()).orElseThrow(NotFoundByIdException::new);
@@ -167,7 +168,8 @@ public class AccountBookService {
                 accountBookMemberRepository.save(bookMember);
             }
         }
-        InvitationInfo build = InvitationInfo.builder().accountBookName(invitationReply.getAccountBookName())
+        InvitationInfo build = InvitationInfo.builder()
+                .accountBookName(invitationReply.getAccountBookName())
                 .memberName(invitationReply.getMemberName())
                 .id(invitationReply.getId())
                 .createdTime(invitationReply.getCreatedTime()).build();

@@ -143,6 +143,11 @@ public class AccountBookDTO {
         @Schema(description = "조인 여부")
         @NotNull
         private Boolean join;
+
+        @Override
+        public String toString() {
+            return "InvitationReply = id: " + this.id + " memberName: " + this.memberName + " accountBookName: " + this.accountBookName + " createdTime: " + this.createdTime + " join: " + this.join;
+        }
     }
 
     @Builder
@@ -279,7 +284,6 @@ public class AccountBookDTO {
     }
 
 
-
     @Builder
     @Getter
     @NoArgsConstructor
@@ -301,9 +305,6 @@ public class AccountBookDTO {
 //        @Schema(description = "금융 일정들")
 //        private List<ScheduleInfoQ> schedules;
 //    }
-
-
-
 
 
     @Builder
