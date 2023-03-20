@@ -72,18 +72,8 @@ public class AuthService {
         AccountBook accountBook = build.toEntity();
         accountBookRepository.save(accountBook);
         member.setPrivateAccountBook(accountBook);
-        AccountBookMember bookMember = AccountBookMember.builder()
-                .accountBook(accountBook)
-                .member(member)
-                .accountBookAuthority(AccountBookAuthority.ADMIN)
-                .getNotification(true).build();
-        accountBookMemberRepository.save(bookMember);
-        for (String cat : defaultCategories) {
-            Category category = Category.builder()
-                    .accountBook(accountBook)
-                    .name(cat).build();
-            categoryRepository.save(category);
-        }
+        CreateRequestPrivate requestPrivate = CreateRequestPrivate.builder().name(member.getNickName() + " 님의 가계부").isPrivate(true).build();
+        accountBookService.createAccountBookPrivate(member, requestPrivate);
         return member.getId();
     }
 
@@ -94,7 +84,7 @@ public class AuthService {
         memberRepository.save(member);
 
         CreateRequestPrivate build = CreateRequestPrivate.builder().name(member.getNickName() + " 님의 가계부").isPrivate(true).build();
-        accountBookService.createAccountBookPrivate(member.getId(), build);
+        accountBookService.createAccountBookPrivate(member, build);
 
 
     }

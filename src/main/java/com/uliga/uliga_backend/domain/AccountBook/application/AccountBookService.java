@@ -25,7 +25,6 @@ import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Record.application.RecordService;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import com.uliga.uliga_backend.domain.Schedule.application.ScheduleService;
-import com.uliga.uliga_backend.domain.Schedule.dao.ScheduleRepository;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -35,12 +34,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
-import static com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO.*;
+import static com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO.CreateBudgetDto;
 
 @Slf4j
 @Service
@@ -94,8 +91,7 @@ public class AccountBookService {
     }
 
     @Transactional
-    public void createAccountBookPrivate(Long id, CreateRequestPrivate createRequest) {
-        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+    public void createAccountBookPrivate(Member member, CreateRequestPrivate createRequest) {
         AccountBook accountBook = createRequest.toEntity();
         accountBookRepository.save(accountBook);
         AccountBookMember bookMember = AccountBookMember.builder()
@@ -104,7 +100,12 @@ public class AccountBookService {
                 .accountBookAuthority(AccountBookAuthority.ADMIN)
                 .getNotification(true).build();
         accountBookMemberRepository.save(bookMember);
-        // 카테고리 생성 authService에서 해줌
+        for (String cat : defaultCategories) {
+            Category category = Category.builder()
+                    .accountBook(accountBook)
+                    .name(cat).build();
+            categoryRepository.save(category);
+        }
     }
 
     @Transactional
@@ -122,15 +123,11 @@ public class AccountBookService {
 
         categoryService.createCategories(createRequest.getCategories(), accountBook);
 
-        LocalDateTime now = LocalDateTime.now();
-        String createdTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(now);
-
         for (String email : createRequest.getEmails()) {
             InvitationInfo info = InvitationInfo.builder()
                     .id(accountBook.getId())
                     .memberName(member.getUserName())
                     .accountBookName(accountBook.getName())
-//                    .createdTime(createdTime)
                     .build();
 
             SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
@@ -148,15 +145,12 @@ public class AccountBookService {
     public Invited createInvitation(Long id, GetInvitations invitations) throws JsonProcessingException {
         Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
         AccountBook accountBook = accountBookRepository.findById(invitations.getId()).orElseThrow(NotFoundByIdException::new);
-        LocalDateTime now = LocalDateTime.now();
-        String createdTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(now);
         long result = 0L;
         for (String email : invitations.getEmails()) {
             InvitationInfo info = InvitationInfo.builder()
                     .id(accountBook.getId())
                     .memberName(member.getUserName())
                     .accountBookName(accountBook.getName())
-//                    .createdTime(createdTime)
                     .build();
             SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
             try {
@@ -197,7 +191,10 @@ public class AccountBookService {
                 .join(invitationReply.getJoin()).build();
 
     }
-
+    // TODO
+    // incomeService, recordService에 addItemToSharedAccountBook이 재정의되야할 것 같음
+    // 현재 방식 = 아이템하나마다 각각 공유 가계부로 생성 쿼리가 나감,
+    // 바꿀 방식 = 아이템하나마다 생성 쿼리를 호출하지말고, 가계부 단위로 생성 쿼리가 나가게 변경 예정
     @Transactional
     public CreateResult createItems(Long id, CreateItems createItems) {
         long r = 0L;
@@ -208,13 +205,17 @@ public class AccountBookService {
         AccountBook accountBook = accountBookRepository.findById(createItems.getId()).orElseThrow(NotFoundByIdException::new);
         // 현재 작성하고 있는 가계부의 카테고리
         List<Category> categories = accountBook.getCategories();
+        // 카테고리 이름 - 카테고리 객체
         HashMap<String, Category> categoryDict = new HashMap<>();
         // 다른 가계부들의 기타 카테고리 객체
         List<Category> otherAccountBookDefaultCategories = categoryRepository.findCategoriesByMemberIdAndName(id, "기타");
         // 다른 공유 가계부 객체
         List<AccountBook> accountBooks = accountBookRepository.findAccountBooksByMemberId(id);
-
+        // 다른 가계부 객체 - 아이템 생성 요청 리퀘스트
+        Map<AccountBook, List<CreateRecordOrIncomeDto>> addToOtherAccountBooks = new HashMap<>();
+        // 다른 가계부들 아이디 - 다른 가계부들 기타 카테고리 객체
         HashMap<Long, Category> defaultCategories = new HashMap<>();
+        // 다른 가계부들 아이디 - 다른 가계부들 객체
         HashMap<Long, AccountBook> otherAccountBooks = new HashMap<>();
         for (Category cat : categories) {
             categoryDict.put(cat.getName(), cat);
@@ -224,6 +225,7 @@ public class AccountBookService {
         }
         for (AccountBook ab : accountBooks) {
             otherAccountBooks.put(ab.getId(), ab);
+            addToOtherAccountBooks.put(ab, new ArrayList<>());
         }
         List<CreateItemResult> createResult = new ArrayList<>();
         for (CreateRecordOrIncomeDto dto : createItems.getCreateRequest()) {

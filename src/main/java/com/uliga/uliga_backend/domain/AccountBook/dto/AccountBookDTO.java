@@ -293,16 +293,6 @@ public class AccountBookDTO {
         private List<DailyValueQ> records;
     }
 
-//    @Builder
-//    @Getter
-//    @NoArgsConstructor
-//    @AllArgsConstructor
-//    @Schema(description = "한달 금융 일정 조회")
-//    public static class AccountBookSchedules {
-//        @Schema(description = "금융 일정들")
-//        private List<ScheduleInfoQ> schedules;
-//    }
-
 
     @Builder
     @Getter
