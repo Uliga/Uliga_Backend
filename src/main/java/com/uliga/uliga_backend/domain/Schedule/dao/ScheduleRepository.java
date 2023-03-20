@@ -19,7 +19,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             "sm.value, " +
             "m.nickName," +
             "s.accountBook.name) " +
-            "FROM Schedule s JOIN ScheduleMember sm ON s.id = sm.schedule.id JOIN Member m on sm.member.id = m.id WHERE m.id = :id")
+            "FROM Schedule s JOIN ScheduleMember sm ON s.id = sm.schedule.id JOIN Member m on sm.member.id = m.id WHERE m.id = :id ORDER BY s.notificationDate ASC ")
     List<ScheduleInfoQ> findByMemberId(@Param("id") Long id);
 
     @Query("SELECT NEW com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleInfoQ(" +
