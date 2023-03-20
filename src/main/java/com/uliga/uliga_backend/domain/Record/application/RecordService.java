@@ -24,6 +24,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
@@ -37,6 +38,11 @@ public class RecordService {
 
     private final CategoryRepository categoryRepository;
     private final ObjectMapper objectMapper;
+
+    @Transactional
+    public void addRecordToOtherAccountBooks(List<Record> records) {
+        recordRepository.saveAll(records);
+    }
     @Transactional
     public CreateItemResult addItemToAccountBook(CreateRecordOrIncomeDto dto, AccountBook accountBook, Member member, Date date, Category category) {
         Record build = Record.builder()

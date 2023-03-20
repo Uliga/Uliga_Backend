@@ -17,6 +17,7 @@ import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.Date;
 import com.uliga.uliga_backend.domain.Income.application.IncomeService;
 import com.uliga.uliga_backend.domain.Income.dao.IncomeRepository;
+import com.uliga.uliga_backend.domain.Income.model.Income;
 import com.uliga.uliga_backend.domain.JoinTable.dao.AccountBookMemberRepository;
 import com.uliga.uliga_backend.domain.JoinTable.model.AccountBookMember;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
@@ -24,6 +25,7 @@ import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.InvitationInfo;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Record.application.RecordService;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
+import com.uliga.uliga_backend.domain.Record.model.Record;
 import com.uliga.uliga_backend.domain.Schedule.application.ScheduleService;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import jakarta.transaction.Transactional;
@@ -191,6 +193,7 @@ public class AccountBookService {
                 .join(invitationReply.getJoin()).build();
 
     }
+
     // TODO
     // incomeService, recordService에 addItemToSharedAccountBook이 재정의되야할 것 같음
     // 현재 방식 = 아이템하나마다 각각 공유 가계부로 생성 쿼리가 나감,
@@ -211,21 +214,27 @@ public class AccountBookService {
         List<Category> otherAccountBookDefaultCategories = categoryRepository.findCategoriesByMemberIdAndName(id, "기타");
         // 다른 공유 가계부 객체
         List<AccountBook> accountBooks = accountBookRepository.findAccountBooksByMemberId(id);
-        // 다른 가계부 객체 - 아이템 생성 요청 리퀘스트
-        Map<AccountBook, List<CreateRecordOrIncomeDto>> addToOtherAccountBooks = new HashMap<>();
         // 다른 가계부들 아이디 - 다른 가계부들 기타 카테고리 객체
         HashMap<Long, Category> defaultCategories = new HashMap<>();
         // 다른 가계부들 아이디 - 다른 가계부들 객체
         HashMap<Long, AccountBook> otherAccountBooks = new HashMap<>();
+        // 카테고리 이름과 카테고리 객체 매핑
         for (Category cat : categories) {
             categoryDict.put(cat.getName(), cat);
         }
+        // 다른 가계부들 아이디와 기타 카테고리 객체 매핑
         for (Category cat : otherAccountBookDefaultCategories) {
             defaultCategories.put(cat.getAccountBook().getId(), cat);
         }
+        // 다른 가계부 객체 - 아이템 생성 요청 리퀘스트
+        // 수입/지출 서비스로 넘겨줘야하는 값 - 수입/지출 생성 요청 리스트, 멤버, 날짜, 카테고리
+        Map<AccountBook, List<Income>> addIncomeToOtherAccountBooks = new HashMap<>();
+        Map<AccountBook, List<Record>> addRecordToOtherAccountBooks = new HashMap<>();
+        // 다른 가계부 아이디와 다른 가계부 객체 매핑
         for (AccountBook ab : accountBooks) {
             otherAccountBooks.put(ab.getId(), ab);
-            addToOtherAccountBooks.put(ab, new ArrayList<>());
+            addIncomeToOtherAccountBooks.put(ab, new ArrayList<>());
+            addRecordToOtherAccountBooks.put(ab, new ArrayList<>());
         }
         List<CreateItemResult> createResult = new ArrayList<>();
         for (CreateRecordOrIncomeDto dto : createItems.getCreateRequest()) {
@@ -242,7 +251,18 @@ public class AccountBookService {
                 for (Long accountBookId : dto.getSharedAccountBook()) {
                     AccountBook sharedAccountBook = otherAccountBooks.get(accountBookId);
                     Category defaultCategory = defaultCategories.get(accountBookId);
-                    incomeService.addItemToSharedAccountBook(dto, sharedAccountBook, member, date, defaultCategory);
+                    List<Income> addIncomeToAccountBooks = addIncomeToOtherAccountBooks.get(sharedAccountBook);
+
+                    addIncomeToAccountBooks.add(
+                            Income.builder()
+                                    .account(dto.getAccount())
+                                    .value(dto.getValue())
+                                    .accountBook(sharedAccountBook)
+                                    .memo(dto.getMemo())
+                                    .category(defaultCategory)
+                                    .creator(member)
+                                    .payment(dto.getPayment())
+                                    .date(date).build());
                 }
                 i += 1;
 
@@ -253,7 +273,17 @@ public class AccountBookService {
                 for (Long accountBookId : dto.getSharedAccountBook()) {
                     AccountBook sharedAccountBook = otherAccountBooks.get(accountBookId);
                     Category defaultCategory = defaultCategories.get(accountBookId);
-                    recordService.addItemToSharedAccountBook(dto, sharedAccountBook, member, date, defaultCategory);
+                    List<Record> addRecordToAccountBooks = addRecordToOtherAccountBooks.get(sharedAccountBook);
+                    addRecordToAccountBooks.add(
+                            Record.builder()
+                                    .account(dto.getAccount())
+                                    .spend(dto.getValue())
+                                    .accountBook(sharedAccountBook)
+                                    .memo(dto.getMemo())
+                                    .category(defaultCategory)
+                                    .creator(member)
+                                    .payment(dto.getPayment())
+                                    .date(date).build());
                 }
                 r += 1;
 
@@ -261,6 +291,12 @@ public class AccountBookService {
             }
 
         }
+
+        for (AccountBook ab : accountBooks) {
+            incomeService.addIncomeToOtherAccountBooks(addIncomeToOtherAccountBooks.get(ab));
+            recordService.addRecordToOtherAccountBooks(addRecordToOtherAccountBooks.get(ab));
+        }
+
         return CreateResult.builder()
                 .income(i)
                 .record(r)
@@ -320,7 +356,7 @@ public class AccountBookService {
     }
 
     @Transactional
-    public GetAccountBookAssets getAccountBookAssets(Long id,Long year, Long month) {
+    public GetAccountBookAssets getAccountBookAssets(Long id, Long year, Long month) {
         return GetAccountBookAssets.builder()
                 .budget(budgetRepository.getMonthlySumByAccountBookId(id, year, month))
                 .income(incomeRepository.getMonthlySumByAccountBookId(id, year, month))

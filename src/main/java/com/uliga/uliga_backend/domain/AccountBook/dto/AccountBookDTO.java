@@ -2,8 +2,13 @@ package com.uliga.uliga_backend.domain.AccountBook.dto;
 
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.*;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
+import com.uliga.uliga_backend.domain.Category.model.Category;
+import com.uliga.uliga_backend.domain.Common.Date;
 import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
+import com.uliga.uliga_backend.domain.Income.model.Income;
+import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
+import com.uliga.uliga_backend.domain.Record.model.Record;
 import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleInfoQ;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.CreateScheduleRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -185,6 +190,7 @@ public class AccountBookDTO {
         @Schema(description = "추가할 공유 가계부들")
         private List<Long> sharedAccountBook;
     }
+
 
     @Builder
     @Getter
