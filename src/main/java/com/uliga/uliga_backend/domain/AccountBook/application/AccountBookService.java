@@ -32,6 +32,7 @@ import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.RedisSystemException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
@@ -128,7 +129,12 @@ public class AccountBookService {
                     .createdTime(createdTime).build();
 
             SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
-            setOperations.add(email, objectMapper.writeValueAsString(info));
+            try {
+
+                setOperations.add(email, objectMapper.writeValueAsString(info));
+            } catch (RedisSystemException e) {
+
+            }
         }
         return accountBook.toInfoDto();
     }

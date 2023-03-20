@@ -1,9 +1,6 @@
 package com.uliga.uliga_backend.domain.AccountBook.exception.handler;
 
-import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
-import com.uliga.uliga_backend.domain.AccountBook.exception.InvalidAccountBookDeleteRequest;
-import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookAccessException;
-import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookCategoryCreateException;
+import com.uliga.uliga_backend.domain.AccountBook.exception.*;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -50,6 +47,17 @@ public class AccountBookExceptionHandler {
             InvalidAccountBookDeleteRequest ex, WebRequest request
     ) {
         log.info("해당 가계부에 속하지 않아서 삭제할 수 없습니다");
+        return new ResponseEntity<>(ErrorResponse.builder()
+                .errorCode(409L)
+                .message(ex.getMessage()).build(),
+                HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(InvitationSaveError.class)
+    protected final ResponseEntity<ErrorResponse> handleInvitationSaveError(
+            InvitationSaveError ex, WebRequest request
+    ) {
+        log.info("레디스 저장중 오류 발생");
         return new ResponseEntity<>(ErrorResponse.builder()
                 .errorCode(409L)
                 .message(ex.getMessage()).build(),
