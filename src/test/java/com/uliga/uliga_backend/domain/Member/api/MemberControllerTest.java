@@ -20,6 +20,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -110,19 +112,21 @@ class MemberControllerTest {
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString().equals(result);
     }
-    // TODO 변경해야된다
+
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 애플리케이션 비밀번호 업데이트 성공 테스트")
     public void updateApplicationPasswordTestToSuccess() throws Exception {
         // given
+        Map<String, Object> map = new HashMap<>();
+        map.put("applicationPassword", "4321");
         MemberInfoUpdateRequest build = MemberInfoUpdateRequest.builder().applicationPassword("4321").build();
 
         // when
-        String body = mapper.writeValueAsString(build);
+        String body = mapper.writeValueAsString(map);
         doReturn(build).when(memberService).updateMemberInfo(any(), any());
         // then
-        mvc.perform(patch(BASE_URL + "/applicationPassword")
+        mvc.perform(patch(BASE_URL)
                         .with(csrf())
                         .content(body)
                         .contentType(APPLICATION_JSON))
@@ -173,16 +177,17 @@ class MemberControllerTest {
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString().equals(result);
     }
-    // TODO 재작성해야함
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 비밀번호 업데이트 성공 테스트")
     public void updatePasswordTestToSuccess() throws Exception {
         // given
+        Map<String, Object> map = new HashMap<>();
+        map.put("password", "123456789");
         MemberInfoUpdateRequest build = MemberInfoUpdateRequest.builder().password("123456789").build();
 
         // when
-        String body = mapper.writeValueAsString(build);
+        String body = mapper.writeValueAsString(map);
         doReturn(build).when(memberService).updateMemberInfo(any(), any());
         // then
         mvc.perform(patch(BASE_URL)
@@ -192,17 +197,18 @@ class MemberControllerTest {
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString().equals(body);
     }
-    // TODO 재작성해야함
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 프사 변경 성공 테스트")
     public void updateAvatarUrlTestToSuccess() throws Exception {
         // given
+        Map<String, Object> map = new HashMap<>();
+        map.put("avatarUrl", "red");
         MemberInfoUpdateRequest build = MemberInfoUpdateRequest.builder().avatarUrl("red").build();
 
 
         // when
-        String body = mapper.writeValueAsString(build);
+        String body = mapper.writeValueAsString(map);
         doReturn(build).when(memberService).updateMemberInfo(any(), any());
         // then
         mvc.perform(patch(BASE_URL)
@@ -212,17 +218,19 @@ class MemberControllerTest {
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString().equals(body);
     }
-    // TODO 다시
+
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 닉네임 변경 성공 테스트")
     public void updateMemberNicknameTestToSuccess() throws Exception {
         // given
+        Map<String, Object> map = new HashMap<>();
+        map.put("nickName", "newNickname");
         MemberInfoUpdateRequest build = MemberInfoUpdateRequest.builder().nickName("newNickname").build();
 
 
         // when
-        String body = mapper.writeValueAsString(build);
+        String body = mapper.writeValueAsString(map);
         doReturn(build).when(memberService).updateMemberInfo(any(), any());
         // then
         mvc.perform(patch(BASE_URL)
