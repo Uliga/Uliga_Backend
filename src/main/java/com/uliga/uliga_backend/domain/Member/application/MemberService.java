@@ -5,9 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
 import com.uliga.uliga_backend.domain.JoinTable.dao.AccountBookMemberRepository;
-import com.uliga.uliga_backend.domain.JoinTable.model.AccountBookMember;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
-import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.UpdateApplicationPasswordDto;
 import com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ;
 import com.uliga.uliga_backend.domain.Member.exception.UserExistsInAccountBook;
 import com.uliga.uliga_backend.domain.Member.exception.UserNotFoundByEmail;
@@ -16,7 +14,6 @@ import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
@@ -147,6 +144,10 @@ public class MemberService {
     public void deleteMemberNotification(Long id) {
         SetOperations<String, Object> setOperations = objectRedisTemplate.opsForSet();
         Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
-        setOperations.pop(member.getNickName());
+        Long size = setOperations.size(member.getNickName());
+        if (size != null) {
+
+            setOperations.pop(member.getNickName(), size);
+        }
     }
 }
