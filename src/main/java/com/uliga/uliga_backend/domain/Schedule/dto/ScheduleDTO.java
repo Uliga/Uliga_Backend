@@ -54,6 +54,8 @@ public class ScheduleDTO {
     public static class Assignment {
         @Schema(description = "멤버 아이디")
         private Long id;
+        @Schema(description = "멤버 이름")
+        private String username;
         @Schema(description = "할당량")
         private Long value;
     }
