@@ -4,10 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
-import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
-import com.uliga.uliga_backend.domain.AccountBook.exception.InvalidAccountBookDeleteRequest;
-import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookAccessException;
-import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookCategoryCreateException;
+import com.uliga.uliga_backend.domain.AccountBook.exception.*;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
 import com.uliga.uliga_backend.domain.Budget.application.BudgetService;
@@ -133,7 +130,7 @@ public class AccountBookService {
 
                 setOperations.add(email, objectMapper.writeValueAsString(info));
             } catch (RedisSystemException e) {
-
+                throw new InvitationSaveError();
             }
         }
         return accountBook.toInfoDto();
@@ -153,7 +150,12 @@ public class AccountBookService {
                     .accountBookName(accountBook.getName())
                     .createdTime(createdTime).build();
             SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
-            setOperations.add(email, objectMapper.writeValueAsString(info));
+            try {
+
+                setOperations.add(email, objectMapper.writeValueAsString(info));
+            } catch (RedisSystemException e) {
+                throw new InvitationSaveError();
+            }
             result += 1;
         }
         return Invited.builder().invited(result).build();
