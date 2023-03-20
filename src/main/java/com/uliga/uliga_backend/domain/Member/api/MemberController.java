@@ -124,4 +124,15 @@ public class MemberController {
     }
 
 
+    @Operation(summary = "금융 일정 알림 전체 제거", description = "멤버한테 온 금융 일정 알림 전체 제거 API 입니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "삭제 성공시"),
+            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @DeleteMapping(value = "/notification")
+    public ResponseEntity<String> deleteMemberNotification() {
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        memberService.deleteMemberNotification(currentMemberId);
+        return ResponseEntity.ok("DELETED");
+    }
 }

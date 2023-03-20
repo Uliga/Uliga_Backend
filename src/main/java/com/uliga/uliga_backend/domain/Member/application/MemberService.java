@@ -36,6 +36,7 @@ public class MemberService {
     private final AccountBookMemberRepository accountBookMemberRepository;
     private final PasswordEncoder passwordEncoder;
     private final RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<String, Object> objectRedisTemplate;
     private final ObjectMapper objectMapper;
 
     @Transactional
@@ -140,5 +141,12 @@ public class MemberService {
             member.updateNickname(memberInfoUpdateRequest.getNickName());
         }
         return memberInfoUpdateRequest;
+    }
+
+    @Transactional
+    public void deleteMemberNotification(Long id) {
+        SetOperations<String, Object> setOperations = objectRedisTemplate.opsForSet();
+        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        setOperations.pop(member.getNickName());
     }
 }
