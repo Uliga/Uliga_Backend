@@ -304,10 +304,8 @@ public class AccountBookService {
 
     @Transactional
     public AccountBookCategories getAccountBookCategories(Long id) {
-        List<AccountBookCategoryInfoQ> categoryInfoById = accountBookRepository.findAccountBookCategoryInfoById(id);
-        categoryInfoById.add(new AccountBookCategoryInfoQ("선택"));
         return AccountBookCategories.builder()
-                .categories(categoryInfoById).build();
+                .categories(accountBookRepository.findAccountBookCategoryInfoById(id)).build();
     }
 
     @Transactional
