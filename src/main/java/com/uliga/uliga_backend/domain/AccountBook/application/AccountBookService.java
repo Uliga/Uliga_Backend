@@ -3,6 +3,7 @@ package com.uliga.uliga_backend.domain.AccountBook.application;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategoryInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.exception.*;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
@@ -260,8 +261,10 @@ public class AccountBookService {
 
     @Transactional
     public AccountBookCategories getAccountBookCategories(Long id) {
+        List<AccountBookCategoryInfoQ> categoryInfoById = accountBookRepository.findAccountBookCategoryInfoById(id);
+        categoryInfoById.add(new AccountBookCategoryInfoQ("선택"));
         return AccountBookCategories.builder()
-                .categories(accountBookRepository.findAccountBookCategoryInfoById(id)).build();
+                .categories(categoryInfoById).build();
     }
 
     @Transactional

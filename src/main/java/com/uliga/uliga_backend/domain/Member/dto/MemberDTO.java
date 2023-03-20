@@ -324,22 +324,6 @@ public class MemberDTO {
         private String memberName;
         @Schema(defaultValue = "초대 받은 가계부", description = "testUser님의 가계부")
         private String accountBookName;
-//        @Schema(description = "생성 시간, 삭제할때도 보내줘야행")
-//        private String createdTime;
-
-//        @Override
-//        public int compareTo(Object o) {
-//            InvitationInfo o1 = (InvitationInfo) o;
-//            String[] split = o1.createdTime.split("");
-//            String temp = split[1];
-//            String[] timesO = temp.split(":");
-//            String[] strings = this.createdTime.split("");
-//            String temp2 = strings[1];
-//            String[] timesT = temp2.split(":");
-//
-//            return (parseInt(timesO[0]) * (24 * 60) + parseInt(timesO[1]) * 60 + parseInt(timesO[2]))
-//                    - (parseInt(timesT[0]) * (24 * 60) + parseInt(timesT[1]) * 60 + parseInt(timesT[2]));
-//        }
     }
 
 
