@@ -75,12 +75,7 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.createAccountBook(id, createRequest));
     }
 
-    @PostMapping(value = "/private")
-    public ResponseEntity<SimpleAccountBookInfo> createAccountBookPrivate(@RequestBody CreateRequestPrivate createRequest) {
-        log.info("개인 가계부 생성 API 호출");
-        Long id = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(accountBookService.createAccountBookPrivate(id, createRequest));
-    }
+
 
     @Operation(summary = "멤버 초대 API", description = "멤버 초대 API 입니다")
     @ApiResponses(value = {

@@ -52,7 +52,6 @@ public class AccountBookService {
     private final MemberRepository memberRepository;
     private final IncomeRepository incomeRepository;
     private final RecordRepository recordRepository;
-    private final ScheduleRepository scheduleRepository;
     private final BudgetRepository budgetRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
