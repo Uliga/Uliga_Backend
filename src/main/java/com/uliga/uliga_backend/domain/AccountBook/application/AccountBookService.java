@@ -63,6 +63,14 @@ public class AccountBookService {
     private final IncomeService incomeService;
     private final ScheduleService scheduleService;
     private final BudgetService budgetService;
+    private final List<String> defaultCategories = new ArrayList<>(
+            Arrays.asList("\uD83C\uDF7D️ 식비",
+                    "☕ 카페 · 간식",
+                    "\uD83C\uDFE0 생활",
+                    "\uD83C\uDF59 편의점,마트,잡화",
+                    "\uD83D\uDC55 쇼핑",
+                    "기타")
+    );
 
     @Transactional
     public AccountBookInfo getSingleAccountBookInfo(Long id, Long memberId) {
@@ -86,7 +94,7 @@ public class AccountBookService {
     }
 
     @Transactional
-    public SimpleAccountBookInfo createAccountBookPrivate(Long id, CreateRequestPrivate createRequest) {
+    public void createAccountBookPrivate(Long id, CreateRequestPrivate createRequest) {
         Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
         AccountBook accountBook = createRequest.toEntity();
         accountBookRepository.save(accountBook);
@@ -97,7 +105,6 @@ public class AccountBookService {
                 .getNotification(true).build();
         accountBookMemberRepository.save(bookMember);
         // 카테고리 생성 authService에서 해줌
-        return accountBook.toInfoDto();
     }
 
     @Transactional

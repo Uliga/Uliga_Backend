@@ -10,15 +10,15 @@ import lombok.Getter;
 @Schema(description = "카테고리 정보")
 public class AccountBookCategoryInfoQ {
     private Long id;
-    @Schema(description = "가계부 이름", defaultValue = "categoryName")
-    private String name;
+    @Schema(description = "가계부 이름", defaultValue = "categoryNameValue")
+    private String value;
 
     @Schema(description = "가계부 레이블", defaultValue = "categoryLabel")
     private String label;
     @Builder
     public AccountBookCategoryInfoQ(Long id, String name) {
         this.id = id;
-        this.name = name;
+        this.value = name;
         this.label = name;
     }
 
