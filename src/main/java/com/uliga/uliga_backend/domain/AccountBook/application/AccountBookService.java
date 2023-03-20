@@ -227,7 +227,6 @@ public class AccountBookService {
             defaultCategories.put(cat.getAccountBook().getId(), cat);
         }
         // 다른 가계부 객체 - 아이템 생성 요청 리퀘스트
-        // 수입/지출 서비스로 넘겨줘야하는 값 - 수입/지출 생성 요청 리스트, 멤버, 날짜, 카테고리
         Map<AccountBook, List<Income>> addIncomeToOtherAccountBooks = new HashMap<>();
         Map<AccountBook, List<Record>> addRecordToOtherAccountBooks = new HashMap<>();
         // 다른 가계부 아이디와 다른 가계부 객체 매핑
