@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
@@ -41,19 +42,27 @@ class MemberServiceTest {
     }
 
     public Map<String, Object> createUpdateApplicationPassword(String applicationPassword) {
-        return null;
+        Map<String, Object> map = new HashMap<>();
+        map.put("applicationPassword", applicationPassword);
+        return map;
     }
 
     public Map<String, Object> createUpdatePassword(String password) {
-        return null;
+        Map<String, Object> map = new HashMap<>();
+        map.put("password", password);
+        return map;
     }
 
     public Map<String, Object> createUpdateNickname(String nickname) {
-        return null;
+        Map<String, Object> map = new HashMap<>();
+        map.put("nickName", nickname);
+        return map;
     }
 
     public Map<String, Object> createUpdateAvatarUrl(String avatarUrl) {
-        return null;
+        Map<String, Object> map = new HashMap<>();
+        map.put("avatarUrl", avatarUrl);
+        return map;
     }
 
 
