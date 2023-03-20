@@ -137,16 +137,13 @@ public class AccountBookDTO {
         @Schema(description = "가계부 이름")
         @NotNull
         private String accountBookName;
-        @Schema(description = "생성 시간, 레디스에서 초대 지우려면 이 값도 필요해염..")
-        @NotNull
-        private String createdTime;
         @Schema(description = "조인 여부")
         @NotNull
         private Boolean join;
 
         @Override
         public String toString() {
-            return "InvitationReply = id: " + this.id + " memberName: " + this.memberName + " accountBookName: " + this.accountBookName + " createdTime: " + this.createdTime + " join: " + this.join;
+            return "InvitationReply = id: " + this.id + " memberName: " + this.memberName + " accountBookName: " + this.accountBookName + " join: " + this.join;
         }
     }
 

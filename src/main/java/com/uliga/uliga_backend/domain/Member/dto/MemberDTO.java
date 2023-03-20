@@ -136,7 +136,6 @@ public class MemberDTO {
     }
 
 
-
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
@@ -318,29 +317,29 @@ public class MemberDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     @Getter
-    public static class InvitationInfo implements Comparable{
+    public static class InvitationInfo {
         @Schema(description = "초대온 가계부 아이디", defaultValue = "1")
         private Long id;
         @Schema(description = "자신을 초대한 사람", defaultValue = "testUser")
         private String memberName;
-        @Schema( defaultValue = "초대 받은 가계부", description = "testUser님의 가계부")
+        @Schema(defaultValue = "초대 받은 가계부", description = "testUser님의 가계부")
         private String accountBookName;
-        @Schema(description = "생성 시간, 삭제할때도 보내줘야행")
-        private String createdTime;
+//        @Schema(description = "생성 시간, 삭제할때도 보내줘야행")
+//        private String createdTime;
 
-        @Override
-        public int compareTo(Object o) {
-            InvitationInfo o1 = (InvitationInfo) o;
-            String[] split = o1.createdTime.split("");
-            String temp = split[1];
-            String[] timesO = temp.split(":");
-            String[] strings = this.createdTime.split("");
-            String temp2 = strings[1];
-            String[] timesT = temp2.split(":");
-
-            return (parseInt(timesO[0]) * (24 * 60) + parseInt(timesO[1]) * 60 + parseInt(timesO[2]))
-                    - (parseInt(timesT[0]) * (24 * 60) + parseInt(timesT[1]) * 60 + parseInt(timesT[2]));
-        }
+//        @Override
+//        public int compareTo(Object o) {
+//            InvitationInfo o1 = (InvitationInfo) o;
+//            String[] split = o1.createdTime.split("");
+//            String temp = split[1];
+//            String[] timesO = temp.split(":");
+//            String[] strings = this.createdTime.split("");
+//            String temp2 = strings[1];
+//            String[] timesT = temp2.split(":");
+//
+//            return (parseInt(timesO[0]) * (24 * 60) + parseInt(timesO[1]) * 60 + parseInt(timesO[2]))
+//                    - (parseInt(timesT[0]) * (24 * 60) + parseInt(timesT[1]) * 60 + parseInt(timesT[2]));
+//        }
     }
 
 
@@ -358,11 +357,12 @@ public class MemberDTO {
 
         private List<NotificationInfo> notifications;
     }
+
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     @Getter
-    public static class NotificationInfo implements Comparable{
+    public static class NotificationInfo implements Comparable {
         @Schema(description = "금융일정 이름")
         private String scheduleName;
         @Schema(description = "금융 일정 생성자 이름")
@@ -378,7 +378,6 @@ public class MemberDTO {
             return Math.toIntExact(info.day - this.day);
         }
     }
-
 
 
     @Builder
@@ -397,7 +396,7 @@ public class MemberDTO {
     @Getter
     public static class SearchEmailResult {
 
-        @Schema( description = "이메일로 찾은 멤버 아이디")
+        @Schema(description = "이메일로 찾은 멤버 아이디")
         private Long id;
         @Schema(description = "이메일로 찾은 멤버 이름", defaultValue = "userName")
         private String userName;

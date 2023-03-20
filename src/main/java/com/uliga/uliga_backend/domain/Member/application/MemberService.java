@@ -53,7 +53,7 @@ public class MemberService {
                 result.add(objectMapper.readValue(o, InvitationInfo.class));
             }
         }
-        Collections.sort(result, Collections.reverseOrder());
+//        Collections.sort(result, Collections.reverseOrder());
         if (stringSet != null) {
             for (String o : stringSet) {
                 notificationInfos.add(objectMapper.readValue(o, NotificationInfo.class));

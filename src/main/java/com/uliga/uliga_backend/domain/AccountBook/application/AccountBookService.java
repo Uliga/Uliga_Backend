@@ -123,7 +123,8 @@ public class AccountBookService {
                     .id(accountBook.getId())
                     .memberName(member.getUserName())
                     .accountBookName(accountBook.getName())
-                    .createdTime(createdTime).build();
+//                    .createdTime(createdTime)
+                    .build();
 
             SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
             try {
@@ -148,7 +149,8 @@ public class AccountBookService {
                     .id(accountBook.getId())
                     .memberName(member.getUserName())
                     .accountBookName(accountBook.getName())
-                    .createdTime(createdTime).build();
+//                    .createdTime(createdTime)
+                    .build();
             SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
             try {
 
@@ -180,7 +182,7 @@ public class AccountBookService {
                 .accountBookName(invitationReply.getAccountBookName())
                 .memberName(invitationReply.getMemberName())
                 .id(invitationReply.getId())
-                .createdTime(invitationReply.getCreatedTime()).build();
+                .build();
         SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
         setOperations.remove(member.getEmail(), objectMapper.writeValueAsString(build));
         return InvitationReplyResult.builder()
