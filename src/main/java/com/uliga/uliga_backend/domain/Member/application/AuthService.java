@@ -4,11 +4,8 @@ import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.CreateRequestPrivate;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
-import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
-import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.JoinTable.dao.AccountBookMemberRepository;
-import com.uliga.uliga_backend.domain.JoinTable.model.AccountBookMember;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenInfoDTO;
@@ -46,21 +43,11 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final AccountBookService accountBookService;
     private final AccountBookRepository accountBookRepository;
-    private final AccountBookMemberRepository accountBookMemberRepository;
-    private final CategoryRepository categoryRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate<String, String> redisTemplate;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    private final List<String> defaultCategories = new ArrayList<>(
-            Arrays.asList("\uD83C\uDF7D️ 식비",
-                    "☕ 카페 · 간식",
-                    "\uD83C\uDFE0 생활",
-                    "\uD83C\uDF59 편의점,마트,잡화",
-                    "\uD83D\uDC55 쇼핑",
-                    "기타")
-    );
 
     @Transactional
     public Long signUp(SignUpRequest signUpRequest) {
@@ -72,7 +59,7 @@ public class AuthService {
         AccountBook accountBook = build.toEntity();
         accountBookRepository.save(accountBook);
         member.setPrivateAccountBook(accountBook);
-        CreateRequestPrivate requestPrivate = CreateRequestPrivate.builder().name(member.getNickName() + " 님의 가계부").isPrivate(true).build();
+        CreateRequestPrivate requestPrivate = CreateRequestPrivate.builder().name(member.getUserName() + " 님의 가계부").isPrivate(true).build();
         accountBookService.createAccountBookPrivate(member, requestPrivate);
         return member.getId();
     }
@@ -83,7 +70,7 @@ public class AuthService {
         Member member = socialSignUpRequest.toEntity();
         memberRepository.save(member);
 
-        CreateRequestPrivate build = CreateRequestPrivate.builder().name(member.getNickName() + " 님의 가계부").isPrivate(true).build();
+        CreateRequestPrivate build = CreateRequestPrivate.builder().name(member.getUserName() + " 님의 가계부").isPrivate(true).build();
         accountBookService.createAccountBookPrivate(member, build);
 
 

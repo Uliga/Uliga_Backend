@@ -11,13 +11,13 @@ public class AccountBookMemberInfoQ {
 
     private Long id;
     @Schema(description = "멤버 닉네임", defaultValue = "memberNickname")
-    private String nickname;
+    private String username;
     @Schema(description = "멤버 권한", defaultValue = "memberAuthority")
     private AccountBookAuthority accountBookAuthority;
 
-    public AccountBookMemberInfoQ(Long id, String nickname, AccountBookAuthority accountBookAuthority) {
+    public AccountBookMemberInfoQ(Long id, String username, AccountBookAuthority accountBookAuthority) {
         this.id = id;
-        this.nickname = nickname;
+        this.username = username;
         this.accountBookAuthority = accountBookAuthority;
     }
 }

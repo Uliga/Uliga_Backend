@@ -2,14 +2,8 @@ package com.uliga.uliga_backend.domain.AccountBook.dto;
 
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.*;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
-import com.uliga.uliga_backend.domain.Category.model.Category;
-import com.uliga.uliga_backend.domain.Common.Date;
 import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
-import com.uliga.uliga_backend.domain.Income.model.Income;
-import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
-import com.uliga.uliga_backend.domain.Record.model.Record;
-import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleInfoQ;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.CreateScheduleRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -18,7 +12,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class AccountBookDTO {
@@ -439,7 +432,9 @@ public class AccountBookDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class AddSchedules {
+        @NotNull
         private Long id;
+        @NotNull
         private List<CreateScheduleRequest> schedules;
     }
 

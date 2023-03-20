@@ -8,6 +8,8 @@ import com.uliga.uliga_backend.domain.JoinTable.dao.ScheduleMemberRepository;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import com.uliga.uliga_backend.domain.Schedule.dao.ScheduleRepository;
 import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -33,5 +35,14 @@ class AccountBookServiceTest {
     @Autowired
     CategoryRepository categoryRepository;
 
+    @Test
+    @DisplayName("가계부 정보 조회 성공 테스트")
+    public void getSingleAccountBookInfoTestToSuccess() throws Exception{
+        //given
 
+
+        // when
+
+        // then
+    }
 }
