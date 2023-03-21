@@ -2,6 +2,7 @@ package com.uliga.uliga_backend.domain.AccountBook.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService;
+import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
 import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO.CreateBudgetDto;
 import com.uliga.uliga_backend.domain.Budget.dto.NativeQ.BudgetInfoQ;
@@ -66,11 +67,11 @@ public class AccountBookController {
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "")
-    public ResponseEntity<SimpleAccountBookInfo> createAccountBook(@Valid @RequestBody CreateRequest createRequest) throws JsonProcessingException {
+    public ResponseEntity<SimpleAccountBookInfo> createAccountBook(@Valid @RequestBody AccountBookDTO.AccountBookCreateRequest accountBookCreateRequest) throws JsonProcessingException {
 
         log.info("가계부 생성 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(accountBookService.createAccountBook(id, createRequest));
+        return ResponseEntity.ok(accountBookService.createAccountBook(id, accountBookCreateRequest));
     }
 
 

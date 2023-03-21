@@ -3,7 +3,6 @@ package com.uliga.uliga_backend.domain.AccountBook.application;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategoryInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.exception.*;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
@@ -111,9 +110,9 @@ public class AccountBookService {
     }
 
     @Transactional
-    public SimpleAccountBookInfo createAccountBook(Long id, CreateRequest createRequest) throws JsonProcessingException {
+    public SimpleAccountBookInfo createAccountBook(Long id, AccountBookCreateRequest accountBookCreateRequest) throws JsonProcessingException {
         Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
-        AccountBook accountBook = createRequest.toEntity();
+        AccountBook accountBook = accountBookCreateRequest.toEntity();
         accountBookRepository.save(accountBook);
         AccountBookMember bookMember = AccountBookMember.builder()
                 .accountBook(accountBook)
@@ -123,9 +122,9 @@ public class AccountBookService {
         accountBookMemberRepository.save(bookMember);
 
 
-        categoryService.createCategories(createRequest.getCategories(), accountBook);
+        categoryService.createCategories(accountBookCreateRequest.getCategories(), accountBook);
 
-        for (String email : createRequest.getEmails()) {
+        for (String email : accountBookCreateRequest.getEmails()) {
             InvitationInfo info = InvitationInfo.builder()
                     .id(accountBook.getId())
                     .memberName(member.getUserName())
@@ -194,10 +193,6 @@ public class AccountBookService {
 
     }
 
-    // TODO
-    // incomeService, recordService에 addItemToSharedAccountBook이 재정의되야할 것 같음
-    // 현재 방식 = 아이템하나마다 각각 공유 가계부로 생성 쿼리가 나감,
-    // 바꿀 방식 = 아이템하나마다 생성 쿼리를 호출하지말고, 가계부 단위로 생성 쿼리가 나가게 변경 예정
     @Transactional
     public CreateResult createItems(Long id, CreateItems createItems) {
         long r = 0L;

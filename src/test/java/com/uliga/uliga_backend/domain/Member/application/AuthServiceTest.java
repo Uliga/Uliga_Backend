@@ -105,7 +105,7 @@ class AuthServiceTest {
                 ()-> assertEquals(accountBookCategoryInfoById.size(), defaultCategories.size()),
                 () -> {
                     for (AccountBookCategoryInfoQ accountBookCategoryInfoQ : accountBookCategoryInfoById) {
-                        assertTrue(defaultCategories.contains(accountBookCategoryInfoQ.getName()));
+                        assertTrue(defaultCategories.contains(accountBookCategoryInfoQ.getValue()));
                     }
                 }
         );
