@@ -2,8 +2,6 @@ package com.uliga.uliga_backend.domain.AccountBook.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService;
-import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO;
-import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
 import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO.CreateBudgetDto;
 import com.uliga.uliga_backend.domain.Budget.dto.NativeQ.BudgetInfoQ;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
@@ -23,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
 
 @Tag(name = "가계부", description = "가계부 관련 API 입니다")
@@ -67,7 +66,7 @@ public class AccountBookController {
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "")
-    public ResponseEntity<SimpleAccountBookInfo> createAccountBook(@Valid @RequestBody AccountBookDTO.AccountBookCreateRequest accountBookCreateRequest) throws JsonProcessingException {
+    public ResponseEntity<SimpleAccountBookInfo> createAccountBook(@Valid @RequestBody AccountBookCreateRequest accountBookCreateRequest) throws JsonProcessingException {
 
         log.info("가계부 생성 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
