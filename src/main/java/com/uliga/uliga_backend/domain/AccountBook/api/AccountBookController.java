@@ -111,7 +111,7 @@ public class AccountBookController {
                                                                 @Parameter(name = "year", description = "년도", in = PATH) @PathVariable("year") Long year,
                                                                 @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month) {
 
-        log.info("한달 가계부 수입/지출/금융 일정 조회 API 호출");
+        log.info("한달 가계부 수입/지출 조회 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookItems(id, year, month));
     }
 

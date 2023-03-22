@@ -70,7 +70,7 @@ class AccountBookControllerTest {
                 .categories(defaultCategories).build();
     }
 
-    // TODO 생성 실패 테스트해야함
+
     @Test
     @WithMockCustomUser
     @DisplayName("가계부 생성 성공 테스트")
@@ -78,17 +78,70 @@ class AccountBookControllerTest {
         //given
         AccountBookCreateRequest accountBook = createAccountBook("가계부 생성");
         String accountBookCreateRequest = mapper.writeValueAsString(accountBook);
-
+        SimpleAccountBookInfo simpleAccountBookInfo = SimpleAccountBookInfo.builder().build();
         // when
-        doReturn(null).when(accountBookService).createAccountBook(any(), any());
+        doReturn(simpleAccountBookInfo).when(accountBookService).createAccountBook(any(), any());
 
         // then
         mvc.perform(post(BASE_URL)
                         .with(csrf())
                         .content(accountBookCreateRequest)
                         .contentType(APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString().equals(mapper.writeValueAsString(simpleAccountBookInfo));
     }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("Null name - 가계부 생성 실패 테스트")
+    public void createAccountBookTestToFailByNullName() throws Exception{
+        //given
+        AccountBookCreateRequest createRequest = AccountBookCreateRequest.builder().emails(new ArrayList<>()).relationship("relationship").categories(new ArrayList<>()).build();
+        String value = mapper.writeValueAsString(createRequest);
+
+        // then
+        mvc.perform(post(BASE_URL)
+                        .with(csrf())
+                        .content(value)
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("Null emails - 가계부 생성 실패 테스트")
+    public void createAccountBookTestToFailByNullEmails() throws Exception{
+        //given
+        AccountBookCreateRequest createRequest = AccountBookCreateRequest.builder().name("name").categories(new ArrayList<>()).relationship("relationship").build();
+        String value = mapper.writeValueAsString(createRequest);
+
+
+        // then
+        mvc.perform(post(BASE_URL)
+                        .with(csrf())
+                        .content(value)
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("Null categories - 가계부 생성 실패 테스트")
+    public void createAccountBookTestToFailByNullCategories() throws Exception{
+        //given
+        AccountBookCreateRequest createRequest = AccountBookCreateRequest.builder().name("name").emails(new ArrayList<>()).relationship("relationship").build();
+        String value = mapper.writeValueAsString(createRequest);
+
+
+        // then
+        mvc.perform(post(BASE_URL)
+                        .with(csrf())
+                        .content(value)
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isConflict());
+    }
+
+
 
     @Test
     @WithMockCustomUser
@@ -155,7 +208,6 @@ class AccountBookControllerTest {
         String value = mapper.writeValueAsString(invitationReply);
 
 
-
         // when
         doReturn(invitationReplyResult).when(accountBookService).invitationReply(any(), any());
 
@@ -166,5 +218,126 @@ class AccountBookControllerTest {
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString().equals(mapper.writeValueAsString(invitationReplyResult));
+    }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("Null id - 초대 응답 실패 테스트")
+    public void invitationReplyTestToFailByNullId() throws Exception{
+        //given
+        InvitationReply invitationReply = InvitationReply.builder().accountBookName("accountBook").memberName("member").join(true).build();
+        // when
+        String value = mapper.writeValueAsString(invitationReply);
+
+        // then
+        mvc.perform(post(BASE_URL + "/invitation/reply")
+                        .with(csrf())
+                        .content(value)
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("Null membername - 초대 응답 실패 테스트")
+    public void invitationReplyTestToFailByNullMemberName() throws Exception{
+        //given
+        InvitationReply invitationReply = InvitationReply.builder().accountBookName("accountBook").join(true).id(1L).build();
+        // when
+        String value = mapper.writeValueAsString(invitationReply);
+
+        // then
+        mvc.perform(post(BASE_URL + "/invitation/reply")
+                        .with(csrf())
+                        .content(value)
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("Null accountBookName - 초대 응답 실패 테스트")
+    public void invitationReplyTestToFailByNullAccountBookName() throws Exception{
+        //given
+        InvitationReply invitationReply = InvitationReply.builder().memberName("member").join(true).id(1L).build();
+        // when
+        String value = mapper.writeValueAsString(invitationReply);
+
+        // then
+        mvc.perform(post(BASE_URL + "/invitation/reply")
+                        .with(csrf())
+                        .content(value)
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("Null join - 초대 응답 실패 테스트")
+    public void invitationReplyTestToFailByNullJoin() throws Exception{
+        //given
+        InvitationReply invitationReply = InvitationReply.builder().accountBookName("accountBook").memberName("member").id(1L).build();
+        // when
+        String value = mapper.writeValueAsString(invitationReply);
+
+        // then
+        mvc.perform(post(BASE_URL + "/invitation/reply")
+                        .with(csrf())
+                        .content(value)
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("한달 가계부 수입/지출 정보 조회 성공 테스트")
+    public void getMonthlyIncomeRecordTestToSuccess() throws Exception{
+        //given
+        AccountBookIncomesAndRecords accountBookIncomesAndRecords = AccountBookIncomesAndRecords.builder().build();
+
+        // when
+        doReturn(accountBookIncomesAndRecords).when(accountBookService).getAccountBookItems(any(), any(), any());
+
+
+
+        // then
+        mvc.perform(get(BASE_URL + "/1/item/2023/3")
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString().equals(mapper.writeValueAsString(accountBookIncomesAndRecords));
+    }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("하루 수입/지출 내역 상세 조회 성공 테스트")
+    public void getDailyIncomeAndRecordInfoTestToSuccess() throws Exception{
+        //given
+        RecordAndIncomeDetails recordAndIncomeDetails = RecordAndIncomeDetails.builder().build();
+
+        // when
+        doReturn(recordAndIncomeDetails).when(accountBookService).getAccountBookItemDetails(any(), any(), any(), any());
+
+        // then
+        mvc.perform(get(BASE_URL + "/1/item/2023/3/1")
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString().equals(mapper.writeValueAsString(recordAndIncomeDetails));
+    }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("한달 수입/지출/예산 내역 총합 조회 성공 테스트")
+    public void getMonthlyIncomeRecordBudgetSumTestToSuccess() throws Exception{
+        //given
+        GetAccountBookAssets accountBookAssets = GetAccountBookAssets.builder().build();
+        // when
+        doReturn(accountBookAssets).when(accountBookService).getAccountBookAssets(any(), any(), any());
+
+        // then
+        mvc.perform(get(BASE_URL + "/1/asset/2023/3")
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString().equals(mapper.writeValueAsString(accountBookAssets));
+
     }
 }
