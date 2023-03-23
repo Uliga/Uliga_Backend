@@ -33,7 +33,7 @@ class UserDetailServiceTest {
     @Test
     @DisplayName("이메일로 UserDetail 조회 성공")
     public void getUserDetailByEmailToSuccess() throws Exception{
-        //given
+        // given
         SignUpRequest signUpRequest = createSignUpRequest("email@email.com", "testNickname");
 
         // when
@@ -47,7 +47,7 @@ class UserDetailServiceTest {
     @Test
     @DisplayName("존재하지 않는 이메일로 userDetail 조회 실패")
     public void getUserDetailByEmailToFail() throws Exception{
-        //given
+        // given
         SignUpRequest signUpRequest = createSignUpRequest("email@email.com", "testNickname");
 
         // when

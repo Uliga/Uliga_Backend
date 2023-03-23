@@ -252,7 +252,7 @@ public class AccountBookController {
             @ApiResponse(responseCode = "200", description = "삭제 성공시")
     })
     @DeleteMapping(value = "")
-    public ResponseEntity<String> deleteAccountBook(@RequestBody AccountBookDeleteRequest deleteRequest) {
+    public ResponseEntity<String> deleteAccountBook(@Valid  @RequestBody AccountBookDeleteRequest deleteRequest) {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.deleteAccountBook(deleteRequest, currentMemberId));
     }

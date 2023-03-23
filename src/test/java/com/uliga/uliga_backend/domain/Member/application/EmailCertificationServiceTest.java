@@ -25,7 +25,7 @@ class EmailCertificationServiceTest {
     @Test
     @DisplayName("이메일 전송 성공 테스트")
     public void sendEmailTestToSuccess() throws Exception{
-        //given
+        // given
         emailCertificationService.sendSimpleMessage("dongjunkim99@icloud.com");
 
 
@@ -39,7 +39,7 @@ class EmailCertificationServiceTest {
     @Test
     @DisplayName("이메일 코드 검증 실패 테스트 - 레디스에 없는 이메일")
     public void sendEmailTestToFailByInvalidEmail() throws Exception{
-        //given
+        // given
         emailCertificationService.sendSimpleMessage("dongjunkim99@icloud.com");
 
         // when
@@ -51,7 +51,7 @@ class EmailCertificationServiceTest {
     @Test
     @DisplayName("이메일 코드 검증 실패 테스트 - 잘못된 코드")
     public void sendEmailTestToFailByInvalidCode() throws Exception{
-        //given
+        // given
         emailCertificationService.sendSimpleMessage("dongjunkim99@icloud.com");
 
 

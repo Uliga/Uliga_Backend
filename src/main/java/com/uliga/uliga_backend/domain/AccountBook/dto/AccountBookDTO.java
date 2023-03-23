@@ -451,6 +451,7 @@ public class AccountBookDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class AccountBookDeleteRequest {
+        @NotNull
         private Long accountBookId;
     }
 
