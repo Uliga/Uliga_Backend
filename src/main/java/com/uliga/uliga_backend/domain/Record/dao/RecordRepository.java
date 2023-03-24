@@ -23,7 +23,7 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
                     "r.date.year," +
                     "r.date.month," +
                     "r.date.day," +
-                    "m.nickName," +
+                    "m.userName," +
                     "c.name) from Record r " +
                     "JOIN Member m on m.id = r.creator.id " +
                     "JOIN Category c on c.id=r.category.id " +
@@ -52,7 +52,7 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
                     "r.date.year," +
                     "r.date.month," +
                     "r.date.day," +
-                    "m.nickName," +
+                    "m.userName," +
                     "c.name) from Record r " +
                     "JOIN Member m on m.id = r.creator.id " +
                     "JOIN Category c on c.id=r.category.id " +
@@ -69,7 +69,7 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
                     "r.date.year," +
                     "r.date.month," +
                     "r.date.day," +
-                    "m.nickName," +
+                    "m.userName," +
                     "c.name) from Record r " +
                     "JOIN Member m on m.id = r.creator.id " +
                     "JOIN Category c on c.id=r.category.id " +
