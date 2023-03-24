@@ -23,7 +23,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
                     "i.date.year," +
                     "i.date.month," +
                     "i.date.day," +
-                    "m.nickName," +
+                    "m.userName," +
                     "c.name) from Income i " +
                     "JOIN Member m on m.id = i.creator.id " +
                     "JOIN Category c on c.id = i.category.id " +
@@ -51,7 +51,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
             "i.date.year," +
             "i.date.month," +
             "i.date.day," +
-            "m.nickName," +
+            "m.userName," +
             "c.name) from Income i " +
             "JOIN Member m on m.id = i.creator.id " +
             "JOIN Category c on c.id = i.category.id " +
@@ -66,7 +66,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
             "i.date.year," +
             "i.date.month," +
             "i.date.day," +
-            "m.nickName," +
+            "m.userName," +
             "c.name) from Income i " +
             "JOIN Member m on m.id = i.creator.id " +
             "JOIN Category c on c.id = i.category.id " +
