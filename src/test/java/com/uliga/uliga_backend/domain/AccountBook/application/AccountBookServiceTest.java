@@ -1,5 +1,6 @@
 package com.uliga.uliga_backend.domain.AccountBook.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookAccessException;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
@@ -7,6 +8,8 @@ import com.uliga.uliga_backend.domain.Income.dao.IncomeRepository;
 import com.uliga.uliga_backend.domain.JoinTable.dao.AccountBookMemberRepository;
 import com.uliga.uliga_backend.domain.JoinTable.dao.ScheduleMemberRepository;
 import com.uliga.uliga_backend.domain.Member.application.AuthService;
+import com.uliga.uliga_backend.domain.Member.dto.MemberDTO;
+import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.InvitationInfo;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SignUpRequest;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import com.uliga.uliga_backend.domain.Schedule.dao.ScheduleRepository;
@@ -15,6 +18,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SetOperations;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,6 +49,10 @@ class AccountBookServiceTest {
     ScheduleMemberRepository scheduleMemberRepository;
     @Autowired
     CategoryRepository categoryRepository;
+    @Autowired
+    RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    ObjectMapper mapper;
     private final List<String> defaultCategories = new ArrayList<>(
             Arrays.asList("\uD83C\uDF7D️ 식비",
                     "☕ 카페 · 간식",
@@ -118,5 +127,59 @@ class AccountBookServiceTest {
        assertThrows(UnauthorizedAccountBookAccessException.class, () -> accountBookService.getSingleAccountBookInfo(accountBook.getId(), signUp));
    }
 
+   @Test
+   @DisplayName("멤버 가계부 조회 성공 테스트")
+   public void getMemberAccountBookTestToSuccess() throws Exception{
+       // given
+       SignUpRequest nickname = createSignUpRequest("email@email.com", "nickname");
+       Long memberId = authService.signUp(nickname);
+       AccountBookCreateRequest createRequest = createAccountBookCreateRequest("newAccountBook");
 
+
+
+       // when
+       SimpleAccountBookInfo simpleAccountBookInfo = accountBookService.createAccountBook(memberId, createRequest);
+       GetAccountBookInfos memberAccountBook = accountBookService.getMemberAccountBook(memberId);
+
+       // then
+       assertAll(
+               () -> assertEquals(2, memberAccountBook.getAccountBooks().size()),
+               () -> assertEquals(simpleAccountBookInfo.getId(), memberAccountBook.getAccountBooks().get(1).getAccountBookId())
+       );
+
+   }
+
+   @Test
+   @DisplayName("개인 가계부 생성 성공 테스트")
+   public void createAccountBookPrivateTestToSuccess() throws Exception{
+       // given
+       SignUpRequest nickname = createSignUpRequest("email@email.com", "nickname");
+       Long memberId = authService.signUp(nickname);
+
+       // when
+       GetAccountBookInfos memberAccountBook = accountBookService.getMemberAccountBook(memberId);
+       // then
+       assertTrue(memberAccountBook.getAccountBooks().get(0).getIsPrivate());
+   }
+
+   @Test
+   @DisplayName("초대 생성 성공 테스트")
+   public void createInvitationTestToSuccess() throws Exception{
+       // given
+       SignUpRequest nickname = createSignUpRequest("email@email.com", "nickname");
+       Long memberId = authService.signUp(nickname);
+       AccountBookCreateRequest createRequest = createAccountBookCreateRequest("newAccountBook");
+       SimpleAccountBookInfo simpleAccountBookInfo = accountBookService.createAccountBook(memberId, createRequest);
+       SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
+       // when
+       GetInvitations invitations = GetInvitations.builder().id(simpleAccountBookInfo.getId()).emails(new ArrayList<>()).build();
+       invitations.getEmails().add("testuser@email.com");
+
+       accountBookService.createInvitation(memberId, invitations);
+       // then
+       Long size = setOperations.size("testuser@email.com");
+       assertEquals(1L, size);
+
+
+   }
 }

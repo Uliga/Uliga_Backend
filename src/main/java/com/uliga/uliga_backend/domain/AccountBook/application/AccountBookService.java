@@ -399,6 +399,16 @@ public class AccountBookService {
     }
 
     @Transactional
+    public GetAccountBookSchedules getAccountBookSchedules(Long memberId, Long accountBookId) {
+        if (accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(memberId, accountBookId)) {
+
+            return scheduleService.getAccountBookSchedules(accountBookId);
+        } else {
+            throw new UnauthorizedAccountBookAccessException();
+        }
+    }
+
+    @Transactional
     public String deleteAccountBook(AccountBookDeleteRequest deleteRequest, Long memberId) {
         AccountBook accountBook = accountBookRepository.findById(deleteRequest.getAccountBookId()).orElseThrow(NotFoundByIdException::new);
         if (accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(memberId, deleteRequest.getAccountBookId())) {

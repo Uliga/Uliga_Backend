@@ -243,8 +243,20 @@ public class AccountBookController {
     })
     @PostMapping(value = "/schedule")
     public ResponseEntity<AddScheduleResult> addSchedule(@Valid @RequestBody AddSchedules addSchedules) throws JsonProcessingException {
+
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.addSchedule(memberId, addSchedules));
+    }
+
+    @Operation(summary = "가계부 금융 일정 세부 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = GetAccountBookSchedules.class)))
+    })
+    @GetMapping(value = "/{id}/schedule")
+    public ResponseEntity<GetAccountBookSchedules> getAccountBookSchedules(@PathVariable("id") Long id) {
+
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(accountBookService.getAccountBookSchedules(memberId, id));
     }
 
     @Operation(summary = "가계부 삭제 요청 - 실제 서비스할때는 멤버 권한 검사 추가되야할듯")
@@ -252,7 +264,8 @@ public class AccountBookController {
             @ApiResponse(responseCode = "200", description = "삭제 성공시")
     })
     @DeleteMapping(value = "")
-    public ResponseEntity<String> deleteAccountBook(@Valid  @RequestBody AccountBookDeleteRequest deleteRequest) {
+    public ResponseEntity<String> deleteAccountBook(@Valid @RequestBody AccountBookDeleteRequest deleteRequest) {
+
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.deleteAccountBook(deleteRequest, currentMemberId));
     }

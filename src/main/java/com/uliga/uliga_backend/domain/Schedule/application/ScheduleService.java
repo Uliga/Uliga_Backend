@@ -2,7 +2,9 @@ package com.uliga.uliga_backend.domain.Schedule.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.AddScheduleResult;
+import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.GetAccountBookSchedules;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.JoinTable.dao.ScheduleMemberRepository;
 import com.uliga.uliga_backend.domain.JoinTable.model.ScheduleMember;
@@ -123,5 +125,16 @@ public class ScheduleService {
         return ScheduleDetail.builder()
                 .info(scheduleRepository.findScheduleInfoById(id))
                 .assignments(scheduleRepository.findScheduleMemberInfoById(id)).build();
+    }
+
+    @Transactional
+    public GetAccountBookSchedules getAccountBookSchedules(Long accountBookId) {
+        List<ScheduleDetail> result = new ArrayList<>();
+        List<ScheduleInfoQ> byAccountBookId = scheduleRepository.findScheduleInfoByAccountBookId(accountBookId);
+        for (ScheduleInfoQ s : byAccountBookId) {
+            ScheduleDetail scheduleDetail = ScheduleDetail.builder().info(s).assignments(scheduleRepository.findScheduleMemberInfoById(s.getId())).build();
+            result.add(scheduleDetail);
+        }
+        return GetAccountBookSchedules.builder().schedules(result).build();
     }
 }
