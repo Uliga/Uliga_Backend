@@ -166,7 +166,7 @@ public class AccountBookService {
     }
 
     @Transactional
-    public InvitationReplyResult 트invitationReply(Long id, InvitationReply invitationReply) throws JsonProcessingException {
+    public InvitationReplyResult invitationReply(Long id, InvitationReply invitationReply) throws JsonProcessingException {
         Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
         log.info(invitationReply.toString());
         if (invitationReply.getJoin()) {
