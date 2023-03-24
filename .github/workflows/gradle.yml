@@ -47,9 +47,9 @@ jobs:
       ## 웹 이미지 빌드 및 도커허브에 push
     - name: web docker build and push
       run: |
-        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-        docker build -t ${{ secrets.DOCKER_REPO }}/uliga_backend .
-        docker push ${{ secrets.DOCKER_REPO }}/uliga_backend
+        sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+        sudo docker build -t ${{ secrets.DOCKER_REPO }}/uliga_backend .
+        sudo docker push ${{ secrets.DOCKER_REPO }}/uliga_backend
 
       ## docker compose up
     - name: executing remote ssh commands using password
@@ -63,7 +63,7 @@ jobs:
           sudo docker rm -f $(docker ps -qa)
           sudo docker pull ${{ secrets.DOCKER_REPO }}/uliga_backend 
           sudo docker pull ${{ secrets.DOCKER_REPO }}/uliga-backend-nginx
-          docker-compose up -d
+          sudo docker-compose up -d
           docker image prune -f
 
 

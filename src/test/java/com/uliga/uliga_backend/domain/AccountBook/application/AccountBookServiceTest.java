@@ -14,6 +14,8 @@ import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SignUpRequest;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import com.uliga.uliga_backend.domain.Schedule.dao.ScheduleRepository;
 import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +55,13 @@ class AccountBookServiceTest {
     RedisTemplate<String, Object> redisTemplate;
     @Autowired
     ObjectMapper mapper;
+
+    @BeforeEach
+    public void emptyRedis() {
+
+        SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
+        setOperations.pop("testuser@email.com", setOperations.size("testuser@email.com"));
+    }
     private final List<String> defaultCategories = new ArrayList<>(
             Arrays.asList("\uD83C\uDF7D️ 식비",
                     "☕ 카페 · 간식",
@@ -181,5 +190,39 @@ class AccountBookServiceTest {
        assertEquals(1L, size);
 
 
+   }
+
+   @Test
+   @DisplayName("초대 응답 성공 테스트")
+   public void invitationReplyTestToSuccess() throws Exception{
+       // given
+       SignUpRequest nickname = createSignUpRequest("email@email.com", "nickname");
+       Long memberId = authService.signUp(nickname);
+       AccountBookCreateRequest createRequest = createAccountBookCreateRequest("newAccountBook");
+       SignUpRequest newNickname = createSignUpRequest("testuser@email.com", "newNickname");
+       Long signUp = authService.signUp(newNickname);
+       SimpleAccountBookInfo simpleAccountBookInfo = accountBookService.createAccountBook(memberId, createRequest);
+       SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
+       GetInvitations invitations = GetInvitations.builder().id(simpleAccountBookInfo.getId()).emails(new ArrayList<>()).build();
+       invitations.getEmails().add("testuser@email.com");
+
+       accountBookService.createInvitation(memberId, invitations);
+       // when
+       InvitationReply invitationReply = InvitationReply.builder().join(true).id(simpleAccountBookInfo.getId()).accountBookName(simpleAccountBookInfo.getName()).build();
+       accountBookService.invitationReply(signUp, invitationReply);
+
+       // then
+       assertEquals(0, setOperations.size("testuser@email.com"));
+   }
+
+   @Test
+   @DisplayName("가계부 수입/지출 생성 성공 테스트")
+   public void createItemsTestToSuccess() throws Exception{
+       // given
+
+
+       // when
+
+       // then
    }
 }
