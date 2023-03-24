@@ -7,12 +7,12 @@ import lombok.Getter;
 @Getter
 public class ScheduleMemberInfoQ {
     private Long id;
-    private String nickname;
+    private String username;
     private Long value;
 
-    public ScheduleMemberInfoQ(Long id,String nickname, Long value) {
+    public ScheduleMemberInfoQ(Long id,String username, Long value) {
         this.id = id;
-        this.nickname = nickname;
+        this.username = username;
         this.value = value;
     }
 }

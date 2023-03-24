@@ -20,7 +20,7 @@ public class ScheduleInfoQ {
     private Boolean isIncome;
     @Schema(description = "나가거나/들어오는 값(null이면 변동이라는 뜻)")
     private Long value;
-    @Schema(description = "작성자", defaultValue = "creatorNickname")
+    @Schema(description = "작성자", defaultValue = "creatorUsername")
     private String creator;
     @Schema(description = "가계부 이름",defaultValue = "accountBookName")
     private String accountBookName;

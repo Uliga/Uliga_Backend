@@ -80,7 +80,7 @@ public class ScheduleService {
                 NotificationInfo notificationInfo = NotificationInfo.builder()
                         .scheduleName(scheduleRequest.getName())
                         .day(scheduleRequest.getNotificationDate())
-                        .creatorName(member.getNickName())
+                        .creatorName(member.getUserName())
                         .value(assignment.getValue()).build();
                 setOperations.add(memberMap.get(assignment.getId()).getNickName(), mapper.writeValueAsString(notificationInfo));
                 redisTemplate.expire(memberMap.get(assignment.getId()).getNickName(), NOTIFICATION_EXPIRE_TIME, TimeUnit.MILLISECONDS);

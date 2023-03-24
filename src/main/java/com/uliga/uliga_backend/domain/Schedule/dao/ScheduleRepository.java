@@ -17,7 +17,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             "s.name, "+
             "s.notificationDate, " +
             "sm.value, " +
-            "m.nickName," +
+            "m.userName," +
             "s.accountBook.name) " +
             "FROM Schedule s JOIN ScheduleMember sm ON s.id = sm.schedule.id JOIN Member m on sm.member.id = m.id WHERE m.id = :id ORDER BY s.notificationDate ASC ")
     List<ScheduleInfoQ> findByMemberId(@Param("id") Long id);
@@ -28,7 +28,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             "s.name," +
             "s.notificationDate," +
             "s.value," +
-            "s.creator.nickName," +
+            "s.creator.userName," +
             "s.accountBook.name) FROM Schedule s WHERE s.id = :id")
     ScheduleInfoQ findScheduleInfoById(@Param("id") Long id);
 
@@ -38,13 +38,13 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             "s.name," +
             "s.notificationDate," +
             "s.value," +
-            "s.creator.nickName," +
+            "s.creator.userName," +
             "s.accountBook.name) FROM Schedule s WHERE s.accountBook.id=:id ORDER BY s.notificationDate ASC ")
     List<ScheduleInfoQ> findScheduleInfoByAccountBookId(@Param("id") Long id);
 
     @Query("SELECT NEW com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleMemberInfoQ(" +
             "sm.member.id," +
-            "sm.member.nickName, " +
+            "sm.member.userName, " +
             "sm.value) FROM ScheduleMember sm WHERE sm.schedule.id = :id")
     List<ScheduleMemberInfoQ> findScheduleMemberInfoById(@Param("id") Long id);
 }
