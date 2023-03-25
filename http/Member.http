@@ -1,0 +1,31 @@
+### 회원가입
+POST {{server}}/auth/signup
+Content-Type: application/json
+
+{
+  "email": "httptest@email.com",
+  "password": "123456789",
+  "nickName": "인텔리제이",
+  "userName": "인텔리제이",
+  "applicationPassword": "1234"
+}
+
+### 로그인
+POST {{server}}/auth/login
+Content-Type: application/json
+
+#< ./login.env.json
+{
+  "email": "httptest@email.com",
+  "password": "123456789"
+}
+> {%
+    client.test("Authorization", function () {
+        client.assert(response.status === 200, "Response Status is 200");
+        client.global.set("access_token", response.body.tokenInfo.accessToken)
+    });
+ %}
+
+### 로그인 유저 정보 조회
+GET {{server}}/member
+Authorization: Bearer {{access_token}}
