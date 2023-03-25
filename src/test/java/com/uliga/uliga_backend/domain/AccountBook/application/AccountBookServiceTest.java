@@ -1,5 +1,6 @@
 package com.uliga.uliga_backend.domain.AccountBook.application;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookAccessException;
@@ -56,11 +57,24 @@ class AccountBookServiceTest {
     @Autowired
     ObjectMapper mapper;
 
+    private Long memberId = 0L;
+    private SimpleAccountBookInfo accountBook = null;
+    
+    
+
     @BeforeEach
     public void emptyRedis() {
 
         SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
         setOperations.pop("testuser@email.com", setOperations.size("testuser@email.com"));
+    }
+    
+    @BeforeEach
+    public void setMemberAndAccountBook() throws JsonProcessingException {
+        SignUpRequest nickname = createSignUpRequest("email@email.com", "nickname");
+        memberId = authService.signUp(nickname);
+        AccountBookCreateRequest createRequest = createAccountBookCreateRequest("newAccountBook");
+        accountBook = accountBookService.createAccountBook(memberId, createRequest);
     }
     private final List<String> defaultCategories = new ArrayList<>(
             Arrays.asList("\uD83C\uDF7D️ 식비",
@@ -83,18 +97,26 @@ class AccountBookServiceTest {
                 .relationship("테스트용")
                 .categories(defaultCategories).emails(new ArrayList<>()).build();
     }
+
+    CreateRecordOrIncomeDto createRecordOrIncomeDto(boolean isIncome) {
+        return CreateRecordOrIncomeDto.builder()
+                .isIncome(isIncome)
+                .account("account")
+                .sharedAccountBook(new ArrayList<>())
+                .payment("payment")
+                .value(10000L)
+                .memo("memo")
+                .category("기타")
+                .date("2023-04-25").build();
+    }
    @Test
    @DisplayName("가계부 생성 성공 테스트")
    public void createAccountBookTestToSuccess() throws Exception{
        //given
-       SignUpRequest nickname = createSignUpRequest("email@email.com", "nickname");
-       Long memberId = authService.signUp(nickname);
-       AccountBookCreateRequest newAccountBook = createAccountBookCreateRequest("newAccountBook");
-
+       // BeforeEach에서 멤버 생성
 
        // when
-       SimpleAccountBookInfo accountBook = accountBookService.createAccountBook(memberId, newAccountBook);
-
+       // BeforeEach에서 가계부 생성
        // then
        assertTrue(accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(memberId, accountBook.getId()));
 
@@ -104,12 +126,7 @@ class AccountBookServiceTest {
    @DisplayName("가계부 정보 조회 성공 테스트")
    public void getAccountBookInfoTestToSuccess() throws Exception{
        //given
-       SignUpRequest nickname = createSignUpRequest("email@email.com", "nickname");
-       Long memberId = authService.signUp(nickname);
-       AccountBookCreateRequest newAccountBook = createAccountBookCreateRequest("newAccountBook");
-
-       // when
-       SimpleAccountBookInfo accountBook = accountBookService.createAccountBook(memberId, newAccountBook);
+       // BeforeEach에서 멤버 & 가계부 생성
        // then
        AccountBookInfo accountBookInfo = accountBookService.getSingleAccountBookInfo(accountBook.getId(), memberId);
 
@@ -123,15 +140,13 @@ class AccountBookServiceTest {
    @DisplayName("가계부 정보 조회 실패 테스트")
    public void getAccountBookInfoTestToFailByInvalidMember() throws Exception{
        //given
-       SignUpRequest nickname = createSignUpRequest("email@email.com", "nickname");
-       Long memberId = authService.signUp(nickname);
+       // BeforeEach에서 멤버 & 가계부 생성
        AccountBookCreateRequest newAccountBook = createAccountBookCreateRequest("newAccountBook");
        SignUpRequest signUpRequest = createSignUpRequest("newuser@email.com", "newNickname");
-       Long signUp = authService.signUp(signUpRequest);
 
 
        // when
-       SimpleAccountBookInfo accountBook = accountBookService.createAccountBook(memberId, newAccountBook);
+       Long signUp = authService.signUp(signUpRequest);
        // then
        assertThrows(UnauthorizedAccountBookAccessException.class, () -> accountBookService.getSingleAccountBookInfo(accountBook.getId(), signUp));
    }
@@ -140,20 +155,14 @@ class AccountBookServiceTest {
    @DisplayName("멤버 가계부 조회 성공 테스트")
    public void getMemberAccountBookTestToSuccess() throws Exception{
        // given
-       SignUpRequest nickname = createSignUpRequest("email@email.com", "nickname");
-       Long memberId = authService.signUp(nickname);
-       AccountBookCreateRequest createRequest = createAccountBookCreateRequest("newAccountBook");
-
-
-
+       // BeforeEach에서 멤버 & 가계부 생성
        // when
-       SimpleAccountBookInfo simpleAccountBookInfo = accountBookService.createAccountBook(memberId, createRequest);
        GetAccountBookInfos memberAccountBook = accountBookService.getMemberAccountBook(memberId);
 
        // then
        assertAll(
                () -> assertEquals(2, memberAccountBook.getAccountBooks().size()),
-               () -> assertEquals(simpleAccountBookInfo.getId(), memberAccountBook.getAccountBooks().get(1).getAccountBookId())
+               () -> assertEquals(accountBook.getId(), memberAccountBook.getAccountBooks().get(1).getAccountBookId())
        );
 
    }
@@ -162,8 +171,7 @@ class AccountBookServiceTest {
    @DisplayName("개인 가계부 생성 성공 테스트")
    public void createAccountBookPrivateTestToSuccess() throws Exception{
        // given
-       SignUpRequest nickname = createSignUpRequest("email@email.com", "nickname");
-       Long memberId = authService.signUp(nickname);
+       // BeforeEach에서 멤버 & 가계부 생성
 
        // when
        GetAccountBookInfos memberAccountBook = accountBookService.getMemberAccountBook(memberId);
@@ -175,13 +183,14 @@ class AccountBookServiceTest {
    @DisplayName("초대 생성 성공 테스트")
    public void createInvitationTestToSuccess() throws Exception{
        // given
+       // BeforeEach에서 멤버 & 가계부 생성
        SignUpRequest nickname = createSignUpRequest("email@email.com", "nickname");
        Long memberId = authService.signUp(nickname);
        AccountBookCreateRequest createRequest = createAccountBookCreateRequest("newAccountBook");
-       SimpleAccountBookInfo simpleAccountBookInfo = accountBookService.createAccountBook(memberId, createRequest);
+       SimpleAccountBookInfo accountBook = accountBookService.createAccountBook(memberId, createRequest);
        SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
        // when
-       GetInvitations invitations = GetInvitations.builder().id(simpleAccountBookInfo.getId()).emails(new ArrayList<>()).build();
+       GetInvitations invitations = GetInvitations.builder().id(accountBook.getId()).emails(new ArrayList<>()).build();
        invitations.getEmails().add("testuser@email.com");
 
        accountBookService.createInvitation(memberId, invitations);
@@ -196,19 +205,17 @@ class AccountBookServiceTest {
    @DisplayName("초대 응답 성공 테스트")
    public void invitationReplyTestToSuccess() throws Exception{
        // given
-       SignUpRequest nickname = createSignUpRequest("email@email.com", "nickname");
-       Long memberId = authService.signUp(nickname);
-       AccountBookCreateRequest createRequest = createAccountBookCreateRequest("newAccountBook");
+       // BeforeEach에서 멤버 & 가계부 생성
+
        SignUpRequest newNickname = createSignUpRequest("testuser@email.com", "newNickname");
        Long signUp = authService.signUp(newNickname);
-       SimpleAccountBookInfo simpleAccountBookInfo = accountBookService.createAccountBook(memberId, createRequest);
        SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
-       GetInvitations invitations = GetInvitations.builder().id(simpleAccountBookInfo.getId()).emails(new ArrayList<>()).build();
+       GetInvitations invitations = GetInvitations.builder().id(accountBook.getId()).emails(new ArrayList<>()).build();
        invitations.getEmails().add("testuser@email.com");
 
        accountBookService.createInvitation(memberId, invitations);
        // when
-       InvitationReply invitationReply = InvitationReply.builder().join(true).id(simpleAccountBookInfo.getId()).accountBookName(simpleAccountBookInfo.getName()).build();
+       InvitationReply invitationReply = InvitationReply.builder().join(true).id(accountBook.getId()).accountBookName(accountBook.getName()).build();
        accountBookService.invitationReply(signUp, invitationReply);
 
        // then
@@ -216,15 +223,29 @@ class AccountBookServiceTest {
    }
 
    @Test
-   @DisplayName("가계부 수입/지출 생성 성공 테스트")
-   public void createItemsTestToSuccess() throws Exception{
+   @DisplayName("가계부 카테고리 조회 테스트")
+   public void accountBookCategoryTestToSuccess() throws Exception{
        // given
-
-       //
-
+       // BeforeEach에서 멤버 & 가계부 생성
 
        // when
+       AccountBookCategories accountBookCategories = accountBookService.getAccountBookCategories(accountBook.getId());
 
        // then
+       assertEquals(defaultCategories.size(), accountBookCategories.getCategories().size());
    }
+
+   @Test
+   @DisplayName("가계부 멤버 조회 테스트")
+   public void accountBookMemberTestToSuccess() throws Exception{
+       // given
+       // BeforeEach에서 멤버 & 가계부 생성
+
+       // when
+       AccountBookMembers accountBookMembers = accountBookService.getAccountBookMembers(accountBook.getId());
+
+       // then
+       assertEquals(accountBookMembers.getMembers().size(), 1L);
+    }
+
 }
