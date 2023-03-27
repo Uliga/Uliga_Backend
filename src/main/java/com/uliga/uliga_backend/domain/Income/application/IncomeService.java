@@ -156,8 +156,8 @@ public class IncomeService {
     }
 
     @Transactional
-    public void deleteIncome(Long id, IncomeDeleteRequest deleteRequest) {
-        Income income = incomeRepository.findById(deleteRequest.getId()).orElseThrow(NotFoundByIdException::new);
+    public void deleteIncome(Long id, Long incomeId) {
+        Income income = incomeRepository.findById(incomeId).orElseThrow(NotFoundByIdException::new);
         if (income.getCreator().getId().equals(id)) {
             incomeRepository.delete(income);
         } else {

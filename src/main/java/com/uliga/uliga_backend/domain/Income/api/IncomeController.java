@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -79,10 +80,11 @@ public class IncomeController {
     }
 
     @Operation(summary = "수입 삭제 API", description = "수입 삭제 API 입니다")
-    @DeleteMapping("")
-    public ResponseEntity<String> deleteIncome(@RequestBody IncomeDeleteRequest deleteRequest) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteIncome(@Parameter(name = "id", description = "수입 아이디", in = PATH) @PathVariable("id") Long id) {
+
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        incomeService.deleteIncome(currentMemberId, deleteRequest);
+        incomeService.deleteIncome(currentMemberId, id);
         return ResponseEntity.ok("DELETED");
     }
 }
