@@ -16,7 +16,8 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             "s.isIncome, "+
             "s.name, "+
             "s.notificationDate, " +
-            "sm.value, " +
+            "sm.value," +
+            "m.id, " +
             "m.userName," +
             "s.accountBook.name) " +
             "FROM Schedule s JOIN ScheduleMember sm ON s.id = sm.schedule.id JOIN Member m on sm.member.id = m.id WHERE m.id = :id ORDER BY s.notificationDate ASC ")
@@ -28,6 +29,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             "s.name," +
             "s.notificationDate," +
             "s.value," +
+            "s.creator.id," +
             "s.creator.userName," +
             "s.accountBook.name) FROM Schedule s WHERE s.id = :id")
     ScheduleInfoQ findScheduleInfoById(@Param("id") Long id);
@@ -38,6 +40,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             "s.name," +
             "s.notificationDate," +
             "s.value," +
+            "s.creator.id," +
             "s.creator.userName," +
             "s.accountBook.name) FROM Schedule s WHERE s.accountBook.id=:id ORDER BY s.notificationDate ASC ")
     List<ScheduleInfoQ> findScheduleInfoByAccountBookId(@Param("id") Long id);

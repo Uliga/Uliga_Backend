@@ -20,17 +20,20 @@ public class ScheduleInfoQ {
     private Boolean isIncome;
     @Schema(description = "나가거나/들어오는 값(null이면 변동이라는 뜻)")
     private Long value;
+    @Schema(description = "작성자 아이디")
+    private Long creatorId;
     @Schema(description = "작성자", defaultValue = "creatorUsername")
     private String creator;
     @Schema(description = "가계부 이름",defaultValue = "accountBookName")
     private String accountBookName;
     @Builder
-    public ScheduleInfoQ(Long id, Boolean isIncome, String name, Long nDay, Long value, String creator, String accountBookName) {
+    public ScheduleInfoQ(Long id, Boolean isIncome, String name, Long nDay, Long value, Long creatorId, String creator, String accountBookName) {
         this.id = id;
         this.isIncome = isIncome;
         this.name = name;
         this.notificationDay = nDay;
         this.value = value;
+        this.creatorId = creatorId;
         this.creator = creator;
         this.accountBookName = accountBookName;
     }
