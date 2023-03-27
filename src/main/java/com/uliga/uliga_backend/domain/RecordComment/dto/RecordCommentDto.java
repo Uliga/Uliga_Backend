@@ -12,6 +12,6 @@ public class RecordCommentDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class RecordCommentCreateDto {
-
+        private Long memberId;
     }
 }

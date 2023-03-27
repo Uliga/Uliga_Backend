@@ -1,6 +1,7 @@
 package com.uliga.uliga_backend.domain.Record.dto;
 
 import com.uliga.uliga_backend.domain.Common.Date;
+import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Embedded;
 import lombok.AllArgsConstructor;
@@ -52,7 +53,7 @@ public class RecordDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class RecordInfoDetail {
-
+        private RecordInfoQ recordInfo;
     }
 
 
