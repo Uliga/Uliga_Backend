@@ -7,8 +7,11 @@ import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.Date;
 import com.uliga.uliga_backend.domain.Income.dao.IncomeRepository;
+import com.uliga.uliga_backend.domain.Income.dto.IncomeDTO;
+import com.uliga.uliga_backend.domain.Income.dto.IncomeDTO.IncomeDeleteRequest;
 import com.uliga.uliga_backend.domain.Income.dto.IncomeDTO.IncomeUpdateRequest;
 import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
+import com.uliga.uliga_backend.domain.Income.exception.InvalidIncomeDeleteRequest;
 import com.uliga.uliga_backend.domain.Income.model.Income;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.global.error.exception.IdNotFoundException;
@@ -150,5 +153,15 @@ public class IncomeService {
     @Transactional
     public Page<IncomeInfoQ> getMemberIncomesByCategory(Long id, Long accountBookId, String category, Pageable pageable) {
         return incomeRepository.getMemberIncomesByCategory(id, accountBookId, category, pageable);
+    }
+
+    @Transactional
+    public void deleteIncome(Long id, IncomeDeleteRequest deleteRequest) {
+        Income income = incomeRepository.findById(deleteRequest.getId()).orElseThrow(NotFoundByIdException::new);
+        if (income.getCreator().getId().equals(id)) {
+            incomeRepository.delete(income);
+        } else {
+            throw new InvalidIncomeDeleteRequest();
+        }
     }
 }

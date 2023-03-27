@@ -78,7 +78,9 @@ public class IncomeController {
 
     @Operation(summary = "수입 삭제 API", description = "수입 삭제 API 입니다")
     @DeleteMapping("")
-    public ResponseEntity<String> deleteIncome() {
+    public ResponseEntity<String> deleteIncome(@RequestBody IncomeDeleteRequest deleteRequest) {
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        incomeService.deleteIncome(currentMemberId, deleteRequest);
         return ResponseEntity.ok("DELETED");
     }
 }
