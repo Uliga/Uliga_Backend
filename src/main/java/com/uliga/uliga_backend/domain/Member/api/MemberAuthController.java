@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
+import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
 
 
 @Tag(name = "사용자 인증", description = "사용자 인증 관련 API 입니다.")
@@ -80,7 +81,7 @@ public class MemberAuthController {
 
     @Operation(summary = "소셜 로그인 API - 미구현", description = "소셜 로그인 API 입니다")
     @PostMapping(value = "/social_login/{loginType}")
-    public ResponseEntity<LoginResult> socialLogin(@Param("loginType") String loginType,
+    public ResponseEntity<LoginResult> socialLogin(@Parameter(name = "loginType", description = "로그인 타입", in = PATH)@Param("loginType") String loginType,
                                                    @RequestBody OAuthDTO.SocialLoginDto loginDto,
                                                    @Value("${oAuth.password}") String password,
                                                    HttpServletResponse response,
