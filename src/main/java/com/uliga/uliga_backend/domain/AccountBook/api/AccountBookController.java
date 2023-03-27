@@ -261,10 +261,10 @@ public class AccountBookController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "삭제 성공시")
     })
-    @DeleteMapping(value = "")
-    public ResponseEntity<String> deleteAccountBook(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "가계부 생성 요청") @RequestBody AccountBookDeleteRequest deleteRequest) {
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<String> deleteAccountBook(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id) {
 
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(accountBookService.deleteAccountBook(deleteRequest, currentMemberId));
+        return ResponseEntity.ok(accountBookService.deleteAccountBook(id, currentMemberId));
     }
 }

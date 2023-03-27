@@ -409,9 +409,9 @@ public class AccountBookService {
     }
 
     @Transactional
-    public String deleteAccountBook(AccountBookDeleteRequest deleteRequest, Long memberId) {
-        AccountBook accountBook = accountBookRepository.findById(deleteRequest.getAccountBookId()).orElseThrow(NotFoundByIdException::new);
-        if (accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(memberId, deleteRequest.getAccountBookId())) {
+    public String deleteAccountBook(Long id, Long memberId) {
+        AccountBook accountBook = accountBookRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        if (accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(memberId, id)) {
             accountBookRepository.delete(accountBook);
         } else {
             throw new InvalidAccountBookDeleteRequest();
