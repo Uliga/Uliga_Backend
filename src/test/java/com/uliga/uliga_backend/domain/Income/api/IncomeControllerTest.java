@@ -2,9 +2,7 @@ package com.uliga.uliga_backend.domain.Income.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.Income.application.IncomeService;
-import com.uliga.uliga_backend.domain.Income.dto.IncomeDTO;
 import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
-import com.uliga.uliga_backend.domain.Member.api.MemberAuthController;
 import com.uliga.uliga_backend.global.common.annotation.WithMockCustomUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,12 +22,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.uliga.uliga_backend.domain.Income.dto.IncomeDTO.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(IncomeController.class)
@@ -69,13 +65,13 @@ class IncomeControllerTest {
 
     @Test
     @WithMockCustomUser
-    @DisplayName("멤버 수입 조회 성공 테스트")
+    @DisplayName("멤버 수입 가계부별 조회 성공 테스트")
     public void getMemberIncomesTestToSuccess() throws Exception{
         // given
         Page<IncomeInfoQ> result = new PageImpl<>(new ArrayList<>());
 
         // when
-        doReturn(result).when(incomeService).getMemberIncomes(any(), any(), any());
+        doReturn(result).when(incomeService).getMemberIncomesByAccountBook(any(), any(), any());
 
         // then
         mvc.perform(get(BASE_URL + "/1")

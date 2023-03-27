@@ -28,7 +28,7 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
                     "JOIN Category c on c.id=r.category.id " +
                     "WHERE m.id = :id order by r.createTime DESC"
     )
-    Page<RecordInfoQ> findByMemberId(@Param("id") Long id, Pageable pageable);
+    Page<RecordInfoQ> getMemberRecords(@Param("id") Long id, Pageable pageable);
     @Query(
             "SELECT NEW com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ(" +
                     "r.id," +
@@ -74,7 +74,7 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
                     "JOIN Category c on c.id=r.category.id " +
                     "WHERE m.id = :id AND r.accountBook.id = :accountBookId order by r.createTime DESC"
     )
-    Page<RecordInfoQ> getMemberRecords(@Param("id") Long id, @Param("accountBookId") Long accountBookId, Pageable pageable);
+    Page<RecordInfoQ> getMemberRecordsByAccountBook(@Param("id") Long id, @Param("accountBookId") Long accountBookId, Pageable pageable);
     @Query(
             "SELECT NEW com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ(" +
                     "r.id," +

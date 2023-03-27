@@ -1,9 +1,7 @@
 package com.uliga.uliga_backend.domain.Income.api;
 
 import com.uliga.uliga_backend.domain.Income.application.IncomeService;
-import com.uliga.uliga_backend.domain.Income.dto.IncomeDTO;
 import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
-import com.uliga.uliga_backend.domain.Record.dto.RecordDTO;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import com.uliga.uliga_backend.global.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,11 +45,23 @@ public class IncomeController {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = IncomeInfoQ.class))),
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @GetMapping("/{id}")
-    public ResponseEntity<Page<IncomeInfoQ>> getMemberIncomes(@PathVariable("id") Long id, Pageable pageable) {
+    @GetMapping("")
+    public ResponseEntity<Page<IncomeInfoQ>> getMemberIncomes(Pageable pageable) {
         log.info("멤버 수입 전체 조회 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(incomeService.getMemberIncomes(currentMemberId, id, pageable));
+        return ResponseEntity.ok(incomeService.getMemberIncomes(currentMemberId, pageable));
+    }
+
+    @Operation(summary = "멤버 수입 가계부 별 전체 조회 API", description = "멤버 수입 가계부 별 전체 조회 API 입니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = IncomeInfoQ.class))),
+            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @GetMapping("/accountBook/{id}")
+    public ResponseEntity<Page<IncomeInfoQ>> getMemberIncomesByAccountBook(@PathVariable("id") Long id, Pageable pageable) {
+        log.info("멤버 수입 가계부별 전체 조회 API 호출");
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(incomeService.getMemberIncomesByAccountBook(currentMemberId, id, pageable));
     }
 
     @Operation(summary = "멤버 수입 카테고리별 전체 조회 API", description = "멤버 수입 카테고리 별 전체 조회 API 입니다")

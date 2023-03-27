@@ -1,7 +1,6 @@
 package com.uliga.uliga_backend.domain.Income.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
@@ -139,8 +138,13 @@ public class IncomeService {
     }
 
     @Transactional
-    public Page<IncomeInfoQ> getMemberIncomes(Long id, Long accountBookId, Pageable pageable) {
-        return incomeRepository.getMemberIncomes(id, accountBookId, pageable);
+    public Page<IncomeInfoQ> getMemberIncomesByAccountBook(Long id, Long accountBookId, Pageable pageable) {
+        return incomeRepository.getMemberIncomesByAccountBook(id, accountBookId, pageable);
+    }
+
+    @Transactional
+    public Page<IncomeInfoQ> getMemberIncomes(Long id, Pageable pageable) {
+        return incomeRepository.getMemberIncomes(id, pageable);
     }
 
     @Transactional

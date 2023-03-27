@@ -63,7 +63,7 @@ class RecordControllerTest {
 
     @Test
     @WithMockCustomUser
-    @DisplayName("멤버 지출 조회 성공 테스트")
+    @DisplayName("멤버 지출 가계부별 조회 성공 테스트")
     public void getMemberRecords() throws Exception{
         // given
         Page<RecordInfoQ> result = new PageImpl<>(new ArrayList<>());

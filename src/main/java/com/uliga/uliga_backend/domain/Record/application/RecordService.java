@@ -9,7 +9,6 @@ import com.uliga.uliga_backend.domain.Common.Date;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
-import com.uliga.uliga_backend.domain.Record.dto.RecordDTO;
 import com.uliga.uliga_backend.domain.Record.dto.RecordDTO.RecordInfoDetail;
 import com.uliga.uliga_backend.domain.Record.dto.RecordDTO.RecordUpdateRequest;
 import com.uliga.uliga_backend.domain.Record.model.Record;
@@ -147,7 +146,7 @@ public class RecordService {
 
     @Transactional
     public Page<RecordInfoQ> getMemberRecordsByAccountBook(Long id, Long accountBookId, Pageable pageable) {
-        return recordRepository.getMemberRecords(id, accountBookId, pageable);
+        return recordRepository.getMemberRecordsByAccountBook(id, accountBookId, pageable);
     }
 
     @Transactional
@@ -158,7 +157,7 @@ public class RecordService {
     @Transactional
     public Page<RecordInfoQ> getMemberRecords(Long id, Pageable pageable) {
 
-        return recordRepository.findByMemberId(id, pageable);
+        return recordRepository.getMemberRecords(id, pageable);
     }
     @Transactional
     public RecordCommentInfoQ addCommentToRecord(Long id, RecordCommentCreateDto createDto) {
