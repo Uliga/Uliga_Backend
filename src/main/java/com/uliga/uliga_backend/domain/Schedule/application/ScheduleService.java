@@ -140,11 +140,11 @@ public class ScheduleService {
     }
 
     @Transactional
-    public void deleteSchedule(ScheduleDeleteRequest deleteRequest, Long currentMemberId) {
-        Schedule schedule = scheduleRepository.findById(deleteRequest.getId()).orElseThrow(NotFoundByIdException::new);
+    public void deleteSchedule(Long id, Long currentMemberId) {
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(NotFoundByIdException::new);
         if (schedule.getCreator().getId().equals(currentMemberId)) {
 
-            scheduleRepository.deleteById(deleteRequest.getId());
+            scheduleRepository.deleteById(id);
         } else {
             throw new InvalidScheduleDelete();
         }
