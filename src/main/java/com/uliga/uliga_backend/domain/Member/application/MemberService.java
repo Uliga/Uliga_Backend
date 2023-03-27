@@ -101,7 +101,9 @@ public class MemberService {
                 accountBookRepository.deleteById(accountBookInfoQ.getAccountBookId());
             }
         }
-        memberRepository.delete(member);
+        member.updateNickname("탈퇴한 유저");
+        member.updateUserName("탈퇴한 유저");
+
     }
 
     @Transactional

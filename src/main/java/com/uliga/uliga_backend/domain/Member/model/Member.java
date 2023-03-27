@@ -82,4 +82,8 @@ public class Member extends MemberBase {
     public void setPrivateAccountBook(AccountBook accountBook) {
         this.privateAccountBook = accountBook;
     }
+
+    public void updateUserName(String userName) {
+        this.userName = userName;
+    }
 }
