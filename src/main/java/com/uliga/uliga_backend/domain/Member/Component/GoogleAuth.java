@@ -17,7 +17,7 @@ import static com.uliga.uliga_backend.domain.Member.dto.OAuthDTO.*;
 
 @Component
 @RequiredArgsConstructor
-public class GoogleAuth implements SocialAuth{
+public class GoogleAuth {
 
 
     @Value("${spring.OAuth2.google.userinfo_request}")
@@ -26,10 +26,6 @@ public class GoogleAuth implements SocialAuth{
     private final RestTemplate restTemplate;
 
     private final ObjectMapper objectMapper;
-    @Override
-    public String getOAuthRedirectURL() {
-        return null;
-    }
 
     public ResponseEntity<String> requestUserInfo(String token) {
         HttpHeaders httpHeaders = new HttpHeaders();

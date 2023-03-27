@@ -64,4 +64,14 @@ public class AccountBookExceptionHandler {
                 HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(BudgetAlreadyExists.class)
+    protected final ResponseEntity<ErrorResponse> handleBudgetAlreadyExists(
+            BudgetAlreadyExists ex, WebRequest request
+    ) {
+        log.info("이미 존재하는 예산입니다");
+        return new ResponseEntity<>(ErrorResponse.builder()
+                .message(ex.getMessage())
+                .errorCode(409L).build(),
+                HttpStatus.CONFLICT);
+    }
 }

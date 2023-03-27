@@ -75,4 +75,10 @@ public class IncomeController {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(incomeService.getMemberIncomesByCategory(currentMemberId, id, category, pageable));
     }
+
+    @Operation(summary = "수입 삭제 API", description = "수입 삭제 API 입니다")
+    @DeleteMapping("")
+    public ResponseEntity<String> deleteIncome() {
+        return ResponseEntity.ok("DELETED");
+    }
 }

@@ -24,7 +24,7 @@ public class AccountBookDTO {
     @Getter
     public static class AccountBookCreateRequest {
         @NotNull
-        @Schema(description = "가계부 이름", defaultValue = "acountBookName")
+        @Schema(description = "가계부 이름", defaultValue = "accountBookName")
         private String name;
         @NotNull
         @Schema(description = "생성할 카테고리들")

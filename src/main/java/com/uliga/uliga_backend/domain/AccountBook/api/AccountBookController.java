@@ -74,7 +74,6 @@ public class AccountBookController {
     }
 
 
-
     @Operation(summary = "멤버 초대 API", description = "멤버 초대 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "초대 성공시", content = @Content(schema = @Schema(implementation = Invited.class))),
@@ -108,14 +107,12 @@ public class AccountBookController {
     })
     @GetMapping(value = "/{id}/item/{year}/{month}")
     public ResponseEntity<AccountBookIncomesAndRecords> getAccountBookItems(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
-                                                                @Parameter(name = "year", description = "년도", in = PATH) @PathVariable("year") Long year,
-                                                                @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month) {
+                                                                            @Parameter(name = "year", description = "년도", in = PATH) @PathVariable("year") Long year,
+                                                                            @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month) {
 
         log.info("한달 가계부 수입/지출 조회 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookItems(id, year, month));
     }
-
-
 
 
     @Operation(summary = "하루 수입/지출 내역 상세 조회", description = "하루 가계부 수입/지출 조회 API 입니다")
@@ -225,7 +222,8 @@ public class AccountBookController {
 
     @Operation(summary = "가계부 예산 추가")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = BudgetInfoQ.class)))
+            @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = BudgetInfoQ.class))),
+            @ApiResponse(responseCode = "409", description = "해당 년도/달에 예산 이미 존재시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/budget")
     public ResponseEntity<BudgetInfoQ> addBudget(@io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -259,7 +257,7 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.getAccountBookSchedules(memberId, id));
     }
 
-    @Operation(summary = "가계부 삭제 요청 - 실제 서비스할때는 멤버 권한 검사 추가되야할듯")
+    @Operation(summary = "가계부 삭제 요청")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "삭제 성공시")
     })

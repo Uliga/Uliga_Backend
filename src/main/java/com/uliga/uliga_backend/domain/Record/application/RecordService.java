@@ -9,8 +9,11 @@ import com.uliga.uliga_backend.domain.Common.Date;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
+import com.uliga.uliga_backend.domain.Record.dto.RecordDTO;
+import com.uliga.uliga_backend.domain.Record.dto.RecordDTO.RecordDeleteRequest;
 import com.uliga.uliga_backend.domain.Record.dto.RecordDTO.RecordInfoDetail;
 import com.uliga.uliga_backend.domain.Record.dto.RecordDTO.RecordUpdateRequest;
+import com.uliga.uliga_backend.domain.Record.exception.InvalidRecordDelete;
 import com.uliga.uliga_backend.domain.Record.model.Record;
 import com.uliga.uliga_backend.domain.RecordComment.dto.NativeQ.RecordCommentInfoQ;
 import com.uliga.uliga_backend.domain.RecordComment.dto.RecordCommentDto.RecordCommentCreateDto;
@@ -159,6 +162,19 @@ public class RecordService {
 
         return recordRepository.getMemberRecords(id, pageable);
     }
+
+    @Transactional
+    public void deleteRecord(Long id, RecordDeleteRequest deleteRequest) {
+        Record record = recordRepository.findById(deleteRequest.getId()).orElseThrow(NotFoundByIdException::new);
+        if (record.getCreator().getId().equals(id)) {
+            recordRepository.delete(record);
+        } else {
+            throw new InvalidRecordDelete();
+        }
+
+    }
+
+
     @Transactional
     public RecordCommentInfoQ addCommentToRecord(Long id, RecordCommentCreateDto createDto) {
         return null;

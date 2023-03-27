@@ -2,6 +2,7 @@ package com.uliga.uliga_backend.domain.Budget.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
+import com.uliga.uliga_backend.domain.AccountBook.exception.BudgetAlreadyExists;
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.Budget.dao.BudgetRepository;
@@ -36,6 +37,9 @@ public class BudgetService {
     @Transactional
     public BudgetInfoQ addBudgetToAccountBook(CreateBudgetDto dto) {
         AccountBook accountBook = accountBookRepository.findById(dto.getId()).orElseThrow(NotFoundByIdException::new);
+        if (budgetRepository.existsBudgetByAccountBookIdAndYearAndMonth(dto.getId(), dto.getYear(), dto.getMonth())) {
+            throw new BudgetAlreadyExists();
+        }
         if (dto.getCategory() != null) {
             Category category = categoryRepository.findByAccountBookAndName(accountBook, dto.getCategory()).orElseThrow(CategoryNotFoundException::new);
             Budget build = Budget.builder()

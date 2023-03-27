@@ -9,7 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -20,14 +22,17 @@ public class CategoryService {
 
     @Transactional
     public void createCategories(List<String> categoryNames, AccountBook accountBook) {
-
+        Set<String> createCategories = new HashSet<>();
         List<Category> categories = new ArrayList<>();
         for (String category : categoryNames){
-            Category newCategory = Category.builder()
-                    .accountBook(accountBook)
-                    .name(category)
-                    .build();
-            categories.add(newCategory);
+            if (!createCategories.contains(category)) {
+                Category newCategory = Category.builder()
+                        .accountBook(accountBook)
+                        .name(category)
+                        .build();
+                categories.add(newCategory);
+                createCategories.add(category);
+            }
         }
         categoryRepository.saveAll(categories);
     }

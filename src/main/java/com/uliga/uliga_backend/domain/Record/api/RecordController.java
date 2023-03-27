@@ -7,6 +7,7 @@ import com.uliga.uliga_backend.domain.RecordComment.dto.RecordCommentDto.RecordC
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import com.uliga.uliga_backend.global.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -96,5 +97,13 @@ public class RecordController {
     @PostMapping(value = "/{id}/comment")
     public ResponseEntity<RecordCommentInfoQ> addCommentToRecord(@PathVariable("id") Long id, @RequestBody RecordCommentCreateDto createDto) {
         return ResponseEntity.ok(recordService.addCommentToRecord(id, createDto));
+    }
+
+    @Operation(summary = "지출 삭제 API", description = "지출 삭제 API 입니다")
+    @DeleteMapping("")
+    public ResponseEntity<String> deleteRecord(@RequestBody RecordDeleteRequest deleteRequest) {
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        recordService.deleteRecord(currentMemberId, deleteRequest);
+        return ResponseEntity.ok("DELETED");
     }
 }

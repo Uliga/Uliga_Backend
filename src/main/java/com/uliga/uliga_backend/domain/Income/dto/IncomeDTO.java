@@ -1,6 +1,7 @@
 package com.uliga.uliga_backend.domain.Income.dto;
 
 import com.uliga.uliga_backend.domain.Common.Date;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Embedded;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,7 +41,15 @@ public class IncomeDTO {
 
     }
 
-
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema(description = "수입 삭제 요청")
+    public static class IncomeDeleteRequest {
+        @Schema(description = "수입 아이디")
+        private Long id;
+    }
 
 
 }

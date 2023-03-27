@@ -89,9 +89,7 @@ public class MemberService {
             return memberRepository.existsByNickName(nicknameCheckDto.getNickname());
         }
     }
-    // JPQL로 리팩터링해야할듯? 공유 가계부가 좀 걸림, 개인 가계부는 다 지우면 되는데, 회원이 탈퇴했는데, 공유 가계부에 다른 사람들이 있으면
-    // 지우면 안되고, 공유 가계부에 사람이 없으면 지워야하니까 ㅇㅇ
-    // 고도화때 하면될듯 TODO
+
     @Transactional
     public void deleteMember(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);

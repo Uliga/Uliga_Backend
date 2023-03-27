@@ -56,5 +56,15 @@ public class RecordDTO {
         private RecordInfoQ recordInfo;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema(description = "지출 삭제 요청")
+    public static class RecordDeleteRequest {
+        @Schema(description = "지출 아이디")
+        private Long id;
+    }
+
 
 }
