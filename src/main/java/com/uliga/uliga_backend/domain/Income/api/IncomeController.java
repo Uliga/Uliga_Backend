@@ -5,6 +5,7 @@ import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import com.uliga.uliga_backend.global.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 import static com.uliga.uliga_backend.domain.Income.dto.IncomeDTO.*;
+import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
 
 @Tag(name = "수입", description = "수입 관련 API 입니다")
 @Slf4j
@@ -58,7 +60,7 @@ public class IncomeController {
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping("/accountBook/{id}")
-    public ResponseEntity<Page<IncomeInfoQ>> getMemberIncomesByAccountBook(@PathVariable("id") Long id, Pageable pageable) {
+    public ResponseEntity<Page<IncomeInfoQ>> getMemberIncomesByAccountBook(@Parameter(name = "id", description = "가계부 아이디", in = PATH)@PathVariable("id") Long id, Pageable pageable) {
         log.info("멤버 수입 가계부별 전체 조회 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(incomeService.getMemberIncomesByAccountBook(currentMemberId, id, pageable));
@@ -70,7 +72,7 @@ public class IncomeController {
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "/{id}/{category}")
-    public ResponseEntity<Page<IncomeInfoQ>> getMemberIncomesByCategory(@PathVariable("id") Long id, @PathVariable("category") String category, Pageable pageable) {
+    public ResponseEntity<Page<IncomeInfoQ>> getMemberIncomesByCategory(@Parameter(name = "id", description = "가계부  아이디", in = PATH)@PathVariable("id") Long id,@Parameter(name = "category", description = "카테고리 이름", in = PATH) @PathVariable("category") String category, Pageable pageable) {
         log.info("멤버 수입 카테고리별 전체 조회 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(incomeService.getMemberIncomesByCategory(currentMemberId, id, category, pageable));

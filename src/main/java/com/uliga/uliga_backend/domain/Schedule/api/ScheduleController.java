@@ -52,7 +52,7 @@ public class ScheduleController {
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "/{id}")
-    public ResponseEntity<ScheduleDetail> getScheduleDetail(@PathVariable("id") Long id) {
+    public ResponseEntity<ScheduleDetail> getScheduleDetail(@Parameter(name = "id", description = "금융일정 아이디", in = PATH)@PathVariable("id") Long id) {
 
         log.info("금융 일정 세부 내용 조회 API 호출");
         return ResponseEntity.ok(scheduleService.getScheduleDetails(id));

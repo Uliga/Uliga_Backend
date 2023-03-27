@@ -8,6 +8,7 @@ import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import com.uliga.uliga_backend.global.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 import static com.uliga.uliga_backend.domain.Record.dto.RecordDTO.*;
+import static io.swagger.v3.oas.annotations.enums.ParameterIn.*;
 
 @Tag(name = "지출", description = "지출 관련 API 입니다")
 @Slf4j
@@ -64,7 +66,7 @@ public class RecordController {
 
     })
     @GetMapping(value = "/{id}")
-    public ResponseEntity<RecordInfoDetail> getRecordInfoDetail(@PathVariable("id") Long id) {
+    public ResponseEntity<RecordInfoDetail> getRecordInfoDetail(@Parameter(name = "id", description = "지출 아이디", in = PATH) @PathVariable("id") Long id) {
         log.info("지출 상세 내력 조회 API 호출");
         return ResponseEntity.ok(recordService.getRecordInfoDetail(id));
     }
@@ -75,7 +77,7 @@ public class RecordController {
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "/accountBook/{id}")
-    public ResponseEntity<Page<RecordInfoQ>> getMemberRecordsByAccountBook(@PathVariable("id") Long id, Pageable pageable) {
+    public ResponseEntity<Page<RecordInfoQ>> getMemberRecordsByAccountBook(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id, Pageable pageable) {
         log.info("멤버 가계부별 지출 전체 조회 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(recordService.getMemberRecordsByAccountBook(currentMemberId, id, pageable));
@@ -87,7 +89,7 @@ public class RecordController {
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "/{id}/{category}")
-    public ResponseEntity<Page<RecordInfoQ>> getMemberRecordsByCategory(@PathVariable("id") Long id, @PathVariable("category") String category, Pageable pageable) {
+    public ResponseEntity<Page<RecordInfoQ>> getMemberRecordsByCategory(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id, @PathVariable("category") String category, Pageable pageable) {
         log.info("멤버 지출 카테고리 별 전체 조회 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(recordService.getMemberRecordsByCategory(currentMemberId, id, category, pageable));
@@ -95,7 +97,7 @@ public class RecordController {
 
     @Operation(summary = "지출에 댓글 추가 API", description = "지출에 댓글 추가하는 API 입니다")
     @PostMapping(value = "/{id}/comment")
-    public ResponseEntity<RecordCommentInfoQ> addCommentToRecord(@PathVariable("id") Long id, @RequestBody RecordCommentCreateDto createDto) {
+    public ResponseEntity<RecordCommentInfoQ> addCommentToRecord(@Parameter(name = "id", description = "지출 아이디", in = PATH)@PathVariable("id") Long id, @RequestBody RecordCommentCreateDto createDto) {
         return ResponseEntity.ok(recordService.addCommentToRecord(id, createDto));
     }
 

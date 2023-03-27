@@ -66,7 +66,7 @@ public class AccountBookController {
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "")
-    public ResponseEntity<SimpleAccountBookInfo> createAccountBook(@Valid @RequestBody AccountBookCreateRequest accountBookCreateRequest) throws JsonProcessingException {
+    public ResponseEntity<SimpleAccountBookInfo> createAccountBook(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "가계부 생성 요청") @RequestBody AccountBookCreateRequest accountBookCreateRequest) throws JsonProcessingException {
 
         log.info("가계부 생성 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
@@ -80,7 +80,7 @@ public class AccountBookController {
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/invitation")
-    public ResponseEntity<Invited> createInvitation(@Valid @RequestBody GetInvitations invitations) throws JsonProcessingException {
+    public ResponseEntity<Invited> createInvitation(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "초대 생성 요청") @RequestBody GetInvitations invitations) throws JsonProcessingException {
 
         log.info("멤버 초대 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
@@ -93,7 +93,7 @@ public class AccountBookController {
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/invitation/reply")
-    public ResponseEntity<InvitationReplyResult> invitationReply(@Valid @RequestBody InvitationReply invitationReply) throws JsonProcessingException {
+    public ResponseEntity<InvitationReplyResult> invitationReply(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "초대 응답 요청") @RequestBody InvitationReply invitationReply) throws JsonProcessingException {
 
         log.info("초대 응답 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
@@ -150,7 +150,7 @@ public class AccountBookController {
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/item")
-    public ResponseEntity<CreateResult> createItems(@Valid @RequestBody CreateItems items) {
+    public ResponseEntity<CreateResult> createItems(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "수입/지출 생성 요청") @RequestBody CreateItems items) {
 
         log.info("지출 혹은 수입 생성 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
@@ -163,7 +163,7 @@ public class AccountBookController {
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/category")
-    public ResponseEntity<CategoryCreateResult> createCategories(@Valid @RequestBody CategoryCreateRequest createRequest) {
+    public ResponseEntity<CategoryCreateResult> createCategories(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "카테고리 생성 요청") @RequestBody CategoryCreateRequest createRequest) {
 
         log.info("가계부에 카테고리 추가 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
@@ -176,7 +176,7 @@ public class AccountBookController {
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/record")
-    public ResponseEntity<AddRecordResult> addRecord(@Valid @RequestBody AddRecordRequest request) {
+    public ResponseEntity<AddRecordResult> addRecord(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "지출 한개 생성 요청") @RequestBody AddRecordRequest request) {
 
         log.info("가계부에 지출 한개 추가 api 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
@@ -189,7 +189,7 @@ public class AccountBookController {
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/income")
-    public ResponseEntity<AddIncomeResult> addIncome(@Valid @RequestBody AddIncomeRequest request) {
+    public ResponseEntity<AddIncomeResult> addIncome(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "수입 한개 생성 요청") @RequestBody AddIncomeRequest request) {
 
         log.info("가계부에 수입 한개 추가 api 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
@@ -251,7 +251,7 @@ public class AccountBookController {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = GetAccountBookSchedules.class)))
     })
     @GetMapping(value = "/{id}/schedule")
-    public ResponseEntity<GetAccountBookSchedules> getAccountBookSchedules(@PathVariable("id") Long id) {
+    public ResponseEntity<GetAccountBookSchedules> getAccountBookSchedules(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id) {
 
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.getAccountBookSchedules(memberId, id));
@@ -262,7 +262,7 @@ public class AccountBookController {
             @ApiResponse(responseCode = "200", description = "삭제 성공시")
     })
     @DeleteMapping(value = "")
-    public ResponseEntity<String> deleteAccountBook(@Valid @RequestBody AccountBookDeleteRequest deleteRequest) {
+    public ResponseEntity<String> deleteAccountBook(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "가계부 생성 요청") @RequestBody AccountBookDeleteRequest deleteRequest) {
 
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.deleteAccountBook(deleteRequest, currentMemberId));

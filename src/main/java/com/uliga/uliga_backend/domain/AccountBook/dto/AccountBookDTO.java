@@ -214,6 +214,7 @@ public class AccountBookDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    @Schema(description = "수입/지출 생성 요청")
     public static class CreateItems {
         @NotNull
         @Schema(description = "가계부 아이디")
@@ -261,6 +262,7 @@ public class AccountBookDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    @Schema(description = "카테고리 생성 요청")
     public static class CategoryCreateRequest {
         @NotNull
         @Schema(description = "가계부 아이디")
@@ -362,6 +364,7 @@ public class AccountBookDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    @Schema(description = "수입 한개 생성 요청")
     public static class AddIncomeRequest {
         @NotNull
         @Schema(description = "가계부 아이디")
@@ -392,6 +395,7 @@ public class AccountBookDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    @Schema(description = "지출 한개 생성 요청")
     public static class AddRecordRequest {
         @NotNull
         @Schema(description = "가계부 아이디")
@@ -452,7 +456,9 @@ public class AccountBookDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    @Schema(description = "가계부 생성 요청")
     public static class AccountBookDeleteRequest {
+        @Schema(description = "삭제할 가계부 아이디")
         @NotNull
         private Long accountBookId;
     }
