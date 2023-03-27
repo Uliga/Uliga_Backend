@@ -1,11 +1,8 @@
 package com.uliga.uliga_backend.domain.Record.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.Income.api.IncomeController;
-import com.uliga.uliga_backend.domain.Income.application.IncomeService;
 import com.uliga.uliga_backend.domain.Record.application.RecordService;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
-import com.uliga.uliga_backend.domain.Record.dto.RecordDTO;
 import com.uliga.uliga_backend.domain.Record.dto.RecordDTO.RecordUpdateRequest;
 import com.uliga.uliga_backend.global.common.annotation.WithMockCustomUser;
 import org.junit.jupiter.api.DisplayName;
@@ -25,12 +22,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(RecordController.class)
@@ -75,7 +69,7 @@ class RecordControllerTest {
         Page<RecordInfoQ> result = new PageImpl<>(new ArrayList<>());
 
         // when
-        doReturn(result).when(recordService).getMemberRecords(any(), any(), any());
+        doReturn(result).when(recordService).getMemberRecordsByAccountBook(any(), any(), any());
         // then
         mvc.perform(get(BASE_URL + "/1")
                         .with(csrf()))

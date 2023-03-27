@@ -2,7 +2,8 @@ package com.uliga.uliga_backend.domain.Record.api;
 
 import com.uliga.uliga_backend.domain.Record.application.RecordService;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
-import com.uliga.uliga_backend.domain.Record.dto.RecordDTO;
+import com.uliga.uliga_backend.domain.RecordComment.dto.NativeQ.RecordCommentInfoQ;
+import com.uliga.uliga_backend.domain.RecordComment.dto.RecordCommentDto.RecordCommentCreateDto;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import com.uliga.uliga_backend.global.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,11 +48,36 @@ public class RecordController {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = RecordInfoQ.class))),
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Page<RecordInfoQ>> getMemberRecords(@PathVariable("id") Long id, Pageable pageable) {
+    @GetMapping(value = "")
+    public ResponseEntity<Page<RecordInfoQ>> getMemberRecords(Pageable pageable) {
         log.info("멤버 지출 전체 조회 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(recordService.getMemberRecords(currentMemberId, id, pageable));
+        return ResponseEntity.ok(recordService.getMemberRecords(currentMemberId, pageable));
+
+    }
+
+    @Operation(summary = "지출 상세 내역 조회", description = "지출 상세 내역 조회 API 입니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = RecordInfoDetail.class))),
+            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+
+    })
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<RecordInfoDetail> getRecordInfoDetail(@PathVariable("id") Long id) {
+        log.info("지출 상세 내력 조회 API 호출");
+        return ResponseEntity.ok(recordService.getRecordInfoDetail(id));
+    }
+
+    @Operation(summary = "멤버 가계부 별 지출 전체 조회 API", description = "멤버 가계부 별 지출 전체 조회 API 입니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = RecordInfoQ.class))),
+            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @GetMapping(value = "/accountBook/{id}")
+    public ResponseEntity<Page<RecordInfoQ>> getMemberRecordsByAccountBook(@PathVariable("id") Long id, Pageable pageable) {
+        log.info("멤버 가계부별 지출 전체 조회 API 호출");
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(recordService.getMemberRecordsByAccountBook(currentMemberId, id, pageable));
     }
 
     @Operation(summary = "멤버 지출 카테고리 별 전체 조회 API", description = "멤버 지출 카테고리별 전체 조회 API 입니다")
@@ -64,5 +90,11 @@ public class RecordController {
         log.info("멤버 지출 카테고리 별 전체 조회 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(recordService.getMemberRecordsByCategory(currentMemberId, id, category, pageable));
+    }
+
+    @Operation(summary = "지출에 댓글 추가 API", description = "지출에 댓글 추가하는 API 입니다")
+    @PostMapping(value = "/{id}/comment")
+    public ResponseEntity<RecordCommentInfoQ> addCommentToRecord(@PathVariable("id") Long id, @RequestBody RecordCommentCreateDto createDto) {
+        return ResponseEntity.ok(recordService.addCommentToRecord(id, createDto));
     }
 }

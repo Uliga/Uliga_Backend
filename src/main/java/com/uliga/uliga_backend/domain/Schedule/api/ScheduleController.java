@@ -5,6 +5,7 @@ import com.uliga.uliga_backend.domain.Schedule.application.ScheduleService;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.CreateScheduleRequest;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.GetMemberSchedules;
+import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.ScheduleDeleteRequest;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.ScheduleDetail;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import com.uliga.uliga_backend.global.util.SecurityUtil;
@@ -65,5 +66,12 @@ public class ScheduleController {
     @PatchMapping(value = "")
     public ResponseEntity<ScheduleDTO.UpdateScheduleRequest> updateSchedule(@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "금융일정 업데이트 요청", content = @Content(schema = @Schema(implementation = ScheduleDTO.UpdateScheduleRequest.class))) @RequestBody Map<String, Object> updates) {
         return ResponseEntity.ok(scheduleService.updateSchedule(updates));
+    }
+
+    @Operation(summary = "금융 일정 삭제 API")
+    @DeleteMapping(value = "")
+    public ResponseEntity<String> deleteSchedule(@RequestBody ScheduleDeleteRequest deleteRequest) {
+        scheduleService.deleteSchedule(deleteRequest);
+        return ResponseEntity.ok("DELETED");
     }
 }

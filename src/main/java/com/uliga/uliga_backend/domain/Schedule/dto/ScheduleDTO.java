@@ -100,4 +100,14 @@ public class ScheduleDTO {
         @Schema(description = "멤버 할당 정보")
         private List<ScheduleMemberInfoQ> assignments;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema(description = "금융 일정 삭제 요청 데이터")
+    public static class ScheduleDeleteRequest {
+        @Schema(description = "삭제할 금융 일정 아이디")
+        private Long id;
+    }
 }

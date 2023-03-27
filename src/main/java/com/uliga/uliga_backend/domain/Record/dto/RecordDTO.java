@@ -47,5 +47,13 @@ public class RecordDTO {
         private String date;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class RecordInfoDetail {
+
+    }
+
 
 }

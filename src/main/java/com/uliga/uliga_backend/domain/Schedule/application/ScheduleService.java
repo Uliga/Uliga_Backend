@@ -137,4 +137,9 @@ public class ScheduleService {
         }
         return GetAccountBookSchedules.builder().schedules(result).build();
     }
+
+    @Transactional
+    public void deleteSchedule(ScheduleDeleteRequest deleteRequest) {
+
+    }
 }

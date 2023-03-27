@@ -1,7 +1,6 @@
 package com.uliga.uliga_backend.domain.Record.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
@@ -10,8 +9,12 @@ import com.uliga.uliga_backend.domain.Common.Date;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
+import com.uliga.uliga_backend.domain.Record.dto.RecordDTO;
+import com.uliga.uliga_backend.domain.Record.dto.RecordDTO.RecordInfoDetail;
 import com.uliga.uliga_backend.domain.Record.dto.RecordDTO.RecordUpdateRequest;
 import com.uliga.uliga_backend.domain.Record.model.Record;
+import com.uliga.uliga_backend.domain.RecordComment.dto.NativeQ.RecordCommentInfoQ;
+import com.uliga.uliga_backend.domain.RecordComment.dto.RecordCommentDto.RecordCommentCreateDto;
 import com.uliga.uliga_backend.global.error.exception.IdNotFoundException;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import jakarta.transaction.Transactional;
@@ -143,12 +146,27 @@ public class RecordService {
     }
 
     @Transactional
-    public Page<RecordInfoQ> getMemberRecords(Long id, Long accountBookId, Pageable pageable) {
+    public Page<RecordInfoQ> getMemberRecordsByAccountBook(Long id, Long accountBookId, Pageable pageable) {
         return recordRepository.getMemberRecords(id, accountBookId, pageable);
     }
 
     @Transactional
     public Page<RecordInfoQ> getMemberRecordsByCategory(Long id, Long accountBookId, String category, Pageable pageable) {
         return recordRepository.getMemberRecordsByCategory(id, accountBookId, category, pageable);
+    }
+
+    @Transactional
+    public Page<RecordInfoQ> getMemberRecords(Long id, Pageable pageable) {
+
+        return recordRepository.findByMemberId(id, pageable);
+    }
+    @Transactional
+    public RecordCommentInfoQ addCommentToRecord(Long id, RecordCommentCreateDto createDto) {
+        return null;
+    }
+
+    @Transactional
+    public RecordInfoDetail getRecordInfoDetail(Long id) {
+        return null;
     }
 }
