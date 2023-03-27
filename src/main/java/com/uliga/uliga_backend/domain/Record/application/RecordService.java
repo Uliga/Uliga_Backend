@@ -164,8 +164,8 @@ public class RecordService {
     }
 
     @Transactional
-    public void deleteRecord(Long id, RecordDeleteRequest deleteRequest) {
-        Record record = recordRepository.findById(deleteRequest.getId()).orElseThrow(NotFoundByIdException::new);
+    public void deleteRecord(Long id, Long recordId) {
+        Record record = recordRepository.findById(recordId).orElseThrow(NotFoundByIdException::new);
         if (record.getCreator().getId().equals(id)) {
             recordRepository.delete(record);
         } else {

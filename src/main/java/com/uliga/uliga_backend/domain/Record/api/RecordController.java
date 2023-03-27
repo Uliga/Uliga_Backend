@@ -102,10 +102,10 @@ public class RecordController {
     }
 
     @Operation(summary = "지출 삭제 API", description = "지출 삭제 API 입니다")
-    @DeleteMapping("")
-    public ResponseEntity<String> deleteRecord(@RequestBody RecordDeleteRequest deleteRequest) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteRecord(@Parameter(name = "id", description = "지출 아이디", in = PATH) @PathVariable("id") Long id) {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        recordService.deleteRecord(currentMemberId, deleteRequest);
+        recordService.deleteRecord(currentMemberId, id);
         return ResponseEntity.ok("DELETED");
     }
 }
