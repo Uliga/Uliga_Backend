@@ -15,6 +15,7 @@ import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Schedule.dao.ScheduleRepository;
 import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleInfoQ;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO;
+import com.uliga.uliga_backend.domain.Schedule.exception.InvalidScheduleDelete;
 import com.uliga.uliga_backend.domain.Schedule.model.Schedule;
 import com.uliga.uliga_backend.global.common.constants.UserConstants;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
@@ -139,7 +140,14 @@ public class ScheduleService {
     }
 
     @Transactional
-    public void deleteSchedule(ScheduleDeleteRequest deleteRequest) {
+    public void deleteSchedule(ScheduleDeleteRequest deleteRequest, Long currentMemberId) {
+        Schedule schedule = scheduleRepository.findById(deleteRequest.getId()).orElseThrow(NotFoundByIdException::new);
+        if (schedule.getCreator().getId().equals(currentMemberId)) {
+
+            scheduleRepository.deleteById(deleteRequest.getId());
+        } else {
+            throw new InvalidScheduleDelete();
+        }
 
     }
 }

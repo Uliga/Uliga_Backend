@@ -71,7 +71,8 @@ public class ScheduleController {
     @Operation(summary = "금융 일정 삭제 API")
     @DeleteMapping(value = "")
     public ResponseEntity<String> deleteSchedule(@RequestBody ScheduleDeleteRequest deleteRequest) {
-        scheduleService.deleteSchedule(deleteRequest);
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        scheduleService.deleteSchedule(deleteRequest,currentMemberId);
         return ResponseEntity.ok("DELETED");
     }
 }

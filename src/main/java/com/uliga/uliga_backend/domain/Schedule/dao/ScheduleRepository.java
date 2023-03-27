@@ -50,4 +50,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             "sm.member.userName, " +
             "sm.value) FROM ScheduleMember sm WHERE sm.schedule.id = :id")
     List<ScheduleMemberInfoQ> findScheduleMemberInfoById(@Param("id") Long id);
+
+    void deleteById(Long id);
 }
