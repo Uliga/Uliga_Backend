@@ -55,16 +55,18 @@ public class IncomeController {
         return ResponseEntity.ok(incomeService.getMemberIncomes(currentMemberId, pageable));
     }
 
-    @Operation(summary = "멤버 수입 가계부 별 전체 조회 API", description = "멤버 수입 가계부 별 전체 조회 API 입니다")
+    @Operation(summary = "멤버 수입 가계부 별 전체/년도별/월회 조회 API", description = "멤버 수입 가계부 별 전체/월별 조회 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = IncomeInfoQ.class))),
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping("/accountBook/{id}")
-    public ResponseEntity<Page<IncomeInfoQ>> getMemberIncomesByAccountBook(@Parameter(name = "id", description = "가계부 아이디", in = PATH)@PathVariable("id") Long id, Pageable pageable) {
+    public ResponseEntity<Page<IncomeInfoQ>> getMemberIncomesByAccountBook(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
+                                                                           @RequestParam(name = "year", required = false, defaultValue = "") Long year,
+                                                                           @RequestParam(name = "month", required = false, defaultValue = "") Long month, Pageable pageable) {
         log.info("멤버 수입 가계부별 전체 조회 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(incomeService.getMemberIncomesByAccountBook(currentMemberId, id, pageable));
+        return ResponseEntity.ok(incomeService.getMemberIncomesByAccountBook(currentMemberId, id, year, month, pageable));
     }
 
     @Operation(summary = "멤버 수입 카테고리별 전체 조회 API", description = "멤버 수입 카테고리 별 전체 조회 API 입니다")

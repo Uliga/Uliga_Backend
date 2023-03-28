@@ -86,6 +86,45 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
             "c.name) from Income i " +
             "JOIN Member m on m.id = i.creator.id " +
             "JOIN Category c on c.id = i.category.id " +
+            "WHERE m.id=:id " +
+            "AND i.accountBook.id = :accountBookId " +
+            "AND i.date.year = :year " +
+            "ORDER BY i.date.year*365 + i.date.month*31 + i.date.day DESC ")
+    Page<IncomeInfoQ> getMemberIncomesByAccountBookAndYear(@Param("id") Long id, @Param("accountBookId") Long accountBookId, @Param("year") Long year, Pageable pageable);
+    @Query("select new com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ(" +
+            "i.id," +
+            "i.value," +
+            "i.payment," +
+            "i.account," +
+            "i.memo," +
+            "i.date.year," +
+            "i.date.month," +
+            "i.date.day," +
+            "m.userName," +
+            "c.name) from Income i " +
+            "JOIN Member m on m.id = i.creator.id " +
+            "JOIN Category c on c.id = i.category.id " +
+            "WHERE m.id=:i " +
+            "AND i.accountBook.id = :accountBookId " +
+            "AND i.date.year = :year " +
+            "AND i.date.month = :month " +
+            "ORDER BY i.date.year*365 + i.date.month*31 + i.date.day DESC ")
+    Page<IncomeInfoQ> getMemberIncomesByAccountBookAndYearAndMonth(@Param("id") Long id, @Param("accountBookId") Long accountBookId, @Param("year") Long year, @Param("month") Long month, Pageable pageable);
+
+
+    @Query("select new com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ(" +
+            "i.id," +
+            "i.value," +
+            "i.payment," +
+            "i.account," +
+            "i.memo," +
+            "i.date.year," +
+            "i.date.month," +
+            "i.date.day," +
+            "m.userName," +
+            "c.name) from Income i " +
+            "JOIN Member m on m.id = i.creator.id " +
+            "JOIN Category c on c.id = i.category.id " +
             "WHERE m.id=:id AND i.accountBook.id = :accountBookId AND c.name = :category ORDER BY i.date.year*365 + i.date.month*31 + i.date.day DESC ")
     Page<IncomeInfoQ> getMemberIncomesByCategory(@Param("id") Long id, @Param("accountBookId") Long accountBookId, @Param("category") String category, Pageable pageable);
 

@@ -141,8 +141,15 @@ public class IncomeService {
     }
 
     @Transactional
-    public Page<IncomeInfoQ> getMemberIncomesByAccountBook(Long id, Long accountBookId, Pageable pageable) {
-        return incomeRepository.getMemberIncomesByAccountBook(id, accountBookId, pageable);
+    public Page<IncomeInfoQ> getMemberIncomesByAccountBook(Long id, Long accountBookId, Long year, Long month, Pageable pageable) {
+        if (year == null && month == null) {
+
+            return incomeRepository.getMemberIncomesByAccountBook(id, accountBookId, pageable);
+        } else if (year != null && month == null) {
+            return incomeRepository.getMemberIncomesByAccountBookAndYear(id, accountBookId, year, pageable);
+        } else {
+            return incomeRepository.getMemberIncomesByAccountBookAndYearAndMonth(id, accountBookId, year, month, pageable);
+        }
     }
 
     @Transactional

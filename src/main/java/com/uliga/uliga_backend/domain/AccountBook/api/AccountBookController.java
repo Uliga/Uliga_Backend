@@ -271,7 +271,7 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.deleteAccountBook(id, currentMemberId));
     }
 
-    @Operation(summary = "내역 조회에 쓸 API")
+    @Operation(summary = "내역 조회에 쓸 API, 전체/년도별/월별 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountBookDataQ.class)))
     })
