@@ -73,7 +73,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("가계부 생성 성공 테스트")
-    public void createAccountBookTestToSuccess() throws Exception {
+     void createAccountBookTestToSuccess() throws Exception {
         // given
         AccountBookCreateRequest accountBook = createAccountBook("가계부 생성");
         String accountBookCreateRequest = mapper.writeValueAsString(accountBook);
@@ -93,7 +93,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null name - 가계부 생성 실패 테스트")
-    public void createAccountBookTestToFailByNullName() throws Exception {
+     void createAccountBookTestToFailByNullName() throws Exception {
         // given
         AccountBookCreateRequest createRequest = AccountBookCreateRequest.builder().emails(new ArrayList<>()).relationship("relationship").categories(new ArrayList<>()).build();
         String value = mapper.writeValueAsString(createRequest);
@@ -109,7 +109,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null emails - 가계부 생성 실패 테스트")
-    public void createAccountBookTestToFailByNullEmails() throws Exception {
+     void createAccountBookTestToFailByNullEmails() throws Exception {
         // given
         AccountBookCreateRequest createRequest = AccountBookCreateRequest.builder().name("name").categories(new ArrayList<>()).relationship("relationship").build();
         String value = mapper.writeValueAsString(createRequest);
@@ -126,7 +126,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null categories - 가계부 생성 실패 테스트")
-    public void createAccountBookTestToFailByNullCategories() throws Exception {
+     void createAccountBookTestToFailByNullCategories() throws Exception {
         // given
         AccountBookCreateRequest createRequest = AccountBookCreateRequest.builder().name("name").emails(new ArrayList<>()).relationship("relationship").build();
         String value = mapper.writeValueAsString(createRequest);
@@ -144,7 +144,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 가계부 조회 성공 테스트")
-    public void getMemberAccountBookTestToSuccess() throws Exception {
+     void getMemberAccountBookTestToSuccess() throws Exception {
         // given
         GetAccountBookInfos accountBookInfos = GetAccountBookInfos.builder().accountBooks(new ArrayList<>()).build();
 
@@ -161,7 +161,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("아이디로 가계부 정보조회 성공 테스트")
-    public void getAccountBookInfoTestToSuccess() throws Exception {
+     void getAccountBookInfoTestToSuccess() throws Exception {
         // given
         AccountBookInfo accountBookInfo = AccountBookInfo.builder().build();
 
@@ -178,7 +178,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 초대 성공 테스트")
-    public void inviteMemberTestToSuccess() throws Exception {
+     void inviteMemberTestToSuccess() throws Exception {
         // given
         Invited invited = Invited.builder().invited(0L).build();
         GetInvitations invitations = GetInvitations.builder().id(1L).emails(new ArrayList<>()).build();
@@ -199,7 +199,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("초대 응답 성공 테스트")
-    public void invitationReplyTestToSuccess() throws Exception {
+     void invitationReplyTestToSuccess() throws Exception {
         // given
         InvitationReply invitationReply = InvitationReply.builder().accountBookName("accountBook").memberName("member").join(true).id(1L).build();
         InvitationReplyResult invitationReplyResult = InvitationReplyResult.builder().build();
@@ -221,7 +221,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null id - 초대 응답 실패 테스트")
-    public void invitationReplyTestToFailByNullId() throws Exception {
+     void invitationReplyTestToFailByNullId() throws Exception {
         // given
         InvitationReply invitationReply = InvitationReply.builder().accountBookName("accountBook").memberName("member").join(true).build();
         // when
@@ -238,7 +238,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null membername - 초대 응답 실패 테스트")
-    public void invitationReplyTestToFailByNullMemberName() throws Exception {
+     void invitationReplyTestToFailByNullMemberName() throws Exception {
         // given
         InvitationReply invitationReply = InvitationReply.builder().accountBookName("accountBook").join(true).id(1L).build();
         // when
@@ -255,7 +255,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null accountBookName - 초대 응답 실패 테스트")
-    public void invitationReplyTestToFailByNullAccountBookName() throws Exception {
+     void invitationReplyTestToFailByNullAccountBookName() throws Exception {
         // given
         InvitationReply invitationReply = InvitationReply.builder().memberName("member").join(true).id(1L).build();
         // when
@@ -272,7 +272,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null join - 초대 응답 실패 테스트")
-    public void invitationReplyTestToFailByNullJoin() throws Exception {
+     void invitationReplyTestToFailByNullJoin() throws Exception {
         // given
         InvitationReply invitationReply = InvitationReply.builder().accountBookName("accountBook").memberName("member").id(1L).build();
         // when
@@ -289,7 +289,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("한달 가계부 수입/지출 정보 조회 성공 테스트")
-    public void getMonthlyIncomeRecordTestToSuccess() throws Exception {
+     void getMonthlyIncomeRecordTestToSuccess() throws Exception {
         // given
         AccountBookIncomesAndRecords accountBookIncomesAndRecords = AccountBookIncomesAndRecords.builder().build();
 
@@ -307,7 +307,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("하루 수입/지출 내역 상세 조회 성공 테스트")
-    public void getDailyIncomeAndRecordInfoTestToSuccess() throws Exception {
+     void getDailyIncomeAndRecordInfoTestToSuccess() throws Exception {
         // given
         RecordAndIncomeDetails recordAndIncomeDetails = RecordAndIncomeDetails.builder().build();
 
@@ -324,7 +324,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("한달 수입/지출/예산 내역 총합 조회 성공 테스트")
-    public void getMonthlyIncomeRecordBudgetSumTestToSuccess() throws Exception {
+     void getMonthlyIncomeRecordBudgetSumTestToSuccess() throws Exception {
         // given
         GetAccountBookAssets accountBookAssets = GetAccountBookAssets.builder().build();
         // when
@@ -341,7 +341,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("가계부 수입/지출 추가 성공 테스트")
-    public void createItemsTestToSuccess() throws Exception {
+     void createItemsTestToSuccess() throws Exception {
         // given
 
         CreateItems createItems = CreateItems.builder().id(0L).createRequest(new ArrayList<>()).build();
@@ -363,7 +363,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null id - 가계부 수입/지출 추가 실패 테스트")
-    public void createItemsTestToFailByNullId() throws Exception {
+     void createItemsTestToFailByNullId() throws Exception {
         // given
         CreateItems createItems = CreateItems.builder().createRequest(new ArrayList<>()).build();
         String value = mapper.writeValueAsString(createItems);
@@ -380,7 +380,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null createRequest - 가계부 수입/지출 추가 실패 테스트")
-    public void createItemsTestToFailByNullCreateRequest() throws Exception {
+     void createItemsTestToFailByNullCreateRequest() throws Exception {
         // given
         CreateItems createItems = CreateItems.builder().createRequest(new ArrayList<>()).build();
         String value = mapper.writeValueAsString(createItems);
@@ -397,7 +397,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("가계부 카테고리 추가 성공 테스트")
-    public void createCategoriesTestToSuccess() throws Exception {
+     void createCategoriesTestToSuccess() throws Exception {
         // given
         CategoryCreateRequest createRequest = CategoryCreateRequest.builder().categories(new ArrayList<>()).id(0L).build();
         String value = mapper.writeValueAsString(createRequest);
@@ -416,7 +416,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null id - 가계부 카테고리 추가 실패 테스트")
-    public void createCategoriesTestToFailByNullId() throws Exception {
+     void createCategoriesTestToFailByNullId() throws Exception {
         // given
         CategoryCreateRequest createRequest = CategoryCreateRequest.builder().categories(new ArrayList<>()).build();
         String value = mapper.writeValueAsString(createRequest);
@@ -432,7 +432,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null categories - 가계부 카테고리 추가 실패 테스트")
-    public void createCategoriesTestToFailByNullCategories() throws Exception {
+     void createCategoriesTestToFailByNullCategories() throws Exception {
         // given
         CategoryCreateRequest createRequest = CategoryCreateRequest.builder().id(0L).build();
         String value = mapper.writeValueAsString(createRequest);
@@ -448,7 +448,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("가계부에 지출 한개 추가 성공 테스트")
-    public void addRecordTestToSuccess() throws Exception {
+     void addRecordTestToSuccess() throws Exception {
         // given
         AddRecordRequest recordRequest = AddRecordRequest.builder()
                 .account("account")
@@ -478,7 +478,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null id - 가계부에 지출 추가 실패 테스트")
-    public void addRecordTestToFailByNullId() throws Exception{
+     void addRecordTestToFailByNullId() throws Exception{
         // given
         AddRecordRequest recordRequest = AddRecordRequest.builder()
                 .account("account")
@@ -503,7 +503,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null account - 가계부에 지출 추가 실패 테스트")
-    public void addRecordTestToFailByNullAccount() throws Exception{
+     void addRecordTestToFailByNullAccount() throws Exception{
         // given
         AddRecordRequest recordRequest = AddRecordRequest.builder()
                 .sharedAccountBook(new ArrayList<>())
@@ -528,7 +528,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null sharedAccountBook - 가계부에 지출 추가 실패 테스트")
-    public void addRecordTestToFailByNullSharedAccountBook() throws Exception{
+     void addRecordTestToFailByNullSharedAccountBook() throws Exception{
         // given
         AddRecordRequest recordRequest = AddRecordRequest.builder()
                 .account("account")
@@ -555,7 +555,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null payment - 가계부에 지출 추가 실패 테스트")
-    public void addRecordTestToFailByNullPayment() throws Exception{
+     void addRecordTestToFailByNullPayment() throws Exception{
         // given
         AddRecordRequest recordRequest = AddRecordRequest.builder()
                 .account("account")
@@ -580,7 +580,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null date - 가계부에 지출 추가 실패 테스트")
-    public void addRecordTestToFailByNullDate() throws Exception{
+     void addRecordTestToFailByNullDate() throws Exception{
         // given
         AddRecordRequest recordRequest = AddRecordRequest.builder()
                 .account("account")
@@ -605,7 +605,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null category - 가계부에 지출 추가 실패 테스트")
-    public void addRecordTestToFailByNullCategory() throws Exception{
+     void addRecordTestToFailByNullCategory() throws Exception{
         // given
         AddRecordRequest recordRequest = AddRecordRequest.builder()
                 .account("account")
@@ -630,7 +630,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null value - 가계부에 지출 추가 실패 테스트")
-    public void addRecordTestToFailByNullValue() throws Exception{
+     void addRecordTestToFailByNullValue() throws Exception{
         // given
         AddRecordRequest recordRequest = AddRecordRequest.builder()
                 .account("account")
@@ -655,7 +655,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("가계부에 수입 추가 성공 테스트")
-    public void addIncomeTestToSuccess() throws Exception{
+     void addIncomeTestToSuccess() throws Exception{
         // given
         AddIncomeRequest incomeRequest = AddIncomeRequest.builder()
                 .account("account")
@@ -686,7 +686,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null account - 가계부 수입 추가 실패 테스트")
-    public void addIncomeTestToFailByNullAccount() throws Exception{
+     void addIncomeTestToFailByNullAccount() throws Exception{
         // given
         AddIncomeRequest incomeRequest = AddIncomeRequest.builder()
                 .sharedAccountBook(new ArrayList<>())
@@ -710,7 +710,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null sharedAccountBook - 가계부 수입 추가 실패 테스트")
-    public void addIncomeTestToFailByNullSharedAccountBook() throws Exception{
+     void addIncomeTestToFailByNullSharedAccountBook() throws Exception{
         // given
         AddIncomeRequest incomeRequest = AddIncomeRequest.builder()
                 .account("account")
@@ -734,7 +734,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null payment - 가계부 수입 추가 실패 테스트")
-    public void addIncomeTestToFailByNullPayment() throws Exception{
+     void addIncomeTestToFailByNullPayment() throws Exception{
         // given
         AddIncomeRequest incomeRequest = AddIncomeRequest.builder()
                 .account("account")
@@ -758,7 +758,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null date - 가계부 수입 추가 실패 테스트")
-    public void addIncomeTestToFailByNullDate() throws Exception{
+     void addIncomeTestToFailByNullDate() throws Exception{
         // given
         AddIncomeRequest incomeRequest = AddIncomeRequest.builder()
                 .account("account")
@@ -782,7 +782,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null category - 가계부 수입 추가 실패 테스트")
-    public void addIncomeTestToFailByNullCategory() throws Exception{
+     void addIncomeTestToFailByNullCategory() throws Exception{
         // given
         AddIncomeRequest incomeRequest = AddIncomeRequest.builder()
                 .account("account")
@@ -806,7 +806,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null id - 가계부 수입 추가 실패 테스트")
-    public void addIncomeTestToFailByNullId() throws Exception{
+     void addIncomeTestToFailByNullId() throws Exception{
         // given
         AddIncomeRequest incomeRequest = AddIncomeRequest.builder()
                 .account("account")
@@ -830,7 +830,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null value - 가계부 수입 추가 실패 테스트")
-    public void addIncomeTestToFailByNullValue() throws Exception{
+     void addIncomeTestToFailByNullValue() throws Exception{
         // given
         AddIncomeRequest incomeRequest = AddIncomeRequest.builder()
                 .account("account")
@@ -854,7 +854,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("가계부 카테고리 조회 성공 테스트")
-    public void getAccountBookCategoryTestToSuccess() throws Exception{
+     void getAccountBookCategoryTestToSuccess() throws Exception{
         // given
         AccountBookCategories result = AccountBookCategories.builder().categories(new ArrayList<>()).build();
 
@@ -872,7 +872,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("가계부 멤버 조회 성공 테스트")
-    public void getAccountBookMemberTestToSuccess() throws Exception{
+     void getAccountBookMemberTestToSuccess() throws Exception{
         // given
         AccountBookMembers result = AccountBookMembers.builder().members(new ArrayList<>()).build();
 
@@ -889,7 +889,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("가계부 예산 추가 성공 테스트")
-    public void addBudgetToAccountBookTestToSuccess() throws Exception{
+     void addBudgetToAccountBookTestToSuccess() throws Exception{
         // given
         Map<String, Object> map = new HashMap<>();
         String value = mapper.writeValueAsString(map);
@@ -910,7 +910,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("가계부에 금융일정 추가 성공 테스트")
-    public void addScheduleToAccountBookTestToSuccess() throws Exception{
+     void addScheduleToAccountBookTestToSuccess() throws Exception{
         // given
         AddSchedules schedules = AddSchedules.builder().schedules(new ArrayList<>()).id(0L).build();
         String value = mapper.writeValueAsString(schedules);
@@ -931,7 +931,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null id - 가계부에 금융 일정 추가 실패 테스트")
-    public void addScheduleToAccountBookTestToFailByNullId() throws Exception{
+     void addScheduleToAccountBookTestToFailByNullId() throws Exception{
         // given
         AddSchedules schedules = AddSchedules.builder().schedules(new ArrayList<>()).build();
         String value = mapper.writeValueAsString(schedules);
@@ -947,7 +947,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null schedules - 가계부에 금융 일정 추가 실패 테스트")
-    public void addScheduleToAccountBookTestToFailByNullSchedules() throws Exception{
+     void addScheduleToAccountBookTestToFailByNullSchedules() throws Exception{
         // given
         AddSchedules schedules = AddSchedules.builder().id(1L).build();
         String value = mapper.writeValueAsString(schedules);
@@ -963,7 +963,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("가계부 삭제 성공 테스트")
-    public void deleteAccountBookTestToSuccess() throws Exception{
+     void deleteAccountBookTestToSuccess() throws Exception{
         // given
         AccountBookDeleteRequest deleteRequest = AccountBookDeleteRequest.builder().accountBookId(1L).build();
         String value = mapper.writeValueAsString(deleteRequest);
@@ -983,7 +983,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Null id - 가계부 삭제 실패 테스트")
-    public void deleteAccountBookTestToFailByNullId() throws Exception{
+     void deleteAccountBookTestToFailByNullId() throws Exception{
         // given
         AccountBookDeleteRequest deleteRequest = AccountBookDeleteRequest.builder().build();
         String value = mapper.writeValueAsString(deleteRequest);
@@ -999,7 +999,7 @@ class AccountBookControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("Invalid delete request - 가계부 삭제 실패 테스트")
-    public void deleteAccountBookTestToFailByInvalidRequest() throws Exception{
+     void deleteAccountBookTestToFailByInvalidRequest() throws Exception{
         // given
         AccountBookDeleteRequest deleteRequest = AccountBookDeleteRequest.builder().accountBookId(1L).build();
         String value = mapper.writeValueAsString(deleteRequest);

@@ -31,7 +31,7 @@ class MemberServiceTest {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    public SignUpRequest createSignUpRequest(String email, String nickname) {
+     SignUpRequest createSignUpRequest(String email, String nickname) {
         return SignUpRequest.builder()
                 .email(email)
                 .applicationPassword("1234")
@@ -41,45 +41,45 @@ class MemberServiceTest {
                 .build();
     }
 
-    public Map<String, Object> createUpdateApplicationPassword(String applicationPassword) {
+     Map<String, Object> createUpdateApplicationPassword(String applicationPassword) {
         Map<String, Object> map = new HashMap<>();
         map.put("applicationPassword", applicationPassword);
         return map;
     }
 
-    public Map<String, Object> createUpdatePassword(String password) {
+     Map<String, Object> createUpdatePassword(String password) {
         Map<String, Object> map = new HashMap<>();
         map.put("password", password);
         return map;
     }
 
-    public Map<String, Object> createUpdateNickname(String nickname) {
+     Map<String, Object> createUpdateNickname(String nickname) {
         Map<String, Object> map = new HashMap<>();
         map.put("nickName", nickname);
         return map;
     }
 
-    public Map<String, Object> createUpdateAvatarUrl(String avatarUrl) {
+     Map<String, Object> createUpdateAvatarUrl(String avatarUrl) {
         Map<String, Object> map = new HashMap<>();
         map.put("avatarUrl", avatarUrl);
         return map;
     }
 
 
-    public NicknameCheckDto createNicknameCheck(String nickname) {
+     NicknameCheckDto createNicknameCheck(String nickname) {
         return NicknameCheckDto.builder()
                 .nickname(nickname).build();
     }
 
 
 
-    public SearchMemberByEmail createSearchMemberByEmail(String email) {
+     SearchMemberByEmail createSearchMemberByEmail(String email) {
         return SearchMemberByEmail.builder()
                 .email(email).build();
     }
     @Test
     @DisplayName("아이디로 멤버 정보 조회 테스트")
-    public void getCurrentMemberInfoTestToSuccess() throws Exception{
+     void getCurrentMemberInfoTestToSuccess() throws Exception{
         //given
         SignUpRequest signUpRequest = createSignUpRequest("nouser@email.com", "nouser");
         Long signUp = authService.signUp(signUpRequest);
@@ -96,7 +96,7 @@ class MemberServiceTest {
     }
     @Test
     @DisplayName("멤버 애플리케이션 비밀번호 일치 테스트")
-    public void checkApplicationPasswordTestToSuccess() throws Exception{
+     void checkApplicationPasswordTestToSuccess() throws Exception{
         //given
         SignUpRequest signUpRequest = createSignUpRequest("nouser@email.com", "nouser");
         Long signUp = authService.signUp(signUpRequest);
@@ -110,7 +110,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("멤버 애플리케이션 비밀번호 불일치 테스트")
-    public void checkApplicationPasswordTestToFail() throws Exception{
+     void checkApplicationPasswordTestToFail() throws Exception{
         //given
         SignUpRequest signUpRequest = createSignUpRequest("nouser@email.com", "nouser");
         Long signUp = authService.signUp(signUpRequest);
@@ -124,7 +124,7 @@ class MemberServiceTest {
     // TODO
     @Test
     @DisplayName("멤버 애플리케이션 비밀번호 업데이트 테스트")
-    public void updateApplicationPasswordTestToSuccess() throws Exception{
+     void updateApplicationPasswordTestToSuccess() throws Exception{
         //given
         SignUpRequest signUpRequest = createSignUpRequest("nouser@email.com", "nouser");
         Long signUp = authService.signUp(signUpRequest);
@@ -140,7 +140,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("멤버 비밀번호 일치 성공 테스트")
-    public void checkMemberPasswordTestToSuccess() throws Exception{
+     void checkMemberPasswordTestToSuccess() throws Exception{
         //given
         SignUpRequest signUpRequest = createSignUpRequest("nouser@email.com", "nouser");
         Long signUp = authService.signUp(signUpRequest);
@@ -153,7 +153,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("멤버 비밀번호 일치 실패 테스트")
-    public void checkMemberPasswordTestToFail() throws Exception{
+     void checkMemberPasswordTestToFail() throws Exception{
         //given
         SignUpRequest signUpRequest = createSignUpRequest("nouser@email.com", "nouser");
         Long signUp = authService.signUp(signUpRequest);
@@ -167,7 +167,7 @@ class MemberServiceTest {
     // TODO
     @Test
     @DisplayName("멤버 비밀번호 업데이트 성공 테스트")
-    public void updateMemberPasswordToSuccess() throws Exception{
+     void updateMemberPasswordToSuccess() throws Exception{
         //given
         SignUpRequest signUpRequest = createSignUpRequest("nouser@email.com", "nouser");
         Long signUp = authService.signUp(signUpRequest);
@@ -181,7 +181,7 @@ class MemberServiceTest {
     // TODO
     @Test
     @DisplayName("멤버 프사 변경 테스트")
-    public void updateAvatarUrlTestToSuccess() throws Exception{
+     void updateAvatarUrlTestToSuccess() throws Exception{
         //given
         SignUpRequest signUpRequest = createSignUpRequest("nouser@email.com", "nouser");
         Long signUp = authService.signUp(signUpRequest);
@@ -196,7 +196,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("닉네임 존재하는지 확인 테스트 - 닉네임 존재")
-    public void nicknameExistsTestToSuccess() throws Exception{
+     void nicknameExistsTestToSuccess() throws Exception{
         //given
         SignUpRequest signUpRequest = createSignUpRequest("nouser@email.com", "nouser");
 
@@ -209,7 +209,7 @@ class MemberServiceTest {
     }
     @Test
     @DisplayName("닉네임 존재하는지 확인 테스트 - 닉네임 존재 X")
-    public void nicknameExistsTestToFail() throws Exception{
+     void nicknameExistsTestToFail() throws Exception{
         //given
         SignUpRequest signUpRequest = createSignUpRequest("nouser@email.com", "nouser");
 
@@ -223,7 +223,7 @@ class MemberServiceTest {
     // TODO
     @Test
     @DisplayName("멤버 닉네임 업데이트 테스트")
-    public void updateNicknameTestToSuccess() throws Exception{
+     void updateNicknameTestToSuccess() throws Exception{
         //given
         SignUpRequest signUpRequest = createSignUpRequest("nouser@email.com", "nouser");
 
@@ -239,7 +239,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("이메일로 존재하는 멤버 검색 테스트")
-    public void memberSearchByEmailTestToSuccess() throws Exception{
+     void memberSearchByEmailTestToSuccess() throws Exception{
         //given
         SignUpRequest signUpRequest = createSignUpRequest("nouser@email.com", "nouser");
 

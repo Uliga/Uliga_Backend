@@ -63,14 +63,14 @@ class AccountBookServiceTest {
     
 
     @BeforeEach
-    public void emptyRedis() {
+     void emptyRedis() {
 
         SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
         setOperations.pop("testuser@email.com", setOperations.size("testuser@email.com"));
     }
     
     @BeforeEach
-    public void setMemberAndAccountBook() throws JsonProcessingException {
+     void setMemberAndAccountBook() throws JsonProcessingException {
         SignUpRequest nickname = createSignUpRequest("email@email.com", "nickname");
         memberId = authService.signUp(nickname);
         AccountBookCreateRequest createRequest = createAccountBookCreateRequest("newAccountBook");
@@ -111,7 +111,7 @@ class AccountBookServiceTest {
     }
    @Test
    @DisplayName("가계부 생성 성공 테스트")
-   public void createAccountBookTestToSuccess() throws Exception{
+    void createAccountBookTestToSuccess() throws Exception{
        //given
        // BeforeEach에서 멤버 생성
 
@@ -124,7 +124,7 @@ class AccountBookServiceTest {
 
    @Test
    @DisplayName("가계부 정보 조회 성공 테스트")
-   public void getAccountBookInfoTestToSuccess() throws Exception{
+    void getAccountBookInfoTestToSuccess() throws Exception{
        //given
        // BeforeEach에서 멤버 & 가계부 생성
        // then
@@ -138,7 +138,7 @@ class AccountBookServiceTest {
 
    @Test
    @DisplayName("가계부 정보 조회 실패 테스트")
-   public void getAccountBookInfoTestToFailByInvalidMember() throws Exception{
+    void getAccountBookInfoTestToFailByInvalidMember() throws Exception{
        //given
        // BeforeEach에서 멤버 & 가계부 생성
        AccountBookCreateRequest newAccountBook = createAccountBookCreateRequest("newAccountBook");
@@ -153,7 +153,7 @@ class AccountBookServiceTest {
 
    @Test
    @DisplayName("멤버 가계부 조회 성공 테스트")
-   public void getMemberAccountBookTestToSuccess() throws Exception{
+    void getMemberAccountBookTestToSuccess() throws Exception{
        // given
        // BeforeEach에서 멤버 & 가계부 생성
        // when
@@ -169,7 +169,7 @@ class AccountBookServiceTest {
 
    @Test
    @DisplayName("개인 가계부 생성 성공 테스트")
-   public void createAccountBookPrivateTestToSuccess() throws Exception{
+    void createAccountBookPrivateTestToSuccess() throws Exception{
        // given
        // BeforeEach에서 멤버 & 가계부 생성
 
@@ -181,7 +181,7 @@ class AccountBookServiceTest {
 
    @Test
    @DisplayName("초대 생성 성공 테스트")
-   public void createInvitationTestToSuccess() throws Exception{
+    void createInvitationTestToSuccess() throws Exception{
        // given
        // BeforeEach에서 멤버 & 가계부 생성
        SignUpRequest nickname = createSignUpRequest("email@email.com", "nickname");
@@ -203,7 +203,7 @@ class AccountBookServiceTest {
 
    @Test
    @DisplayName("초대 응답 성공 테스트")
-   public void invitationReplyTestToSuccess() throws Exception{
+    void invitationReplyTestToSuccess() throws Exception{
        // given
        // BeforeEach에서 멤버 & 가계부 생성
 
@@ -224,7 +224,7 @@ class AccountBookServiceTest {
 
    @Test
    @DisplayName("가계부 카테고리 조회 테스트")
-   public void accountBookCategoryTestToSuccess() throws Exception{
+    void accountBookCategoryTestToSuccess() throws Exception{
        // given
        // BeforeEach에서 멤버 & 가계부 생성
 
@@ -237,7 +237,7 @@ class AccountBookServiceTest {
 
    @Test
    @DisplayName("가계부 멤버 조회 테스트")
-   public void accountBookMemberTestToSuccess() throws Exception{
+    void accountBookMemberTestToSuccess() throws Exception{
        // given
        // BeforeEach에서 멤버 & 가계부 생성
 

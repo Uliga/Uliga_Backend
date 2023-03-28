@@ -44,12 +44,12 @@ class MemberControllerTest {
     @Autowired
     MockMvc mvc;
 
-    public static final String BASE_URL = "/member";
+     static final String BASE_URL = "/member";
 
     @Test
     @WithMockCustomUser
     @DisplayName("로그인한 멤버 정보 조회 성공 테스트")
-    public void getLoginMemberInfoSuccessTest() throws Exception {
+     void getLoginMemberInfoSuccessTest() throws Exception {
         // given
         MemberInfoNativeQ memberInfoNativeQ = new MemberInfoNativeQ(1L, 1L, "default", "username", "nickname", "email@email.com");
         GetMemberInfo memberInfo = GetMemberInfo.builder()
@@ -69,7 +69,7 @@ class MemberControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 애플리케이션 비밀번호 확인 성공 테스트")
-    public void checkApplicationPasswordTestToSuccess() throws Exception {
+     void checkApplicationPasswordTestToSuccess() throws Exception {
         // given
         ApplicationPasswordCheck passwordCheck = ApplicationPasswordCheck.builder()
                 .applicationPassword("1234").build();
@@ -92,7 +92,7 @@ class MemberControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 애플리케이션 비밀번호 확인 실패 테스트")
-    public void checkApplicationPasswordTestToFail() throws Exception {
+     void checkApplicationPasswordTestToFail() throws Exception {
         // given
         ApplicationPasswordCheck passwordCheck = ApplicationPasswordCheck.builder()
                 .applicationPassword("1234").build();
@@ -116,7 +116,7 @@ class MemberControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 애플리케이션 비밀번호 업데이트 성공 테스트")
-    public void updateApplicationPasswordTestToSuccess() throws Exception {
+     void updateApplicationPasswordTestToSuccess() throws Exception {
         // given
         Map<String, Object> map = new HashMap<>();
         map.put("applicationPassword", "4321");
@@ -137,7 +137,7 @@ class MemberControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 비밀번호 확인 성공 테스트")
-    public void checkPasswordTestToSuccess() throws Exception {
+     void checkPasswordTestToSuccess() throws Exception {
         // given
         PasswordCheck passwordCheck = PasswordCheck.builder().password("12345678").build();
 
@@ -159,7 +159,7 @@ class MemberControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 비밀번호 확인 실패 테스트")
-    public void checkPasswordTestToFail() throws Exception {
+     void checkPasswordTestToFail() throws Exception {
         // given
         PasswordCheck passwordCheck = PasswordCheck.builder().password("12345678").build();
 
@@ -180,7 +180,7 @@ class MemberControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 비밀번호 업데이트 성공 테스트")
-    public void updatePasswordTestToSuccess() throws Exception {
+     void updatePasswordTestToSuccess() throws Exception {
         // given
         Map<String, Object> map = new HashMap<>();
         map.put("password", "123456789");
@@ -200,7 +200,7 @@ class MemberControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 프사 변경 성공 테스트")
-    public void updateAvatarUrlTestToSuccess() throws Exception {
+     void updateAvatarUrlTestToSuccess() throws Exception {
         // given
         Map<String, Object> map = new HashMap<>();
         map.put("avatarUrl", "red");
@@ -222,7 +222,7 @@ class MemberControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 닉네임 변경 성공 테스트")
-    public void updateMemberNicknameTestToSuccess() throws Exception {
+     void updateMemberNicknameTestToSuccess() throws Exception {
         // given
         Map<String, Object> map = new HashMap<>();
         map.put("nickName", "newNickname");
@@ -244,7 +244,7 @@ class MemberControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 닉네임 중복 여부 확인 성공 테스트")
-    public void checkMemberNicknameTestToSuccess() throws Exception {
+     void checkMemberNicknameTestToSuccess() throws Exception {
         // given
         NicknameCheckDto build = NicknameCheckDto.builder().nickname("newNickname").build();
 
@@ -265,7 +265,7 @@ class MemberControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 닉네임 중복 여부 확인 실패 테스트")
-    public void checkMemberNicknameTestToFail() throws Exception {
+     void checkMemberNicknameTestToFail() throws Exception {
         // given
         NicknameCheckDto build = NicknameCheckDto.builder().nickname("newNickname").build();
 
@@ -286,7 +286,7 @@ class MemberControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 탈퇴 성공 테스트")
-    public void deleteMemberTestToSuccess() throws Exception {
+     void deleteMemberTestToSuccess() throws Exception {
         // given
         doNothing().when(memberService).deleteMember(any());
 

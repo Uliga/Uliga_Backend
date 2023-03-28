@@ -58,7 +58,7 @@ class MemberAuthControllerTest {
 
     private static final String BASE_URL = "/auth";
 
-    public SignUpRequest createSignUpRequest(String email, String nickname) {
+     SignUpRequest createSignUpRequest(String email, String nickname) {
         return SignUpRequest.builder()
                 .email(email)
                 .applicationPassword("1234")
@@ -68,7 +68,7 @@ class MemberAuthControllerTest {
                 .build();
     }
 
-    public LoginRequest createLoginRequest(String email) {
+     LoginRequest createLoginRequest(String email) {
         return LoginRequest.builder()
                 .email(email)
                 .password("12345678").build();
@@ -78,7 +78,7 @@ class MemberAuthControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("회원가입 성공 테스트")
-    public void signUpTestToSuccess() throws Exception{
+     void signUpTestToSuccess() throws Exception{
         // given
         SignUpRequest mvctest = createSignUpRequest("mvctest@email.com", "mvctest");
 
@@ -96,7 +96,7 @@ class MemberAuthControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("이메일 - 잘못된 값 형식으로 회원가입 실패 테스트")
-    public void signUpTestToFailByInvalidEmail() throws Exception{
+     void signUpTestToFailByInvalidEmail() throws Exception{
         // given
         SignUpRequest mvctest = createSignUpRequest("mvctestemail.com", "mvctest");
 
@@ -114,7 +114,7 @@ class MemberAuthControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("비밀번호 - 잘못된 값 형식으로 회원가입 실패 테스트")
-    public void signUpTestToFailByInvalidPassword() throws Exception{
+     void signUpTestToFailByInvalidPassword() throws Exception{
         // given
         SignUpRequest build = SignUpRequest.builder()
                 .email("mvctest@email.com")
@@ -138,7 +138,7 @@ class MemberAuthControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("닉네임 - 잘못된 값 형식으로 회원가입 실패 테스트")
-    public void signUpTestToFailByInvalidNickname() throws Exception{
+     void signUpTestToFailByInvalidNickname() throws Exception{
         // given
         SignUpRequest build = SignUpRequest.builder()
                 .email("mvctest@email.com")
@@ -162,7 +162,7 @@ class MemberAuthControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("유저네임 - 잘못된 값 형식으로 회원가입 실패 테스트")
-    public void signUpTestToFailByNullUsername() throws Exception{
+     void signUpTestToFailByNullUsername() throws Exception{
         // given
         SignUpRequest build = SignUpRequest.builder()
                 .email("mvctest@email.com")
@@ -185,7 +185,7 @@ class MemberAuthControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("애플리케이션 비밀번호 - 잘못된 값 형식으로 회원가입 실패 테스트")
-    public void signUpTestToFailByNullApplicationPassword() throws Exception{
+     void signUpTestToFailByNullApplicationPassword() throws Exception{
         // given
         SignUpRequest build = SignUpRequest.builder()
                 .email("mvctest@email.com")
@@ -208,7 +208,7 @@ class MemberAuthControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("로그인 성공 테스트")
-    public void loginTestToSuccess() throws Exception{
+     void loginTestToSuccess() throws Exception{
         // given
         LoginRequest loginRequest = LoginRequest.builder()
                 .email("test@email.com")
@@ -229,7 +229,7 @@ class MemberAuthControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("잘못된 이메일 - 로그인 실패")
-    public void loginTestToFailByInvalidEmail() throws Exception{
+     void loginTestToFailByInvalidEmail() throws Exception{
         // given
         LoginRequest loginRequest = LoginRequest.builder()
                 .email("test1@email.com")
@@ -252,7 +252,7 @@ class MemberAuthControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("잘못된 비밀번호 - 로그인 실패")
-    public void loginTestToFailByInvalidPassword() throws Exception{
+     void loginTestToFailByInvalidPassword() throws Exception{
         // given
         LoginRequest loginRequest = LoginRequest.builder()
                 .email("test@email.com")
@@ -275,7 +275,7 @@ class MemberAuthControllerTest {
    @Test
    @WithMockCustomUser
    @DisplayName("이메일 전송 성공 테스트")
-   public void sendEmailTestToSuccess() throws Exception{
+    void sendEmailTestToSuccess() throws Exception{
        // given
        ConfirmEmailDto email = ConfirmEmailDto.builder().email("dongjunkim99@icloud.com").build();
 
@@ -296,7 +296,7 @@ class MemberAuthControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("코드 검증 성공 테스트")
-    public void confirmCodeTestToSuccess() throws Exception{
+     void confirmCodeTestToSuccess() throws Exception{
         // given
         EmailConfirmCodeDto emailConfirmCodeDto = EmailConfirmCodeDto.builder()
                 .code("random").email("dongjunkim99@icloud.com").build();

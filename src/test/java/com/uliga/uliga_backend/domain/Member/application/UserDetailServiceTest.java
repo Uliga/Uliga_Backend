@@ -20,7 +20,7 @@ class UserDetailServiceTest {
     @Autowired
     AuthService authService;
 
-    public SignUpRequest createSignUpRequest(String email, String nickname) {
+     SignUpRequest createSignUpRequest(String email, String nickname) {
         return SignUpRequest.builder()
                 .email(email)
                 .applicationPassword("1234")
@@ -32,7 +32,7 @@ class UserDetailServiceTest {
 
     @Test
     @DisplayName("이메일로 UserDetail 조회 성공")
-    public void getUserDetailByEmailToSuccess() throws Exception{
+     void getUserDetailByEmailToSuccess() throws Exception{
         // given
         SignUpRequest signUpRequest = createSignUpRequest("email@email.com", "testNickname");
 
@@ -46,7 +46,7 @@ class UserDetailServiceTest {
 
     @Test
     @DisplayName("존재하지 않는 이메일로 userDetail 조회 실패")
-    public void getUserDetailByEmailToFail() throws Exception{
+     void getUserDetailByEmailToFail() throws Exception{
         // given
         SignUpRequest signUpRequest = createSignUpRequest("email@email.com", "testNickname");
 

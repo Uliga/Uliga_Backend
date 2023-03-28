@@ -43,7 +43,7 @@ class RecordControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("지출 업데이트 성공 테스트")
-    public void updateRecordTestToSuccess() throws Exception{
+     void updateRecordTestToSuccess() throws Exception{
         // given
         Map<String, Object> updates = new HashMap<>();
         String value = mapper.writeValueAsString(updates);
@@ -64,7 +64,7 @@ class RecordControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 지출 가계부별 조회 성공 테스트")
-    public void getMemberRecords() throws Exception{
+     void getMemberRecords() throws Exception{
         // given
         Page<RecordInfoQ> result = new PageImpl<>(new ArrayList<>());
 
@@ -80,7 +80,7 @@ class RecordControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 지출 카테고리별 조회 성공 테스트")
-    public void getMemberRecordsByCategory() throws Exception{
+     void getMemberRecordsByCategory() throws Exception{
         // given
         Page<RecordInfoQ> result = new PageImpl<>(new ArrayList<>());
 

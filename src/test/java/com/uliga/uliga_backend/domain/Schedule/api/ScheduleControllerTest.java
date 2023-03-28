@@ -42,7 +42,7 @@ class ScheduleControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 금융 일정 조회 성공 테스트")
-    public void getMemberSchedules() throws Exception{
+     void getMemberSchedules() throws Exception{
         // given
         GetMemberSchedules result = GetMemberSchedules.builder().build();
 
@@ -58,7 +58,7 @@ class ScheduleControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("금융 일정 세부 조회 성공 테스트")
-    public void getScheduleInfos() throws Exception{
+     void getScheduleInfos() throws Exception{
         // given
         ScheduleDetail result = ScheduleDetail.builder().build();
 
@@ -75,7 +75,7 @@ class ScheduleControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("금융 일정 업데이트 성공 테스트")
-    public void updateSchedule() throws Exception{
+     void updateSchedule() throws Exception{
         // given
         Map<String, Object> updates = new HashMap<>();
         String value = mapper.writeValueAsString(updates);

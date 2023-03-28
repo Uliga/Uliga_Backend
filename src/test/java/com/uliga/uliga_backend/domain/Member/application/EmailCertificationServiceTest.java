@@ -17,14 +17,14 @@ class EmailCertificationServiceTest {
     @Autowired
     EmailCertificationService emailCertificationService;
 
-    public EmailConfirmCodeDto createEmailConfirmCode(String email, String code) {
+     EmailConfirmCodeDto createEmailConfirmCode(String email, String code) {
         return EmailConfirmCodeDto.builder()
                 .email(email)
                 .code(code).build();
     }
     @Test
     @DisplayName("이메일 전송 성공 테스트")
-    public void sendEmailTestToSuccess() throws Exception{
+     void sendEmailTestToSuccess() throws Exception{
         // given
         emailCertificationService.sendSimpleMessage("dongjunkim99@icloud.com");
 
@@ -38,7 +38,7 @@ class EmailCertificationServiceTest {
 
     @Test
     @DisplayName("이메일 코드 검증 실패 테스트 - 레디스에 없는 이메일")
-    public void sendEmailTestToFailByInvalidEmail() throws Exception{
+     void sendEmailTestToFailByInvalidEmail() throws Exception{
         // given
         emailCertificationService.sendSimpleMessage("dongjunkim99@icloud.com");
 
@@ -50,7 +50,7 @@ class EmailCertificationServiceTest {
 
     @Test
     @DisplayName("이메일 코드 검증 실패 테스트 - 잘못된 코드")
-    public void sendEmailTestToFailByInvalidCode() throws Exception{
+     void sendEmailTestToFailByInvalidCode() throws Exception{
         // given
         emailCertificationService.sendSimpleMessage("dongjunkim99@icloud.com");
 

@@ -45,7 +45,7 @@ class IncomeControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("수입 업데이트 성공 테스트")
-    public void updateIncomeTestToSuccess() throws Exception{
+     void updateIncomeTestToSuccess() throws Exception{
         // given
         Map<String, Object> updates = new HashMap<>();
         String value = mapper.writeValueAsString(updates);
@@ -66,7 +66,7 @@ class IncomeControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("멤버 수입 가계부별 조회 성공 테스트")
-    public void getMemberIncomesTestToSuccess() throws Exception{
+     void getMemberIncomesTestToSuccess() throws Exception{
         // given
         Page<IncomeInfoQ> result = new PageImpl<>(new ArrayList<>());
 
@@ -83,7 +83,7 @@ class IncomeControllerTest {
     @Test
     @WithMockCustomUser
     @DisplayName("수입 카테고리 별 조회 성공 테스트")
-    public void getMemberIncomeWithCategoryTestToSuccess() throws Exception{
+     void getMemberIncomeWithCategoryTestToSuccess() throws Exception{
         // given
         Page<IncomeInfoQ> result = new PageImpl<>(new ArrayList<>());
 

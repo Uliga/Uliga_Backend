@@ -41,7 +41,7 @@ class AuthServiceTest {
                     "기타")
     );
 
-    public SignUpRequest createSignUpRequest(String email, String nickname) {
+     SignUpRequest createSignUpRequest(String email, String nickname) {
         return SignUpRequest.builder()
                 .email(email)
                 .applicationPassword("1234")
@@ -51,7 +51,7 @@ class AuthServiceTest {
                 .build();
     }
 
-    public LoginRequest createLoginRequest(String email) {
+     LoginRequest createLoginRequest(String email) {
         return LoginRequest.builder()
                 .email(email)
                 .password("12345678").build();
@@ -59,7 +59,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("회원가입 성공 테스트")
-    public void signUpTestToSuccess() throws Exception{
+     void signUpTestToSuccess() throws Exception{
         // given
         SignUpRequest signUpRequest= createSignUpRequest("test@email.com", "nickname");
 
@@ -73,7 +73,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("회원가입 시 가계부 생성 확인 테스트")
-    public void signUpTestToSuccessCheckAccountBook() throws Exception{
+     void signUpTestToSuccessCheckAccountBook() throws Exception{
         // given
         SignUpRequest signUpRequest= createSignUpRequest("nouser@email.com", "nickname");
 
@@ -90,7 +90,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("회원 가입 시 가계부 카테고리 생성 확인 테스트")
-    public void signUpTestToSuccessCheckAccountBookCategory() throws Exception{
+     void signUpTestToSuccessCheckAccountBookCategory() throws Exception{
         // given
         SignUpRequest signUpRequest= createSignUpRequest("nouser@email.com", "nickname");
 
@@ -113,7 +113,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("이메일 중복 확인 테스트")
-    public void duplicateEmailCheckTestToSuccess() throws Exception{
+     void duplicateEmailCheckTestToSuccess() throws Exception{
         // given
         SignUpRequest signUpRequest= createSignUpRequest("nouser@email.com", "nickname");
 
@@ -127,7 +127,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("존재하지 않는 이메일 확인 테스트")
-    public void duplicateEmailCheckTestToFail() throws Exception{
+     void duplicateEmailCheckTestToFail() throws Exception{
         // given
         SignUpRequest signUpRequest= createSignUpRequest("nouser@email.com", "nickname");
 
@@ -139,7 +139,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("닉네임 중복 확인 테스트")
-    public void duplicateNicknameCheckTestToSuccess() throws Exception{
+     void duplicateNicknameCheckTestToSuccess() throws Exception{
         // given
         SignUpRequest signUpRequest= createSignUpRequest("nouser@email.com", "nouser");
 
@@ -153,7 +153,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("존재하지 않는 닉네임 확인 테스트")
-    public void duplicateNicknameCheckTestToFail() throws Exception{
+     void duplicateNicknameCheckTestToFail() throws Exception{
         // given
         SignUpRequest signUpRequest= createSignUpRequest("nouser@email.com", "nouser");
 
