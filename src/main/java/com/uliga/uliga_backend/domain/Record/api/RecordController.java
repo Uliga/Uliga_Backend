@@ -71,16 +71,18 @@ public class RecordController {
         return ResponseEntity.ok(recordService.getRecordInfoDetail(id));
     }
 
-    @Operation(summary = "멤버 가계부 별 지출 전체 조회 API", description = "멤버 가계부 별 지출 전체 조회 API 입니다")
+    @Operation(summary = "멤버 가계부 별 지출 전체/년도별/월별 조회 API", description = "멤버 가계부 별 지출 전체/년도별/월별 조회 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = RecordInfoQ.class))),
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "/accountBook/{id}")
-    public ResponseEntity<Page<RecordInfoQ>> getMemberRecordsByAccountBook(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id, Pageable pageable) {
+    public ResponseEntity<Page<RecordInfoQ>> getMemberRecordsByAccountBook(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
+                                                                           @RequestParam(name = "year", required = false, defaultValue = "") Long year,
+                                                                           @RequestParam(name = "month", required = false, defaultValue = "") Long month, Pageable pageable) {
         log.info("멤버 가계부별 지출 전체 조회 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(recordService.getMemberRecordsByAccountBook(currentMemberId, id, pageable));
+        return ResponseEntity.ok(recordService.getMemberRecordsByAccountBook(currentMemberId, id, year, month, pageable));
     }
 
     @Operation(summary = "멤버 지출 카테고리 별 전체 조회 API", description = "멤버 지출 카테고리별 전체 조회 API 입니다")

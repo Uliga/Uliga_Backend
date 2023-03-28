@@ -148,8 +148,15 @@ public class RecordService {
     }
 
     @Transactional
-    public Page<RecordInfoQ> getMemberRecordsByAccountBook(Long id, Long accountBookId, Pageable pageable) {
-        return recordRepository.getMemberRecordsByAccountBook(id, accountBookId, pageable);
+    public Page<RecordInfoQ> getMemberRecordsByAccountBook(Long id, Long accountBookId, Long year, Long month, Pageable pageable) {
+        if (year == null && month == null) {
+
+            return recordRepository.getMemberRecordsByAccountBook(id, accountBookId, pageable);
+        } else if (year != null && month == null) {
+            return recordRepository.getMemberRecordsByAccountBookAndYear(id, accountBookId, year, pageable);
+        } else {
+            return recordRepository.getMemberRecordsByAccountBookAndYearAndMonth(id, accountBookId, year, month, pageable);
+        }
     }
 
     @Transactional

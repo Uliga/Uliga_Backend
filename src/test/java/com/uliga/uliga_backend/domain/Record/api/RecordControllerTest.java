@@ -69,7 +69,7 @@ class RecordControllerTest {
         Page<RecordInfoQ> result = new PageImpl<>(new ArrayList<>());
 
         // when
-        doReturn(result).when(recordService).getMemberRecordsByAccountBook(any(), any(), any());
+        doReturn(result).when(recordService).getMemberRecordsByAccountBook(any(),any(), any(), any(), any());
         // then
         mvc.perform(get(BASE_URL + "/1")
                         .with(csrf()))
