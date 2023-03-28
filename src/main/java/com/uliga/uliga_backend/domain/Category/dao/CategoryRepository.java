@@ -12,6 +12,8 @@ import java.util.Optional;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     boolean existsByAccountBookIdAndName(Long id, String name);
 
+    void deleteById(Long id);
+
     Optional<Category> findByAccountBookIdAndName(Long accountBookId, String name);
 
     Optional<Category> findByAccountBookAndName(AccountBook accountBook, String name);

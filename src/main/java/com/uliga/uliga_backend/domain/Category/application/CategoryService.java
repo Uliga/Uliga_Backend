@@ -3,6 +3,7 @@ package com.uliga.uliga_backend.domain.Category.application;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
 import com.uliga.uliga_backend.domain.Category.model.Category;
+import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +45,15 @@ public class CategoryService {
                 .name(name)
                 .build();
         categoryRepository.save(newCategory);
+    }
+
+    @Transactional
+    public void deleteCategory(Long id) {
+        if (categoryRepository.existsById(id)) {
+            categoryRepository.deleteById(id);
+        } else {
+            throw new NotFoundByIdException();
+        }
     }
 }
 
