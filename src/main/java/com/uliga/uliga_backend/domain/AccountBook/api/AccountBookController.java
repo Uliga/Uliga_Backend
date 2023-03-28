@@ -272,6 +272,9 @@ public class AccountBookController {
     }
 
     @Operation(summary = "내역 조회에 쓸 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountBookDataQ.class)))
+    })
     @GetMapping(value = "/{id}/history")
     public ResponseEntity<Page<AccountBookDataQ>> getAccountBookHistory(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
                                                                         @RequestParam(value = "year", required = false, defaultValue = "") Long year,

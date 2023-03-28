@@ -10,6 +10,7 @@ import lombok.Getter;
 @Data
 @Schema(description = "가계부 내역 조회")
 public class AccountBookDataQ {
+    @Schema(description = "수입 혹은 지출 아이디")
     private Long id;
     @Schema(description = "금액")
     private Long value;
@@ -22,6 +23,7 @@ public class AccountBookDataQ {
     private Long year;
     private Long month;
     private Long day;
+    @Schema(description = "수입/지출 여부")
     private AccountBookDataType type;
     @Schema(description = "작성자", defaultValue = "creatorNickname")
     private String creator;
