@@ -55,7 +55,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
             "c.name) from Income i " +
             "JOIN Member m on m.id = i.creator.id " +
             "JOIN Category c on c.id = i.category.id " +
-            "WHERE m.id=:id ORDER BY i.createTime DESC ")
+            "WHERE m.id=:id ORDER BY i.date.year*365 + i.date.month*31 + i.date.day DESC ")
     Page<IncomeInfoQ> getMemberIncomes(@Param("id") Long id, Pageable pageable);
 
     @Query("select new com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ(" +
@@ -71,7 +71,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
             "c.name) from Income i " +
             "JOIN Member m on m.id = i.creator.id " +
             "JOIN Category c on c.id = i.category.id " +
-            "WHERE m.id=:id AND i.accountBook.id = :accountBookId ORDER BY i.createTime DESC ")
+            "WHERE m.id=:id AND i.accountBook.id = :accountBookId ORDER BY i.date.year*365 + i.date.month*31 + i.date.day DESC ")
     Page<IncomeInfoQ> getMemberIncomesByAccountBook(@Param("id") Long id, @Param("accountBookId") Long accountBookId, Pageable pageable);
     @Query("select new com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ(" +
             "i.id," +
@@ -86,7 +86,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
             "c.name) from Income i " +
             "JOIN Member m on m.id = i.creator.id " +
             "JOIN Category c on c.id = i.category.id " +
-            "WHERE m.id=:id AND i.accountBook.id = :accountBookId AND c.name = :category ORDER BY i.createTime DESC ")
+            "WHERE m.id=:id AND i.accountBook.id = :accountBookId AND c.name = :category ORDER BY i.date.year*365 + i.date.month*31 + i.date.day DESC ")
     Page<IncomeInfoQ> getMemberIncomesByCategory(@Param("id") Long id, @Param("accountBookId") Long accountBookId, @Param("category") String category, Pageable pageable);
 
 }

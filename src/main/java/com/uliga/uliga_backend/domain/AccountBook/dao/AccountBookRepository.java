@@ -72,7 +72,7 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long> 
                                        @Param("month") Long month);
     @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.DailyValueQ(" +
             "r.date.day, " +
-            "SUM(r.spend)) " +
+            "SUM(r.value)) " +
             "FROM AccountBook ab " +
             "JOIN Record r ON r.accountBook.id = ab.id " +
             "WHERE r.date.year = :year " +
@@ -83,5 +83,7 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long> 
     List<DailyValueQ> getMonthlyRecord(@Param("id") Long id,
                                        @Param("year") Long year,
                                        @Param("month") Long month);
+
+
 
 }

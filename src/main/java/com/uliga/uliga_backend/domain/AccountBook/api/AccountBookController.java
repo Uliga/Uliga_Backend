@@ -2,6 +2,7 @@ package com.uliga.uliga_backend.domain.AccountBook.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService;
+import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ;
 import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO.CreateBudgetDto;
 import com.uliga.uliga_backend.domain.Budget.dto.NativeQ.BudgetInfoQ;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
@@ -16,6 +17,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -267,4 +270,16 @@ public class AccountBookController {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.deleteAccountBook(id, currentMemberId));
     }
+
+    @Operation(summary = "내역 조회에 쓸 API")
+    @GetMapping(value = "/{id}/history")
+    public ResponseEntity<Page<AccountBookDataQ>> getAccountBookHistory(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
+                                                                        @RequestParam(value = "year", required = false, defaultValue = "") Long year,
+                                                                        @RequestParam(value = "month", required = false, defaultValue = "") Long month,
+                                                                        Pageable pageable) {
+
+        log.info("가계부 내역 조회 API 호출");
+        return ResponseEntity.ok(accountBookService.getAccountBookHistory(id, year, month, pageable));
+    }
+
 }

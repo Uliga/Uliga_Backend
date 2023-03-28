@@ -59,7 +59,7 @@ public class AuthService {
         AccountBook accountBook = build.toEntity();
         accountBookRepository.save(accountBook);
         member.setPrivateAccountBook(accountBook);
-        CreateRequestPrivate requestPrivate = CreateRequestPrivate.builder().name(member.getUserName() + " 님의 가계부").isPrivate(true).build();
+        CreateRequestPrivate requestPrivate = CreateRequestPrivate.builder().name(member.getUserName() + " 님의 가계부").relationship("개인 가계부").isPrivate(true).build();
         accountBookService.createAccountBookPrivate(member, requestPrivate);
         return member.getId();
     }
@@ -70,7 +70,7 @@ public class AuthService {
         Member member = socialSignUpRequest.toEntity();
         memberRepository.save(member);
 
-        CreateRequestPrivate build = CreateRequestPrivate.builder().name(member.getUserName() + " 님의 가계부").isPrivate(true).build();
+        CreateRequestPrivate build = CreateRequestPrivate.builder().name(member.getUserName() + " 님의 가계부").relationship("개인 가계부").isPrivate(true).build();
         accountBookService.createAccountBookPrivate(member, build);
 
 

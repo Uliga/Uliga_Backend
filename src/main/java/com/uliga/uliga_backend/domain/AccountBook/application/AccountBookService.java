@@ -3,10 +3,12 @@ package com.uliga.uliga_backend.domain.AccountBook.application;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
+import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.exception.*;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
+import com.uliga.uliga_backend.domain.AccountBookData.dao.AccountBookDataRepository;
 import com.uliga.uliga_backend.domain.Budget.application.BudgetService;
 import com.uliga.uliga_backend.domain.Budget.dao.BudgetRepository;
 import com.uliga.uliga_backend.domain.Budget.dto.NativeQ.BudgetInfoQ;
@@ -30,6 +32,8 @@ import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.RedisSystemException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
@@ -47,6 +51,7 @@ public class AccountBookService {
 
     private final AccountBookRepository accountBookRepository;
     private final AccountBookMemberRepository accountBookMemberRepository;
+    private final AccountBookDataRepository accountBookDataRepository;
     private final MemberRepository memberRepository;
     private final IncomeRepository incomeRepository;
     private final RecordRepository recordRepository;
@@ -100,6 +105,7 @@ public class AccountBookService {
                 .member(member)
                 .accountBookAuthority(AccountBookAuthority.ADMIN)
                 .getNotification(true).build();
+
         accountBookMemberRepository.save(bookMember);
         for (String cat : defaultCategories) {
             Category category = Category.builder()
@@ -419,4 +425,15 @@ public class AccountBookService {
         return "DELETED";
     }
 
+    @Transactional
+    public Page<AccountBookDataQ> getAccountBookHistory(Long id, Long year, Long month, Pageable pageable) {
+
+        if (year == null && month == null) {
+            return accountBookDataRepository.findAccountBookDataByAccountBookId(id, pageable);
+        } else if (year != null && month == null) {
+            return accountBookDataRepository.findAccountBookDataByAccountBookIdAndYear(id, year, pageable);
+        } else {
+            return accountBookDataRepository.findAccountBookDataByAccountBookIdAndYearAndMonth(id, year, month, pageable);
+        }
+    }
 }

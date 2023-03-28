@@ -26,7 +26,7 @@ public class AccountBookMember {
     private Member member;
 
     private Boolean getNotification;
-
+    @Enumerated(EnumType.STRING)
     private AccountBookAuthority accountBookAuthority;
     @Builder
     public AccountBookMember(AccountBook accountBook, Member member, Boolean getNotification, AccountBookAuthority accountBookAuthority) {
