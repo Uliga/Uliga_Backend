@@ -104,7 +104,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
             "c.name) from Income i " +
             "JOIN Member m on m.id = i.creator.id " +
             "JOIN Category c on c.id = i.category.id " +
-            "WHERE m.id=:i " +
+            "WHERE m.id=:id " +
             "AND i.accountBook.id = :accountBookId " +
             "AND i.date.year = :year " +
             "AND i.date.month = :month " +
