@@ -6,12 +6,13 @@ import com.uliga.uliga_backend.domain.Income.model.Income;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface IncomeRepository extends JpaRepository<Income, Long> {
+public interface IncomeRepository extends JpaRepository<Income, Long>, JpaSpecificationExecutor<Income> {
 
     @Query(
             "select new com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ(" +

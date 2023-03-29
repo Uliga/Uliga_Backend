@@ -3,12 +3,13 @@ package com.uliga.uliga_backend.domain.AccountBook.dao;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.*;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface AccountBookRepository extends JpaRepository<AccountBook, Long> {
+public interface AccountBookRepository extends JpaRepository<AccountBook, Long>, JpaSpecificationExecutor<AccountBook> {
 
     @Query("select new com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ(" +
             "abm.accountBook.id, " +
