@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface IncomeRepository extends JpaRepository<Income, Long>, JpaSpecificationExecutor<Income> {
+public interface IncomeRepository extends JpaRepository<Income, Long>{
 
     @Query(
             "select new com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ(" +

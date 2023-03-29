@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface RecordRepository extends JpaRepository<Record, Long>, JpaSpecificationExecutor<Record> {
+public interface RecordRepository extends JpaRepository<Record, Long> {
     @Query(
             "SELECT NEW com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ(" +
                     "r.id," +

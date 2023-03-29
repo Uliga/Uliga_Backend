@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface AccountBookDataRepository extends JpaRepository<AccountBookData, Long>, JpaSpecificationExecutor<AccountBookData> {
+public interface AccountBookDataRepository extends JpaRepository<AccountBookData, Long> {
     @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ(" +
             "abd.id, " +
             "abd.value, " +
