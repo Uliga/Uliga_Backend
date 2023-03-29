@@ -271,6 +271,17 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.deleteAccountBook(id, currentMemberId));
     }
 
+    @Operation(summary = "가계부 내역 다수 삭제 요청")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "삭제 성공시")
+    })
+    @DeleteMapping(value = "/data")
+    public ResponseEntity<String> deleteAccountBookData(@RequestBody AccountBookDataDeleteRequest dataDeleteRequest) {
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        accountBookService.deleteAccountBookData(currentMemberId, dataDeleteRequest);
+        return ResponseEntity.ok("DELETED");
+    }
+
     @Operation(summary = "내역 조회에 쓸 API, 전체/년도별/월별 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountBookDataQ.class)))

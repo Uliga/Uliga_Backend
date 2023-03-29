@@ -437,4 +437,9 @@ public class AccountBookService {
             return accountBookDataRepository.findAccountBookDataByAccountBookIdAndYearAndMonth(id, year, month, pageable);
         }
     }
+
+    @Transactional
+    public void deleteAccountBookData(Long memberId, AccountBookDataDeleteRequest dataDeleteRequest) {
+        accountBookDataRepository.deleteAllById(dataDeleteRequest.getIds());
+    }
 }

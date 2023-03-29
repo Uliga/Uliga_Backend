@@ -471,4 +471,13 @@ public class AccountBookDTO {
         private List<ScheduleDetail> schedules;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema(description = "가계부 내역 삭제 요청")
+    public static class AccountBookDataDeleteRequest {
+        private List<Long> ids;
+    }
+
 }
