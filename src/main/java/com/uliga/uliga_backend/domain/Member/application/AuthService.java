@@ -54,12 +54,8 @@ public class AuthService {
         signUpRequest.encrypt(passwordEncoder);
         Member member = signUpRequest.toEntity();
         memberRepository.save(member);
-        CreateRequestPrivate build = CreateRequestPrivate.builder().name(member.getNickName() + " 님의 가계부").isPrivate(true).relationship("개인").build();
 
-        AccountBook accountBook = build.toEntity();
-        accountBookRepository.save(accountBook);
-        member.setPrivateAccountBook(accountBook);
-        CreateRequestPrivate requestPrivate = CreateRequestPrivate.builder().name(member.getUserName() + " 님의 가계부").relationship("개인 가계부").isPrivate(true).build();
+        CreateRequestPrivate requestPrivate = CreateRequestPrivate.builder().name(member.getUserName() + " 님의 가계부").relationship("개인").isPrivate(true).build();
         accountBookService.createAccountBookPrivate(member, requestPrivate);
         return member.getId();
     }

@@ -100,6 +100,7 @@ public class AccountBookService {
     public void createAccountBookPrivate(Member member, CreateRequestPrivate createRequest) {
         AccountBook accountBook = createRequest.toEntity();
         accountBookRepository.save(accountBook);
+        member.setPrivateAccountBook(accountBook);
         AccountBookMember bookMember = AccountBookMember.builder()
                 .accountBook(accountBook)
                 .member(member)
