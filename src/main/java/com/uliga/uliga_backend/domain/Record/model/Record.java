@@ -22,44 +22,12 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class Record extends AccountBookData {
-//    @Id
-//    @GeneratedValue
-//    @Column(name = "record_id")
-//    private Long id;
-//
-//    private String memo;
-//    private Long spend;
-//
-//    private String payment;
-//
-//    private String account;
-//
-//
-//    @Embedded
-//    private Date date;
-//
-//    private AccountBookDataType type = AccountBookDataType.RECORD;
-
-//    @ManyToOne
-//    @JoinColumn(name = "member_id")
-//    private Member creator;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "accountBook_id")
-//    private AccountBook accountBook;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "category_id")
-//    private Category category;
 
     @OneToMany(mappedBy = "record", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<RecordComment> recordComments = new ArrayList<>();
     @Builder
     public Record(Long id, String memo, Long spend, String payment, String account, Date date, Member creator, AccountBook accountBook, Category category) {
         super(id, spend, payment, account, memo, date, AccountBookDataType.RECORD, creator, category, accountBook);
-//        this.creator = creator;
-//        this.accountBook = accountBook;
-//        this.category = category;
     }
 
     public String updateCategory(Category category) {
