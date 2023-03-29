@@ -4,6 +4,7 @@ import com.uliga.uliga_backend.domain.Member.application.AuthService;
 import com.uliga.uliga_backend.domain.Member.application.EmailCertificationService;
 import com.uliga.uliga_backend.domain.Member.application.OAuth2MemberService;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
+import com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ;
 import com.uliga.uliga_backend.domain.Member.dto.OAuthDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenIssueDTO;
@@ -29,6 +30,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
@@ -81,7 +83,7 @@ public class MemberAuthController {
 
     @Operation(summary = "소셜 로그인 API - 미구현", description = "소셜 로그인 API 입니다")
     @PostMapping(value = "/social_login/{loginType}")
-    public ResponseEntity<LoginResult> socialLogin(@Parameter(name = "loginType", description = "로그인 타입", in = PATH)@Param("loginType") String loginType,
+    public ResponseEntity<LoginResult> socialLogin(@Parameter(name = "loginType", description = "로그인 타입", in = PATH) @Param("loginType") String loginType,
                                                    @RequestBody OAuthDTO.SocialLoginDto loginDto,
                                                    @Value("${oAuth.password}") String password,
                                                    HttpServletResponse response,
@@ -187,5 +189,10 @@ public class MemberAuthController {
                                                          @PathVariable("nickname") String nickname) {
         log.info("닉네임 중복 확인 API 호출");
         return ResponseEntity.ok(authService.nicknameExists(nickname));
+    }
+
+    @GetMapping(value = "/mybatis/test")
+    public ResponseEntity<List<MemberInfoNativeQ>> mybatisTest() {
+        return ResponseEntity.ok(authService.mybatisTest());
     }
 }

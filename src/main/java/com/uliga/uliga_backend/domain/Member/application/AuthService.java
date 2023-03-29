@@ -6,7 +6,9 @@ import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.CreateReque
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
 import com.uliga.uliga_backend.domain.JoinTable.dao.AccountBookMemberRepository;
+import com.uliga.uliga_backend.domain.Member.dao.MemberMapperRepository;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
+import com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenInfoDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenIssueDTO;
@@ -41,8 +43,8 @@ import static com.uliga.uliga_backend.global.common.constants.JwtConstants.*;
 @RequiredArgsConstructor
 public class AuthService {
     private final MemberRepository memberRepository;
+    private final MemberMapperRepository memberMapperRepository;
     private final AccountBookService accountBookService;
-    private final AccountBookRepository accountBookRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate<String, String> redisTemplate;
@@ -140,5 +142,10 @@ public class AuthService {
     public ExistsCheckDto nicknameExists(String nickname) {
         return ExistsCheckDto.builder()
                 .exists(memberRepository.existsByNickName(nickname)).build();
+    }
+
+    @Transactional
+    public List<MemberInfoNativeQ> mybatisTest() {
+        return memberMapperRepository.find();
     }
 }
