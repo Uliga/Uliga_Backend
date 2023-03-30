@@ -36,7 +36,6 @@ dependencies {
     // MyBatis
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.1'
-    implementation 'com.github.pagehelper:pagehelper-spring-boot-starter'
     // OAuth
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     // Swagger
