@@ -65,7 +65,6 @@ public class IncomeController {
                                                                            @RequestParam(name = "year", required = false, defaultValue = "") Long year,
                                                                            @RequestParam(name = "month", required = false, defaultValue = "") Long month, Pageable pageable) {
         log.info("멤버 수입 가계부별 전체 조회 API 호출");
-        Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(incomeService.getMemberIncomesByAccountBook(id, year, month, pageable));
     }
 
