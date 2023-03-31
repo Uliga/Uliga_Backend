@@ -431,17 +431,6 @@ public class AccountBookService {
 
     @Transactional
     public Page<AccountBookDataQ> getAccountBookHistory(Long id, Long year, Long month, Pageable pageable) {
-
-        if (year == null && month == null) {
-            return accountBookDataRepository.findAccountBookDataByAccountBookId(id, pageable);
-        } else if (year != null && month == null) {
-            return accountBookDataRepository.findAccountBookDataByAccountBookIdAndYear(id, year, pageable);
-        } else {
-            return accountBookDataRepository.findAccountBookDataByAccountBookIdAndYearAndMonth(id, year, month, pageable);
-        }
-    }
-    @Transactional
-    public Page<AccountBookDataQ> getAccountBookHistoryMybatis(Long id, Long year, Long month, Pageable pageable) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("id", id);
         map.put("year", year);
@@ -452,7 +441,9 @@ public class AccountBookService {
         List<AccountBookDataQ> accountBookData = accountBookDataMapper.findAccountBookData(map);
         List<Long> counted = accountBookDataMapper.countQueryForAccountBookHistory(map);
         return new PageImpl<>(accountBookData, pageable, counted.size());
+
     }
+
 
     @Transactional
     public void deleteAccountBookData(Long memberId, AccountBookDataDeleteRequest dataDeleteRequest) {
