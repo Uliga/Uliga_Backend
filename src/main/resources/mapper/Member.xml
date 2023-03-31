@@ -13,7 +13,7 @@
         AND mb.member_id = ${id}
     </if>
     <if test="name != null">
-        AND m.user_name = #{name}
+        AND m.user_name = ${name}
     </if>
 </select>
 </mapper>
