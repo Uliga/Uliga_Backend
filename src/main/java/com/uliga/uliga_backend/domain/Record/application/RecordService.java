@@ -7,6 +7,7 @@ import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.Date;
 import com.uliga.uliga_backend.domain.Member.model.Member;
+import com.uliga.uliga_backend.domain.Record.dao.RecordMapper;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
 import com.uliga.uliga_backend.domain.Record.dto.RecordDTO;
@@ -23,9 +24,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +40,7 @@ import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
 public class RecordService {
 
     private final RecordRepository recordRepository;
-
+    private final RecordMapper mapper;
     private final CategoryRepository categoryRepository;
     private final ObjectMapper objectMapper;
 
@@ -148,15 +151,17 @@ public class RecordService {
     }
 
     @Transactional
-    public Page<RecordInfoQ> getMemberRecordsByAccountBook(Long id, Long accountBookId, Long year, Long month, Pageable pageable) {
-        if (year == null && month == null) {
+    public Page<RecordInfoQ> getMemberRecordsByAccountBook(Long accountBookId, Long year, Long month, Pageable pageable) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("accountBookId", accountBookId);
+        map.put("year", year);
+        map.put("month", month);
+        map.put("offset", pageable.getOffset());
+        map.put("pageSize", pageable.getPageSize());
 
-            return recordRepository.getMemberRecordsByAccountBook(id, accountBookId, pageable);
-        } else if (year != null && month == null) {
-            return recordRepository.getMemberRecordsByAccountBookAndYear(id, accountBookId, year, pageable);
-        } else {
-            return recordRepository.getMemberRecordsByAccountBookAndYearAndMonth(id, accountBookId, year, month, pageable);
-        }
+        List<RecordInfoQ> accountBookMemberRecords = mapper.findAccountBookMemberRecords(map);
+        List<Long> counted = mapper.countQueryForRecordHistory(map);
+        return new PageImpl<>(accountBookMemberRecords, pageable, counted.size());
     }
 
     @Transactional

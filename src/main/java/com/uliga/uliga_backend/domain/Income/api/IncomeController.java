@@ -66,7 +66,7 @@ public class IncomeController {
                                                                            @RequestParam(name = "month", required = false, defaultValue = "") Long month, Pageable pageable) {
         log.info("멤버 수입 가계부별 전체 조회 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(incomeService.getMemberIncomesByAccountBook(currentMemberId, id, year, month, pageable));
+        return ResponseEntity.ok(incomeService.getMemberIncomesByAccountBook(id, year, month, pageable));
     }
 
     @Operation(summary = "멤버 수입 카테고리별 전체 조회 API", description = "멤버 수입 카테고리 별 전체 조회 API 입니다")

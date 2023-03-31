@@ -3,17 +3,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.uliga.uliga_backend.domain.AccountBookData.dao.AccountBookDataMapper">
-    <select id="findAccountBookData" parameterType="HashMap"
-            resultType="com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ">
+<mapper namespace="com.uliga.uliga_backend.domain.Income.dao.IncomeMapper">
+    <select id="findAccountBookMemberIncomes" parameterType="HashMap" resultType="com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ">
         SELECT abd.account_book_data_id, abd.value, abd.payment, abd.account, abd.memo, abd.year, abd.month, abd.day,
-        abd.type, m.user_name, c.name
-        FROM account_book_data abd
+        m.user_name, c.name FROM account_book_data abd
         JOIN member m on abd.member_id = m.member_id
         JOIN account_book ab on abd.account_book_id = ab.account_book_id
         JOIN category c on ab.account_book_id = c.account_book_id
-        WHERE
-        abd.account_book_id = ${accountBookId}
+        WHERE abd.type = 'INCOME'
+        <if test="accountBookId != null">
+            AND abd.account_book_id = ${accountBookId}
+        </if>
         <if test="year != null">
             AND abd.year = ${year}
         </if>
@@ -37,11 +37,9 @@
                 LIMIT 20
             </otherwise>
         </choose>
-
     </select>
-    <select id="countQueryForAccountBookHistory" parameterType="HashMap" resultType="Long">
-        SELECT abd.account_book_data_id
-        FROM account_book_data abd
-        WHERE abd.account_book_id = ${accountBookId}
+    <select id="countQueryForIncomeHistory" parameterType="HashMap" resultType="Long">
+        SELECT abd.account_book_data_id FROM account_book_data abd
+        WHERE abd.account_book_id = ${accountBookId} AND abd.type = 'INCOME'
     </select>
 </mapper>

@@ -430,9 +430,9 @@ public class AccountBookService {
     }
 
     @Transactional
-    public Page<AccountBookDataQ> getAccountBookHistory(Long id, Long year, Long month, Pageable pageable) {
+    public Page<AccountBookDataQ> getAccountBookHistory(Long accountBookId, Long year, Long month, Pageable pageable) {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("id", id);
+        map.put("accountBookId", accountBookId);
         map.put("year", year);
         map.put("month", month);
         map.put("offset", pageable.getOffset());

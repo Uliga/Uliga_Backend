@@ -6,6 +6,7 @@ import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.Date;
+import com.uliga.uliga_backend.domain.Income.dao.IncomeMapper;
 import com.uliga.uliga_backend.domain.Income.dao.IncomeRepository;
 import com.uliga.uliga_backend.domain.Income.dto.IncomeDTO;
 import com.uliga.uliga_backend.domain.Income.dto.IncomeDTO.IncomeDeleteRequest;
@@ -20,9 +21,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +36,7 @@ import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
 @RequiredArgsConstructor
 public class IncomeService {
     private final IncomeRepository incomeRepository;
+    private final IncomeMapper incomeMapper;
     private final CategoryRepository categoryRepository;
     private final ObjectMapper objectMapper;
 
@@ -141,15 +145,18 @@ public class IncomeService {
     }
 
     @Transactional
-    public Page<IncomeInfoQ> getMemberIncomesByAccountBook(Long id, Long accountBookId, Long year, Long month, Pageable pageable) {
-        if (year == null && month == null) {
+    public Page<IncomeInfoQ> getMemberIncomesByAccountBook(Long accountBookId, Long year, Long month, Pageable pageable) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("accountBookId", accountBookId);
+        map.put("year", year);
+        map.put("month", month);
+        map.put("offset", pageable.getOffset());
+        map.put("pageSize", pageable.getPageSize());
 
-            return incomeRepository.getMemberIncomesByAccountBook(id, accountBookId, pageable);
-        } else if (year != null && month == null) {
-            return incomeRepository.getMemberIncomesByAccountBookAndYear(id, accountBookId, year, pageable);
-        } else {
-            return incomeRepository.getMemberIncomesByAccountBookAndYearAndMonth(id, accountBookId, year, month, pageable);
-        }
+        List<IncomeInfoQ> accountBookMemberIncomes = incomeMapper.findAccountBookMemberIncomes(map);
+        List<Long> counted = incomeMapper.countQueryForIncomeHistory(map);
+        return new PageImpl<>(accountBookMemberIncomes, pageable, counted.size());
+
     }
 
     @Transactional

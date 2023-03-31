@@ -81,8 +81,7 @@ public class RecordController {
                                                                            @RequestParam(name = "year", required = false, defaultValue = "") Long year,
                                                                            @RequestParam(name = "month", required = false, defaultValue = "") Long month, Pageable pageable) {
         log.info("멤버 가계부별 지출 전체 조회 API 호출");
-        Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(recordService.getMemberRecordsByAccountBook(currentMemberId, id, year, month, pageable));
+        return ResponseEntity.ok(recordService.getMemberRecordsByAccountBook(id, year, month, pageable));
     }
 
     @Operation(summary = "멤버 지출 카테고리 별 전체 조회 API", description = "멤버 지출 카테고리별 전체 조회 API 입니다")
@@ -99,7 +98,7 @@ public class RecordController {
 
     @Operation(summary = "지출에 댓글 추가 API", description = "지출에 댓글 추가하는 API 입니다")
     @PostMapping(value = "/{id}/comment")
-    public ResponseEntity<RecordCommentInfoQ> addCommentToRecord(@Parameter(name = "id", description = "지출 아이디", in = PATH)@PathVariable("id") Long id, @RequestBody RecordCommentCreateDto createDto) {
+    public ResponseEntity<RecordCommentInfoQ> addCommentToRecord(@Parameter(name = "id", description = "지출 아이디", in = PATH) @PathVariable("id") Long id, @RequestBody RecordCommentCreateDto createDto) {
         return ResponseEntity.ok(recordService.addCommentToRecord(id, createDto));
     }
 
