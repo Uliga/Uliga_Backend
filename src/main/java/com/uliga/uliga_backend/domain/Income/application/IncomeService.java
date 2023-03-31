@@ -71,31 +71,7 @@ public class IncomeService {
                 .build();
     }
 
-    @Transactional
-    public void addItemToSharedAccountBook(CreateRecordOrIncomeDto dto, AccountBook accountBook, Member member, Date date, Category category) {
-        Income sharedIncome = Income.builder()
-                .payment(dto.getPayment())
-                .account(dto.getAccount())
-                .creator(member)
-                .accountBook(accountBook)
-                .value(dto.getValue())
-                .memo(dto.getMemo())
-                .date(date)
-                .category(category).build();
-        incomeRepository.save(sharedIncome);
-    }
 
-    @Transactional
-    public UpdateCategoryResult updateIncomeCategory(UpdateIncomeCategory incomeCategory) {
-        Income income = incomeRepository.findById(incomeCategory.getIncomeId()).orElseThrow(NotFoundByIdException::new);
-        Category category = categoryRepository.findByAccountBookAndName(income.getAccountBook(), incomeCategory.getCategory()).orElseThrow(CategoryNotFoundException::new);
-        String updateCategory = income.updateCategory(category);
-
-        return UpdateCategoryResult.builder()
-                .category(updateCategory)
-                .updateItemId(income.getId())
-                .build();
-    }
 
     @Transactional
     public AddIncomeResult addSingleIncomeToAccountBook(AddIncomeRequest request, Category category, Date date, AccountBook accountBook, Member member) {
@@ -163,11 +139,6 @@ public class IncomeService {
     @Transactional
     public Page<IncomeInfoQ> getMemberIncomes(Long id, Pageable pageable) {
         return incomeRepository.getMemberIncomes(id, pageable);
-    }
-
-    @Transactional
-    public Page<IncomeInfoQ> getMemberIncomesByCategory(Long id, Long accountBookId, String category, Pageable pageable) {
-        return incomeRepository.getMemberIncomesByCategory(id, accountBookId, category, pageable);
     }
 
     @Transactional

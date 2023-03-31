@@ -69,17 +69,7 @@ public class IncomeController {
         return ResponseEntity.ok(incomeService.getMemberIncomesByAccountBook(id, categoryId, year, month, pageable));
     }
 
-    @Operation(summary = "멤버 수입 카테고리별 전체 조회 API - 이것도 쓰면 안돼여", description = "멤버 수입 카테고리 별 전체 조회 API 입니다")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = IncomeInfoQ.class))),
-            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-    })
-    @GetMapping(value = "/accountBook/{id}/{category}")
-    public ResponseEntity<Page<IncomeInfoQ>> getMemberIncomesByCategory(@Parameter(name = "id", description = "가계부  아이디", in = PATH)@PathVariable("id") Long id,@Parameter(name = "category", description = "카테고리 이름", in = PATH) @PathVariable("category") String category, Pageable pageable) {
-        log.info("멤버 수입 카테고리별 전체 조회 API 호출");
-        Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(incomeService.getMemberIncomesByCategory(currentMemberId, id, category, pageable));
-    }
+
 
     @Operation(summary = "수입 삭제 API", description = "수입 삭제 API 입니다")
     @DeleteMapping("/{id}")

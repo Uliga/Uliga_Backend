@@ -85,17 +85,6 @@ public class RecordController {
         return ResponseEntity.ok(recordService.getMemberRecordsByAccountBook(id, categoryId, year, month, pageable));
     }
 
-    @Operation(summary = "멤버 지출 카테고리 별 전체 조회 API - 이거아니야 미안", description = "멤버 지출 카테고리별 전체 조회 API 입니다")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = RecordInfoQ.class))),
-            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-    })
-    @GetMapping(value = "/accountBook/{id}/{category}")
-    public ResponseEntity<Page<RecordInfoQ>> getMemberRecordsByCategory(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id, @PathVariable("category") String category, Pageable pageable) {
-        log.info("멤버 지출 카테고리 별 전체 조회 API 호출");
-        Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(recordService.getMemberRecordsByCategory(currentMemberId, id, category, pageable));
-    }
 
     @Operation(summary = "지출에 댓글 추가 API", description = "지출에 댓글 추가하는 API 입니다")
     @PostMapping(value = "/{id}/comment")

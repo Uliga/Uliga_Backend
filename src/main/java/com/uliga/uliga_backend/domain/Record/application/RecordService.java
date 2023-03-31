@@ -74,31 +74,6 @@ public class RecordService {
                 .build();
     }
 
-    @Transactional
-    public void addItemToSharedAccountBook(CreateRecordOrIncomeDto dto, AccountBook accountBook, Member member, Date date, Category category) {
-         Record sharedRecord = Record.builder()
-                .payment(dto.getPayment())
-                .account(dto.getAccount())
-                .creator(member)
-                .accountBook(accountBook)
-                .spend(dto.getValue())
-                .memo(dto.getMemo())
-                .date(date)
-                .category(category).build();
-        recordRepository.save(sharedRecord);
-    }
-
-    @Transactional
-    public UpdateCategoryResult updateRecordCategory(UpdateRecordCategory recordCategory) {
-        Record record = recordRepository.findById(recordCategory.getRecordId()).orElseThrow(NotFoundByIdException::new);
-        Category category = categoryRepository.findByAccountBookAndName(record.getAccountBook(), recordCategory.getCategory()).orElseThrow(CategoryNotFoundException::new);
-        String updateCategory = record.updateCategory(category);
-
-        return UpdateCategoryResult.builder()
-                .updateItemId(record.getId())
-                .category(updateCategory)
-                .build();
-    }
 
     @Transactional
     public AddRecordResult addSingleItemToAccountBook(AddRecordRequest request, Category category, Date date, AccountBook accountBook, Member member) {
@@ -163,11 +138,6 @@ public class RecordService {
         List<RecordInfoQ> accountBookMemberRecords = mapper.findAccountBookMemberRecords(map);
         List<Long> counted = mapper.countQueryForRecordHistory(map);
         return new PageImpl<>(accountBookMemberRecords, pageable, counted.size());
-    }
-
-    @Transactional
-    public Page<RecordInfoQ> getMemberRecordsByCategory(Long id, Long accountBookId, String category, Pageable pageable) {
-        return recordRepository.getMemberRecordsByCategory(id, accountBookId, category, pageable);
     }
 
     @Transactional
