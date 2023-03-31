@@ -15,6 +15,9 @@
         <if test="accountBookId != null">
             AND abd.account_book_id = ${accountBookId}
         </if>
+        <if test="name != null">
+            AND c.name = #{name}
+        </if>
         <if test="year != null">
             AND abd.year = ${year}
         </if>
@@ -40,7 +43,12 @@
         </choose>
     </select>
     <select id="countQueryForRecordHistory" parameterType="HashMap" resultType="Long">
-        SELECT abd.account_book_data_id FROM account_book_data abd
+        SELECT abd.account_book_data_id
+        FROM account_book_data abd
+            JOIN category c on abd.category_id = c.category_id
         WHERE abd.account_book_id = ${accountBookId} AND abd.type = 'RECORD'
+        <if test="name != null">
+            AND c.name = #{name}
+        </if>
     </select>
 </mapper>

@@ -145,9 +145,10 @@ public class IncomeService {
     }
 
     @Transactional
-    public Page<IncomeInfoQ> getMemberIncomesByAccountBook(Long accountBookId, Long year, Long month, Pageable pageable) {
+    public Page<IncomeInfoQ> getMemberIncomesByAccountBook(Long accountBookId, String name, Long year, Long month, Pageable pageable) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("accountBookId", accountBookId);
+        map.put("name", name);
         map.put("year", year);
         map.put("month", month);
         map.put("offset", pageable.getOffset());
