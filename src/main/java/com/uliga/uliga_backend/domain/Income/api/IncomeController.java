@@ -69,7 +69,7 @@ public class IncomeController {
         return ResponseEntity.ok(incomeService.getMemberIncomesByAccountBook(id, name, year, month, pageable));
     }
 
-    @Operation(summary = "멤버 수입 카테고리별 전체 조회 API", description = "멤버 수입 카테고리 별 전체 조회 API 입니다")
+    @Operation(summary = "멤버 수입 카테고리별 전체 조회 API - 이것도 쓰면 안돼여", description = "멤버 수입 카테고리 별 전체 조회 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = IncomeInfoQ.class))),
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))

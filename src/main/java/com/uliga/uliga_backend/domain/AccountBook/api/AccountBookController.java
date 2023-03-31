@@ -288,13 +288,13 @@ public class AccountBookController {
     })
     @GetMapping(value = "/{id}/history")
     public ResponseEntity<Page<AccountBookDataQ>> getAccountBookHistory(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
-                                                                        @RequestParam(value = "name", required = false) String name,
+                                                                        @RequestParam(value = "categoryId", required = false) Long categoryId,
                                                                         @RequestParam(value = "year", required = false) Long year,
                                                                         @RequestParam(value = "month", required = false) Long month,
                                                                         Pageable pageable) {
 
         log.info("가계부 내역 조회 API 호출");
-        return ResponseEntity.ok(accountBookService.getAccountBookHistory(id, name, year, month, pageable));
+        return ResponseEntity.ok(accountBookService.getAccountBookHistory(id, categoryId, year, month, pageable));
     }
 
 

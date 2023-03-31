@@ -85,7 +85,7 @@ public class RecordController {
         return ResponseEntity.ok(recordService.getMemberRecordsByAccountBook(id, name, year, month, pageable));
     }
 
-    @Operation(summary = "멤버 지출 카테고리 별 전체 조회 API", description = "멤버 지출 카테고리별 전체 조회 API 입니다")
+    @Operation(summary = "멤버 지출 카테고리 별 전체 조회 API - 이거아니야 미안", description = "멤버 지출 카테고리별 전체 조회 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = RecordInfoQ.class))),
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
