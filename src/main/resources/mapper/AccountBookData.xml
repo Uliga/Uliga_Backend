@@ -30,14 +30,14 @@
                 OFFSET ${offset}
             </when>
             <when test="pageSize == null and offset != null">
-                LIMIT 10
+                LIMIT 20
                 OFFSET ${offset}
             </when>
             <when test="pageSize != null and offset == null">
                 LIMIT ${pageSize}
             </when>
             <otherwise>
-                LIMIT 10
+                LIMIT 20
             </otherwise>
         </choose>
 

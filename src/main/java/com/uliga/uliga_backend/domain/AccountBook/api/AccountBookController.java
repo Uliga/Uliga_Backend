@@ -305,6 +305,6 @@ public class AccountBookController {
                                                                         Pageable pageable) {
 
         log.info("가계부 내역 조회 API 호출");
-        return ResponseEntity.ok(accountBookService.getAccountBookHistory(id, year, month, pageable));
+        return ResponseEntity.ok(accountBookService.getAccountBookHistoryMybatis(id, year, month, pageable));
     }
 }
