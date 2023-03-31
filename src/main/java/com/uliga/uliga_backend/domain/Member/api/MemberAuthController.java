@@ -30,7 +30,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
@@ -192,7 +194,10 @@ public class MemberAuthController {
     }
 
     @GetMapping(value = "/mybatis/test")
-    public ResponseEntity<List<MemberInfoNativeQ>> mybatisTest() {
-        return ResponseEntity.ok(authService.mybatisTest());
+    public ResponseEntity<List<MemberInfoNativeQ>> mybatisTest(@RequestParam(name = "id", required = false, defaultValue = "") Long id, @RequestParam(name = "name", required = false, defaultValue = "") String name) {
+        HashMap<String, Object> requirements = new HashMap<>();
+        requirements.put("id", id);
+        requirements.put("name", name);
+        return ResponseEntity.ok(authService.mybatisTest(requirements));
     }
 }

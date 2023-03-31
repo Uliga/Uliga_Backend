@@ -1,11 +1,7 @@
 package com.uliga.uliga_backend.domain.Member.application;
 
 import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService;
-import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.CreateRequestPrivate;
-import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
-import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
-import com.uliga.uliga_backend.domain.JoinTable.dao.AccountBookMemberRepository;
 import com.uliga.uliga_backend.domain.Member.dao.MemberMapperRepository;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ;
@@ -30,8 +26,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -145,7 +140,7 @@ public class AuthService {
     }
 
     @Transactional
-    public List<MemberInfoNativeQ> mybatisTest() {
-        return memberMapperRepository.find();
+    public List<MemberInfoNativeQ> mybatisTest(HashMap<String, Object> map) {
+        return memberMapperRepository.find(map);
     }
 }
