@@ -194,7 +194,7 @@ public class MemberAuthController {
     }
 
     @GetMapping(value = "/mybatis/test")
-    public ResponseEntity<List<MemberInfoNativeQ>> mybatisTest(@RequestParam(name = "id", required = false, defaultValue = "") Long id, @RequestParam(name = "name", required = false, defaultValue = "") String name) {
+    public ResponseEntity<List<MemberInfoNativeQ>> mybatisTest(@RequestParam(name = "id", required = false) Long id, @RequestParam(name = "name", required = false) String name) {
         HashMap<String, Object> requirements = new HashMap<>();
         requirements.put("id", id);
         requirements.put("name", name);
