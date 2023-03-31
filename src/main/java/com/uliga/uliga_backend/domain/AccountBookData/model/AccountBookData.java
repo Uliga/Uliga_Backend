@@ -30,6 +30,7 @@ public class AccountBookData extends BaseTimeEntity {
     private String memo;
     @Embedded
     private Date date;
+    @Enumerated(EnumType.STRING)
     private AccountBookDataType type;
     @ManyToOne
     @JoinColumn(name = "member_id")
