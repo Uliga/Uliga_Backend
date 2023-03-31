@@ -282,18 +282,19 @@ public class AccountBookController {
         return ResponseEntity.ok("DELETED");
     }
 
-    @Operation(summary = "내역 조회에 쓸 API, 전체/년도별/월별 조회")
+    @Operation(summary = "가계부 전체 내역 전체/년도별/월별 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountBookDataQ.class)))
     })
     @GetMapping(value = "/{id}/history")
     public ResponseEntity<Page<AccountBookDataQ>> getAccountBookHistory(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
-                                                                        @RequestParam(value = "year", required = false, defaultValue = "") Long year,
-                                                                        @RequestParam(value = "month", required = false, defaultValue = "") Long month,
+                                                                        @RequestParam(value = "name", required = false) String name,
+                                                                        @RequestParam(value = "year", required = false) Long year,
+                                                                        @RequestParam(value = "month", required = false) Long month,
                                                                         Pageable pageable) {
 
         log.info("가계부 내역 조회 API 호출");
-        return ResponseEntity.ok(accountBookService.getAccountBookHistory(id, year, month, pageable));
+        return ResponseEntity.ok(accountBookService.getAccountBookHistory(id, name, year, month, pageable));
     }
 
 
