@@ -10,7 +10,7 @@
         m.user_name, c.name FROM account_book_data abd
         JOIN member m on abd.member_id = m.member_id
         JOIN account_book ab on abd.account_book_id = ab.account_book_id
-        JOIN category c on abd.account_book_id = c.account_book_id
+        JOIN category c on abd.category_id = c.category_id
         WHERE abd.type = 'RECORD'
         <if test="accountBookId != null">
             AND abd.account_book_id = ${accountBookId}
