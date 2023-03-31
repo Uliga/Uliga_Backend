@@ -15,8 +15,8 @@
         <if test="accountBookId != null">
             AND abd.account_book_id = ${accountBookId}
         </if>
-        <if test="name != null">
-            AND c.name = #{name}
+        <if test="categoryId != null">
+            AND c.category_id = ${categoryId}
         </if>
         <if test="year != null">
             AND abd.year = ${year}
@@ -47,8 +47,8 @@
         FROM account_book_data abd
             JOIN category c on abd.category_id = c.category_id
         WHERE abd.account_book_id = ${accountBookId} AND abd.type = 'RECORD'
-        <if test="name != null">
-            AND c.name = #{name}
+        <if test="categoryId != null">
+            AND c.category_id = ${categoryId}
         </if>
     </select>
 </mapper>
