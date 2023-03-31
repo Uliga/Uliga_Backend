@@ -2,7 +2,7 @@ package com.uliga.uliga_backend.domain.Member.application;
 
 import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.CreateRequestPrivate;
-import com.uliga.uliga_backend.domain.Member.dao.MemberMapperRepository;
+import com.uliga.uliga_backend.domain.Member.dao.MemberMapper;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ;
 import com.uliga.uliga_backend.domain.Member.model.Member;
@@ -38,7 +38,7 @@ import static com.uliga.uliga_backend.global.common.constants.JwtConstants.*;
 @RequiredArgsConstructor
 public class AuthService {
     private final MemberRepository memberRepository;
-    private final MemberMapperRepository memberMapperRepository;
+    private final MemberMapper memberMapper;
     private final AccountBookService accountBookService;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -141,6 +141,6 @@ public class AuthService {
 
     @Transactional
     public List<MemberInfoNativeQ> mybatisTest(HashMap<String, Object> map) {
-        return memberMapperRepository.find(map);
+        return memberMapper.find(map);
     }
 }

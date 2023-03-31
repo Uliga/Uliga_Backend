@@ -3,6 +3,7 @@ package com.uliga.uliga_backend.domain.AccountBook.application;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
+import com.uliga.uliga_backend.domain.AccountBookData.dao.AccountBookDataMapper;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.exception.*;
@@ -33,6 +34,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.RedisSystemException;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -52,6 +54,7 @@ public class AccountBookService {
     private final AccountBookRepository accountBookRepository;
     private final AccountBookMemberRepository accountBookMemberRepository;
     private final AccountBookDataRepository accountBookDataRepository;
+    private final AccountBookDataMapper accountBookDataMapper;
     private final MemberRepository memberRepository;
     private final IncomeRepository incomeRepository;
     private final RecordRepository recordRepository;
@@ -436,6 +439,19 @@ public class AccountBookService {
         } else {
             return accountBookDataRepository.findAccountBookDataByAccountBookIdAndYearAndMonth(id, year, month, pageable);
         }
+    }
+    @Transactional
+    public Page<AccountBookDataQ> getAccountBookHistoryMybatis(Long id, Long year, Long month, Pageable pageable) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("id", id);
+        map.put("year", year);
+        map.put("month", month);
+        map.put("offset", pageable.getOffset());
+        map.put("pageSize", pageable.getPageSize());
+
+        List<AccountBookDataQ> accountBookData = accountBookDataMapper.findAccountBookData(map);
+        List<Long> counted = accountBookDataMapper.countQueryForAccountBookHistory(map);
+        return new PageImpl<>(accountBookData, pageable, counted.size());
     }
 
     @Transactional

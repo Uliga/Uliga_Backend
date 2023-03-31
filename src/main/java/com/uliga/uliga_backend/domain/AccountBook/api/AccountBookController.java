@@ -296,4 +296,15 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.getAccountBookHistory(id, year, month, pageable));
     }
 
+
+    @Operation(summary = "마이바티스 페이징 테스트")
+    @GetMapping(value = "/mybatis/{id}/history")
+    public ResponseEntity<Page<AccountBookDataQ>> getAccountBookHistoryMybatis(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
+                                                                        @RequestParam(value = "year", required = false, defaultValue = "") Long year,
+                                                                        @RequestParam(value = "month", required = false, defaultValue = "") Long month,
+                                                                        Pageable pageable) {
+
+        log.info("가계부 내역 조회 API 호출");
+        return ResponseEntity.ok(accountBookService.getAccountBookHistory(id, year, month, pageable));
+    }
 }

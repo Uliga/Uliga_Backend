@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Mapper
-public interface MemberMapperRepository {
+public interface MemberMapper {
 
     List<MemberInfoNativeQ> find(HashMap<String, Object> map);
 
