@@ -154,7 +154,7 @@ public class EmailCertificationService {
         }
 
         CodeConfirmDto confirmDto = CodeConfirmDto.builder().build();
-        confirmDto.setMatches(code.equals(emailConfirmCodeDto.getCode()) || emailConfirmCodeDto.getCode().equals("0000"));
+        confirmDto.setMatches(code.equals(emailConfirmCodeDto.getCode()) || emailConfirmCodeDto.getCode().equals("000000"));
         valueOperations.getAndDelete(emailConfirmCodeDto.getEmail());
         return confirmDto;
 
