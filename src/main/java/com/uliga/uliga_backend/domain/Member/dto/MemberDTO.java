@@ -169,6 +169,7 @@ public class MemberDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
+    @Setter
     public static class CodeConfirmDto {
         @Schema(description = "일치시", example = "true", defaultValue = "false")
         private boolean matches;

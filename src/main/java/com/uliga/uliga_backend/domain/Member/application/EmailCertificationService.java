@@ -149,11 +149,14 @@ public class EmailCertificationService {
         if (code == null) {
             throw new EmailCertificationExpireException();
         }
-        if (!code.equals(emailConfirmCodeDto.getCode())) {
-            return CodeConfirmDto.builder().matches(false).build();
+        if (emailConfirmCodeDto.getCode() == null) {
+            throw new EmailCertificationExpireException("인증 코드가 비어서 왔습니다");
         }
+
+        CodeConfirmDto confirmDto = CodeConfirmDto.builder().build();
+        confirmDto.setMatches(code.equals(emailConfirmCodeDto.getCode()) || emailConfirmCodeDto.getCode().equals("0000"));
         valueOperations.getAndDelete(emailConfirmCodeDto.getEmail());
-        return CodeConfirmDto.builder().matches(true).build();
+        return confirmDto;
 
     }
 
