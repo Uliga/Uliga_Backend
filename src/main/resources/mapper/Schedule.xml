@@ -5,7 +5,7 @@
 <mapper namespace="com.uliga.uliga_backend.domain.Schedule.dao.ScheduleMapper">
     <select id="getScheduleMonthSum" parameterType="HashMap"
             resultType="com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleMonthSum">
-        SELECT SUM(value) as value, is_income FROM schedule s WHERE s.account_book_id = ${id} GROUP BY is_income
+        SELECT SUM(s.value) as value, s.is_income FROM schedule s WHERE s.account_book_id = ${id} GROUP BY s.is_income
     </select>
 
 
