@@ -143,4 +143,9 @@ public class AuthService {
     public List<MemberInfoNativeQ> mybatisTest(HashMap<String, Object> map) {
         return memberMapper.find(map);
     }
+
+    @Transactional
+    public void writeTest(HashMap<String, Object> map) {
+        memberMapper.write(map);
+    }
 }

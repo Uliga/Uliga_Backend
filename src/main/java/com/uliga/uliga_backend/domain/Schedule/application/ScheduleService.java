@@ -2,22 +2,20 @@ package com.uliga.uliga_backend.domain.Schedule.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.AddScheduleResult;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.GetAccountBookSchedules;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.JoinTable.dao.ScheduleMemberRepository;
 import com.uliga.uliga_backend.domain.JoinTable.model.ScheduleMember;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
-import com.uliga.uliga_backend.domain.Member.dto.MemberDTO;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.NotificationInfo;
 import com.uliga.uliga_backend.domain.Member.model.Member;
+import com.uliga.uliga_backend.domain.Schedule.dao.ScheduleMapper;
 import com.uliga.uliga_backend.domain.Schedule.dao.ScheduleRepository;
 import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleInfoQ;
-import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO;
+import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleMonthSum;
 import com.uliga.uliga_backend.domain.Schedule.exception.InvalidScheduleDelete;
 import com.uliga.uliga_backend.domain.Schedule.model.Schedule;
-import com.uliga.uliga_backend.global.common.constants.UserConstants;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +24,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,13 +31,14 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.*;
-import static com.uliga.uliga_backend.global.common.constants.UserConstants.*;
+import static com.uliga.uliga_backend.global.common.constants.UserConstants.NOTIFICATION_EXPIRE_TIME;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
+    private final ScheduleMapper scheduleMapper;
     private final ScheduleMemberRepository scheduleMemberRepository;
     private final MemberRepository memberRepository;
     private final RedisTemplate<String, String> redisTemplate;
@@ -136,7 +134,19 @@ public class ScheduleService {
             ScheduleDetail scheduleDetail = ScheduleDetail.builder().info(s).assignments(scheduleRepository.findScheduleMemberInfoById(s.getId())).build();
             result.add(scheduleDetail);
         }
-        return GetAccountBookSchedules.builder().schedules(result).build();
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("id", accountBookId);
+        GetAccountBookSchedules accountBookSchedules = GetAccountBookSchedules.builder().build();
+        accountBookSchedules.setSchedules(result);
+        List<ScheduleMonthSum> scheduleMonthSum = scheduleMapper.getScheduleMonthSum(map);
+        for (ScheduleMonthSum sms : scheduleMonthSum) {
+            if (sms.getIsIncome()) {
+                accountBookSchedules.setIncomeSum(sms.getValue());
+            } else {
+                accountBookSchedules.setRecordSum(sms.getValue());
+            }
+        }
+        return accountBookSchedules;
     }
 
     @Transactional

@@ -201,4 +201,11 @@ public class MemberAuthController {
         requirements.put("name", name);
         return ResponseEntity.ok(authService.mybatisTest(requirements));
     }
+
+    @GetMapping(value = "/mybatis/writetest")
+    public ResponseEntity<String> mybatisWriteTest(@RequestBody HashMap<String, Object> map) {
+
+        authService.writeTest(map);
+        return ResponseEntity.ok("CREATED");
+    }
 }

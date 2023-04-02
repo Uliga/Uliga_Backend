@@ -11,4 +11,6 @@ public interface MemberMapper {
 
     List<MemberInfoNativeQ> find(HashMap<String, Object> map);
 
+    void write(HashMap<String, Object> map);
+
 }
