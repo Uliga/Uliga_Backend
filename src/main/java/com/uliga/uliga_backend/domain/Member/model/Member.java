@@ -22,6 +22,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class Member extends MemberBase {
+    private Boolean deleted;
     private String userName;
 
     private String nickName;
@@ -61,6 +62,10 @@ public class Member extends MemberBase {
         this.userName = userName;
         this.nickName = nickName;
         this.avatarUrl = avatarUrl;
+    }
+
+    public void delete() {
+        this.deleted = true;
     }
 
     public void updatePassword(String newPassword) {
