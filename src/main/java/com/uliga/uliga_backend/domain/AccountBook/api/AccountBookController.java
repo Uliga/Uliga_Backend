@@ -133,6 +133,15 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.getAccountBookItemDetails(id, year, month, day));
     }
 
+    @Operation(summary = "가계부 내역 삭제", description = "가계부 내역 삭제 API 입니다")
+    @DeleteMapping(value = "/item")
+    public ResponseEntity<String> deleteAccountBookItems(@RequestBody DeleteItemRequest deleteItemRequest) {
+
+        log.info("가계부 내역 삭제 API 호출");
+        accountBookService.deleteAccountBookItems(deleteItemRequest);
+        return ResponseEntity.ok("DELETED");
+    }
+
     @Operation(summary = "한달 가계부 지출/수입/예산 총합 조회 API", description = "한달 동안의 가계부 수입/지출/예산 총합 조회 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = GetAccountBookAssets.class))),
@@ -296,6 +305,7 @@ public class AccountBookController {
         log.info("가계부 내역 조회 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookHistory(id, categoryId, year, month, pageable));
     }
+
 
 
 

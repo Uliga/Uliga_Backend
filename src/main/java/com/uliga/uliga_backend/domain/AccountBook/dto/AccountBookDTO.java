@@ -309,6 +309,14 @@ public class AccountBookDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class DeleteItemRequest {
+        private List<Long> deleteIds;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class UpdateRecordCategory {
         private Long accountBookId;
         private Long recordId;

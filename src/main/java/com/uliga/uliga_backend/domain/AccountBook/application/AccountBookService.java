@@ -358,6 +358,12 @@ public class AccountBookService {
     }
 
     @Transactional
+    public void deleteAccountBookItems(DeleteItemRequest deleteItemRequest) {
+
+        accountBookDataRepository.deleteAllById(deleteItemRequest.getDeleteIds());
+    }
+
+    @Transactional
     public GetAccountBookAssets getAccountBookAssets(Long id, Long year, Long month) {
         return GetAccountBookAssets.builder()
                 .budget(budgetRepository.getMonthlySumByAccountBookId(id, year, month))
