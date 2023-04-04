@@ -1,6 +1,7 @@
 package com.uliga.uliga_backend.domain.Member.model;
 
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
+import com.uliga.uliga_backend.domain.AccountBookData.model.AccountBookData;
 import com.uliga.uliga_backend.domain.Income.model.Income;
 import com.uliga.uliga_backend.domain.JoinTable.model.AccountBookMember;
 import com.uliga.uliga_backend.domain.JoinTable.model.ScheduleMember;
@@ -39,10 +40,10 @@ public class Member extends MemberBase {
     @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private final List<Schedule> schedules = new ArrayList<>();
     @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private final List<Record> records = new ArrayList<>();
+    private final List<AccountBookData> records = new ArrayList<>();
 
     @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private final List<Income> incomes = new ArrayList<>();
+    private final List<AccountBookData> incomes = new ArrayList<>();
 
     @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private final List<Post> posts = new ArrayList<>();

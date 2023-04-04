@@ -1,6 +1,7 @@
 package com.uliga.uliga_backend.domain.AccountBook.model;
 
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.SimpleAccountBookInfo;
+import com.uliga.uliga_backend.domain.AccountBookData.model.AccountBookData;
 import com.uliga.uliga_backend.domain.Budget.model.Budget;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.BaseTimeEntity;
@@ -40,10 +41,10 @@ public class AccountBook extends BaseTimeEntity {
     }
 
     @OneToMany(mappedBy = "accountBook", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Budget> budgets = new ArrayList<>();
+    private List<AccountBookData> budgets = new ArrayList<>();
 
     @OneToMany(mappedBy = "accountBook", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Income> incomes = new ArrayList<>();
+    private List<AccountBookData> incomes = new ArrayList<>();
 
     @OneToMany(mappedBy = "accountBook", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<AccountBookMember> members = new ArrayList<>();
