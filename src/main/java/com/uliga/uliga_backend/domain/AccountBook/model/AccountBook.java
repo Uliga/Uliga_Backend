@@ -41,7 +41,7 @@ public class AccountBook extends BaseTimeEntity {
     }
 
     @OneToMany(mappedBy = "accountBook", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<AccountBookData> budgets = new ArrayList<>();
+    private List<Budget> budgets = new ArrayList<>();
 
     @OneToMany(mappedBy = "accountBook", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<AccountBookData> incomes = new ArrayList<>();
@@ -53,7 +53,7 @@ public class AccountBook extends BaseTimeEntity {
     private List<Schedule> schedules = new ArrayList<>();
 
     @OneToMany(mappedBy = "accountBook", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Record> records = new ArrayList<>();
+    private List<AccountBookData> records = new ArrayList<>();
 
     @OneToMany(mappedBy = "accountBook", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Category> categories = new ArrayList<>();
