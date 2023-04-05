@@ -353,10 +353,14 @@ public class AccountBookService {
 
     @Transactional
     public RecordAndIncomeDetails getAccountBookItemDetails(Long id, Long year, Long month, Long day) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("accountBookId", id);
+        map.put("year", year);
+        map.put("month", month);
+        map.put("day", day);
         return RecordAndIncomeDetails
                 .builder()
-                .records(recordRepository.findByAccountBookId(id, year, month, day))
-                .incomes(incomeRepository.findByAccountBookId(id, year, month, day))
+                .items(accountBookDataMapper.findAccountBookData(map))
                 .build();
     }
 

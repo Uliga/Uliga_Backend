@@ -29,8 +29,10 @@ public class AccountBookDataQ {
     private String creator;
     @Schema(description = "카테고리", defaultValue = "category")
     private String category;
+    @Schema(description = "아바타 색")
+    private String avatarUrl;
     @Builder
-    public AccountBookDataQ(Long id, Long value, String payment, String account, String memo, Long year, Long month, Long day, AccountBookDataType type, String creator, String category) {
+    public AccountBookDataQ(Long id, Long value, String payment, String account, String memo, Long year, Long month, Long day, AccountBookDataType type, String creator, String category, String avatarUrl) {
         this.id = id;
         this.value = value;
         this.payment = payment;
@@ -42,5 +44,6 @@ public class AccountBookDataQ {
         this.type = type;
         this.creator = creator;
         this.category = category;
+        this.avatarUrl = avatarUrl;
     }
 }

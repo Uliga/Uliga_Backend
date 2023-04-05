@@ -2,6 +2,7 @@ package com.uliga.uliga_backend.domain.AccountBook.dto;
 
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.*;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
+import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ;
 import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO;
@@ -299,10 +300,7 @@ public class AccountBookDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class RecordAndIncomeDetails {
-        @Schema(description = "수입들")
-        private List<IncomeInfoQ> incomes;
-        @Schema(description = "지출들")
-        private List<RecordInfoQ> records;
+        private List<AccountBookDataQ> items;
     }
 
     @Builder
