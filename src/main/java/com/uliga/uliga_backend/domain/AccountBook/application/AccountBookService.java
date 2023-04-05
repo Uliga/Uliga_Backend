@@ -360,7 +360,7 @@ public class AccountBookService {
         map.put("day", day);
         return RecordAndIncomeDetails
                 .builder()
-                .items(accountBookDataMapper.findAccountBookData(map))
+                .items(accountBookDataMapper.findAccountBookDataOrderByValue(map))
                 .build();
     }
 
@@ -451,7 +451,6 @@ public class AccountBookService {
         map.put("month", month);
         map.put("offset", pageable.getOffset());
         map.put("pageSize", pageable.getPageSize());
-
         List<AccountBookDataQ> accountBookData = accountBookDataMapper.findAccountBookData(map);
         List<Long> counted = accountBookDataMapper.countQueryForAccountBookHistory(map);
         return new PageImpl<>(accountBookData, pageable, counted.size());

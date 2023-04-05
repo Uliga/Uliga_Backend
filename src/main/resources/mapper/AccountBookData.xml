@@ -46,6 +46,32 @@
         </choose>
 
     </select>
+    <select id="findAccountBookDataOrderByValue" parameterType="HashMap"
+            resultType="com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ">
+        SELECT abd.account_book_data_id, abd.value, abd.payment, abd.account, abd.memo, abd.year, abd.month, abd.day,
+        abd.type, m.user_name, c.name, abm.avatar_url
+        FROM account_book_data abd
+        JOIN member m on abd.member_id = m.member_id
+        JOIN account_book_member abm on abd.member_id = abm.member_id AND abm.account_book_id = abd.account_book_id
+        JOIN account_book ab on abd.account_book_id = ab.account_book_id
+        JOIN category c on abd.category_id = c.category_id
+        WHERE
+        abd.account_book_id = ${accountBookId}
+        <if test="categoryId != null">
+            AND c.category_id = ${categoryId}
+        </if>
+        <if test="year != null">
+            AND abd.year = ${year}
+        </if>
+        <if test="month != null">
+            AND abd.month = ${month}
+        </if>
+        <if test="day != null">
+            AND abd.day = ${day}
+        </if>
+        ORDER BY abd.value desc
+
+    </select>
     <select id="countQueryForAccountBookHistory" parameterType="HashMap" resultType="Long">
         SELECT abd.account_book_data_id
         FROM account_book_data abd

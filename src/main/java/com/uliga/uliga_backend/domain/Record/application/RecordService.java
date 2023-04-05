@@ -133,8 +133,7 @@ public class RecordService {
         map.put("year", year);
         map.put("month", month);
         map.put("offset", pageable.getOffset());
-        map.put("pageSize", pageable.getPageSize());
-
+        map.put("pageSize", pageable.getPageSize());;
         List<RecordInfoQ> accountBookMemberRecords = mapper.findAccountBookMemberRecords(map);
         List<Long> counted = mapper.countQueryForRecordHistory(map);
         return new PageImpl<>(accountBookMemberRecords, pageable, counted.size());

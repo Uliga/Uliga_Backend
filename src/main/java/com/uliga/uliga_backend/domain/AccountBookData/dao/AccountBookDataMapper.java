@@ -10,5 +10,7 @@ import java.util.List;
 public interface AccountBookDataMapper {
     List<AccountBookDataQ> findAccountBookData(HashMap<String, Object> map);
 
+    List<AccountBookDataQ> findAccountBookDataOrderByValue(HashMap<String, Object> map);
+
     List<Long> countQueryForAccountBookHistory(HashMap<String, Object> map);
 }
