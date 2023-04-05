@@ -6,9 +6,10 @@
 <mapper namespace="com.uliga.uliga_backend.domain.Income.dao.IncomeMapper">
     <select id="findAccountBookMemberIncomes" parameterType="HashMap" resultType="com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ">
         SELECT abd.account_book_data_id, abd.value, abd.payment, abd.account, abd.memo, abd.year, abd.month, abd.day,
-        m.user_name, c.name FROM account_book_data abd
+        m.user_name, c.name, abm.avatar_url FROM account_book_data abd
         JOIN member m on abd.member_id = m.member_id
         JOIN account_book ab on abd.account_book_id = ab.account_book_id
+        JOIN account_book_member abm on ab.account_book_id = abm.account_book_id AND abm.member_id = abd.member_id
         JOIN category c on abd.category_id = c.category_id
         WHERE abd.type = 'INCOME'
         <if test="accountBookId != null">

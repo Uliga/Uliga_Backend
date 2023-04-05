@@ -311,6 +311,7 @@ public class AccountBookController {
                                                                         @RequestParam(value = "year", required = false) Long year,
                                                                         @RequestParam(value = "month", required = false) Long month,
                                                                         Pageable pageable) {
+        // TODO 날짜랑 생성한 사람 아바타 URL 필요함
 
         log.info("가계부 내역 조회 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookHistory(id, categoryId, year, month, pageable));

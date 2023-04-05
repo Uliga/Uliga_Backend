@@ -1,8 +1,6 @@
 package com.uliga.uliga_backend.domain.Income.dto.NativeQ;
 
-import com.uliga.uliga_backend.domain.Common.Date;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Embedded;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -24,10 +22,11 @@ public class IncomeInfoQ {
     private Long day;
     @Schema(description = "작성자", defaultValue = "creatorNickname")
     private String creator;
+    private String avatarUrl;
     @Schema(description = "카테고리", defaultValue = "category")
     private String category;
     @Builder
-    public IncomeInfoQ(Long id, Long value, String payment, String account, String memo, Long year, Long month, Long day, String creator, String category) {
+    public IncomeInfoQ(Long id, Long value, String payment, String account, String memo, Long year, Long month, Long day, String creator, String category, String avatarUrl) {
         this.id = id;
         this.value = value;
         this.payment = payment;
@@ -36,7 +35,7 @@ public class IncomeInfoQ {
         this.year = year;
         this.month = month;
         this.day = day;
-
+        this.avatarUrl = avatarUrl;
         this.creator = creator;
         this.category = category;
     }

@@ -33,7 +33,8 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long>{
     @Query("select new com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookMemberInfoQ(" +
             "m.id, " +
             "m.userName," +
-            "abm.accountBookAuthority) " +
+            "abm.accountBookAuthority, " +
+            "abm.avatarUrl) " +
             "FROM " +
             "AccountBook ab join AccountBookMember abm on ab.id = abm.accountBook.id " +
             "join Member m on abm.member.id = m.id " +

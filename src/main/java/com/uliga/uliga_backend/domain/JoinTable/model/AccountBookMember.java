@@ -24,6 +24,7 @@ public class AccountBookMember {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
     private String avatarUrl;
 
     private Boolean getNotification;

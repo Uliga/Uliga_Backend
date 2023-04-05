@@ -24,8 +24,10 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
                     "r.date.month," +
                     "r.date.day," +
                     "m.userName," +
-                    "c.name) from Record r " +
+                    "c.name," +
+                    "abm.avatarUrl) from Record r " +
                     "JOIN Member m on m.id = r.creator.id " +
+                    "JOIN AccountBookMember abm ON abm.accountBook.id = r.accountBook.id AND abm.member.id = r.creator.id " +
                     "JOIN Category c on c.id=r.category.id " +
                     "WHERE m.id = :id order by r.date.year*365 + r.date.month*31 + r.date.day DESC"
     )
@@ -41,8 +43,10 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
                     "r.date.month," +
                     "r.date.day," +
                     "m.userName," +
-                    "c.name) from Record r " +
+                    "c.name," +
+                    "abm.avatarUrl) from Record r " +
                     "JOIN Member m on m.id = r.creator.id " +
+                    "JOIN AccountBookMember abm ON abm.accountBook.id = r.accountBook.id AND abm.member.id = r.creator.id " +
                     "JOIN Category c on c.id=r.category.id " +
                     "WHERE r.accountBook.id=:id and r.date.month=:month and r.date.year = :year and r.date.day = :day"
     )
