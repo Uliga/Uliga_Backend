@@ -457,4 +457,9 @@ public class AccountBookService {
     public void deleteAccountBookData(Long memberId, AccountBookDataDeleteRequest dataDeleteRequest) {
         accountBookDataRepository.deleteAllById(dataDeleteRequest.getIds());
     }
+
+    @Transactional
+    public AccountBookUpdateRequest updateAccountBookInfo(Long memberId, Long accountBookId, Map<String, Object> map) {
+        return null;
+    }
 }

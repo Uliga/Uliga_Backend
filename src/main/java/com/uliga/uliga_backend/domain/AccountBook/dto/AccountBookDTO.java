@@ -488,4 +488,17 @@ public class AccountBookDTO {
         private List<Long> ids;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema(description = "가계부 정보 수정 요청")
+    public static class AccountBookUpdateRequest {
+        @Schema(description = "변경할 이름")
+        private String name;
+        @Schema(description = "변경할 별칭")
+        private String relationShip;
+        @Schema(description = "변경할 카테고리")
+        private List<String> categories;
+    }
 }

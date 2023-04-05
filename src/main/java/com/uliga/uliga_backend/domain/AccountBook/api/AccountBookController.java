@@ -62,7 +62,17 @@ public class AccountBookController {
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.getSingleAccountBookInfo(id, memberId));
     }
+    @Operation(summary = "가계부 정보 업데이트 API", description = "가계부 정보 업데이트 API입니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "업데이트 성공시", content = @Content(schema = @Schema(implementation = AccountBookUpdateRequest.class)))
+    })
+    @PatchMapping(value = "/{id}")
+    public ResponseEntity<AccountBookUpdateRequest> updateAccountBookInfo(@PathVariable("id") Long id, @RequestBody Map<String, Object> updateRequest) {
 
+        log.info("가계부 정보 수정 API 호출");
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(accountBookService.updateAccountBookInfo(currentMemberId, id, updateRequest));
+    }
     @Operation(summary = "가계부 생성 API", description = "가계부 생성하는 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "가계부 생성시", content = @Content(schema = @Schema(implementation = SimpleAccountBookInfo.class))),
