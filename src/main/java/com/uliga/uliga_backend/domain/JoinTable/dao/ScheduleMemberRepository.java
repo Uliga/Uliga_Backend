@@ -10,4 +10,6 @@ import java.util.List;
 public interface ScheduleMemberRepository extends JpaRepository<ScheduleMember, Long> {
     List<ScheduleMember> findByScheduleId(Long scheduleId);
 
+    void deleteAllByMemberId(Long memberId);
+
 }

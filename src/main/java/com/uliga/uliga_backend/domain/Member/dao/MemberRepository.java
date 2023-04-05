@@ -12,9 +12,9 @@ import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    Optional<Member> findByEmail(String email);
+    Optional<Member> findByEmailAndDeleted(String email, Boolean deleted);
 
-    boolean existsByEmail(String email);
+    boolean existsByEmailAndDeleted(String email, Boolean deleted);
 
     boolean existsByNickName(String nickname);
 

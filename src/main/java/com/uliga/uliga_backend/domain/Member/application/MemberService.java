@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
 import com.uliga.uliga_backend.domain.JoinTable.dao.AccountBookMemberRepository;
+import com.uliga.uliga_backend.domain.JoinTable.dao.ScheduleMemberRepository;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ;
 import com.uliga.uliga_backend.domain.Member.exception.UserExistsInAccountBook;
@@ -31,6 +32,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final AccountBookRepository accountBookRepository;
     private final AccountBookMemberRepository accountBookMemberRepository;
+    private final ScheduleMemberRepository scheduleMemberRepository;
     private final PasswordEncoder passwordEncoder;
     private final RedisTemplate<String, String> redisTemplate;
     private final RedisTemplate<String, Object> objectRedisTemplate;
@@ -99,15 +101,15 @@ public class MemberService {
                 accountBookRepository.deleteById(accountBookInfoQ.getAccountBookId());
             }
         }
-        member.updateNickname("탈퇴한 유저");
-        member.updateUserName("탈퇴한 유저");
         member.delete();
+        accountBookMemberRepository.deleteAllByMemberId(id);
+        scheduleMemberRepository.deleteAllByMemberId(id);
 
     }
 
     @Transactional
     public SearchEmailResult findMemberByEmail(Long accountBookId, SearchMemberByEmail byEmail) {
-        Member member = memberRepository.findByEmail(byEmail.getEmail()).orElseThrow(UserNotFoundByEmail::new);
+        Member member = memberRepository.findByEmailAndDeleted(byEmail.getEmail(), false).orElseThrow(UserNotFoundByEmail::new);
         if (accountBookId != null) {
             if (accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(member.getId(), accountBookId)) {
                 throw new UserExistsInAccountBook(member.getUserName());

@@ -130,7 +130,7 @@ public class AuthService {
     @Transactional
     public ExistsCheckDto emailExists(String email) {
         return ExistsCheckDto.builder()
-                .exists(memberRepository.existsByEmail(email)).build();
+                .exists(memberRepository.existsByEmailAndDeleted(email, false)).build();
     }
 
     @Transactional

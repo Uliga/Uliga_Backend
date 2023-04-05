@@ -67,7 +67,7 @@ class AuthServiceTest {
         authService.signUp(signUpRequest);
 
         // then
-        assertTrue(memberRepository.existsByEmail("test@email.com"));
+        assertTrue(memberRepository.existsByEmailAndDeleted("test@email.com", false));
 
     }
 
@@ -80,7 +80,7 @@ class AuthServiceTest {
 
         // when
         authService.signUp(signUpRequest);
-        Member member = memberRepository.findByEmail("nouser@email.com").orElseThrow(NotFoundByIdException::new);
+        Member member = memberRepository.findByEmailAndDeleted("nouser@email.com", false).orElseThrow(NotFoundByIdException::new);
         List<AccountBookInfoQ> accountBookInfosByMemberId = accountBookRepository.findAccountBookInfosByMemberId(member.getId());
 
         // then
@@ -97,7 +97,7 @@ class AuthServiceTest {
 
         // when
         authService.signUp(signUpRequest);
-        Member member = memberRepository.findByEmail("nouser@email.com").orElseThrow(NotFoundByIdException::new);
+        Member member = memberRepository.findByEmailAndDeleted("nouser@email.com", false).orElseThrow(NotFoundByIdException::new);
         List<AccountBookCategoryInfoQ> accountBookCategoryInfoById = accountBookRepository.findAccountBookCategoryInfoById(member.getPrivateAccountBook().getId());
 
         // then

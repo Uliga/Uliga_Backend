@@ -45,7 +45,7 @@ public class OAuth2MemberService {
                 ResponseEntity<String> userInfoResponse = googleAuth.requestUserInfo(token);
                 // 다시 Json 형식의 응답 객체를 자바 객체로 역 직렬화
                 OAuthDTO.GoogleUser googleUser = googleAuth.getUserInfo(userInfoResponse);
-                Optional<Member> byEmail = memberRepository.findByEmail(googleUser.getEmail());
+                Optional<Member> byEmail = memberRepository.findByEmailAndDeleted(googleUser.getEmail(), false);
                 // 이메일로 디비에 유저 존재
                 if (byEmail.isPresent()) {
                     Member member = byEmail.get();

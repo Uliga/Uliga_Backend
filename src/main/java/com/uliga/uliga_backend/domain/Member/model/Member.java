@@ -28,7 +28,6 @@ public class Member extends MemberBase {
 
     private String nickName;
 
-//    private String avatarUrl;
     @OneToOne
     @JoinColumn(name = "accountBook_id")
     private AccountBook privateAccountBook;
