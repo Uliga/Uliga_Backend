@@ -128,9 +128,6 @@ public class MemberService {
             String encode = passwordEncoder.encode(memberInfoUpdateRequest.getApplicationPassword());
             member.updateApplicationPassword(encode);
         }
-        if (memberInfoUpdateRequest.getAvatarUrl() != null) {
-            member.updateAvatarUrl(memberInfoUpdateRequest.getAvatarUrl());
-        }
         if (memberInfoUpdateRequest.getPassword() != null) {
             String encode = passwordEncoder.encode(memberInfoUpdateRequest.getPassword());
             member.updatePassword(encode);
@@ -150,5 +147,10 @@ public class MemberService {
 
             setOperations.pop(member.getNickName(), size);
         }
+    }
+
+    @Transactional
+    public void deleteAccountBookMember(Long accountBookId, Long memberId) {
+
     }
 }

@@ -108,6 +108,7 @@ public class AccountBookService {
                 .accountBook(accountBook)
                 .member(member)
                 .accountBookAuthority(AccountBookAuthority.ADMIN)
+                .avatarUrl("default")
                 .getNotification(true).build();
 
         accountBookMemberRepository.save(bookMember);
@@ -128,6 +129,7 @@ public class AccountBookService {
                 .accountBook(accountBook)
                 .member(member)
                 .accountBookAuthority(AccountBookAuthority.ADMIN)
+                .avatarUrl("default")
                 .getNotification(true).build();
         accountBookMemberRepository.save(bookMember);
 
@@ -186,6 +188,7 @@ public class AccountBookService {
                         .accountBook(accountBook)
                         .member(member)
                         .accountBookAuthority(AccountBookAuthority.USER)
+                        .avatarUrl("default")
                         .getNotification(true).build();
                 accountBookMemberRepository.save(bookMember);
             }

@@ -28,7 +28,7 @@ public class Member extends MemberBase {
 
     private String nickName;
 
-    private String avatarUrl;
+//    private String avatarUrl;
     @OneToOne
     @JoinColumn(name = "accountBook_id")
     private AccountBook privateAccountBook;
@@ -58,11 +58,10 @@ public class Member extends MemberBase {
     private final List<Liked> likedPosts = new ArrayList<>();
 
     @Builder
-    public Member(Long id, String email, String password, Authority authority, UserLoginType userLoginType, String userName, String applicationPassword, String nickName, String avatarUrl) {
+    public Member(Long id, String email, String password, Authority authority, UserLoginType userLoginType, String userName, String applicationPassword, String nickName) {
         super(id, email, password, applicationPassword, authority, userLoginType);
         this.userName = userName;
         this.nickName = nickName;
-        this.avatarUrl = avatarUrl;
     }
 
     public void delete() {
@@ -77,9 +76,6 @@ public class Member extends MemberBase {
         super.updateApplicationPassword(newPassword);
     }
 
-    public void updateAvatarUrl(String updateUrl) {
-        this.avatarUrl = updateUrl;
-    }
 
     public void updateNickname(String nickName) {
         this.nickName = nickName;

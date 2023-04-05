@@ -51,7 +51,7 @@ class MemberControllerTest {
     @DisplayName("로그인한 멤버 정보 조회 성공 테스트")
      void getLoginMemberInfoSuccessTest() throws Exception {
         // given
-        MemberInfoNativeQ memberInfoNativeQ = new MemberInfoNativeQ(1L, 1L, "default", "username", "nickname", "email@email.com");
+        MemberInfoNativeQ memberInfoNativeQ = new MemberInfoNativeQ(1L, 1L,  "username", "nickname", "email@email.com");
         GetMemberInfo memberInfo = GetMemberInfo.builder()
                 .memberInfo(memberInfoNativeQ)
                 .invitations(new ArrayList<>()).build();

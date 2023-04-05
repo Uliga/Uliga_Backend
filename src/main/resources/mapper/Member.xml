@@ -8,7 +8,7 @@
 <mapper namespace="com.uliga.uliga_backend.domain.Member.dao.MemberMapper">
     <select id="find" parameterType="HashMap"
             resultType="com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ">
-        select mb.member_id, m.account_book_id, m.avatar_url, m.user_name, m.nick_name, mb.email
+        select mb.member_id, m.account_book_id,  m.user_name, m.nick_name, mb.email
         FROM member m JOIN member_base mb on m.member_id = mb.member_id
         <if test="id != null">
             AND mb.member_id = ${id}

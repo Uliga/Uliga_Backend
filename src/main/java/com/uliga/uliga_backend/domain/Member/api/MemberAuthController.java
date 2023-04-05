@@ -194,18 +194,11 @@ public class MemberAuthController {
         return ResponseEntity.ok(authService.nicknameExists(nickname));
     }
 
-    @GetMapping(value = "/mybatis/test")
-    public ResponseEntity<List<MemberInfoNativeQ>> mybatisTest(@RequestParam(name = "id", required = false) Long id, @RequestParam(name = "name", required = false) String name) {
-        HashMap<String, Object> requirements = new HashMap<>();
-        requirements.put("id", id);
-        requirements.put("name", name);
-        return ResponseEntity.ok(authService.mybatisTest(requirements));
-    }
+    @Operation(summary = "비밀번호 찾기 요청 API", description = "비밀번호 찾기 요청 API 입니다")
+    @PostMapping(value = "/password/reset")
+    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
 
-    @GetMapping(value = "/mybatis/writetest")
-    public ResponseEntity<String> mybatisWriteTest(@RequestBody HashMap<String, Object> map) {
-
-        authService.writeTest(map);
-        return ResponseEntity.ok("CREATED");
+        authService.resetPassword(resetPasswordRequest);
+        return ResponseEntity.ok("RESET");
     }
 }

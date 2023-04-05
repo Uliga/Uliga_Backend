@@ -24,15 +24,17 @@ public class AccountBookMember {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+    private String avatarUrl;
 
     private Boolean getNotification;
     @Enumerated(EnumType.STRING)
     private AccountBookAuthority accountBookAuthority;
     @Builder
-    public AccountBookMember(AccountBook accountBook, Member member, Boolean getNotification, AccountBookAuthority accountBookAuthority) {
+    public AccountBookMember(AccountBook accountBook, Member member, Boolean getNotification, AccountBookAuthority accountBookAuthority, String avatarUrl) {
         this.accountBook = accountBook;
         this.member = member;
         this.getNotification = getNotification;
         this.accountBookAuthority = accountBookAuthority;
+        this.avatarUrl = avatarUrl;
     }
 }

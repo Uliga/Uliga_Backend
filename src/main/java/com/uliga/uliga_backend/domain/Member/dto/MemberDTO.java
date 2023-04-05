@@ -56,7 +56,6 @@ public class MemberDTO {
                     .authority(ROLE_USER)
                     .email(email)
                     .userLoginType(UserLoginType.EMAIL)
-                    .avatarUrl("default")
                     .nickName(nickName)
                     .userName(userName)
                     .password(password).build();
@@ -205,6 +204,16 @@ public class MemberDTO {
         @Schema(description = "존재여부", defaultValue = "true")
         private boolean exists;
     }
+
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class ResetPasswordRequest {
+        private String email;
+    }
+
 
     @Builder
     @AllArgsConstructor

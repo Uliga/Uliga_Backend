@@ -21,7 +21,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("select new com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ(" +
             "m.id, " +
             "m.privateAccountBook.id," +
-            "m.avatarUrl, " +
             "m.userName," +
             " m.nickName, " +
             "m.email) from Member m where m.id = :id")

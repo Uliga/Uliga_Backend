@@ -500,5 +500,9 @@ public class AccountBookDTO {
         private String relationShip;
         @Schema(description = "변경할 카테고리")
         private List<String> categories;
+        @Schema(description = "초대할 멤버")
+        private List<String> members;
+        @Schema(description = "변경할 아바타")
+        private String avatarUrl;
     }
 }

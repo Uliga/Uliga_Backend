@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -133,6 +134,16 @@ public class MemberController {
     public ResponseEntity<String> deleteMemberNotification() {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         memberService.deleteMemberNotification(currentMemberId);
+        return ResponseEntity.ok("DELETED");
+    }
+
+
+    @Operation(summary = "공유 가계부 탈퇴 API", description = "공유 가계뿌에 탈퇴 할때 쓰는 API 입니다")
+    @DeleteMapping(value = "/accountBook/{id}")
+    public ResponseEntity<String> deleteAccountBookMember(@PathVariable("id") Long id) {
+
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        memberService.deleteAccountBookMember(id, currentMemberId);
         return ResponseEntity.ok("DELETED");
     }
 }
