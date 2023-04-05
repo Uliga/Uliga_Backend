@@ -151,6 +151,6 @@ public class MemberService {
 
     @Transactional
     public void deleteAccountBookMember(Long accountBookId, Long memberId) {
-
+        accountBookMemberRepository.deleteAccountBookMemberByAccountBookIdAndMemberId(accountBookId, memberId);
     }
 }
