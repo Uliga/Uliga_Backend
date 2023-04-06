@@ -1,5 +1,6 @@
 package com.uliga.uliga_backend.global.config;
 
+import com.uliga.uliga_backend.domain.Member.model.Authority;
 import com.uliga.uliga_backend.global.jwt.CustomLogoutSuccessHandler;
 import com.uliga.uliga_backend.global.jwt.JwtAccessDeniedHandler;
 import com.uliga.uliga_backend.global.jwt.JwtAuthenticationEntryPoint;
@@ -61,6 +62,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(HttpMethod.OPTIONS, "**").permitAll()
+                        .requestMatchers("/actuator/**").authenticated()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/logout-redirect").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
