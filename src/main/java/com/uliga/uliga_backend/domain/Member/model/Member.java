@@ -57,10 +57,11 @@ public class Member extends MemberBase {
     private final List<Liked> likedPosts = new ArrayList<>();
 
     @Builder
-    public Member(Long id, String email, String password, Authority authority, UserLoginType userLoginType, String userName, String applicationPassword, String nickName) {
+    public Member(Long id, String email, String password, Authority authority, UserLoginType userLoginType, String userName, String applicationPassword, String nickName, Boolean deleted) {
         super(id, email, password, applicationPassword, authority, userLoginType);
         this.userName = userName;
         this.nickName = nickName;
+        this.deleted = deleted;
     }
 
     public void delete() {

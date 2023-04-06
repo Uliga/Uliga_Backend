@@ -58,6 +58,7 @@ public class MemberDTO {
                     .userLoginType(UserLoginType.EMAIL)
                     .nickName(nickName)
                     .userName(userName)
+                    .deleted(false)
                     .password(password).build();
         }
 
