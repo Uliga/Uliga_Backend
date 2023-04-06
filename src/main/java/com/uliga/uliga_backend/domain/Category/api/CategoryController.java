@@ -1,6 +1,8 @@
 package com.uliga.uliga_backend.domain.Category.api;
 
 import com.uliga.uliga_backend.domain.Category.application.CategoryService;
+import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO;
+import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -9,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @Tag(name = "카테고리", description = "카테고리 관련 API 입니다")
 @Slf4j
@@ -25,5 +29,13 @@ public class CategoryController {
         log.info("카테고리 삭제 api 호출");
         categoryService.deleteCategory(id);
         return ResponseEntity.ok("DELETED");
+    }
+
+    @Operation(summary = "카테고리 업데이트 요청 API", description = "카테고리 업데이트 요청 API입니다")
+    @PatchMapping("/{id}")
+    public ResponseEntity<CategoryUpdateRequest> updateCategory(@PathVariable("id") Long id, @RequestBody Map<String, Object> map) {
+
+        log.info("카테고리 업데이트 api 호출");
+        return ResponseEntity.ok(categoryService.updateCategory(id, map));
     }
 }

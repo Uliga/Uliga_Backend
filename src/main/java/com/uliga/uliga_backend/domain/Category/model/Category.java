@@ -43,4 +43,8 @@ public class Category {
         this.name = name;
         this.accountBook = accountBook;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
