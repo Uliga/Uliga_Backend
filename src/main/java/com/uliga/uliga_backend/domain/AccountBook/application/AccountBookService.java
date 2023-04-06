@@ -465,7 +465,43 @@ public class AccountBookService {
     }
 
     @Transactional
-    public AccountBookUpdateRequest updateAccountBookInfo(Long memberId, Long accountBookId, Map<String, Object> map) {
-        return null;
+    public AccountBookUpdateRequest updateAccountBookInfo(Long memberId, Long accountBookId, Map<String, Object> map) throws JsonProcessingException {
+        AccountBookUpdateRequest request = objectMapper.convertValue(map, AccountBookUpdateRequest.class);
+        AccountBook accountBook = accountBookRepository.findById(accountBookId).orElseThrow(NotFoundByIdException::new);
+        AccountBookMember accountBookMember = accountBookMemberRepository.findAccountBookMemberByMemberIdAndAccountBookId(memberId, accountBookId).orElseThrow(UnauthorizedAccountBookAccessException::new);
+        List<Category> categoriesByAccountBookId = categoryRepository.findCategoriesByAccountBookId(accountBookId);
+        HashMap<String, Category> hashMap = new HashMap<>();
+        for (Category category : categoriesByAccountBookId) {
+            hashMap.put(category.getName(), category);
+        }
+
+        if (request.getAvatarUrl() != null) {
+            accountBookMember.setAvatarUrl(request.getAvatarUrl());
+        }
+
+        if (request.getMembers() != null) {
+            createInvitation(memberId, GetInvitations.builder().id(accountBookId).emails(request.getMembers()).build());
+        }
+
+        if (request.getName() != null) {
+            accountBook.setName(request.getName());
+        }
+
+        if (request.getCategories() != null) {
+            List<String> createCategories = new ArrayList<>();
+            for (String category : request.getCategories()) {
+                if (hashMap.containsKey(category)) {
+                    categoryRepository.delete(hashMap.get(category));
+                } else {
+                    createCategories.add(category);
+                }
+            }
+            createCategory(memberId, CategoryCreateRequest.builder().id(accountBookId).categories(createCategories).build());
+        }
+
+        if (request.getRelationShip() != null) {
+            accountBook.setRelationShip(request.getRelationShip());
+        }
+        return request;
     }
 }

@@ -104,9 +104,6 @@ public class MemberService {
             }
         }
 
-//        accountBookMemberRepository.deleteAllByMemberId(id);
-//        scheduleMemberRepository.deleteAllByMemberId(id);
-
     }
 
     @Transactional

@@ -67,5 +67,13 @@ public class AccountBook extends BaseTimeEntity {
                 .relationShip(relationShip)
                 .build();
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setRelationShip(String relationShip) {
+        this.relationShip = relationShip;
+    }
 }
 

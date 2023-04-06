@@ -38,4 +38,8 @@ public class AccountBookMember {
         this.accountBookAuthority = accountBookAuthority;
         this.avatarUrl = avatarUrl;
     }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
 }
