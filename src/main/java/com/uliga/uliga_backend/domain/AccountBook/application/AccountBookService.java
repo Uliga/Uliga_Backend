@@ -93,10 +93,18 @@ public class AccountBookService {
 
     @Transactional
     public GetAccountBookInfos getMemberAccountBook(Long id) {
+        List<AccountBookInfo> result = new ArrayList<>();
         List<AccountBookInfoQ> accountBookInfosByMemberId = accountBookRepository.findAccountBookInfosByMemberId(id);
+        for (AccountBookInfoQ accountBookInfoQ : accountBookInfosByMemberId) {
+            AccountBookInfo build = AccountBookInfo.builder().info(accountBookInfoQ)
+                    .members(accountBookRepository.findAccountBookMemberInfoById(accountBookInfoQ.getAccountBookId()))
+                    .numberOfMember(accountBookRepository.getMemberNumberByAccountBookId(accountBookInfoQ.getAccountBookId()))
+                    .categories(accountBookRepository.findAccountBookCategoryInfoById(accountBookInfoQ.getAccountBookId())).build();
+            result.add(build);
+        }
 
         return GetAccountBookInfos.builder()
-                .accountBooks(accountBookInfosByMemberId).build();
+                .accountBooks(result).build();
     }
 
     @Transactional

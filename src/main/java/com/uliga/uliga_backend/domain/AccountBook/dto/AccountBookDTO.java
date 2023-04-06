@@ -66,7 +66,7 @@ public class AccountBookDTO {
     @Getter
     public static class GetAccountBookInfos {
         @Schema(description = "가계부 정보 리스트")
-        private List<AccountBookInfoQ> accountBooks;
+        private List<AccountBookInfo> accountBooks;
     }
 
     @Builder
