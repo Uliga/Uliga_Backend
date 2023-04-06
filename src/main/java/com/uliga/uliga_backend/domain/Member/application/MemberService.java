@@ -103,8 +103,8 @@ public class MemberService {
                 accountBookRepository.deleteById(accountBookInfoQ.getAccountBookId());
             }
         }
-        accountBookMemberRepository.deleteAllByMemberId(id);
-        scheduleMemberRepository.deleteAllByMemberId(id);
+//        accountBookMemberRepository.deleteAllByMemberId(id);
+//        scheduleMemberRepository.deleteAllByMemberId(id);
 
     }
 
