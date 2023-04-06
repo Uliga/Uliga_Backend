@@ -489,13 +489,15 @@ public class AccountBookService {
 
         if (request.getCategories() != null) {
             List<String> createCategories = new ArrayList<>();
+            List<Long> deleteAll = new ArrayList<>();
             for (String category : request.getCategories()) {
                 if (hashMap.containsKey(category)) {
-                    categoryRepository.delete(hashMap.get(category));
+                    deleteAll.add(hashMap.get(category).getId());
                 } else {
                     createCategories.add(category);
                 }
             }
+            categoryRepository.deleteAllById(deleteAll);
             createCategory(memberId, CategoryCreateRequest.builder().id(accountBookId).categories(createCategories).build());
         }
 
