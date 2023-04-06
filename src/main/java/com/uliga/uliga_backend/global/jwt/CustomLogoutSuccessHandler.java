@@ -21,6 +21,7 @@ import java.io.IOException;
 public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler implements LogoutSuccessHandler {
     private final RedisTemplate<String, String> redisTemplate;
 
+    private final JwtTokenProvider jwtTokenProvider;
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         log.info("로그아웃 호출됐음");
@@ -30,10 +31,11 @@ public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler im
 
         String token = request.getHeader("Authorization").split(" ")[1];
         log.info("token = " + token);
+        Authentication auth = jwtTokenProvider.getAuthentication(token);
 
 
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-        if (valueOperations.get(token) == null) {
+        if (valueOperations.get(auth.getName()) == null) {
             throw new LogoutMemberException();
         }
         log.info("레디스에 비어있을때"+valueOperations.get(token));
