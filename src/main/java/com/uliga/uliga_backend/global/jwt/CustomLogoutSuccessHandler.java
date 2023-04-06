@@ -6,6 +6,7 @@ import com.uliga.uliga_backend.global.util.SecurityUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -28,6 +29,7 @@ public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler im
 
     private final ObjectMapper objectMapper;
     @Override
+    @Transactional
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         log.info("로그아웃 호출됐음");
         log.info(response.getHeader("Access-Control-Allow-Origin"));
@@ -37,13 +39,13 @@ public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler im
         String token = request.getHeader("Authorization").split(" ")[1];
         log.info("token = " + token);
         Authentication auth = jwtTokenProvider.getAuthentication(token);
+        User principal = (User) auth.getPrincipal();
 
 
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-        if (valueOperations.get(auth.getName()) == null) {
+        if (valueOperations.get(principal.getUsername()) == null) {
             throw new LogoutMemberException();
         }
-        User principal = (User) auth.getPrincipal();
         log.info("제발 "+ principal.getUsername());
         log.info("레디스에 비어있을때"+valueOperations.get(principal.getUsername()));
         valueOperations.getAndDelete(principal.getUsername());
