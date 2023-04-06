@@ -30,13 +30,21 @@ public class IncomeDTO {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
+    @Schema(description = "수입 업데이트 요청")
     public static class IncomeUpdateRequest {
+        @Schema(description = "수입 아이디")
         private Long id;
+        @Schema(description = "값")
         private Long value;
+        @Schema(description = "결제 수단", defaultValue = "카드/현금/이체 등등")
         private String payment;
+        @Schema(description = "거래처", defaultValue = "거래처")
         private String account;
+        @Schema(description = "간단한 메모", defaultValue = "simple memo")
         private String memo;
+        @Schema(description = "카테고리", defaultValue = "newCategory")
         private String category;
+        @Schema(description = "날짜", defaultValue = "yyyy-mm-dd")
         private String date;
 
     }

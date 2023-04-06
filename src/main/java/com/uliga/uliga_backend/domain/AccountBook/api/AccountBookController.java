@@ -67,7 +67,9 @@ public class AccountBookController {
             @ApiResponse(responseCode = "200", description = "업데이트 성공시", content = @Content(schema = @Schema(implementation = AccountBookUpdateRequest.class)))
     })
     @PatchMapping(value = "/{id}")
-    public ResponseEntity<AccountBookUpdateRequest> updateAccountBookInfo(@PathVariable("id") Long id, @RequestBody Map<String, Object> updateRequest) throws JsonProcessingException {
+    public ResponseEntity<AccountBookUpdateRequest> updateAccountBookInfo(@PathVariable("id") Long id,
+                                                                          @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "가계부 업데이트 요청", content = @Content(schema = @Schema(implementation = AccountBookUpdateRequest.class)))
+                                                                          @RequestBody Map<String, Object> updateRequest) throws JsonProcessingException {
 
         log.info("가계부 정보 수정 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();

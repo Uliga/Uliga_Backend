@@ -38,7 +38,7 @@ public class IncomeController {
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PatchMapping(value = "")
-    public ResponseEntity<IncomeUpdateRequest> updateIncome(@RequestBody Map<String, Object> updates) {
+    public ResponseEntity<IncomeUpdateRequest> updateIncome(@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "수입 업데이트 요청", content = @Content(schema = @Schema(implementation = IncomeUpdateRequest.class))) @RequestBody Map<String, Object> updates) {
         log.info("수입 업데이트 API 호출");
         return ResponseEntity.ok(incomeService.updateIncome(updates));
     }

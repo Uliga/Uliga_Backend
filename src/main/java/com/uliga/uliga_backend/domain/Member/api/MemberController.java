@@ -56,6 +56,7 @@ public class MemberController {
     @Operation(summary = "멤버 정보 업데이트 API", description = "멤버 정보 업데이트 API 입니다", security = @SecurityRequirement(name = "bearerAuth"))
     @PatchMapping(value = "")
     public ResponseEntity<MemberInfoUpdateRequest> updateMemberInfo(@Parameter(name = "authorization", description = "토큰 정보", in = ParameterIn.HEADER)
+                                                                    @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "멤버 정보 업데이트 요청", content = @Content(schema = @Schema(implementation = MemberInfoUpdateRequest.class)))
                                                                     @RequestBody Map<String, Object> updates) {
 
         log.info("멤버 정보 업데이트 API 호출됌");

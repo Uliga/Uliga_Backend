@@ -41,7 +41,8 @@ public class RecordController {
             @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PatchMapping(value = "")
-    public ResponseEntity<RecordUpdateRequest> updateRecord(@RequestBody Map<String, Object> updates) {
+    public ResponseEntity<RecordUpdateRequest> updateRecord(@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "지출 업데이트 요청", content = @Content(schema = @Schema(implementation = RecordUpdateRequest.class)))
+                                                            @RequestBody Map<String, Object> updates) {
         log.info("지출 업데이트 API 호출");
         return ResponseEntity.ok(recordService.updateRecord(updates));
     }

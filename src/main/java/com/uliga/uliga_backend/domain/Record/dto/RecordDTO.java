@@ -32,6 +32,7 @@ public class RecordDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    @Schema(description = "지출 업데이트 요청")
     public static class RecordUpdateRequest {
         private Long id;
         @Schema(description = "값")
