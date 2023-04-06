@@ -38,8 +38,8 @@ public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler im
         if (valueOperations.get(auth.getName()) == null) {
             throw new LogoutMemberException();
         }
-        log.info("레디스에 비어있을때"+valueOperations.get(token));
-        valueOperations.getAndDelete(token);
+        log.info("레디스에 비어있을때"+valueOperations.get(auth.getName()));
+        valueOperations.getAndDelete(auth.getName());
 
         log.info(request.getRequestURI());
         response.addHeader("Access-Control-Allow-Origin","http://localhost:3000");
