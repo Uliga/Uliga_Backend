@@ -65,6 +65,7 @@ public class Member extends MemberBase {
     }
 
     public void delete() {
+        this.privateAccountBook = null;
         this.deleted = true;
     }
 

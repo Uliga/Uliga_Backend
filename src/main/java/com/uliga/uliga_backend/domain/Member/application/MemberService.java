@@ -96,12 +96,13 @@ public class MemberService {
     public void deleteMember(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
         List<AccountBookInfoQ> accountBookInfosByMemberId = accountBookRepository.findAccountBookInfosByMemberId(id);
+
+        member.delete();
         for (AccountBookInfoQ accountBookInfoQ : accountBookInfosByMemberId) {
             if (accountBookInfoQ.getIsPrivate()) {
                 accountBookRepository.deleteById(accountBookInfoQ.getAccountBookId());
             }
         }
-        member.delete();
         accountBookMemberRepository.deleteAllByMemberId(id);
         scheduleMemberRepository.deleteAllByMemberId(id);
 
