@@ -111,7 +111,7 @@ public class MemberController {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         memberService.deleteMember(currentMemberId);
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("/auth/logout"));
+        headers.setLocation(URI.create("/logout"));
         return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
