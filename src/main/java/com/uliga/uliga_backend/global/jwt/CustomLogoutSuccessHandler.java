@@ -1,6 +1,8 @@
 package com.uliga.uliga_backend.global.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.Member.exception.LogoutMemberException;
+import com.uliga.uliga_backend.global.util.SecurityUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -22,6 +25,8 @@ public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler im
     private final RedisTemplate<String, String> redisTemplate;
 
     private final JwtTokenProvider jwtTokenProvider;
+
+    private final ObjectMapper objectMapper;
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         log.info("로그아웃 호출됐음");
@@ -38,8 +43,10 @@ public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler im
         if (valueOperations.get(auth.getName()) == null) {
             throw new LogoutMemberException();
         }
-        log.info("레디스에 비어있을때"+valueOperations.get(auth.getName()));
-        valueOperations.getAndDelete(auth.getName());
+        User principal = (User) auth.getPrincipal();
+        log.info("제발 "+ principal.getUsername());
+        log.info("레디스에 비어있을때"+valueOperations.get(principal.getUsername()));
+        valueOperations.getAndDelete(principal.getUsername());
 
         log.info(request.getRequestURI());
         response.addHeader("Access-Control-Allow-Origin","http://localhost:3000");
