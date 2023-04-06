@@ -22,9 +22,12 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.Map;
 
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
@@ -104,10 +107,12 @@ public class MemberController {
 
     @Operation(summary = "멤버 탈퇴", description = "멤버 탈퇴 API")
     @DeleteMapping(value = "")
-    public ResponseEntity<String> deleteMember() {
+    public ResponseEntity<?> deleteMember() {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         memberService.deleteMember(currentMemberId);
-        return ResponseEntity.ok("DELETED");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("/auth/logout"));
+        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
     @Operation(summary = "이메일로 존재하는 멤버 찾기", description = "이메일로 존재하는 멤버 찾는 API", security = @SecurityRequirement(name = "bearerAuth"))
