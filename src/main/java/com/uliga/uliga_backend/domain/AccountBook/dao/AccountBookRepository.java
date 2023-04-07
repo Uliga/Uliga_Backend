@@ -34,7 +34,8 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long>{
             "m.id, " +
             "m.userName," +
             "abm.accountBookAuthority, " +
-            "abm.avatarUrl) " +
+            "abm.avatarUrl, " +
+            "m.email) " +
             "FROM " +
             "AccountBook ab join AccountBookMember abm on ab.id = abm.accountBook.id " +
             "join Member m on abm.member.id = m.id " +

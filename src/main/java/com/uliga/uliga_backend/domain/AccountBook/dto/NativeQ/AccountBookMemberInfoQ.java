@@ -16,12 +16,15 @@ public class AccountBookMemberInfoQ {
     private AccountBookAuthority accountBookAuthority;
     @Schema(description = "아타바 색상")
     private String avatarUrl;
+    @Schema(description = "멤버 이메일")
+    private String email;
 
 
-    public AccountBookMemberInfoQ(Long id, String username, AccountBookAuthority accountBookAuthority, String avatarUrl) {
+    public AccountBookMemberInfoQ(Long id, String username, AccountBookAuthority accountBookAuthority, String avatarUrl, String email) {
         this.id = id;
         this.username = username;
         this.accountBookAuthority = accountBookAuthority;
         this.avatarUrl = avatarUrl;
+        this.email = email;
     }
 }
