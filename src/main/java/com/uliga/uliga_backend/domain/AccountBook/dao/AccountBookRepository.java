@@ -56,7 +56,8 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long>{
             "COUNT(abm.member.id)" +
             ") FROM AccountBook ab " +
             "JOIN AccountBookMember abm ON abm.accountBook.id = ab.id " +
-            "WHERE ab.id=:id GROUP BY ab.id")
+            "JOIN Member m ON abm.member.id = m.id " +
+            "WHERE abm.accountBook.id=:id AND m.deleted = false GROUP BY ab.id")
     MembersQ getMemberNumberByAccountBookId(@Param("id") Long id);
 
     void deleteById(Long id);
