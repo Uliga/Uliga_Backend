@@ -510,8 +510,8 @@ public class AccountBookService {
             createCategory(memberId, CategoryCreateRequest.builder().id(accountBookId).categories(createCategories).build());
         }
 
-        if (request.getRelationShip() != null) {
-            accountBook.setRelationShip(request.getRelationShip());
+        if (request.getRelationship() != null) {
+            accountBook.setRelationShip(request.getRelationship());
         }
         return request;
     }
