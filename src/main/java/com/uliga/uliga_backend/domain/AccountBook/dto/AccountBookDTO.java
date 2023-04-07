@@ -495,7 +495,7 @@ public class AccountBookDTO {
         @Schema(description = "변경할 이름")
         private String name;
         @Schema(description = "변경할 별칭")
-        private String relationShip;
+        private String relationship;
         @Schema(description = "변경할 카테고리")
         private List<String> categories;
         @Schema(description = "초대할 멤버")
