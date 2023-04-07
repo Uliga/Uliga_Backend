@@ -107,12 +107,12 @@ public class MemberController {
 
     @Operation(summary = "멤버 탈퇴", description = "멤버 탈퇴 API")
     @DeleteMapping(value = "")
-    public ResponseEntity<?> deleteMember() {
+    public ResponseEntity<String> deleteMember() {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         memberService.deleteMember(currentMemberId);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("/logout"));
-        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setLocation(URI.create("/logout"));
+        return ResponseEntity.ok("DELETED");
     }
 
     @Operation(summary = "이메일로 존재하는 멤버 찾기", description = "이메일로 존재하는 멤버 찾는 API", security = @SecurityRequirement(name = "bearerAuth"))

@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +33,6 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final AccountBookRepository accountBookRepository;
     private final AccountBookMemberRepository accountBookMemberRepository;
-    private final ScheduleMemberRepository scheduleMemberRepository;
     private final PasswordEncoder passwordEncoder;
     private final RedisTemplate<String, String> redisTemplate;
     private final RedisTemplate<String, Object> objectRedisTemplate;
@@ -103,6 +103,9 @@ public class MemberService {
                 accountBookRepository.deleteById(accountBookInfoQ.getAccountBookId());
             }
         }
+
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        valueOperations.getAndDelete(Long.toString(id));
 
     }
 
