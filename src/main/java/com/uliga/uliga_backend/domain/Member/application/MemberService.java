@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
 import com.uliga.uliga_backend.domain.JoinTable.dao.AccountBookMemberRepository;
-import com.uliga.uliga_backend.domain.JoinTable.dao.ScheduleMemberRepository;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ;
 import com.uliga.uliga_backend.domain.Member.exception.UserExistsInAccountBook;
@@ -88,7 +87,7 @@ public class MemberService {
         if (member.getNickName().equals(nicknameCheckDto.getNickname())) {
             return true;
         } else {
-            return memberRepository.existsByNickName(nicknameCheckDto.getNickname());
+            return memberRepository.existsByNickNameAndDeleted(nicknameCheckDto.getNickname(), false);
         }
     }
 

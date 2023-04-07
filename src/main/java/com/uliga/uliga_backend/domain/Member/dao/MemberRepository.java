@@ -3,7 +3,6 @@ package com.uliga.uliga_backend.domain.Member.dao;
 import com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -16,7 +15,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     boolean existsByEmailAndDeleted(String email, Boolean deleted);
 
-    boolean existsByNickName(String nickname);
+    boolean existsByNickNameAndDeleted(String nickname, Boolean deleted);
 
     @Query("select new com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ(" +
             "m.id, " +
