@@ -497,15 +497,16 @@ public class AccountBookService {
 
         if (request.getCategories() != null) {
             List<String> createCategories = new ArrayList<>();
-            List<Long> deleteAll = new ArrayList<>();
             for (String category : request.getCategories()) {
-                if (hashMap.containsKey(category)) {
-                    deleteAll.add(hashMap.get(category).getId());
-                } else {
+                if (!hashMap.containsKey(category)) {
                     createCategories.add(category);
                 }
             }
-            categoryRepository.deleteAllById(deleteAll);
+            for (Category category : categoriesByAccountBookId) {
+                if (!request.getCategories().contains(category.getName())) {
+                    categoryRepository.delete(category);
+                }
+            }
             createCategory(memberId, CategoryCreateRequest.builder().id(accountBookId).categories(createCategories).build());
         }
 
