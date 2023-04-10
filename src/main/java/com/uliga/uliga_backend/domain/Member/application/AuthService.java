@@ -106,6 +106,7 @@ public class AuthService {
 //        } else {
 //            accessToken = cookie.getValue();
 //        }
+        log.info("access : "+accessToken);
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         // Access Token에서 멤버 아이디 가져오기
         Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
