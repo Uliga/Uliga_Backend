@@ -1,5 +1,6 @@
 package com.uliga.uliga_backend.global.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.Member.model.Authority;
 import com.uliga.uliga_backend.global.jwt.CustomLogoutSuccessHandler;
 import com.uliga.uliga_backend.global.jwt.JwtAccessDeniedHandler;
@@ -30,6 +31,7 @@ public class SecurityConfig {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final RedisTemplate<String, String> redisTemplate;
     private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
+    private final ObjectMapper mapper;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -49,6 +51,7 @@ public class SecurityConfig {
                 .exceptionHandling()
                 .accessDeniedHandler(jwtAccessDeniedHandler)
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+
 
 
                 .and()
@@ -80,7 +83,7 @@ public class SecurityConfig {
                 );
 
         http
-                .apply(new JwtSecurityConfig(jwtTokenProvider, redisTemplate))
+                .apply(new JwtSecurityConfig(jwtTokenProvider,mapper,redisTemplate))
                 .and()
                 .logout()
                 .logoutUrl("/logout")

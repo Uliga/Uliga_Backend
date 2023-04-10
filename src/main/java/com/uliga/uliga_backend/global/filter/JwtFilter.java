@@ -1,5 +1,7 @@
 package com.uliga.uliga_backend.global.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import com.uliga.uliga_backend.global.jwt.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -23,25 +25,39 @@ import static com.uliga.uliga_backend.global.common.constants.JwtConstants.BEARE
 public class JwtFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
 
+
     private final RedisTemplate<String, String> redisTemplate;
+
+    private final ObjectMapper mapper;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // 1. request Header에서 토큰 꺼냄, 여기서 HTTP ONLY 쿠키에서 읽어오게 변경 가능
-        String jwt = resolveToken(request);
-        // 2. validateToken으로 유효성 검사
-        // 정상 토큰이면, Authentication을 가져와서 SecurityContext에 저장
-        if (jwt != null) {
-            if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
-                Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
-                User user = (User) authentication.getPrincipal();
-                if (user.getUsername() != null && redisTemplate.hasKey(user.getUsername())) {
-                    log.info("memberId : "+user.getUsername());
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        try {
+            // 1. request Header에서 토큰 꺼냄, 여기서 HTTP ONLY 쿠키에서 읽어오게 변경 가능
+            String jwt = resolveToken(request);
+            // 2. validateToken으로 유효성 검사
+            // 정상 토큰이면, Authentication을 가져와서 SecurityContext에 저장
+            if (jwt != null) {
+                if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
+                    Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
+                    User user = (User) authentication.getPrincipal();
+                    if (user.getUsername() != null && redisTemplate.hasKey(user.getUsername())) {
+                        log.info("memberId : " + user.getUsername());
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    }
                 }
             }
+
+            filterChain.doFilter(request, response);
+        } catch (Exception e) {
+            String result = mapper.writeValueAsString(new ErrorResponse(401L, "토큰 인증에 실패했습니다"));
+            response.setContentType("application/json");
+            response.setCharacterEncoding("utf-8");
+            response.setHeader("Access-Control-Allow-Origin","http://localhost:3000");
+            response.getWriter().write(result);
         }
-        filterChain.doFilter(request, response);
+
     }
 
     private String resolveToken(HttpServletRequest request) {
@@ -51,4 +67,6 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         return null;
     }
+
+
 }

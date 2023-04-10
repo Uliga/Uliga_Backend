@@ -31,7 +31,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     }
 
     private void sendResponse(HttpServletResponse response, AuthenticationException authException) throws IOException {
-        String result;
+        String result = "서버 에러가 발생했습니다";
         if (authException instanceof BadCredentialsException) {
             result = objectMapper.writeValueAsString(new ErrorResponse(409L, "잘못된 이메일, 비밀번호 입니다."));
             response.setStatus(response.SC_CONFLICT);
@@ -39,13 +39,9 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             result = objectMapper.writeValueAsString(new ErrorResponse(404L,
                     "존재하지 않는 멤버입니다."));
             response.setStatus(response.SC_NOT_FOUND);
-        } else if (authException instanceof InsufficientAuthenticationException){
-            result = objectMapper.writeValueAsString(new ErrorResponse(401L, "사용자 인증 과정 중 오류가 발생하였거나, 서버 내부 오류가 발생하였습니다. 오류 지속시 재로그인을 해주세요."));
-            response.setStatus(response.SC_UNAUTHORIZED);
         } else {
-            result = objectMapper.writeValueAsString(new ErrorResponse(500L,
-                    "서버 내부 오류가 발생하였습니다"));
-            response.setStatus(response.SC_INTERNAL_SERVER_ERROR);
+            result = objectMapper.writeValueAsString(new ErrorResponse(503L, "서버 내부 오류가 발생하였습니다"));
+            response.setStatus(response.SC_SERVICE_UNAVAILABLE);
         }
 
 
