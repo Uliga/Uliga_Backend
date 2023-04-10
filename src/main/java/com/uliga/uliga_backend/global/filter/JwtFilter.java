@@ -52,6 +52,7 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (Exception e) {
             log.info(e.getMessage());
+            log.info(e.getClass().getName());
             String result = mapper.writeValueAsString(new ErrorResponse(401L, "토큰 인증에 실패했습니다"));
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
