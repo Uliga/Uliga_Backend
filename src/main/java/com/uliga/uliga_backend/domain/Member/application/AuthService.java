@@ -24,6 +24,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -85,15 +86,26 @@ public class AuthService {
                 .build();
     }
 
+    public String resolveToken(HttpServletRequest request) {
+
+        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
     @Transactional
     public TokenIssueDTO reissue(HttpServletResponse response, HttpServletRequest request) {
-        Cookie cookie = CookieUtil.getCookie(request, ACCESS_TOKEN).orElse(null);
-        String accessToken;
-        if (cookie == null) {
-            throw new ExpireRefreshTokenException();
-        } else {
-            accessToken = cookie.getValue();
-        }
+        String accessToken = resolveToken(request);
+
+
+//        Cookie cookie = CookieUtil.getCookie(request, ACCESS_TOKEN).orElse(null);
+//        String accessToken;
+//        if (cookie == null) {
+//            throw new ExpireRefreshTokenException();
+//        } else {
+//            accessToken = cookie.getValue();
+//        }
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         // Access Token에서 멤버 아이디 가져오기
         Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
