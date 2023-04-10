@@ -51,4 +51,14 @@ public class TokenDTO {
     public static class AccessTokenDTO {
         private String accessToken;
     }
+
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    public static class ReissueRequest {
+        private String token;
+    }
+
+
 }

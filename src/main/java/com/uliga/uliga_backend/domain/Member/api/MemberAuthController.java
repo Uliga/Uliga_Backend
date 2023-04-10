@@ -7,6 +7,7 @@ import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
 import com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ;
 import com.uliga.uliga_backend.domain.Member.dto.OAuthDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO;
+import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.ReissueRequest;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenIssueDTO;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -110,11 +111,11 @@ public class MemberAuthController {
             @ApiResponse(responseCode = "200", description = "토큰 재발급 성공", content = @Content(schema = @Schema(implementation = TokenIssueDTO.class))),
             @ApiResponse(responseCode = "401", description = "토큰 재발급 실패, 만료된 리프레쉬", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @GetMapping(value = "/reissue")
-    public ResponseEntity<TokenIssueDTO> reissue(HttpServletResponse response, HttpServletRequest request) {
+    @PostMapping(value = "/reissue")
+    public ResponseEntity<TokenIssueDTO> reissue(@RequestBody ReissueRequest reissueRequest) {
 
         log.info("토큰 재발급 요청 API 호출");
-        return ResponseEntity.ok(authService.reissue(response, request));
+        return ResponseEntity.ok(authService.reissue(reissueRequest));
     }
 
     @Operation(summary = "이메일 인증 요청 API", description = "이메일 인증 요청 API 입니다")

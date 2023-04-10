@@ -5,6 +5,8 @@ import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.CreateReque
 import com.uliga.uliga_backend.domain.Member.dao.MemberMapper;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.model.Member;
+import com.uliga.uliga_backend.domain.Token.dto.TokenDTO;
+import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.ReissueRequest;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenInfoDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenIssueDTO;
 import com.uliga.uliga_backend.domain.Token.exception.ExpireRefreshTokenException;
@@ -83,19 +85,12 @@ public class AuthService {
                 .build();
     }
 
-    public String resolveToken(HttpServletRequest request) {
-
-        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
-            return bearerToken.substring(7);
-        }
-        return null;
-    }
     @Transactional
-    public TokenIssueDTO reissue(HttpServletResponse response, HttpServletRequest request) {
-        String accessToken = resolveToken(request);
+    public TokenIssueDTO reissue(ReissueRequest reissueRequest) {
 
-        log.info("access : "+accessToken);
+        String accessToken = reissueRequest.getToken();
+
+        log.info("access : " + accessToken);
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         // Access Token에서 멤버 아이디 가져오기
         Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
