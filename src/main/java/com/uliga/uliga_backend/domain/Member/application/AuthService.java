@@ -10,7 +10,6 @@ import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenIssueDTO;
 import com.uliga.uliga_backend.domain.Token.exception.ExpireRefreshTokenException;
 import com.uliga.uliga_backend.domain.Token.exception.InvalidRefreshTokenException;
 import com.uliga.uliga_backend.global.jwt.JwtTokenProvider;
-import com.uliga.uliga_backend.global.util.CookieUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -76,8 +75,6 @@ public class AuthService {
         log.info("로그인 API 중 토큰 생성 로직 실행");
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         valueOperations.set(authenticate.getName(), tokenInfoDTO.getRefreshToken());
-        CookieUtil.deleteCookie(request, response, ACCESS_TOKEN);
-        CookieUtil.addCookie(response, ACCESS_TOKEN, tokenInfoDTO.getAccessToken(), ACCESS_TOKEN_COOKIE_EXPIRE_TIME);
         redisTemplate.expire(authenticate.getName(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
 
         return LoginResult.builder()
@@ -98,14 +95,6 @@ public class AuthService {
     public TokenIssueDTO reissue(HttpServletResponse response, HttpServletRequest request) {
         String accessToken = resolveToken(request);
 
-
-//        Cookie cookie = CookieUtil.getCookie(request, ACCESS_TOKEN).orElse(null);
-//        String accessToken;
-//        if (cookie == null) {
-//            throw new ExpireRefreshTokenException();
-//        } else {
-//            accessToken = cookie.getValue();
-//        }
         log.info("access : "+accessToken);
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         // Access Token에서 멤버 아이디 가져오기
@@ -126,8 +115,6 @@ public class AuthService {
         TokenInfoDTO tokenInfoDTO = jwtTokenProvider.generateTokenDto(authentication);
         // 저장소 정보 업데이트
         log.info("토큰 재발급 성공후 레디스에 값 저장");
-        CookieUtil.deleteCookie(request, response, ACCESS_TOKEN);
-        CookieUtil.addCookie(response, ACCESS_TOKEN, tokenInfoDTO.getAccessToken(), ACCESS_TOKEN_COOKIE_EXPIRE_TIME);
         valueOperations.set(authentication.getName(), tokenInfoDTO.getRefreshToken());
         redisTemplate.expire(authentication.getName(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
 
