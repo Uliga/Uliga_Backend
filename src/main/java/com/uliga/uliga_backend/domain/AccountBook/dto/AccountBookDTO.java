@@ -30,6 +30,7 @@ public class AccountBookDTO {
         @NotNull
         @Schema(description = "초대할 이메일들")
         private List<String> emails;
+        @NotNull
         @Schema(description = "가계부 별칭", defaultValue = "relationship")
         private String relationship;
 
@@ -308,6 +309,7 @@ public class AccountBookDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class DeleteItemRequest {
+        @NotNull
         private List<Long> deleteIds;
     }
 
@@ -483,6 +485,7 @@ public class AccountBookDTO {
     @AllArgsConstructor
     @Schema(description = "가계부 내역 삭제 요청")
     public static class AccountBookDataDeleteRequest {
+        @NotNull
         private List<Long> ids;
     }
 

@@ -147,7 +147,7 @@ public class AccountBookController {
 
     @Operation(summary = "가계부 내역 삭제", description = "가계부 내역 삭제 API 입니다")
     @DeleteMapping(value = "/item")
-    public ResponseEntity<String> deleteAccountBookItems(@RequestBody DeleteItemRequest deleteItemRequest) {
+    public ResponseEntity<String> deleteAccountBookItems(@Valid @RequestBody DeleteItemRequest deleteItemRequest) {
 
         log.info("가계부 내역 삭제 API 호출");
         accountBookService.deleteAccountBookItems(deleteItemRequest);
@@ -297,7 +297,7 @@ public class AccountBookController {
             @ApiResponse(responseCode = "200", description = "삭제 성공시")
     })
     @DeleteMapping(value = "/data")
-    public ResponseEntity<String> deleteAccountBookData(@RequestBody AccountBookDataDeleteRequest dataDeleteRequest) {
+    public ResponseEntity<String> deleteAccountBookData(@Valid @RequestBody AccountBookDataDeleteRequest dataDeleteRequest) {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         accountBookService.deleteAccountBookData(currentMemberId, dataDeleteRequest);
         return ResponseEntity.ok("DELETED");

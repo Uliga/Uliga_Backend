@@ -143,7 +143,7 @@ public class MemberController {
     }
 
 
-    @Operation(summary = "공유 가계부 탈퇴 API", description = "공유 가계뿌에 탈퇴 할때 쓰는 API 입니다")
+    @Operation(summary = "공유 가계부 탈퇴 API", description = "공유 가계부에 탈퇴 할때 쓰는 API 입니다")
     @DeleteMapping(value = "/accountBook/{id}")
     public ResponseEntity<String> deleteAccountBookMember(@PathVariable("id") Long id) {
 

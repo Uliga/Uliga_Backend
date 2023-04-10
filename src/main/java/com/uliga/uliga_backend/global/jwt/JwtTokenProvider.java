@@ -1,6 +1,7 @@
 package com.uliga.uliga_backend.global.jwt;
 
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenInfoDTO;
+import com.uliga.uliga_backend.global.util.SecurityUtil;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -94,6 +95,11 @@ public class JwtTokenProvider {
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("잘못된 JWT 서명입니다.");
         } catch (ExpiredJwtException e) {
+            Authentication authentication = getAuthentication(token);
+            Object principal = authentication.getPrincipal();
+            User user = (User) principal;
+            log.info("이거 되려나");
+            log.info(user.getUsername());
             log.info("만료된 JWT 토큰입니다.");
         } catch (UnsupportedJwtException e) {
             log.info("지원되지 않는 JWT 토큰입니다.");
