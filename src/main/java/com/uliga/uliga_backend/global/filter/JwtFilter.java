@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,7 +18,7 @@ import java.io.IOException;
 
 import static com.uliga.uliga_backend.global.common.constants.JwtConstants.AUTHORIZATION_HEADER;
 import static com.uliga.uliga_backend.global.common.constants.JwtConstants.BEARER_PREFIX;
-
+@Slf4j
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
@@ -33,6 +34,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if (jwt != null) {
             if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
                 Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
+                log.info("Jwt filter authority : "+authentication.getAuthorities().toString());
                 User user = (User) authentication.getPrincipal();
                 if (user.getUsername() != null && redisTemplate.hasKey(user.getUsername())) {
 
