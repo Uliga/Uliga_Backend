@@ -39,7 +39,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             result = objectMapper.writeValueAsString(new ErrorResponse(404L,
                     "존재하지 않는 멤버입니다."));
             response.setStatus(response.SC_NOT_FOUND);
-        } else {
+        } else if (authException instanceof InsufficientAuthenticationException){
             result = objectMapper.writeValueAsString(new ErrorResponse(503L, "서버 내부 오류가 발생하였습니다"));
             response.setStatus(response.SC_SERVICE_UNAVAILABLE);
         }
