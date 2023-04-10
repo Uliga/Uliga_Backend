@@ -66,7 +66,6 @@ public class SecurityConfig {
                         .requestMatchers("/actuator/**").authenticated()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/logout-redirect").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/member/**").hasRole("USER")
                         .requestMatchers("/post/**").authenticated()
                         .requestMatchers("/accountBook/**").authenticated()

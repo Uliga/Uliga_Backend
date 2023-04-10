@@ -84,7 +84,6 @@ public class JwtTokenProvider {
 
         // UserDetails 객체를 만들어서 Authentication 리턴
         UserDetails principal = new User(claims.getSubject(), "", authorities);
-        log.info("authorities : "+authorities.toString());
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
@@ -95,10 +94,6 @@ public class JwtTokenProvider {
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("잘못된 JWT 서명입니다.");
         } catch (ExpiredJwtException e) {
-            Authentication authentication = getAuthentication(token);
-            Object principal = authentication.getPrincipal();
-            User user = (User) principal;
-            log.info("Expired user Id : "+user.getUsername());
             log.info("만료된 JWT 토큰입니다.");
         } catch (UnsupportedJwtException e) {
             log.info("지원되지 않는 JWT 토큰입니다.");

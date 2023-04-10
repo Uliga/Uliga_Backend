@@ -7,9 +7,4 @@ public class JwtConstants {
     public static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;  // 7일 1000 * 60 * 60 * 24 * 7
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String BEARER_PREFIX = "Bearer ";
-    public static final String ACCESS_TOKEN = "token";
-
-    public static final String REFRESH_TOKEN = "refreshToken";
-
-    public static final String SET_COOKIE = "Set-Cookie";
 }
