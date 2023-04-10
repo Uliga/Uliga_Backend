@@ -36,22 +36,6 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-//        // 1. request Header에서 토큰 꺼냄, 여기서 HTTP ONLY 쿠키에서 읽어오게 변경 가능
-//        String jwt = resolveToken(request);
-//        // 2. validateToken으로 유효성 검사
-//        // 정상 토큰이면, Authentication을 가져와서 SecurityContext에 저장
-//        if (jwt != null) {
-//            if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
-//                Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
-//                User user = (User) authentication.getPrincipal();
-//                if (user.getUsername() != null && redisTemplate.hasKey(user.getUsername())) {
-//                    log.info("memberId : " + user.getUsername());
-//                    SecurityContextHolder.getContext().setAuthentication(authentication);
-//                }
-//            }
-//        }
-//
-//        filterChain.doFilter(request, response);
 
         try {
             // 1. request Header에서 토큰 꺼냄, 여기서 HTTP ONLY 쿠키에서 읽어오게 변경 가능
