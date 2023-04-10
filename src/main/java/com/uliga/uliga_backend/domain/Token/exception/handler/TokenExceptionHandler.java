@@ -19,10 +19,10 @@ public class TokenExceptionHandler {
     ) {
         log.info("만료된 리프레쉬 토큰입니다. 재로그인 해야함");
         return new ResponseEntity<>(ErrorResponse.builder()
-                .errorCode(503L)
+                .errorCode(401L)
                 .message("만료된 리프레쉬 토큰입니다. 재로그인 해주세요.")
                 .build()
-                , HttpStatus.SERVICE_UNAVAILABLE
+                , HttpStatus.UNAUTHORIZED
         );
     }
 
@@ -34,9 +34,9 @@ public class TokenExceptionHandler {
         return new ResponseEntity<>(
                 ErrorResponse.builder()
                         .message("유효하지 않은 리프레쉬 토큰입니다.")
-                        .errorCode(503L)
+                        .errorCode(401L)
                         .build(),
-                HttpStatus.SERVICE_UNAVAILABLE
+                HttpStatus.UNAUTHORIZED
         );
     }
 
