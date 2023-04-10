@@ -20,16 +20,4 @@ public class SecurityUtil {
         return Long.parseLong(authentication.getName());
     }
 
-    /*
-        회원의 경우 게시글을 조회할때 본인이 누른 스크랩 등을 확인할 수 있어야 한다.
-        따라서 현재 게시글을 조회하는 사용자가 로그인된 회원이라면 아이디를 반환해주고,
-        비회원이라면 null을 반환해줄 필요성이 있기에 해당 메소드를 만들었다.
-     */
-    public static Long getCurrentNullableMemberId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || authentication.getName() == null || authentication.getName().equals("anonymousUser")) {
-            return null;
-        }
-        return Long.parseLong(authentication.getName());
-    }
 }

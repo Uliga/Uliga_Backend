@@ -35,7 +35,7 @@ public class IncomeController {
     @Operation(summary = "수입 업데이트 API", description = "수입 업데이트 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "수입 업데이트시", content = @Content(schema = @Schema(implementation = IncomeUpdateRequest.class))),
-            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PatchMapping(value = "")
     public ResponseEntity<IncomeUpdateRequest> updateIncome(@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "수입 업데이트 요청", content = @Content(schema = @Schema(implementation = IncomeUpdateRequest.class))) @RequestBody Map<String, Object> updates) {
@@ -46,7 +46,7 @@ public class IncomeController {
     @Operation(summary = "멤버 수입 전체 조회 API", description = "멤버 수입 전체 조회 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = IncomeInfoQ.class))),
-            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping("")
     public ResponseEntity<Page<IncomeInfoQ>> getMemberIncomes(Pageable pageable) {
@@ -58,7 +58,7 @@ public class IncomeController {
     @Operation(summary = "멤버 수입 가계부 별 전체/년도별/월회 조회 API", description = "멤버 수입 가계부 별 전체/월별 조회 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = IncomeInfoQ.class))),
-            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping("/accountBook/{id}")
     public ResponseEntity<Page<IncomeInfoQ>> getMemberIncomesByAccountBook(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,

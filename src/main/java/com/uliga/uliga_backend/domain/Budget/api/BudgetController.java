@@ -30,7 +30,7 @@ public class BudgetController {
     @Operation(summary = "예산 업데이트")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "업데이트 성공시", content = @Content(schema = @Schema(implementation = BudgetUpdateRequest.class))),
-            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PatchMapping(value = "")
     public ResponseEntity<BudgetUpdateRequest> updateBudget(@RequestBody Map<String, Object> updates) {

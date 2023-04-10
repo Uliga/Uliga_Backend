@@ -38,7 +38,7 @@ public class RecordController {
     @Operation(summary = "지출 업데이트 API", description = "지출 업데이트 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "지출 업데이트시", content = @Content(schema = @Schema(implementation = RecordUpdateRequest.class))),
-            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PatchMapping(value = "")
     public ResponseEntity<RecordUpdateRequest> updateRecord(@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "지출 업데이트 요청", content = @Content(schema = @Schema(implementation = RecordUpdateRequest.class)))
@@ -50,7 +50,7 @@ public class RecordController {
     @Operation(summary = "멤버 지출 전체 조회 API", description = "멤버 지출 전체 조회 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = RecordInfoQ.class))),
-            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "")
     public ResponseEntity<Page<RecordInfoQ>> getMemberRecords(Pageable pageable) {
@@ -63,7 +63,7 @@ public class RecordController {
     @Operation(summary = "지출 상세 내역 조회", description = "지출 상세 내역 조회 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = RecordInfoDetail.class))),
-            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 
     })
     @GetMapping(value = "/{id}")
@@ -75,7 +75,7 @@ public class RecordController {
     @Operation(summary = "멤버 가계부 별 지출 전체/년도별/월별 조회 API", description = "멤버 가계부 별 지출 전체/년도별/월별 조회 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = RecordInfoQ.class))),
-            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "/accountBook/{id}")
     public ResponseEntity<Page<RecordInfoQ>> getMemberRecordsByAccountBook(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,

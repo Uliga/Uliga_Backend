@@ -35,7 +35,6 @@ import static com.uliga.uliga_backend.global.common.constants.JwtConstants.*;
 @RequiredArgsConstructor
 public class AuthService {
     private final MemberRepository memberRepository;
-    private final MemberMapper memberMapper;
     private final AccountBookService accountBookService;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;

@@ -36,7 +36,7 @@ public class ScheduleController {
     @Operation(summary = "멤버 금융일정 조회 API", description = "멤버 금융일정 조회 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = GetMemberSchedules.class))),
-            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "")
     public ResponseEntity<GetMemberSchedules> getAccountBookSchedules() {
@@ -49,7 +49,7 @@ public class ScheduleController {
     @Operation(summary = "금융일정 세부 내용 조회 API", description = "금융 일정 세부 내용 조회 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = ScheduleDetail.class))),
-            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "/{id}")
     public ResponseEntity<ScheduleDetail> getScheduleDetail(@Parameter(name = "id", description = "금융일정 아이디", in = PATH)@PathVariable("id") Long id) {
@@ -61,7 +61,7 @@ public class ScheduleController {
     @Operation(summary = "금융 일정 업데이트 API")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "업데이트 성공시", content = @Content(schema = @Schema(implementation = ScheduleDTO.UpdateScheduleRequest.class))),
-            @ApiResponse(responseCode = "503", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PatchMapping(value = "")
     public ResponseEntity<ScheduleDTO.UpdateScheduleRequest> updateSchedule(@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "금융일정 업데이트 요청", content = @Content(schema = @Schema(implementation = ScheduleDTO.UpdateScheduleRequest.class))) @RequestBody Map<String, Object> updates) {

@@ -47,8 +47,9 @@ public class SecurityConfig {
         // exception handling 할때 우리가 만든 클래스 추가
         http
                 .exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+
 
                 .and()
                 .headers()
