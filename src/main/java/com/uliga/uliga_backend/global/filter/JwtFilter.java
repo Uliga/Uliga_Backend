@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -50,10 +51,10 @@ public class JwtFilter extends OncePerRequestFilter {
             }
 
             filterChain.doFilter(request, response);
-        } catch (Exception e) {
+        } catch (InternalAuthenticationServiceException e) {
             log.info(e.getMessage());
             log.info(e.getClass().getName());
-            String result = mapper.writeValueAsString(new ErrorResponse(401L, "토큰 인증에 실패했습니다"));
+            String result = mapper.writeValueAsString(new ErrorResponse(401L, e.getMessage()));
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
             response.setStatus(response.SC_UNAUTHORIZED);
