@@ -67,7 +67,7 @@ public class JwtFilter extends OncePerRequestFilter {
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
             response.setStatus(response.SC_UNAUTHORIZED);
-            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
             try {
                 response.getWriter().write(result);
             } catch (IOException exception) {
@@ -81,7 +81,7 @@ public class JwtFilter extends OncePerRequestFilter {
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
             response.setStatus(response.SC_SERVICE_UNAVAILABLE);
-            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
             try {
                 response.getWriter().write(result);
             } catch (IOException exception) {
@@ -94,7 +94,7 @@ public class JwtFilter extends OncePerRequestFilter {
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
             response.setStatus(response.SC_INTERNAL_SERVER_ERROR);
-            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
             try {
                 response.getWriter().write(result);
             } catch (IOException exception) {
