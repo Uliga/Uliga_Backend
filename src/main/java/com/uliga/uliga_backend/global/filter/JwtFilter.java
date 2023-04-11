@@ -2,7 +2,6 @@ package com.uliga.uliga_backend.global.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.Token.exception.ExpireAccessTokenException;
-import com.uliga.uliga_backend.domain.Token.exception.LogoutUserException;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import com.uliga.uliga_backend.global.jwt.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
@@ -48,11 +47,7 @@ public class JwtFilter extends OncePerRequestFilter {
                     if (user.getUsername() != null && redisTemplate.hasKey(user.getUsername())) {
                         log.info("memberId : " + user.getUsername());
                         SecurityContextHolder.getContext().setAuthentication(authentication);
-                    } else {
-                        log.info("토큰이 잘못되어서 유저 정보를 가져올 수 없거나, 레디스에 리프레쉬 토큰이 만료됨");
-                        throw new LogoutUserException();
                     }
-
                 } else {
                     log.info("만료된 엑세스 토큰이다");
                     throw new ExpireAccessTokenException();
@@ -74,20 +69,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 e.printStackTrace();
             }
 
-        } catch (LogoutUserException  e) {
-            log.info(e.getMessage());
-            log.info(e.getClass().getName());
-            String result = mapper.writeValueAsString(new ErrorResponse(503L, e.getMessage()));
-            response.setContentType("application/json");
-            response.setCharacterEncoding("utf-8");
-            response.setStatus(response.SC_SERVICE_UNAVAILABLE);
-            response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-            try {
-                response.getWriter().write(result);
-            } catch (IOException exception) {
-                e.printStackTrace();
-            }
-        } catch (Exception e) {
+        }  catch (Exception e) {
             log.info(e.getMessage());
             log.info(e.getClass().getName());
             String result = mapper.writeValueAsString(new ErrorResponse(500L, e.getMessage()));
