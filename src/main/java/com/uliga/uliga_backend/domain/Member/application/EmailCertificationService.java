@@ -37,9 +37,6 @@ public class EmailCertificationService {
         mimeMessage.setSubject("공유 가계부 우리가 이메일 인증");
 
 
-
-
-
         String msg = "";
 //        msg += "<div style = 'margin:100px;'>";
 //        msg += "<h1> 안녕하세요 </h1>";
