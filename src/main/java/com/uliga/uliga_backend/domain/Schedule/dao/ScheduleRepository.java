@@ -21,8 +21,8 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             "m.id, " +
             "m.userName," +
             "s.accountBook.name) " +
-            "FROM Schedule s JOIN ScheduleMember sm ON s.id = sm.schedule.id JOIN Member m on sm.member.id = m.id WHERE m.id = :id ORDER BY s.notificationDate ASC ")
-    List<ScheduleInfoQ> findByMemberId(@Param("id") Long id);
+            "FROM Schedule s JOIN ScheduleMember sm ON s.id = sm.schedule.id JOIN Member m on sm.member.id = m.id WHERE m.id = :id ORDER BY 31/(s.notificationDate - :curDate) DESC ")
+    List<ScheduleInfoQ> findByMemberId(@Param("id") Long id, @Param("curDate") int curDate);
 
     @Query("SELECT NEW com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleInfoQ(" +
             "s.id," +

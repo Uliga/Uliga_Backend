@@ -24,10 +24,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.*;
@@ -46,8 +45,9 @@ public class ScheduleService {
 
     @Transactional
     public GetMemberSchedules getMemberSchedule(Long id) {
+        LocalDate now = LocalDate.now();
         return GetMemberSchedules.builder()
-                .schedules(scheduleRepository.findByMemberId(id)).build();
+                .schedules(scheduleRepository.findByMemberId(id,  now.getDayOfMonth())).build();
     }
 
     @Transactional
