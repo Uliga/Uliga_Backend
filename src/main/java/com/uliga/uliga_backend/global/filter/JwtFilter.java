@@ -58,9 +58,6 @@ public class JwtFilter extends OncePerRequestFilter {
                     log.info("만료된 엑세스 토큰이다");
                     throw new ExpireAccessTokenException();
                 }
-            } else {
-                log.info("토큰이 비어서옴");
-                throw new EmptyTokenException();
             }
 
             filterChain.doFilter(request, response);
@@ -78,7 +75,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 e.printStackTrace();
             }
 
-        } catch (LogoutUserException | EmptyTokenException e) {
+        } catch (LogoutUserException  e) {
             log.info(e.getMessage());
             log.info(e.getClass().getName());
             String result = mapper.writeValueAsString(new ErrorResponse(503L, e.getMessage()));
