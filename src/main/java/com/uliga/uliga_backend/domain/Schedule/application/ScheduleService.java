@@ -129,7 +129,8 @@ public class ScheduleService {
     @Transactional
     public GetAccountBookSchedules getAccountBookSchedules(Long accountBookId) {
         List<ScheduleDetail> result = new ArrayList<>();
-        List<ScheduleInfoQ> byAccountBookId = scheduleRepository.findScheduleInfoByAccountBookId(accountBookId);
+        LocalDate date = LocalDate.now();
+        List<ScheduleInfoQ> byAccountBookId = scheduleRepository.findScheduleInfoByAccountBookId(accountBookId, date.getDayOfMonth());
         for (ScheduleInfoQ s : byAccountBookId) {
             ScheduleDetail scheduleDetail = ScheduleDetail.builder().info(s).assignments(scheduleRepository.findScheduleMemberInfoById(s.getId())).build();
             result.add(scheduleDetail);

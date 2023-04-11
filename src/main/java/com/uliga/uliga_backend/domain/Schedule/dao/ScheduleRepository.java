@@ -21,7 +21,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             "m.id, " +
             "m.userName," +
             "s.accountBook.name) " +
-            "FROM Schedule s JOIN ScheduleMember sm ON s.id = sm.schedule.id JOIN Member m on sm.member.id = m.id WHERE m.id = :id ORDER BY 31/(s.notificationDate - :curDate) DESC ")
+            "FROM Schedule s JOIN ScheduleMember sm ON s.id = sm.schedule.id JOIN Member m on sm.member.id = m.id WHERE m.id = :id ORDER BY 31/(s.notificationDate - :curDate + 1) DESC ")
     List<ScheduleInfoQ> findByMemberId(@Param("id") Long id, @Param("curDate") int curDate);
 
     @Query("SELECT NEW com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleInfoQ(" +
@@ -43,8 +43,8 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             "s.value," +
             "s.creator.id," +
             "s.creator.userName," +
-            "s.accountBook.name) FROM Schedule s WHERE s.accountBook.id=:id ORDER BY s.notificationDate ASC ")
-    List<ScheduleInfoQ> findScheduleInfoByAccountBookId(@Param("id") Long id);
+            "s.accountBook.name) FROM Schedule s WHERE s.accountBook.id=:id ORDER BY 31/(s.notificationDate - :curDate + 1) DESC ")
+    List<ScheduleInfoQ> findScheduleInfoByAccountBookId(@Param("id") Long id, @Param("curDate") int curDate);
 
     @Query("SELECT NEW com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleMemberInfoQ(" +
             "sm.member.id," +
