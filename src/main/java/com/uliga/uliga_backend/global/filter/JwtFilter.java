@@ -1,7 +1,6 @@
 package com.uliga.uliga_backend.global.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.Token.exception.EmptyTokenException;
 import com.uliga.uliga_backend.domain.Token.exception.ExpireAccessTokenException;
 import com.uliga.uliga_backend.domain.Token.exception.LogoutUserException;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
