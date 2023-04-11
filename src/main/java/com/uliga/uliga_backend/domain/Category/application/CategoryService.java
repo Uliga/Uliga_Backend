@@ -51,7 +51,7 @@ public class CategoryService {
 
     @Transactional
     public CategoryUpdateRequest updateCategory(Long categoryId, Map<String, Object> map) {
-        Category category = categoryRepository.findById(categoryId).orElseThrow(NotFoundByIdException::new);
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 카테고리가 없습니다"));
         AccountBook accountBook = category.getAccountBook();
         CategoryUpdateRequest categoryUpdateRequest = mapper.convertValue(map, CategoryUpdateRequest.class);
         if (categoryUpdateRequest.getName() != null) {
@@ -69,7 +69,7 @@ public class CategoryService {
         if (categoryRepository.existsById(id)) {
             categoryRepository.deleteById(id);
         } else {
-            throw new NotFoundByIdException();
+            throw new NotFoundByIdException("해당 아이디로 존재하는 카테고리가 없습니다");
         }
     }
 }

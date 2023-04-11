@@ -95,7 +95,7 @@ public class ScheduleService {
     @Transactional
     public UpdateScheduleRequest updateSchedule(Map<String, Object> updates) {
         UpdateScheduleRequest scheduleRequest = mapper.convertValue(updates, UpdateScheduleRequest.class);
-        Schedule schedule = scheduleRepository.findById(scheduleRequest.getId()).orElseThrow(NotFoundByIdException::new);
+        Schedule schedule = scheduleRepository.findById(scheduleRequest.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 금융일정이 없습니다"));
         if (scheduleRequest.getIsIncome() != null) {
             schedule.updateIsIncome(scheduleRequest.getIsIncome());
         }
@@ -152,7 +152,7 @@ public class ScheduleService {
 
     @Transactional
     public void deleteSchedule(Long id, Long currentMemberId) {
-        Schedule schedule = scheduleRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 금융일정이 없습니다"));
         if (schedule.getCreator().getId().equals(currentMemberId)) {
 
             scheduleRepository.deleteById(id);

@@ -42,6 +42,7 @@ import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
 import static com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO.CreateBudgetDto;
@@ -130,7 +131,8 @@ public class AccountBookService {
 
     @Transactional
     public SimpleAccountBookInfo createAccountBook(Long id, AccountBookCreateRequest accountBookCreateRequest) throws JsonProcessingException {
-        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+
+        Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
         AccountBook accountBook = accountBookCreateRequest.toEntity();
         accountBookRepository.save(accountBook);
         AccountBookMember bookMember = AccountBookMember.builder()
@@ -164,8 +166,8 @@ public class AccountBookService {
 
     @Transactional
     public Invited createInvitation(Long id, GetInvitations invitations) throws JsonProcessingException {
-        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
-        AccountBook accountBook = accountBookRepository.findById(invitations.getId()).orElseThrow(NotFoundByIdException::new);
+        Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
+        AccountBook accountBook = accountBookRepository.findById(invitations.getId()).orElseThrow(() -> new NotFoundByIdException("가계부 초대에 아이디 값이 없습니다"));
         long result = 0L;
         for (String email : invitations.getEmails()) {
             InvitationInfo info = InvitationInfo.builder()
@@ -187,11 +189,11 @@ public class AccountBookService {
 
     @Transactional
     public InvitationReplyResult invitationReply(Long id, InvitationReply invitationReply) throws JsonProcessingException {
-        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
         log.info(invitationReply.toString());
         if (invitationReply.getJoin()) {
             if (!accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(member.getId(), invitationReply.getId())) {
-                AccountBook accountBook = accountBookRepository.findById(invitationReply.getId()).orElseThrow(NotFoundByIdException::new);
+                AccountBook accountBook = accountBookRepository.findById(invitationReply.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
                 AccountBookMember bookMember = AccountBookMember.builder()
                         .accountBook(accountBook)
                         .member(member)
@@ -219,9 +221,9 @@ public class AccountBookService {
         long r = 0L;
         long i = 0L;
         // 아이템 작성자
-        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
         // 현재 작성하고 있는 가계부
-        AccountBook accountBook = accountBookRepository.findById(createItems.getId()).orElseThrow(NotFoundByIdException::new);
+        AccountBook accountBook = accountBookRepository.findById(createItems.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
         // 현재 작성하고 있는 가계부의 카테고리
         List<Category> categories = accountBook.getCategories();
         // 카테고리 이름 - 카테고리 객체
@@ -334,7 +336,7 @@ public class AccountBookService {
     @Transactional
     public CategoryCreateResult createCategory(Long memberId, CategoryCreateRequest createRequest) {
         Long id = createRequest.getId();
-        AccountBook accountBook = accountBookRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        AccountBook accountBook = accountBookRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
         if (!accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(memberId, id)) {
             throw new UnauthorizedAccountBookCategoryCreateException();
         }
@@ -390,9 +392,9 @@ public class AccountBookService {
 
     @Transactional
     public AddIncomeResult addIncome(Long memberId, AddIncomeRequest request) {
-        AccountBook accountBook = accountBookRepository.findById(request.getId()).orElseThrow(NotFoundByIdException::new);
+        AccountBook accountBook = accountBookRepository.findById(request.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
         Category category = categoryRepository.findByAccountBookAndName(accountBook, request.getCategory()).orElseThrow(CategoryNotFoundException::new);
-        Member member = memberRepository.findById(memberId).orElseThrow(NotFoundByIdException::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
         String[] split = request.getDate().split("-");
         Date date = Date.builder()
                 .year(Long.parseLong(split[0]))
@@ -403,9 +405,9 @@ public class AccountBookService {
 
     @Transactional
     public AddRecordResult addRecord(Long memberId, AddRecordRequest request) {
-        AccountBook accountBook = accountBookRepository.findById(request.getId()).orElseThrow(NotFoundByIdException::new);
+        AccountBook accountBook = accountBookRepository.findById(request.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
         Category category = categoryRepository.findByAccountBookAndName(accountBook, request.getCategory()).orElseThrow(CategoryNotFoundException::new);
-        Member member = memberRepository.findById(memberId).orElseThrow(NotFoundByIdException::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
         String[] split = request.getDate().split("-");
         Date date = Date.builder()
                 .year(Long.parseLong(split[0]))
@@ -424,8 +426,8 @@ public class AccountBookService {
 
     @Transactional
     public AddScheduleResult addSchedule(Long memberId, AddSchedules addSchedules) throws JsonProcessingException {
-        Member member = memberRepository.findById(memberId).orElseThrow(NotFoundByIdException::new);
-        AccountBook accountBook = accountBookRepository.findById(addSchedules.getId()).orElseThrow(NotFoundByIdException::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
+        AccountBook accountBook = accountBookRepository.findById(addSchedules.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
         return scheduleService.addSchedule(member, accountBook, addSchedules.getSchedules());
     }
 
@@ -441,7 +443,7 @@ public class AccountBookService {
 
     @Transactional
     public String deleteAccountBook(Long id, Long memberId) {
-        AccountBook accountBook = accountBookRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        AccountBook accountBook = accountBookRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
         if (accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(memberId, id)) {
             accountBookRepository.delete(accountBook);
         } else {
@@ -466,7 +468,6 @@ public class AccountBookService {
     }
 
 
-
     @Transactional
     public void deleteAccountBookData(Long memberId, AccountBookDataDeleteRequest dataDeleteRequest) {
         accountBookDataRepository.deleteAllById(dataDeleteRequest.getIds());
@@ -475,7 +476,7 @@ public class AccountBookService {
     @Transactional
     public AccountBookUpdateRequest updateAccountBookInfo(Long memberId, Long accountBookId, Map<String, Object> map) throws JsonProcessingException {
         AccountBookUpdateRequest request = objectMapper.convertValue(map, AccountBookUpdateRequest.class);
-        AccountBook accountBook = accountBookRepository.findById(accountBookId).orElseThrow(NotFoundByIdException::new);
+        AccountBook accountBook = accountBookRepository.findById(accountBookId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
         AccountBookMember accountBookMember = accountBookMemberRepository.findAccountBookMemberByMemberIdAndAccountBookId(memberId, accountBookId).orElseThrow(UnauthorizedAccountBookAccessException::new);
         List<Category> categoriesByAccountBookId = categoryRepository.findCategoriesByAccountBookId(accountBookId);
         HashMap<String, Category> hashMap = new HashMap<>();

@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
         log.info("해당 아이디로 존재하는 객체를 찾을 수 없습니다");
         return new ResponseEntity<>(ErrorResponse.builder()
                 .errorCode(404L)
-                .message("해당 아이디로 존재하는 객체를 찾을 수 없습니다.")
+                .message(ex.getMessage())
                 .build()
                 , NOT_FOUND);
     }

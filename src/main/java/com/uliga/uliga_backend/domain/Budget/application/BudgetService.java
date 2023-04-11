@@ -36,7 +36,7 @@ public class BudgetService {
 
     @Transactional
     public BudgetInfoQ addBudgetToAccountBook(CreateBudgetDto dto) {
-        AccountBook accountBook = accountBookRepository.findById(dto.getId()).orElseThrow(NotFoundByIdException::new);
+        AccountBook accountBook = accountBookRepository.findById(dto.getId()).orElseThrow(()->new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
         if (budgetRepository.existsBudgetByAccountBookIdAndYearAndMonth(dto.getId(), dto.getYear(), dto.getMonth())) {
             throw new BudgetAlreadyExists();
         }

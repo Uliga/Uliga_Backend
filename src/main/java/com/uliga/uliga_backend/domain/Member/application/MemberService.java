@@ -70,20 +70,20 @@ public class MemberService {
 
     @Transactional
     public boolean checkApplicationPassword(Long id, ApplicationPasswordCheck passwordCheck) {
-        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
         return passwordEncoder.matches(passwordCheck.getApplicationPassword(), member.getApplicationPassword());
     }
 
     @Transactional
     public boolean checkPassword(Long id, PasswordCheck passwordCheck) {
-        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
         return passwordEncoder.matches(passwordCheck.getPassword(), member.getPassword());
 
     }
 
     @Transactional
     public boolean nicknameExists(Long id, NicknameCheckDto nicknameCheckDto) {
-        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
         if (member.getNickName().equals(nicknameCheckDto.getNickname())) {
             return true;
         } else {
@@ -93,7 +93,7 @@ public class MemberService {
 
     @Transactional
     public void deleteMember(Long id) {
-        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
         List<AccountBookInfoQ> accountBookInfosByMemberId = accountBookRepository.findAccountBookInfosByMemberId(id);
 
         member.delete();
@@ -126,7 +126,7 @@ public class MemberService {
     @Transactional
     public MemberInfoUpdateRequest updateMemberInfo(Long id, Map<String, Object> updates) {
         MemberInfoUpdateRequest memberInfoUpdateRequest = objectMapper.convertValue(updates, MemberInfoUpdateRequest.class);
-        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
         if (memberInfoUpdateRequest.getApplicationPassword() != null) {
             String encode = passwordEncoder.encode(memberInfoUpdateRequest.getApplicationPassword());
             member.updateApplicationPassword(encode);
@@ -144,7 +144,7 @@ public class MemberService {
     @Transactional
     public void deleteMemberNotification(Long id) {
         SetOperations<String, Object> setOperations = objectRedisTemplate.opsForSet();
-        Member member = memberRepository.findById(id).orElseThrow(NotFoundByIdException::new);
+        Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
         Long size = setOperations.size(member.getNickName());
         if (size != null) {
 

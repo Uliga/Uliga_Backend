@@ -94,9 +94,9 @@ public class IncomeService {
     public IncomeUpdateRequest updateIncome(Map<String, Object> updates) {
         IncomeUpdateRequest patchIncome = objectMapper.convertValue(updates, IncomeUpdateRequest.class);
         if (patchIncome.getId() == null) {
-            throw new IdNotFoundException();
+            throw new IdNotFoundException("수입 아이디가 null 입니다.");
         }
-        Income income = incomeRepository.findById(patchIncome.getId()).orElseThrow(NotFoundByIdException::new);
+        Income income = incomeRepository.findById(patchIncome.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 수입이 없습니다"));
         if (patchIncome.getAccount() != null) {
             income.updateAccount(patchIncome.getAccount());
         }
@@ -143,7 +143,7 @@ public class IncomeService {
 
     @Transactional
     public void deleteIncome(Long id, Long incomeId) {
-        Income income = incomeRepository.findById(incomeId).orElseThrow(NotFoundByIdException::new);
+        Income income = incomeRepository.findById(incomeId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 수입이 없습니다"));
         if (income.getCreator().getId().equals(id)) {
             incomeRepository.delete(income);
         } else {

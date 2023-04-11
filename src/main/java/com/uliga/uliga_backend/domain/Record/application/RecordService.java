@@ -97,9 +97,9 @@ public class RecordService {
     public RecordUpdateRequest updateRecord(Map<String, Object> updates) {
         RecordUpdateRequest patchRecord = objectMapper.convertValue(updates, RecordUpdateRequest.class);
         if (patchRecord.getId() == null) {
-            throw new IdNotFoundException();
+            throw new IdNotFoundException("지출 아이디가 null 입니다.");
         }
-        Record record = recordRepository.findById(patchRecord.getId()).orElseThrow(NotFoundByIdException::new);
+        Record record = recordRepository.findById(patchRecord.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 지출이 없습니다"));
 
         if (patchRecord.getAccount() != null) {
             record.updateAccount(patchRecord.getAccount());
@@ -147,7 +147,7 @@ public class RecordService {
 
     @Transactional
     public void deleteRecord(Long id, Long recordId) {
-        Record record = recordRepository.findById(recordId).orElseThrow(NotFoundByIdException::new);
+        Record record = recordRepository.findById(recordId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 지출이 없습니다"));
         if (record.getCreator().getId().equals(id)) {
             recordRepository.delete(record);
         } else {
