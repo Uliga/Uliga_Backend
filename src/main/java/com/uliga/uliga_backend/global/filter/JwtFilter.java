@@ -1,7 +1,9 @@
 package com.uliga.uliga_backend.global.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.Token.exception.ExpireTokenException;
+import com.uliga.uliga_backend.domain.Token.exception.EmptyTokenException;
+import com.uliga.uliga_backend.domain.Token.exception.ExpireAccessTokenException;
+import com.uliga.uliga_backend.domain.Token.exception.LogoutUserException;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import com.uliga.uliga_backend.global.jwt.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
@@ -11,7 +13,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -19,7 +20,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.rmi.server.ExportException;
 
 import static com.uliga.uliga_backend.global.common.constants.JwtConstants.AUTHORIZATION_HEADER;
 import static com.uliga.uliga_backend.global.common.constants.JwtConstants.BEARER_PREFIX;
@@ -50,30 +50,60 @@ public class JwtFilter extends OncePerRequestFilter {
                         log.info("memberId : " + user.getUsername());
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     } else {
-                        throw new ExpireTokenException("리프레쉬 만료");
+                        log.info("토큰이 잘못되어서 유저 정보를 가져올 수 없거나, 레디스에 리프레쉬 토큰이 만료됨");
+                        throw new LogoutUserException();
                     }
 
                 } else {
-                    throw new ExpireTokenException("엑세스 만료");
+                    log.info("만료된 엑세스 토큰이다");
+                    throw new ExpireAccessTokenException();
                 }
+            } else {
+                log.info("토큰이 비어서옴");
+                throw new EmptyTokenException();
             }
 
-
             filterChain.doFilter(request, response);
-        } catch (Exception e) {
+        } catch (ExpireAccessTokenException e) {
             log.info(e.getMessage());
             log.info(e.getClass().getName());
             String result = mapper.writeValueAsString(new ErrorResponse(401L, e.getMessage()));
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
             response.setStatus(response.SC_UNAUTHORIZED);
-            response.setHeader("Access-Control-Allow-Origin","http://localhost:3000");
+            response.setHeader("Access-Control-Allow-Origin", "*");
             try {
                 response.getWriter().write(result);
             } catch (IOException exception) {
                 e.printStackTrace();
             }
 
+        } catch (LogoutUserException | EmptyTokenException e) {
+            log.info(e.getMessage());
+            log.info(e.getClass().getName());
+            String result = mapper.writeValueAsString(new ErrorResponse(503L, e.getMessage()));
+            response.setContentType("application/json");
+            response.setCharacterEncoding("utf-8");
+            response.setStatus(response.SC_SERVICE_UNAVAILABLE);
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            try {
+                response.getWriter().write(result);
+            } catch (IOException exception) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            log.info(e.getClass().getName());
+            String result = mapper.writeValueAsString(new ErrorResponse(500L, e.getMessage()));
+            response.setContentType("application/json");
+            response.setCharacterEncoding("utf-8");
+            response.setStatus(response.SC_INTERNAL_SERVER_ERROR);
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            try {
+                response.getWriter().write(result);
+            } catch (IOException exception) {
+                e.printStackTrace();
+            }
         }
 
     }
