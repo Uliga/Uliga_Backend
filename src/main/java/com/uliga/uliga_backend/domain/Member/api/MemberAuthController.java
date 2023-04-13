@@ -61,6 +61,14 @@ public class MemberAuthController {
         return ResponseEntity.ok(authService.login(loginRequest, response, request));
     }
 
+    @Operation(summary = "OAuth 로그인 성공", description = "OAuth 로그인 성공시 이동할 url 입니다")
+    @GetMapping(value = "/social_login")
+    public ResponseEntity<String> oAuthLogin() {
+
+        log.info("OAuth 로그인 성공");
+        return ResponseEntity.ok("로그인성공");
+    }
+
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<LoginResult> loginForm

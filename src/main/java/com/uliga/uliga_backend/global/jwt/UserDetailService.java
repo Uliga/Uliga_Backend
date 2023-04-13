@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Member.application;
+package com.uliga.uliga_backend.global.jwt;
 
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.model.Member;

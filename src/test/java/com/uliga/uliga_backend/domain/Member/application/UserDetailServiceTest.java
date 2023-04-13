@@ -1,6 +1,6 @@
 package com.uliga.uliga_backend.domain.Member.application;
 
-import com.uliga.uliga_backend.domain.Member.dto.MemberDTO;
+import com.uliga.uliga_backend.global.jwt.UserDetailService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

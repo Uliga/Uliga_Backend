@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Member.Component;
+package com.uliga.uliga_backend.global.oauth2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;

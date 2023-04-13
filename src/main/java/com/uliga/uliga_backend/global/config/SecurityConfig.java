@@ -1,9 +1,9 @@
 package com.uliga.uliga_backend.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.Member.Component.OAuth2SuccessHandler;
-import com.uliga.uliga_backend.domain.Member.application.CustomOAuth2UserService;
-import com.uliga.uliga_backend.domain.Member.model.Authority;
+import com.uliga.uliga_backend.global.oauth2.OAuth2FailureHandler;
+import com.uliga.uliga_backend.global.oauth2.OAuth2SuccessHandler;
+import com.uliga.uliga_backend.global.oauth2.CustomOAuth2UserService;
 import com.uliga.uliga_backend.global.jwt.CustomLogoutSuccessHandler;
 import com.uliga.uliga_backend.global.jwt.JwtAccessDeniedHandler;
 import com.uliga.uliga_backend.global.jwt.JwtAuthenticationEntryPoint;
@@ -34,8 +34,10 @@ public class SecurityConfig {
     private final RedisTemplate<String, String> redisTemplate;
     private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
     private final ObjectMapper mapper;
+    private final OAuth2FailureHandler failureHandler;
     private final OAuth2SuccessHandler successHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -70,6 +72,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "**").permitAll()
                         .requestMatchers("/actuator/**").authenticated()
                         .requestMatchers("/oauth2/**").permitAll()
+                        .requestMatchers("/login/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/logout-redirect").permitAll()
                         .requestMatchers("/member/**").hasRole("USER")
@@ -84,12 +87,23 @@ public class SecurityConfig {
                         .requestMatchers("/test").permitAll()
                         .requestMatchers("/test2").authenticated()
                 );
-        http.oauth2Login().loginPage("/auth/login")
-                .successHandler(successHandler)
-                .userInfoEndpoint().userService(customOAuth2UserService);
+
+//        http
+//                .oauth2Login()
+//                .authorizationEndpoint()
+//                .baseUri("/oauth2/authorize")
+//                .and()
+//                .redirectionEndpoint()
+//                .baseUri("/login/oauth2/code/*")
+//                .and()
+//                .userInfoEndpoint()
+//                .userService(customOAuth2UserService)
+//                .and()
+//                .successHandler(successHandler)
+//                .failureHandler(failureHandler);
 
         http
-                .apply(new JwtSecurityConfig(jwtTokenProvider,mapper,redisTemplate))
+                .apply(new JwtSecurityConfig(jwtTokenProvider, mapper, redisTemplate))
                 .and()
                 .logout()
                 .logoutUrl("/logout")
@@ -106,7 +120,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOriginPatterns(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("HEAD", "POST", "GET", "DELETE", "PUT", "OPTIONS","PATCH"));
+        configuration.setAllowedMethods(Arrays.asList("HEAD", "POST", "GET", "DELETE", "PUT", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
 
