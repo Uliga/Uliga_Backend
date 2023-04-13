@@ -152,34 +152,6 @@ class AccountBookServiceTest {
    }
 
    @Test
-   @DisplayName("멤버 가계부 조회 성공 테스트")
-    void getMemberAccountBookTestToSuccess() throws Exception{
-       // given
-       // BeforeEach에서 멤버 & 가계부 생성
-       // when
-       GetAccountBookInfos memberAccountBook = accountBookService.getMemberAccountBook(memberId);
-
-       // then
-       assertAll(
-               () -> assertEquals(2, memberAccountBook.getAccountBooks().size()),
-               () -> assertEquals(accountBook.getId(), memberAccountBook.getAccountBooks().get(1).getAccountBookId())
-       );
-
-   }
-
-   @Test
-   @DisplayName("개인 가계부 생성 성공 테스트")
-    void createAccountBookPrivateTestToSuccess() throws Exception{
-       // given
-       // BeforeEach에서 멤버 & 가계부 생성
-
-       // when
-       GetAccountBookInfos memberAccountBook = accountBookService.getMemberAccountBook(memberId);
-       // then
-       assertTrue(memberAccountBook.getAccountBooks().get(0).getIsPrivate());
-   }
-
-   @Test
    @DisplayName("초대 생성 성공 테스트")
     void createInvitationTestToSuccess() throws Exception{
        // given

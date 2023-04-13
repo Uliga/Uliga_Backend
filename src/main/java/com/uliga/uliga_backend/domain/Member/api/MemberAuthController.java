@@ -70,17 +70,6 @@ public class MemberAuthController {
         return ResponseEntity.ok(authService.login(loginRequest, response, request));
     }
 
-//    @Operation(summary = "소셜 로그인 API - 미구현", description = "소셜 로그인 API 입니다")
-//    @PostMapping(value = "/social_login/{loginType}")
-//    public ResponseEntity<LoginResult> socialLogin(@Parameter(name = "loginType", description = "로그인 타입", in = PATH) @Param("loginType") String loginType,
-//                                                   @RequestBody OAuthDTO.SocialLoginDto loginDto,
-//                                                   @Value("${oAuth.password}") String password,
-//                                                   HttpServletResponse response,
-//                                                   HttpServletRequest request) throws IOException {
-//
-//        return ResponseEntity.ok(oAuth2MemberService.oAuthLogin(loginType.toUpperCase(), loginDto.getToken(), password, response, request));
-//    }
-
     @Operation(summary = "로그아웃시 리다이렉트 API", description = "로그아웃시 호출되는 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "로그아웃 성공")

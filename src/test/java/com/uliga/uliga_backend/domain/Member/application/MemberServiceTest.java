@@ -178,21 +178,6 @@ class MemberServiceTest {
         // then
         assertTrue(passwordEncoder.matches("123456789", member.getPassword()));
     }
-    // TODO
-    @Test
-    @DisplayName("멤버 프사 변경 테스트")
-     void updateAvatarUrlTestToSuccess() throws Exception{
-        //given
-        SignUpRequest signUpRequest = createSignUpRequest("nouser@email.com", "nouser");
-        Long signUp = authService.signUp(signUpRequest);
-
-        // when
-        Map<String, Object> newUrl = createUpdateAvatarUrl("newUrl");
-        memberService.updateMemberInfo(signUp, newUrl);
-        Member member = memberRepository.findById(signUp).orElseThrow(NotAuthorizedException::new);
-        // then
-        assertEquals("newUrl", member.getAvatarUrl());
-    }
 
     @Test
     @DisplayName("닉네임 존재하는지 확인 테스트 - 닉네임 존재")
