@@ -34,7 +34,7 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        log.info(request.getMethod()+" "+String.valueOf(request.getRequestURL()));
+        log.info(request.getMethod()+" "+String.valueOf(request.getRequestURI()));
 
         try {
             // 1. request Header에서 토큰 꺼냄, 여기서 HTTP ONLY 쿠키에서 읽어오게 변경 가능

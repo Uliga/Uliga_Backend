@@ -1,9 +1,6 @@
 package com.uliga.uliga_backend.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.global.oauth2.OAuth2FailureHandler;
-import com.uliga.uliga_backend.global.oauth2.OAuth2SuccessHandler;
-import com.uliga.uliga_backend.global.oauth2.CustomOAuth2UserService;
 import com.uliga.uliga_backend.global.jwt.CustomLogoutSuccessHandler;
 import com.uliga.uliga_backend.global.jwt.JwtAccessDeniedHandler;
 import com.uliga.uliga_backend.global.jwt.JwtAuthenticationEntryPoint;
@@ -13,7 +10,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -26,6 +25,12 @@ import java.util.Arrays;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(
+        securedEnabled = true,
+        jsr250Enabled = true,
+        prePostEnabled = true
+)
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
@@ -34,9 +39,6 @@ public class SecurityConfig {
     private final RedisTemplate<String, String> redisTemplate;
     private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
     private final ObjectMapper mapper;
-    private final OAuth2FailureHandler failureHandler;
-    private final OAuth2SuccessHandler successHandler;
-    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -84,23 +86,9 @@ public class SecurityConfig {
                         .requestMatchers("/schedule/**").authenticated()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v1/api-docs/**").permitAll()
-                        .requestMatchers("/test").permitAll()
-                        .requestMatchers("/test2").authenticated()
                 );
 
-//        http
-//                .oauth2Login()
-//                .authorizationEndpoint()
-//                .baseUri("/oauth2/authorize")
-//                .and()
-//                .redirectionEndpoint()
-//                .baseUri("/login/oauth2/code/*")
-//                .and()
-//                .userInfoEndpoint()
-//                .userService(customOAuth2UserService)
-//                .and()
-//                .successHandler(successHandler)
-//                .failureHandler(failureHandler);
+
 
         http
                 .apply(new JwtSecurityConfig(jwtTokenProvider, mapper, redisTemplate))
