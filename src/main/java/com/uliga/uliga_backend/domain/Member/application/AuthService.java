@@ -2,17 +2,14 @@ package com.uliga.uliga_backend.domain.Member.application;
 
 import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.CreateRequestPrivate;
-import com.uliga.uliga_backend.domain.Member.dao.MemberMapper;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.model.Member;
-import com.uliga.uliga_backend.domain.Token.dto.TokenDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.ReissueRequest;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenInfoDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenIssueDTO;
 import com.uliga.uliga_backend.domain.Token.exception.ExpireRefreshTokenException;
 import com.uliga.uliga_backend.domain.Token.exception.InvalidRefreshTokenException;
 import com.uliga.uliga_backend.global.jwt.JwtTokenProvider;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
@@ -25,12 +22,11 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.concurrent.TimeUnit;
 
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
-import static com.uliga.uliga_backend.global.common.constants.JwtConstants.*;
+import static com.uliga.uliga_backend.global.common.constants.JwtConstants.REFRESH_TOKEN_EXPIRE_TIME;
 
 @Slf4j
 @Service

@@ -1,6 +1,8 @@
 package com.uliga.uliga_backend.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.uliga.uliga_backend.domain.Member.Component.OAuth2SuccessHandler;
+import com.uliga.uliga_backend.domain.Member.application.CustomOAuth2UserService;
 import com.uliga.uliga_backend.domain.Member.model.Authority;
 import com.uliga.uliga_backend.global.jwt.CustomLogoutSuccessHandler;
 import com.uliga.uliga_backend.global.jwt.JwtAccessDeniedHandler;
@@ -32,7 +34,8 @@ public class SecurityConfig {
     private final RedisTemplate<String, String> redisTemplate;
     private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
     private final ObjectMapper mapper;
-
+    private final OAuth2SuccessHandler successHandler;
+    private final CustomOAuth2UserService customOAuth2UserService;
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -53,7 +56,6 @@ public class SecurityConfig {
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
 
 
-
                 .and()
                 .headers()
                 .frameOptions()
@@ -67,6 +69,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(HttpMethod.OPTIONS, "**").permitAll()
                         .requestMatchers("/actuator/**").authenticated()
+                        .requestMatchers("/oauth2/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/logout-redirect").permitAll()
                         .requestMatchers("/member/**").hasRole("USER")
@@ -81,6 +84,9 @@ public class SecurityConfig {
                         .requestMatchers("/test").permitAll()
                         .requestMatchers("/test2").authenticated()
                 );
+        http.oauth2Login().loginPage("/auth/login")
+                .successHandler(successHandler)
+                .userInfoEndpoint().userService(customOAuth2UserService);
 
         http
                 .apply(new JwtSecurityConfig(jwtTokenProvider,mapper,redisTemplate))

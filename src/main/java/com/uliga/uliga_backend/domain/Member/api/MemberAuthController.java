@@ -2,11 +2,6 @@ package com.uliga.uliga_backend.domain.Member.api;
 
 import com.uliga.uliga_backend.domain.Member.application.AuthService;
 import com.uliga.uliga_backend.domain.Member.application.EmailCertificationService;
-import com.uliga.uliga_backend.domain.Member.application.OAuth2MemberService;
-import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
-import com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ;
-import com.uliga.uliga_backend.domain.Member.dto.OAuthDTO;
-import com.uliga.uliga_backend.domain.Token.dto.TokenDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.ReissueRequest;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenIssueDTO;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
@@ -24,20 +19,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.Pageable;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
-import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
 
 
 @Tag(name = "사용자 인증", description = "사용자 인증 관련 API 입니다.")
@@ -49,7 +35,6 @@ public class MemberAuthController {
     private final AuthService authService;
     private final EmailCertificationService emailCertificationService;
 
-    private final OAuth2MemberService oAuth2MemberService;
 
     @Operation(summary = "회원가입 API", description = "회원가입 API 입니다")
     @ApiResponses(value = {
@@ -85,16 +70,16 @@ public class MemberAuthController {
         return ResponseEntity.ok(authService.login(loginRequest, response, request));
     }
 
-    @Operation(summary = "소셜 로그인 API - 미구현", description = "소셜 로그인 API 입니다")
-    @PostMapping(value = "/social_login/{loginType}")
-    public ResponseEntity<LoginResult> socialLogin(@Parameter(name = "loginType", description = "로그인 타입", in = PATH) @Param("loginType") String loginType,
-                                                   @RequestBody OAuthDTO.SocialLoginDto loginDto,
-                                                   @Value("${oAuth.password}") String password,
-                                                   HttpServletResponse response,
-                                                   HttpServletRequest request) throws IOException {
-
-        return ResponseEntity.ok(oAuth2MemberService.oAuthLogin(loginType.toUpperCase(), loginDto.getToken(), password, response, request));
-    }
+//    @Operation(summary = "소셜 로그인 API - 미구현", description = "소셜 로그인 API 입니다")
+//    @PostMapping(value = "/social_login/{loginType}")
+//    public ResponseEntity<LoginResult> socialLogin(@Parameter(name = "loginType", description = "로그인 타입", in = PATH) @Param("loginType") String loginType,
+//                                                   @RequestBody OAuthDTO.SocialLoginDto loginDto,
+//                                                   @Value("${oAuth.password}") String password,
+//                                                   HttpServletResponse response,
+//                                                   HttpServletRequest request) throws IOException {
+//
+//        return ResponseEntity.ok(oAuth2MemberService.oAuthLogin(loginType.toUpperCase(), loginDto.getToken(), password, response, request));
+//    }
 
     @Operation(summary = "로그아웃시 리다이렉트 API", description = "로그아웃시 호출되는 API 입니다")
     @ApiResponses(value = {
