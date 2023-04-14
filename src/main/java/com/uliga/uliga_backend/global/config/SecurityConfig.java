@@ -5,6 +5,10 @@ import com.uliga.uliga_backend.global.jwt.CustomLogoutSuccessHandler;
 import com.uliga.uliga_backend.global.jwt.JwtAccessDeniedHandler;
 import com.uliga.uliga_backend.global.jwt.JwtAuthenticationEntryPoint;
 import com.uliga.uliga_backend.global.jwt.JwtTokenProvider;
+import com.uliga.uliga_backend.global.oauth2.application.CustomOAuth2UserService;
+import com.uliga.uliga_backend.global.oauth2.handler.OAuth2AuthenticationFailureHandler;
+import com.uliga.uliga_backend.global.oauth2.handler.OAuth2AuthenticationSuccessHandler;
+import com.uliga.uliga_backend.global.oauth2.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,14 +27,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(
-        securedEnabled = true,
-        jsr250Enabled = true,
-        prePostEnabled = true
-)
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
@@ -38,6 +38,10 @@ public class SecurityConfig {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final RedisTemplate<String, String> redisTemplate;
     private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository;
     private final ObjectMapper mapper;
 
     @Bean
@@ -88,6 +92,21 @@ public class SecurityConfig {
                         .requestMatchers("/v1/api-docs/**").permitAll()
                 );
 
+
+        http
+                .oauth2Login()
+                .authorizationEndpoint()
+                .baseUri("/oauth2/authorization") //default
+                .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository)
+                .and()
+                .redirectionEndpoint()
+                .baseUri("/oauth2/callback/*")
+                .and()
+                .userInfoEndpoint()
+                .userService(customOAuth2UserService)
+                .and()
+                .successHandler(oAuth2AuthenticationSuccessHandler)
+                .failureHandler(oAuth2AuthenticationFailureHandler);
 
 
         http
