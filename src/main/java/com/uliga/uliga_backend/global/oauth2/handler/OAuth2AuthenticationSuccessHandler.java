@@ -1,5 +1,8 @@
 package com.uliga.uliga_backend.global.oauth2.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
+import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenInfoDTO;
 import com.uliga.uliga_backend.global.jwt.JwtTokenProvider;
@@ -32,22 +35,32 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate<String, String> redisTemplate;
     private final OAuth2AuthorizationRequestBasedOnCookieRepository authorizationRequestRepository;
+    private final MemberRepository memberRepository;
+    private final ObjectMapper mapper;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         log.info("authentication success");
 
-        String targetUrl = determineTargetUrl(request, response, authentication);
-        log.info("target url : "+targetUrl);
+
+
+        log.info("authentication : "+authentication.getName());
+        Optional<Member> byId = memberRepository.findById(Long.parseLong(authentication.getName()));
+
+        if (byId.isEmpty()) {
+            return;
+        }
         if (response.isCommitted()) {
             return;
         }
-
+        Member member = byId.get();
+        String targetUrl = determineTargetUrl(request, response, authentication, member);
+        log.info("target url : "+targetUrl);
         clearAuthenticationAttributes(request, response);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
-    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication, Member member) {
         Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
@@ -59,25 +72,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         valueOperations.set(authentication.getName(), tokenDto.getRefreshToken());
         redisTemplate.expire(authentication.getName(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
-
-//        saveRefreshTokenInStorage(tokenDTO.getRefreshToken(), Long.valueOf(authentication.getName()));
-//        CookieUtil.deleteCookie(request,response,ACCESSTOKEN);
-//        CookieUtil.addCookie(response,ACCESSTOKEN,tokenDTO.getAccessToken(),  ACCESS_TOKEN_COOKIE_EXPIRE_TIME);
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", tokenDto.getAccessToken())
+                .queryParam("email",member.getEmail())
                 .build().toUriString();
     }
-
-    /**
-     * redis 에 refresh token 저장
-     *
-//     * @param refreshToken
-//     * @param memberId
-     */
-//    private void saveRefreshTokenInStorage(String refreshToken, Long memberId) {
-//        refreshTokenDao.createRefreshToken(memberId, refreshToken);
-//    }
-
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
         super.clearAuthenticationAttributes(request);
         authorizationRequestRepository.removeAuthorizationRequestCookies(request, response);

@@ -5,6 +5,7 @@ import com.uliga.uliga_backend.domain.AccountBookData.model.AccountBookData;
 import com.uliga.uliga_backend.domain.Income.model.Income;
 import com.uliga.uliga_backend.domain.JoinTable.model.AccountBookMember;
 import com.uliga.uliga_backend.domain.JoinTable.model.ScheduleMember;
+import com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ;
 import com.uliga.uliga_backend.domain.PostComment.model.PostComment;
 import com.uliga.uliga_backend.domain.RecordComment.model.RecordComment;
 import com.uliga.uliga_backend.domain.Like.model.Liked;
@@ -62,6 +63,16 @@ public class Member extends MemberBase {
         this.userName = userName;
         this.nickName = nickName;
         this.deleted = deleted;
+    }
+
+    public MemberInfoNativeQ toMemberInfoQ() {
+        return MemberInfoNativeQ.builder()
+                .id(getId())
+                .email(getEmail())
+                .nickName(nickName)
+                .userName(userName)
+                .privateAccountBookId(getPrivateAccountBook().getId())
+                .build();
     }
 
     public void delete() {

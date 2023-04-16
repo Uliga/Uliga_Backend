@@ -11,6 +11,7 @@ import com.uliga.uliga_backend.domain.Member.model.UserPrincipal;
 import com.uliga.uliga_backend.global.oauth2.OAuth2UserInfo;
 import com.uliga.uliga_backend.global.oauth2.OAuth2UserInfoFactory;
 import com.uliga.uliga_backend.global.oauth2.exception.DuplicateUserByEmail;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,8 +31,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     private final MemberRepository memberRepository;
     private final AccountBookService accountBookService;
+    @Transactional
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+        log.info("");
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
@@ -39,8 +42,9 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         log.info("loginType : " + loginType);
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
                 .getUserInfoEndpoint().getUserNameAttributeName();
+        log.info("userNameAttributeName : " + userNameAttributeName);
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(loginType.getType(), oAuth2User.getAttributes());
-
+        log.info("userEmail : "+userInfo.getEmail());
         Optional<Member> byEmailAndDeleted = memberRepository.findByEmailAndDeleted(userInfo.getEmail(), false);
         Member member;
         if (byEmailAndDeleted.isPresent()) {
