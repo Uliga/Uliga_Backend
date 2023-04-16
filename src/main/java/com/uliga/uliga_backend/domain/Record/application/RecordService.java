@@ -1,11 +1,13 @@
 package com.uliga.uliga_backend.domain.Record.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.Date;
+import com.uliga.uliga_backend.domain.Income.model.Income;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Record.dao.RecordMapper;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
@@ -28,6 +30,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +43,7 @@ import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
 public class RecordService {
 
     private final RecordRepository recordRepository;
+    private final AccountBookRepository accountBookRepository;
     private final RecordMapper mapper;
     private final CategoryRepository categoryRepository;
     private final ObjectMapper objectMapper;
@@ -88,6 +92,33 @@ public class RecordService {
                 .account(request.getAccount())
                 .build();
         recordRepository.save(record);
+        List<Long> sharedAccountBookIds = request.getSharedAccountBook();
+        List<AccountBook> sharedAccountBooks = accountBookRepository.findAccountBookByAccountBookIds(sharedAccountBookIds);
+        List<Category> categories = categoryRepository.findCategoriesByAccountBookIds(sharedAccountBookIds);
+
+        Map<Long, Category> categoryDict = new HashMap<>();
+        Map<Long, AccountBook> accountBookDict = new HashMap<>();
+        List<Record> toSave = new ArrayList<>();
+        for (Category c : categories) {
+            categoryDict.put(c.getAccountBook().getId(), c);
+        }
+        for (AccountBook ab : sharedAccountBooks) {
+            accountBookDict.put(ab.getId(), ab);
+        }
+        for (Long accountBookId : sharedAccountBookIds) {
+            Record temp_record = Record.builder()
+                    .category(categoryDict.get(accountBookId))
+                    .date(date)
+                    .accountBook(accountBookDict.get(accountBookId))
+                    .memo(request.getMemo())
+                    .payment(request.getPayment())
+                    .creator(member)
+                    .spend(request.getValue())
+                    .account(request.getAccount())
+                    .build();
+            toSave.add(temp_record);
+        }
+        recordRepository.saveAll(toSave);
         return AddRecordResult.builder()
                 .accountBookId(accountBook.getId())
                 .recordInfo(record.toInfoQ()).build();
