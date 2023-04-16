@@ -51,17 +51,6 @@ public class AuthService {
         return member.getId();
     }
 
-    @Transactional
-    public void socialSignUp(SocialSignUpRequest socialSignUpRequest) {
-        socialSignUpRequest.encrypt(passwordEncoder);
-        Member member = socialSignUpRequest.toEntity();
-        memberRepository.save(member);
-
-        CreateRequestPrivate build = CreateRequestPrivate.builder().name(member.getUserName() + " 님의 가계부").relationship("개인 가계부").isPrivate(true).build();
-        accountBookService.createAccountBookPrivate(member, build);
-
-
-    }
 
     @Transactional
     public LoginResult login(LoginRequest loginRequest, HttpServletResponse response, HttpServletRequest request) {

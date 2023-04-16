@@ -1,5 +1,7 @@
 package com.uliga.uliga_backend.global.oauth2.application;
 
+import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService;
+import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.model.Authority;
 import com.uliga.uliga_backend.domain.Member.model.Member;
@@ -26,6 +28,7 @@ import java.util.Optional;
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final MemberRepository memberRepository;
+    private final AccountBookService accountBookService;
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
@@ -38,11 +41,14 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(loginType.getType(), oAuth2User.getAttributes());
 
         Optional<Member> byEmailAndDeleted = memberRepository.findByEmailAndDeleted(userInfo.getEmail(), false);
-
-
-        //회원가입 된경우
-        // 회원가입 안된 경우 회원가입 진행
-        Member member = byEmailAndDeleted.orElseGet(() -> createUser(userInfo, loginType));
+        Member member;
+        if (byEmailAndDeleted.isPresent()) {
+            member = byEmailAndDeleted.get();
+        } else {
+            member = createUser(userInfo, loginType);
+            AccountBookDTO.CreateRequestPrivate requestPrivate = AccountBookDTO.CreateRequestPrivate.builder().name(member.getUserName() + " 님의 가계부").relationship("개인").isPrivate(true).build();
+            accountBookService.createAccountBookPrivate(member, requestPrivate);
+        }
 
         return UserPrincipal.create(member, oAuth2User.getAttributes());
 
