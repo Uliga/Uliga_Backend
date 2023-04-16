@@ -3,7 +3,6 @@ package com.uliga.uliga_backend.global.oauth2.handler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.model.Member;
-import com.uliga.uliga_backend.domain.Token.dto.TokenDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenInfoDTO;
 import com.uliga.uliga_backend.global.jwt.JwtTokenProvider;
 import com.uliga.uliga_backend.global.oauth2.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
@@ -12,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -40,6 +40,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final ObjectMapper mapper;
 
     @Override
+    @Transactional
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         log.info("authentication success");
 
