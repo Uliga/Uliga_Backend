@@ -36,7 +36,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         log.info("authentication success");
+
         String targetUrl = determineTargetUrl(request, response, authentication);
+        log.info("target url : "+targetUrl);
         if (response.isCommitted()) {
             return;
         }

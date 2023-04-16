@@ -7,6 +7,7 @@ import com.uliga.uliga_backend.domain.Member.model.UserLoginType;
 import com.uliga.uliga_backend.domain.Member.model.UserPrincipal;
 import com.uliga.uliga_backend.global.oauth2.OAuth2UserInfo;
 import com.uliga.uliga_backend.global.oauth2.OAuth2UserInfoFactory;
+import com.uliga.uliga_backend.global.oauth2.exception.DuplicateUserByEmail;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,7 +44,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         if (byEmailAndDeleted.isPresent()) { //회원가입 된경우
             member = byEmailAndDeleted.get();
             if (member.getUserLoginType() != loginType) {
-                throw new IllegalArgumentException("기존에 회원가입한 이메일입니다. 해당 이메일로 로그인해주세요.");
+                throw new DuplicateUserByEmail("기존에 회원가입한 이메일입니다. 해당 이메일로 로그인해주세요.");
             }
         } else {
             // 회원가입 안된 경우 회원가입 진행
