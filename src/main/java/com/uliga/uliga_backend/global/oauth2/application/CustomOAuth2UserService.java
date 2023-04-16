@@ -14,6 +14,7 @@ import com.uliga.uliga_backend.global.oauth2.exception.DuplicateUserByEmail;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -62,8 +63,11 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private Member createUser(OAuth2UserInfo memberInfo, UserLoginType loginType) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encode = passwordEncoder.encode(memberInfo.getEmail());
         Member member = Member.builder().email(memberInfo.getEmail())
                 .userName(memberInfo.getName())
+                .password(encode)
                 .deleted(false)
                 .userLoginType(loginType)
                 .authority(Authority.ROLE_USER)
