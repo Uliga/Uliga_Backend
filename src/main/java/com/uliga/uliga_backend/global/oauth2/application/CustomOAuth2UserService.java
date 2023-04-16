@@ -2,6 +2,7 @@ package com.uliga.uliga_backend.global.oauth2.application;
 
 import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO;
+import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.model.Authority;
 import com.uliga.uliga_backend.domain.Member.model.Member;
@@ -47,7 +48,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         } else {
             member = createUser(userInfo, loginType);
             AccountBookDTO.CreateRequestPrivate requestPrivate = AccountBookDTO.CreateRequestPrivate.builder().name(member.getUserName() + " 님의 가계부").relationship("개인").isPrivate(true).build();
-            accountBookService.createAccountBookPrivate(member, requestPrivate);
+            AccountBook accountBookPrivate = accountBookService.createAccountBookPrivate(member, requestPrivate);
+            member.setPrivateAccountBook(accountBookPrivate);
         }
 
         return UserPrincipal.create(member, oAuth2User.getAttributes());

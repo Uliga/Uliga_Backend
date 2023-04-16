@@ -108,7 +108,7 @@ public class AccountBookService {
     }
 
     @Transactional
-    public void createAccountBookPrivate(Member member, CreateRequestPrivate createRequest) {
+    public AccountBook createAccountBookPrivate(Member member, CreateRequestPrivate createRequest) {
         AccountBook accountBook = createRequest.toEntity();
         accountBookRepository.save(accountBook);
         member.setPrivateAccountBook(accountBook);
@@ -126,6 +126,7 @@ public class AccountBookService {
                     .name(cat).build();
             categoryRepository.save(category);
         }
+        return accountBook;
     }
 
     @Transactional
