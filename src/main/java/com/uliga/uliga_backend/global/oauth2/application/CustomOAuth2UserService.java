@@ -62,24 +62,13 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private Member createUser(OAuth2UserInfo memberInfo, UserLoginType loginType) {
-        if (memberInfo.getEmail() == null) {
-            Member member = Member.builder().email("NULL")
-                    .userName(memberInfo.getName())
-                    .deleted(false)
-                    .userLoginType(loginType)
-                    .authority(Authority.ROLE_USER)
-                    .build();
-            return memberRepository.save(member);
-
-        } else {
-            Member member = Member.builder().email(memberInfo.getEmail())
-                    .userName(memberInfo.getName())
-                    .deleted(false)
-                    .userLoginType(loginType)
-                    .authority(Authority.ROLE_USER)
-                    .build();
-            return memberRepository.save(member);
-        }
+        Member member = Member.builder().email(memberInfo.getEmail())
+                .userName(memberInfo.getName())
+                .deleted(false)
+                .userLoginType(loginType)
+                .authority(Authority.ROLE_USER)
+                .build();
+        return memberRepository.save(member);
 
     }
 }
