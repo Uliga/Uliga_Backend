@@ -19,6 +19,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
@@ -47,20 +48,16 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         log.info("authentication : "+authentication.getName());
         Optional<Member> byId = memberRepository.findById(Long.parseLong(authentication.getName()));
 
-        if (byId.isEmpty()) {
-            return;
-        }
         if (response.isCommitted()) {
             return;
         }
-        Member member = byId.get();
-        String targetUrl = determineTargetUrl(request, response, authentication, member);
+        String targetUrl = determineTargetUrl(request, response, authentication, byId);
         log.info("target url : "+targetUrl);
         clearAuthenticationAttributes(request, response);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
-    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication, Member member) {
+    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication, Optional<Member> byId) {
         Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
@@ -72,10 +69,23 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         valueOperations.set(authentication.getName(), tokenDto.getRefreshToken());
         redisTemplate.expire(authentication.getName(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
-        return UriComponentsBuilder.fromUriString(targetUrl)
-                .queryParam("token", tokenDto.getAccessToken())
-                .queryParam("email",member.getEmail())
-                .build().toUriString();
+        if (byId.isPresent()) {
+            Member member = byId.get();
+
+            UriComponents uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
+                    .queryParam("token", tokenDto.getAccessToken())
+                    .queryParam("email", member.getEmail())
+                    .build();
+            return uriComponents.toUriString();
+        } else {
+            UriComponents uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
+                    .queryParam("token", tokenDto.getAccessToken())
+                    .queryParam("email", "NULL")
+                    .build();
+            return uriComponents.toUriString();
+        }
+
+
     }
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
         super.clearAuthenticationAttributes(request);
