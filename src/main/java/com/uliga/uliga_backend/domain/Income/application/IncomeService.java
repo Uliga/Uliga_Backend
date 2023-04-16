@@ -1,6 +1,7 @@
 package com.uliga.uliga_backend.domain.Income.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
@@ -8,8 +9,6 @@ import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.Date;
 import com.uliga.uliga_backend.domain.Income.dao.IncomeMapper;
 import com.uliga.uliga_backend.domain.Income.dao.IncomeRepository;
-import com.uliga.uliga_backend.domain.Income.dto.IncomeDTO;
-import com.uliga.uliga_backend.domain.Income.dto.IncomeDTO.IncomeDeleteRequest;
 import com.uliga.uliga_backend.domain.Income.dto.IncomeDTO.IncomeUpdateRequest;
 import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
 import com.uliga.uliga_backend.domain.Income.exception.InvalidIncomeDeleteRequest;
@@ -25,6 +24,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +35,7 @@ import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
 @Service
 @RequiredArgsConstructor
 public class IncomeService {
+    private final AccountBookRepository accountBookRepository;
     private final IncomeRepository incomeRepository;
     private final IncomeMapper incomeMapper;
     private final CategoryRepository categoryRepository;
@@ -86,6 +87,33 @@ public class IncomeService {
                 .account(request.getAccount())
                 .build();
         incomeRepository.save(income);
+        List<Long> sharedAccountBookIds = request.getSharedAccountBook();
+        List<AccountBook> sharedAccountBooks = accountBookRepository.findAccountBookByAccountBookIds(sharedAccountBookIds);
+        List<Category> categories = categoryRepository.findCategoriesByAccountBookIds(sharedAccountBookIds);
+
+        Map<Long, Category> categoryDict = new HashMap<>();
+        Map<Long, AccountBook> accountBookDict = new HashMap<>();
+        List<Income> toSave = new ArrayList<>();
+        for (Category c : categories) {
+            categoryDict.put(c.getAccountBook().getId(), c);
+        }
+        for (AccountBook ab : sharedAccountBooks) {
+            accountBookDict.put(ab.getId(), ab);
+        }
+        for (Long accountBookId : sharedAccountBookIds) {
+            Income temp_income = Income.builder()
+                    .category(categoryDict.get(accountBookId))
+                    .date(date)
+                    .accountBook(accountBookDict.get(accountBookId))
+                    .memo(request.getMemo())
+                    .payment(request.getPayment())
+                    .creator(member)
+                    .value(request.getValue())
+                    .account(request.getAccount())
+                    .build();
+            toSave.add(temp_income);
+        }
+        incomeRepository.saveAll(toSave);
         return AddIncomeResult.builder()
                 .accountBookId(accountBook.getId())
                 .incomeInfo(income.toInfoQ()).build();

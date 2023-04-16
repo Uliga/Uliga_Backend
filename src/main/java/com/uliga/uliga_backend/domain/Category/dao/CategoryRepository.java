@@ -20,6 +20,8 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     Optional<Category> findByAccountBookAndName(AccountBook accountBook, String name);
 
     List<Category> findCategoriesByAccountBookId(Long accountBookId);
+    @Query("SELECT c FROM Category c where c.accountBook.id in (:accountBookIds) AND c.name = '기타'")
+    List<Category> findCategoriesByAccountBookIds(@Param("accountBookIds") List<Long> accountBookIds);
 
     @Query("SELECT c " +
             "From Category c " +

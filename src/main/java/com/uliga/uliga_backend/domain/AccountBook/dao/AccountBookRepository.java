@@ -2,6 +2,7 @@ package com.uliga.uliga_backend.domain.AccountBook.dao;
 
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.*;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
+import com.uliga.uliga_backend.domain.Category.model.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -88,6 +89,7 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long>{
                                        @Param("year") Long year,
                                        @Param("month") Long month);
 
-
+    @Query("SELECT ab FROM AccountBook ab where ab.id in (:accountBookIds)")
+    List<AccountBook> findAccountBookByAccountBookIds(@Param("accountBookIds") List<Long> accountBookIds);
 
 }
