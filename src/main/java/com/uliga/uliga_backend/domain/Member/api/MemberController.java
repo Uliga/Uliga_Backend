@@ -53,6 +53,16 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getCurrentMemberInfo(currentMemberId, pageable));
     }
 
+    @Operation(summary = "소셜 로그인용 멤버 개인 가계부 아이디 조회 API", description = "멤버 개인 가계부 아아디 조회 API 입니다")
+    @GetMapping(value = "/privateAccountBook")
+    public ResponseEntity<Long> getPrivateAccountBookId() {
+
+        log.info("멤버 개인 가계부 아이디 조회 API");
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(memberService.getMemberPrivateAccountBookId(currentMemberId));
+
+    }
+
     @Operation(summary = "멤버 정보 업데이트 API", description = "멤버 정보 업데이트 API 입니다", security = @SecurityRequirement(name = "bearerAuth"))
     @PatchMapping(value = "")
     public ResponseEntity<MemberInfoUpdateRequest> updateMemberInfo(@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "멤버 정보 업데이트 요청", content = @Content(schema = @Schema(implementation = MemberInfoUpdateRequest.class)))
@@ -110,8 +120,6 @@ public class MemberController {
     public ResponseEntity<String> deleteMember() {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         memberService.deleteMember(currentMemberId);
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setLocation(URI.create("/logout"));
         return ResponseEntity.ok("DELETED");
     }
 

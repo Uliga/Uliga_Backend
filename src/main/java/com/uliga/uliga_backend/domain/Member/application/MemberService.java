@@ -38,6 +38,12 @@ public class MemberService {
     private final ObjectMapper objectMapper;
 
     @Transactional
+    public Long getMemberPrivateAccountBookId(Long id) {
+        Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
+        return member.getPrivateAccountBook().getId();
+    }
+
+    @Transactional
     public GetMemberInfo getCurrentMemberInfo(Long id, Pageable pageable) throws JsonProcessingException {
 
         MemberInfoNativeQ memberInfoById = memberRepository.findMemberInfoById(id);
