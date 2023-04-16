@@ -40,16 +40,9 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         Optional<Member> byEmailAndDeleted = memberRepository.findByEmailAndDeleted(userInfo.getEmail(), false);
 
 
-        Member member;
-        if (byEmailAndDeleted.isPresent()) { //회원가입 된경우
-            member = byEmailAndDeleted.get();
-            if (member.getUserLoginType() != loginType) {
-                throw new DuplicateUserByEmail("기존에 회원가입한 이메일입니다. 해당 이메일로 로그인해주세요.");
-            }
-        } else {
-            // 회원가입 안된 경우 회원가입 진행
-            member = createUser(userInfo, loginType);
-        }
+        //회원가입 된경우
+        // 회원가입 안된 경우 회원가입 진행
+        Member member = byEmailAndDeleted.orElseGet(() -> createUser(userInfo, loginType));
 
         return UserPrincipal.create(member, oAuth2User.getAttributes());
 
