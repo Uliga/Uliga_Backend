@@ -10,7 +10,6 @@ import com.uliga.uliga_backend.domain.Member.model.UserLoginType;
 import com.uliga.uliga_backend.domain.Member.model.UserPrincipal;
 import com.uliga.uliga_backend.global.oauth2.OAuth2UserInfo;
 import com.uliga.uliga_backend.global.oauth2.OAuth2UserInfoFactory;
-import com.uliga.uliga_backend.global.oauth2.exception.DuplicateUserByEmail;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +37,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         log.info("");
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
+
+        log.info(oAuth2User.getAttributes().toString());
 
         UserLoginType loginType =  UserLoginType.valueOfLabel(userRequest.getClientRegistration().getRegistrationId().toUpperCase());
         log.info("loginType : " + loginType);
