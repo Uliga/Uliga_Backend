@@ -64,16 +64,30 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     private Member createUser(OAuth2UserInfo memberInfo, UserLoginType loginType) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encode = passwordEncoder.encode(memberInfo.getEmail());
-        Member member = Member.builder().email(memberInfo.getEmail())
-                .userName(memberInfo.getName())
-                .nickName(memberInfo.getName())
-                .password(encode)
-                .deleted(false)
-                .userLoginType(loginType)
-                .authority(Authority.ROLE_USER)
-                .build();
-        return memberRepository.save(member);
+        if (memberInfo.getEmail() == null) {
+            String encode = passwordEncoder.encode("NULL");
+            Member member = Member.builder().email("NULL")
+                    .userName(memberInfo.getName())
+                    .nickName(memberInfo.getName())
+                    .password(encode)
+                    .deleted(false)
+                    .userLoginType(loginType)
+                    .authority(Authority.ROLE_USER)
+                    .build();
+            return memberRepository.save(member);
+        } else {
+            String encode = passwordEncoder.encode(memberInfo.getEmail());
+            Member member = Member.builder().email(memberInfo.getEmail())
+                    .userName(memberInfo.getName())
+                    .nickName(memberInfo.getName())
+                    .password(encode)
+                    .deleted(false)
+                    .userLoginType(loginType)
+                    .authority(Authority.ROLE_USER)
+                    .build();
+            return memberRepository.save(member);
+        }
+
 
     }
 }
