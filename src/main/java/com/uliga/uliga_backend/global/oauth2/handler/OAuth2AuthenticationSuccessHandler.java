@@ -72,18 +72,18 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         redisTemplate.expire(authentication.getName(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
         if (byId.isPresent()) {
             Member member = byId.get();
-            if (member.getNickName() == null) {
+            if (member.getApplicationPassword() == null) {
                 UriComponents uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
                         .queryParam("token", tokenDto.getAccessToken())
                         .queryParam("email", member.getEmail())
-                        .queryParam("exists", false)
+                        .queryParam("created", true)
                         .build();
                 return uriComponents.toUriString();
             } else {
                 UriComponents uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
                         .queryParam("token", tokenDto.getAccessToken())
                         .queryParam("email", member.getEmail())
-                        .queryParam("exists", true)
+                        .queryParam("created", false)
                         .build();
                 return uriComponents.toUriString();
             }
