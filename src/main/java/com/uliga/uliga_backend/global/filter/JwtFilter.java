@@ -74,6 +74,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }  catch (Exception e) {
             log.info(e.getMessage());
             log.info(e.getClass().getName());
+            e.printStackTrace();
             String result = mapper.writeValueAsString(new ErrorResponse(500L, e.getMessage()));
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
