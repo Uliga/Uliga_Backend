@@ -34,19 +34,13 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     @Transactional
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        log.info("");
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
-        log.info(oAuth2User.getAttributes().toString());
-
         UserLoginType loginType =  UserLoginType.valueOfLabel(userRequest.getClientRegistration().getRegistrationId().toUpperCase());
-        log.info("loginType : " + loginType);
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
                 .getUserInfoEndpoint().getUserNameAttributeName();
-        log.info("userNameAttributeName : " + userNameAttributeName);
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(loginType.getType(), oAuth2User.getAttributes());
-        log.info("userEmail : "+userInfo.getEmail());
         Optional<Member> byEmailAndDeleted = memberRepository.findByEmailAndDeleted(userInfo.getEmail(), false);
         Member member;
         if (byEmailAndDeleted.isPresent()) {
@@ -65,30 +59,15 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     private Member createUser(OAuth2UserInfo memberInfo, UserLoginType loginType) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        if (memberInfo.getEmail() == null) {
-            String encode = passwordEncoder.encode("NULL");
-            Member member = Member.builder().email("NULL")
-                    .userName(memberInfo.getName())
-                    .nickName(memberInfo.getName())
-                    .password(encode)
-                    .deleted(false)
-                    .userLoginType(loginType)
-                    .authority(Authority.ROLE_USER)
-                    .build();
-            return memberRepository.save(member);
-        } else {
-            String encode = passwordEncoder.encode(memberInfo.getEmail());
-            Member member = Member.builder().email(memberInfo.getEmail())
-                    .userName(memberInfo.getName())
-                    .nickName(memberInfo.getName())
-                    .password(encode)
-                    .deleted(false)
-                    .userLoginType(loginType)
-                    .authority(Authority.ROLE_USER)
-                    .build();
-            return memberRepository.save(member);
-        }
-
-
+        String encode = passwordEncoder.encode(memberInfo.getEmail());
+        Member member = Member.builder().email(memberInfo.getEmail())
+                .userName(memberInfo.getName())
+                .nickName(memberInfo.getName())
+                .password(encode)
+                .deleted(false)
+                .userLoginType(loginType)
+                .authority(Authority.ROLE_USER)
+                .build();
+        return memberRepository.save(member);
     }
 }

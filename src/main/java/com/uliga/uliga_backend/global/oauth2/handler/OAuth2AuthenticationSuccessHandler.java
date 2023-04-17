@@ -37,7 +37,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final RedisTemplate<String, String> redisTemplate;
     private final OAuth2AuthorizationRequestBasedOnCookieRepository authorizationRequestRepository;
     private final MemberRepository memberRepository;
-    private final ObjectMapper mapper;
 
     @Override
     @Transactional
@@ -62,7 +61,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
-        log.info("redirect_uri : ");
         //토큰 생성
         TokenInfoDTO tokenDto = jwtTokenProvider.generateTokenDto(authentication);
 

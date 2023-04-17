@@ -32,9 +32,6 @@ public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler im
     @Transactional
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         log.info("로그아웃 호출됐음");
-        log.info(response.getHeader("Access-Control-Allow-Origin"));
-        log.info(request.getHeader("Access-Control-Allow-Origin"));
-        // 여기 response에 cors 관련 헤더 허용해준다는 거 넣으면 될듯? 그리고 여기서도 그 값 제거해줄 수 있을 것 같은데
 
         String token = request.getHeader("Authorization").split(" ")[1];
         log.info("token = " + token);
@@ -46,12 +43,9 @@ public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler im
         if (valueOperations.get(principal.getUsername()) == null) {
             throw new LogoutMemberException();
         }
-        log.info("제발 "+ principal.getUsername());
-        log.info("레디스에 비어있을때"+valueOperations.get(principal.getUsername()));
         valueOperations.getAndDelete(principal.getUsername());
 
         log.info(request.getRequestURI());
-//        response.addHeader("Access-Control-Allow-Origin","*");
         super.onLogoutSuccess(request, response, authentication);
     }
 
