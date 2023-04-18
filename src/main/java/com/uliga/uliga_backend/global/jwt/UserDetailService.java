@@ -23,7 +23,6 @@ public class UserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("load by username 실행됨");
         Optional<Member> byEmail = memberRepository.findByEmailAndDeleted(username, false);
         if (byEmail.isPresent()) {
             return createUserDetails(byEmail.get());
@@ -36,8 +35,6 @@ public class UserDetailService implements UserDetailsService {
     // DB 에 User 값이 존재한다면 UserDetails 객체로 만들어서 리턴
     private UserDetails createUserDetails(Member member) {
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(member.getAuthority().toString());
-        log.info("User Detail 객체 생성");
-        log.info("Member authority : " + member.getAuthority().toString());
         return new User(
                 String.valueOf(member.getId()),
                 member.getPassword(),
