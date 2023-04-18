@@ -47,6 +47,8 @@ public class RecordDTO {
         private String category;
         @Schema(description = "날짜", defaultValue = "yyyy-mm-dd")
         private String date;
+        @Schema(description = "데이터 타입", defaultValue = "INCOME")
+        private String type;
     }
 
     @Builder

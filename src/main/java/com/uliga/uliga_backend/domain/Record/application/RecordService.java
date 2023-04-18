@@ -4,9 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
+import com.uliga.uliga_backend.domain.AccountBookData.model.AccountBookDataType;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.Date;
+import com.uliga.uliga_backend.domain.Income.dao.IncomeMapper;
+import com.uliga.uliga_backend.domain.Income.dao.IncomeRepository;
 import com.uliga.uliga_backend.domain.Income.model.Income;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Record.dao.RecordMapper;
@@ -45,6 +48,7 @@ public class RecordService {
     private final RecordRepository recordRepository;
     private final AccountBookRepository accountBookRepository;
     private final RecordMapper mapper;
+    private final IncomeRepository incomeRepository;
     private final CategoryRepository categoryRepository;
     private final ObjectMapper objectMapper;
 
@@ -151,8 +155,12 @@ public class RecordService {
         if (patchRecord.getDate() != null) {
             record.updateDate(patchRecord.getDate());
         }
-        // 날짜는 프론트에서 값 받고 변경해야할듯?
+        if (patchRecord.getType() != null && patchRecord.getType().equals(AccountBookDataType.INCOME.toString())) {
+            record.updateType();
+            incomeRepository.createFromAccountBookDataId(record.getId());
+            recordRepository.deleteByAccountBookDataIdNativeQ(record.getId());
 
+        }
         return patchRecord;
     }
 

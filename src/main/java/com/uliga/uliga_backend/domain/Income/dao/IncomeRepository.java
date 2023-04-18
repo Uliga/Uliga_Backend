@@ -7,12 +7,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface IncomeRepository extends JpaRepository<Income, Long>{
+public interface IncomeRepository extends JpaRepository<Income, Long> {
 
     @Query(
             "select new com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ(" +
@@ -36,6 +37,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long>{
                                           @Param("year") Long year,
                                           @Param("month") Long month,
                                           @Param("day") Long day);
+
     @Query("select new com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ(" +
             "SUM(i.value)" +
             ") FROM AccountBook ab " +
@@ -43,7 +45,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long>{
             "WHERE i.date.month=:month " +
             "AND ab.id=:id " +
             "AND i.date.year = :year GROUP BY ab.id")
-    MonthlySumQ getMonthlySumByAccountBookId(@Param("id") Long id,@Param("year") Long year, @Param("month") Long month);
+    MonthlySumQ getMonthlySumByAccountBookId(@Param("id") Long id, @Param("year") Long year, @Param("month") Long month);
 
     @Query("select new com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ(" +
             "i.id," +
@@ -62,6 +64,11 @@ public interface IncomeRepository extends JpaRepository<Income, Long>{
             "WHERE m.id=:id ORDER BY i.date.year*365 + i.date.month*31 + i.date.day DESC ")
     Page<IncomeInfoQ> getMemberIncomes(@Param("id") Long id, Pageable pageable);
 
+    @Modifying
+    @Query(nativeQuery = true, value = "DELETE FROM income where account_book_data_id = :id")
+    void deleteByAccountBookDataIdNativeQ(@Param("id") Long id);
 
-
+    @Modifying
+    @Query(nativeQuery = true, value = "INSERT INTO income (account_book_data_id) value (:id)")
+    void createFromAccountBookDataId(@Param("id") Long id);
 }

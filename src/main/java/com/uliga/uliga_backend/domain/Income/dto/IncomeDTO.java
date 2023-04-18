@@ -46,6 +46,8 @@ public class IncomeDTO {
         private String category;
         @Schema(description = "날짜", defaultValue = "yyyy-mm-dd")
         private String date;
+        @Schema(description = "타입", defaultValue = "RECORD")
+        private String type;
 
     }
 

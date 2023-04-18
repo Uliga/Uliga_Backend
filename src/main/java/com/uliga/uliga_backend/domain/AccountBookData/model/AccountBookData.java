@@ -66,5 +66,9 @@ public class AccountBookData extends BaseTimeEntity {
     public void setCategory(Category category) {
         this.category = category;
     }
+
+    public void setType(AccountBookDataType type) {
+        this.type = type;
+    }
 }
 

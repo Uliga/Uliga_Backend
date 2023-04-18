@@ -75,5 +75,7 @@ public class Record extends AccountBookData {
                 .day(Long.parseLong(split[2])).build());
     }
 
-
+    public void updateType() {
+        super.setType(AccountBookDataType.INCOME);
+    }
 }

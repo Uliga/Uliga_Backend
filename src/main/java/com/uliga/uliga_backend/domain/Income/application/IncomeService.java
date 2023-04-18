@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
+import com.uliga.uliga_backend.domain.AccountBookData.model.AccountBookDataType;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.Date;
@@ -14,6 +15,8 @@ import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
 import com.uliga.uliga_backend.domain.Income.exception.InvalidIncomeDeleteRequest;
 import com.uliga.uliga_backend.domain.Income.model.Income;
 import com.uliga.uliga_backend.domain.Member.model.Member;
+import com.uliga.uliga_backend.domain.Record.dao.RecordMapper;
+import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import com.uliga.uliga_backend.global.error.exception.IdNotFoundException;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import jakarta.transaction.Transactional;
@@ -38,6 +41,7 @@ public class IncomeService {
     private final AccountBookRepository accountBookRepository;
     private final IncomeRepository incomeRepository;
     private final IncomeMapper incomeMapper;
+    private final RecordRepository recordRepository;
     private final CategoryRepository categoryRepository;
     private final ObjectMapper objectMapper;
 
@@ -144,7 +148,11 @@ public class IncomeService {
         if (patchIncome.getDate() != null) {
             income.updateDate(patchIncome.getDate());
         }
-        // 날짜는 프론트에서 값 받고 변경해야할듯?
+        if (patchIncome.getType() != null && patchIncome.getType().equals(AccountBookDataType.RECORD.toString())) {
+            income.updateType();
+            recordRepository.createFromAccountBookDataId(income.getId());
+            incomeRepository.deleteByAccountBookDataIdNativeQ(income.getId());
+        }
         return patchIncome;
     }
 

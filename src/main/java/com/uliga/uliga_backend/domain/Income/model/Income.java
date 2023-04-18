@@ -67,5 +67,9 @@ public class Income extends AccountBookData {
                 .month(Long.parseLong(split[1]))
                 .day(Long.parseLong(split[2])).build());
     }
+
+    public void updateType() {
+        super.setType(AccountBookDataType.RECORD);
+    }
 }
 
