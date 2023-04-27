@@ -92,12 +92,47 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long>{
     @Query("SELECT ab FROM AccountBook ab where ab.id in (:accountBookIds)")
     List<AccountBook> findAccountBookByAccountBookIds(@Param("accountBookIds") List<Long> accountBookIds);
 
-    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategoryAnalyzeQ(c.id, c.name, SUM(r.value)) FROM Category c JOIN Record r ON r.category.id = c.id WHERE c.accountBook.id = :id  AND r.date.year = :year AND r.date.month=:month group by c order by SUM(r.value) DESC LIMIT 5")
+    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategoryAnalyzeQ(" +
+            "c.id, " +
+            "c.name, " +
+            "SUM(r.value)) " +
+            "FROM Category c " +
+            "JOIN Record r ON r.category.id = c.id " +
+            "WHERE c.accountBook.id = :id  " +
+            "AND r.date.year = :year " +
+            "AND r.date.month=:month " +
+            "group by c " +
+            "order by SUM(r.value) DESC LIMIT 5")
     List<AccountBookCategoryAnalyzeQ> findAccountBookCategoryAnalyze(@Param("id") Long id, @Param("year") Long year, @Param("month") Long month);
 
-    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ(SUM(sm.value)) FROM Schedule s JOIN ScheduleMember sm ON sm.schedule.id = s.id WHERE s.accountBook.id=:accountBookId AND sm.member.id=:memberId AND sm.value > 0")
+    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ(" +
+            "SUM(sm.value)) " +
+            "FROM Schedule s " +
+            "JOIN ScheduleMember sm ON sm.schedule.id = s.id " +
+            "WHERE s.accountBook.id=:accountBookId " +
+            "AND sm.member.id=:memberId " +
+            "AND sm.value > 0")
     MonthlySumQ getMonthlyScheduleValue(@Param("accountBookId") Long accountBookId, @Param("memberId") Long memberId);
 
-    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlyCompareQ(r.date.year, r.date.month, SUM(r.value)) FROM Record r WHERE r.accountBook.id = :accountBookId AND r.date.year*366 + r.date.month - :year*366 - :month <= 0  GROUP BY r.date.month ORDER BY r.date.year*366 + r.date.month - :year*366 - :month DESC LIMIT 3")
+    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlyCompareQ(" +
+            "r.date.year, " +
+            "r.date.month, " +
+            "SUM(r.value)) " +
+            "FROM Record r " +
+            "WHERE r.accountBook.id = :accountBookId " +
+            "AND r.date.year*366 + r.date.month - :year*366 - :month <= 0  " +
+            "GROUP BY r.date.month " +
+            "ORDER BY r.date.year*366 + r.date.month - :year*366 - :month DESC LIMIT 3")
     List<MonthlyCompareQ> getMonthlyCompare(@Param("accountBookId") Long accountBookId, @Param("year") Long year, @Param("month") Long month);
+
+    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlyCompareQ(" +
+            "r.date.year, " +
+            "r.date.month, " +
+            "SUM(r.value)) " +
+            "FROM Record r " +
+            "WHERE r.accountBook.id = :accountBookId " +
+            "AND r.date.year*366 + r.date.month - :year*366 - :month <= 0  " +
+            "GROUP BY r.date.month " +
+            "ORDER BY r.date.year*366 + r.date.month - :year*366 - :month DESC LIMIT 2")
+    List<MonthlyCompareQ> getMonthlyCompareInDailyAnalyze(@Param("accountBookId") Long accountBookId, @Param("year") Long year, @Param("month") Long month);
 }

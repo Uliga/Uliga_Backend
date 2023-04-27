@@ -3,12 +3,9 @@ package com.uliga.uliga_backend.domain.AccountBook.application;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategoryAnalyzeQ;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.DailyValueQ;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.*;
 import com.uliga.uliga_backend.domain.AccountBookData.dao.AccountBookDataMapper;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.exception.*;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
@@ -544,8 +541,14 @@ public class AccountBookService {
 
             }
         }
-        MonthlySumQ monthlySumQ = recordRepository.getMonthlySumByAccountBookId(id, year, month);
-        return AccountBookDailyRecord.builder().records(result).sum(monthlySumQ.getValue()).build();
+        List<MonthlyCompareQ> monthlyCompareInDailyAnalyze = accountBookRepository.getMonthlyCompareInDailyAnalyze(id, year, month);
+        if (monthlyCompareInDailyAnalyze.size() == 2) {
+            Long diff = monthlyCompareInDailyAnalyze.get(0).getValue() - monthlyCompareInDailyAnalyze.get(1).getValue();
+            return AccountBookDailyRecord.builder().records(result).sum(monthlyCompareInDailyAnalyze.get(0).getValue()).diff(diff).build();
+        } else {
+            return AccountBookDailyRecord.builder().records(result).sum(monthlyCompareInDailyAnalyze.get(0).getValue()).build();
+        }
+
     }
 
     @Transactional
@@ -573,7 +576,9 @@ public class AccountBookService {
 
     @Transactional
     public MonthlyCompare getAccountBookMonthlyCompare(Long accountBookId, Long year, Long month) {
-        return MonthlyCompare.builder().compare(accountBookRepository.getMonthlyCompare(accountBookId, year, month)).build();
+        List<MonthlyCompareQ> monthlyCompare = accountBookRepository.getMonthlyCompare(accountBookId, year, month);
+
+        return MonthlyCompare.builder().compare(monthlyCompare).build();
     }
 
     @Transactional
