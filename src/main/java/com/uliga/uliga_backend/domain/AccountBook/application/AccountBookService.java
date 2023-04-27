@@ -545,4 +545,9 @@ public class AccountBookService {
         log.info(String.valueOf(actualMaximum));
         return AccountBookDailyRecord.builder().records(result).build();
     }
+
+    @Transactional
+    public AccountBookCategoryAnalyze getAccountBookCategoryAnalyze(Long id, Long year, Long month) {
+        return AccountBookCategoryAnalyze.builder().categories(accountBookRepository.findAccountBookCategoryAnalyze(id, year, month)).build();
+    }
 }

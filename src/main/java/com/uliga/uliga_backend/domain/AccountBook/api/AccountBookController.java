@@ -320,12 +320,26 @@ public class AccountBookController {
     }
 
 
-    @Operation(summary = "가계부 분석용 날짜별 수입 조회 API")
+    @Operation(summary = "가계부 분석용 날짜별 지출 조회 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountBookDailyRecord.class)))
+    })
     @GetMapping(value = "/{id}/analyze/{year}/{month}")
     public ResponseEntity<AccountBookDailyRecord> getAccountBookDailyValues(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
 
         log.info("가계부 분석 - 날짜별 지출 조회 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookDailyRecord(id, year, month));
+    }
+
+    @Operation(summary = "가계부 분석용 한달 카테고리 별 지출 조회 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountBookCategoryAnalyze.class)))
+    })
+    @GetMapping(value = "/{id}/analyze/category/{year}/{month}")
+    public ResponseEntity<AccountBookCategoryAnalyze> getAccountBookCategoryAnalyze(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
+
+        log.info("가계부 분석 - 날짜별 지출 조회 API 호출");
+        return ResponseEntity.ok(accountBookService.getAccountBookCategoryAnalyze(id, year, month));
     }
 
 

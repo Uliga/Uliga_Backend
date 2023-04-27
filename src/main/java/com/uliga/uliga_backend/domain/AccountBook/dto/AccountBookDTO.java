@@ -310,6 +310,16 @@ public class AccountBookDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    @Schema(description = "분석용 한달 지출 조회")
+    public static class AccountBookCategoryAnalyze {
+        @Schema(description = "카테고리별 지출들")
+        private List<AccountBookCategoryAnalyzeQ> categories;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class RecordAndIncomeDetails {
         private List<AccountBookDataQ> items;
     }
