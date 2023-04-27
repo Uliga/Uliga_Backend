@@ -305,6 +305,7 @@ public class AccountBookDTO {
     public static class AccountBookDailyRecord {
         @Schema(description = "날짜별 지출들")
         private List<DailyValueQ> records;
+        private Long sum;
     }
 
     @Builder

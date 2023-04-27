@@ -544,8 +544,8 @@ public class AccountBookService {
 
             }
         }
-        log.info(String.valueOf(actualMaximum));
-        return AccountBookDailyRecord.builder().records(result).build();
+        MonthlySumQ monthlySumQ = recordRepository.getMonthlySumByAccountBookId(id, year, month);
+        return AccountBookDailyRecord.builder().records(result).sum(monthlySumQ.getValue()).build();
     }
 
     @Transactional
