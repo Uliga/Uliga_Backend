@@ -3,7 +3,9 @@ package com.uliga.uliga_backend.domain.AccountBook.application;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategoryAnalyzeQ;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.DailyValueQ;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ;
 import com.uliga.uliga_backend.domain.AccountBookData.dao.AccountBookDataMapper;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
@@ -548,6 +550,19 @@ public class AccountBookService {
 
     @Transactional
     public AccountBookCategoryAnalyze getAccountBookCategoryAnalyze(Long id, Long year, Long month) {
-        return AccountBookCategoryAnalyze.builder().categories(accountBookRepository.findAccountBookCategoryAnalyze(id, year, month)).build();
+        List<AccountBookCategoryAnalyzeQ> categoryAnalyze = accountBookRepository.findAccountBookCategoryAnalyze(id, year, month);
+        MonthlySumQ monthlySumQ = recordRepository.getMonthlySumByAccountBookId(id, year, month);
+        Long compare = 0L;
+        for (AccountBookCategoryAnalyzeQ analyzeQ : categoryAnalyze) {
+            compare += analyzeQ.getValue();
+        }
+        if (compare.equals(monthlySumQ.getValue())) {
+            return AccountBookCategoryAnalyze.builder().categories(categoryAnalyze).build();
+        } else {
+            AccountBookCategoryAnalyzeQ built = AccountBookCategoryAnalyzeQ.builder().name("그 외").value(monthlySumQ.getValue() - compare).build();
+            categoryAnalyze.add(built);
+            return AccountBookCategoryAnalyze.builder().categories(categoryAnalyze).build();
+        }
+
     }
 }

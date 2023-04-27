@@ -92,7 +92,7 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long>{
     @Query("SELECT ab FROM AccountBook ab where ab.id in (:accountBookIds)")
     List<AccountBook> findAccountBookByAccountBookIds(@Param("accountBookIds") List<Long> accountBookIds);
 
-    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategoryAnalyzeQ(c.id, c.name, SUM(r.value)) FROM Category c JOIN Record r ON r.category.id = c.id WHERE c.accountBook.id = :id  AND r.date.year = :year AND r.date.month=:month group by c order by SUM(r.value) DESC LIMIT 6")
+    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategoryAnalyzeQ(c.id, c.name, SUM(r.value)) FROM Category c JOIN Record r ON r.category.id = c.id WHERE c.accountBook.id = :id  AND r.date.year = :year AND r.date.month=:month group by c order by SUM(r.value) DESC LIMIT 5")
     List<AccountBookCategoryAnalyzeQ> findAccountBookCategoryAnalyze(@Param("id") Long id, @Param("year") Long year, @Param("month") Long month);
 
 }
