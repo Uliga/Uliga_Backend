@@ -557,12 +557,17 @@ public class AccountBookService {
             compare += analyzeQ.getValue();
         }
         if (compare.equals(monthlySumQ.getValue())) {
-            return AccountBookCategoryAnalyze.builder().categories(categoryAnalyze).build();
+            return AccountBookCategoryAnalyze.builder().categories(categoryAnalyze).sum(monthlySumQ.getValue()).build();
         } else {
             AccountBookCategoryAnalyzeQ built = AccountBookCategoryAnalyzeQ.builder().name("그 외").value(monthlySumQ.getValue() - compare).build();
             categoryAnalyze.add(built);
-            return AccountBookCategoryAnalyze.builder().categories(categoryAnalyze).build();
+            return AccountBookCategoryAnalyze.builder().categories(categoryAnalyze).sum(monthlySumQ.getValue()).build();
         }
 
+    }
+
+    @Transactional
+    public AccountScheduleAnalyze getAccountBookScheduleAnalyze(Long accountBookId, Long memberId) {
+        return AccountScheduleAnalyze.builder().schedules(scheduleService.findAnalyze(accountBookId, memberId)).sum(accountBookRepository.getMonthlyScheduleValue(accountBookId, memberId).getValue()).build();
     }
 }

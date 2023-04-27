@@ -62,6 +62,7 @@ public class AccountBookController {
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.getSingleAccountBookInfo(id, memberId));
     }
+
     @Operation(summary = "가계부 정보 업데이트 API", description = "가계부 정보 업데이트 API입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "업데이트 성공시", content = @Content(schema = @Schema(implementation = AccountBookUpdateRequest.class)))
@@ -75,6 +76,7 @@ public class AccountBookController {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.updateAccountBookInfo(currentMemberId, id, updateRequest));
     }
+
     @Operation(summary = "가계부 생성 API", description = "가계부 생성하는 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "가계부 생성시", content = @Content(schema = @Schema(implementation = SimpleAccountBookInfo.class))),
@@ -338,9 +340,16 @@ public class AccountBookController {
     @GetMapping(value = "/{id}/analyze/category/{year}/{month}")
     public ResponseEntity<AccountBookCategoryAnalyze> getAccountBookCategoryAnalyze(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
 
-        log.info("가계부 분석 - 날짜별 지출 조회 API 호출");
+        log.info("가계부 분석 - 카테고리별 지출 조회 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookCategoryAnalyze(id, year, month));
     }
 
+    @Operation(summary = "가계부 분석용 한달 고정지출 조회용 API")
+    @GetMapping(value = "/{id}/analyze/schedule")
+    public ResponseEntity<AccountScheduleAnalyze> getAccountBookScheduleAnalyze(@PathVariable("id") Long id) {
 
+        log.info("가계부 분석 - 고정 지출 조회 API 호출");
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(accountBookService.getAccountBookScheduleAnalyze(id, currentMemberId));
+    }
 }

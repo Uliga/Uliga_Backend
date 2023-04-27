@@ -12,6 +12,7 @@ import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.NotificationInfo;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Schedule.dao.ScheduleMapper;
 import com.uliga.uliga_backend.domain.Schedule.dao.ScheduleRepository;
+import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleAnalyzeQ;
 import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleInfoQ;
 import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleMonthSum;
 import com.uliga.uliga_backend.domain.Schedule.exception.InvalidScheduleDelete;
@@ -160,5 +161,10 @@ public class ScheduleService {
             throw new InvalidScheduleDelete();
         }
 
+    }
+
+    @Transactional
+    public List<ScheduleAnalyzeQ> findAnalyze(Long id, Long memberId) {
+        return scheduleRepository.findScheduleAnalyzeByAccountBookId(id, memberId);
     }
 }

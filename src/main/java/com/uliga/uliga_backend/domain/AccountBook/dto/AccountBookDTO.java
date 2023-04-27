@@ -5,6 +5,7 @@ import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ;
 import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
+import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleAnalyzeQ;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.CreateScheduleRequest;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.ScheduleDetail;
@@ -314,6 +315,7 @@ public class AccountBookDTO {
     public static class AccountBookCategoryAnalyze {
         @Schema(description = "카테고리별 지출들")
         private List<AccountBookCategoryAnalyzeQ> categories;
+        private Long sum;
     }
 
     @Builder
@@ -497,6 +499,16 @@ public class AccountBookDTO {
         private Long incomeSum;
         private Long recordSum;
         private List<ScheduleDetail> schedules;
+    }
+
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AccountScheduleAnalyze {
+        private List<ScheduleAnalyzeQ> schedules;
+        private Long sum;
     }
 
     @Builder

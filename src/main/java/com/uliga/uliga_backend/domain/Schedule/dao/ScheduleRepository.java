@@ -1,5 +1,6 @@
 package com.uliga.uliga_backend.domain.Schedule.dao;
 
+import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleAnalyzeQ;
 import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleInfoQ;
 import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleMemberInfoQ;
 import com.uliga.uliga_backend.domain.Schedule.model.Schedule;
@@ -53,4 +54,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<ScheduleMemberInfoQ> findScheduleMemberInfoById(@Param("id") Long id);
 
     void deleteById(Long id);
+
+    @Query("SELECT NEW com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleAnalyzeQ(s.name, s.notificationDate, sm.value) FROM Schedule s JOIN ScheduleMember sm ON s.id = sm.schedule.id WHERE s.accountBook.id=:id AND sm.member.id = :memberId ")
+    List<ScheduleAnalyzeQ> findScheduleAnalyzeByAccountBookId(@Param("accountBookId") Long accountBookId, @Param("memberId") Long memberId);
 }
