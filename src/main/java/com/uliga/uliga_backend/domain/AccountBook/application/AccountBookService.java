@@ -3,6 +3,7 @@ package com.uliga.uliga_backend.domain.AccountBook.application;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.DailyValueQ;
 import com.uliga.uliga_backend.domain.AccountBookData.dao.AccountBookDataMapper;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
@@ -41,6 +42,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
@@ -515,5 +517,32 @@ public class AccountBookService {
             accountBook.setRelationShip(request.getRelationship());
         }
         return request;
+    }
+
+    @Transactional
+    public AccountBookDailyRecord getAccountBookDailyRecord(Long id, Long year, Long month) {
+        List<DailyValueQ> monthlyRecord = accountBookRepository.getMonthlyRecord(id, year, month);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Math.toIntExact(year), Math.toIntExact(month) - 1, 1);
+        int actualMaximum = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        int index = 0;
+        List<DailyValueQ> result = new ArrayList<>();
+        for (int i = 1; i <= actualMaximum; i++) {
+            if (index < monthlyRecord.size()) {
+                if (monthlyRecord.get(index).getDay().equals((long) i)) {
+                    result.add(monthlyRecord.get(index));
+                    index += 1;
+                } else {
+                    result.add(DailyValueQ.builder().day((long) i).value(0L).build());
+
+                }
+            } else {
+                result.add(DailyValueQ.builder().day((long) i).value(0L).build());
+
+            }
+        }
+        log.info(String.valueOf(actualMaximum));
+        return AccountBookDailyRecord.builder().records(result).build();
     }
 }

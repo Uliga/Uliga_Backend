@@ -320,6 +320,13 @@ public class AccountBookController {
     }
 
 
+    @Operation(summary = "가계부 분석용 날짜별 수입 조회 API")
+    @GetMapping(value = "/{id}/analyze/{year}/{month}")
+    public ResponseEntity<AccountBookDailyRecord> getAccountBookDailyValues(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
+
+        log.info("가계부 분석 - 날짜별 지출 조회 API 호출");
+        return ResponseEntity.ok(accountBookService.getAccountBookDailyRecord(id, year, month));
+    }
 
 
 }
