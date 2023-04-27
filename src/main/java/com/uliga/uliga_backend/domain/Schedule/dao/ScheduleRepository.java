@@ -55,6 +55,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
     void deleteById(Long id);
 
-    @Query("SELECT NEW com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleAnalyzeQ(s.name, s.notificationDate, sm.value) FROM Schedule s JOIN ScheduleMember sm ON s.id = sm.schedule.id WHERE s.accountBook.id=:id AND sm.member.id = :memberId ")
+    @Query("SELECT NEW com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleAnalyzeQ(s.name, s.notificationDate, sm.value) FROM Schedule s JOIN ScheduleMember sm ON s.id = sm.schedule.id WHERE s.accountBook.id=:accountBookId AND sm.member.id = :memberId AND sm.value > 0")
     List<ScheduleAnalyzeQ> findScheduleAnalyzeByAccountBookId(@Param("accountBookId") Long accountBookId, @Param("memberId") Long memberId);
 }

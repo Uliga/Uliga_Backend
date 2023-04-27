@@ -95,7 +95,7 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long>{
     @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategoryAnalyzeQ(c.id, c.name, SUM(r.value)) FROM Category c JOIN Record r ON r.category.id = c.id WHERE c.accountBook.id = :id  AND r.date.year = :year AND r.date.month=:month group by c order by SUM(r.value) DESC LIMIT 5")
     List<AccountBookCategoryAnalyzeQ> findAccountBookCategoryAnalyze(@Param("id") Long id, @Param("year") Long year, @Param("month") Long month);
 
-    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ(SUM(sm.value)) FROM Schedule s JOIN ScheduleMember sm ON sm.schedule.id = s.id WHERE s.accountBook.id=:accountBookId AND sm.member.id=:memberId")
+    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ(SUM(sm.value)) FROM Schedule s JOIN ScheduleMember sm ON sm.schedule.id = s.id WHERE s.accountBook.id=:accountBookId AND sm.member.id=:memberId AND sm.value > 0")
     MonthlySumQ getMonthlyScheduleValue(@Param("accountBookId") Long accountBookId, @Param("memberId") Long memberId);
 
 }
