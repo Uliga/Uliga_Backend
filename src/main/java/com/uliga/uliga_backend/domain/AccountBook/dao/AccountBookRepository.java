@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 
@@ -135,4 +136,13 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long>{
             "GROUP BY r.date.month " +
             "ORDER BY r.date.year*366 + r.date.month - :year*366 - :month DESC LIMIT 2")
     List<MonthlyCompareQ> getMonthlyCompareInDailyAnalyze(@Param("accountBookId") Long accountBookId, @Param("year") Long year, @Param("month") Long month);
+    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.WeeklySumQ(SUM(r.value)) " +
+            "FROM Record r " +
+            "WHERE r.accountBook.id=:accountBookId " +
+            "AND r.date.year = :year " +
+            "AND r.date.month = :month " +
+            "AND :startDay <= r.date.day " +
+            "AND r.date.day < :endDay " +
+            "GROUP BY r.date.month")
+    WeeklySumQ getWeeklyRecordSum(@Param("accountBookId") Long accountBookId, @Param("year") Long year, @Param("month") Long month, @Param("startDay") Long startDay, @Param("endDay") Long endDay);
 }

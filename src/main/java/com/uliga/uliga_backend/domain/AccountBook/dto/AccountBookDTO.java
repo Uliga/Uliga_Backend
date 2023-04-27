@@ -309,6 +309,27 @@ public class AccountBookDTO {
         private Long diff;
     }
 
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class WeeklySum {
+        private Long startDay;
+        private Long endDay;
+        private Long value;
+    }
+
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AccountBookWeeklyRecord {
+        private List<WeeklySum> weeklySums;
+        private Long sum;
+    }
+
     @Builder
     @Getter
     @NoArgsConstructor

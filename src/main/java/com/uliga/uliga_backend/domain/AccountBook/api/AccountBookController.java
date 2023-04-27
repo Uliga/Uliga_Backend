@@ -382,4 +382,12 @@ public class AccountBookController {
         log.info("가계부 분석 - 예산과 비교 API 호출");
         return ResponseEntity.ok(accountBookService.getBudgetCompare(id, year, month));
     }
+
+    @Operation(summary = "가계부 분석용 주차별 지출 금액 조회")
+    @GetMapping(value = "/{id}/analyze/weekly/{year}/{month}/{startDay}")
+    public ResponseEntity<AccountBookWeeklyRecord> getAccountBookWeeklyCompare(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month, @PathVariable("startDay") Long startDay) {
+
+        log.info("가계부 분석 - 주차별 지출 금액 조회 API 호출");
+        return ResponseEntity.ok(accountBookService.getAccountBookWeeklyRecord(id, year, month, startDay));
+    }
 }

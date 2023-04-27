@@ -603,4 +603,17 @@ public class AccountBookService {
 
         return BudgetCompare.builder().spend(spend).budget(budgets).diff(budgets - spend).build();
     }
+
+    @Transactional
+    public AccountBookWeeklyRecord getAccountBookWeeklyRecord(Long accountBookId, Long year, Long month, Long startDay) {
+        Long totalSum = 0L;
+        List<WeeklySum> result = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            WeeklySumQ weeklyRecordSum = accountBookRepository.getWeeklyRecordSum(accountBookId, year, month, startDay + i * 7, startDay + (i + 1) * 7);
+            WeeklySum weeklySum = WeeklySum.builder().startDay(startDay + i * 7).endDay(startDay + (i + 1) * 7 - 1).value(weeklyRecordSum.getValue()).build();
+            result.add(weeklySum);
+            totalSum += weeklyRecordSum.getValue();
+        }
+        return AccountBookWeeklyRecord.builder().weeklySums(result).sum(totalSum).build();
+    }
 }
