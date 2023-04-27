@@ -548,4 +548,14 @@ public class AccountBookDTO {
         private List<MonthlyCompareQ> compare;
 
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class BudgetCompare {
+        private Long budget;
+        private Long spend;
+        private Long diff;
+    }
 }

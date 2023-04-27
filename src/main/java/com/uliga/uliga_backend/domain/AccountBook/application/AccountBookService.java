@@ -575,4 +575,12 @@ public class AccountBookService {
     public MonthlyCompare getAccountBookMonthlyCompare(Long accountBookId, Long year, Long month) {
         return MonthlyCompare.builder().compare(accountBookRepository.getMonthlyCompare(accountBookId, year, month)).build();
     }
+
+    @Transactional
+    public BudgetCompare getBudgetCompare(Long accountBookId, Long year, Long month) {
+        Long spend = recordRepository.getMonthlySumByAccountBookId(accountBookId, year, month).getValue();
+        Long budgets = budgetRepository.getMonthlySumByAccountBookId(accountBookId, year, month).getValue();
+
+        return BudgetCompare.builder().spend(spend).budget(budgets).diff(budgets - spend).build();
+    }
 }

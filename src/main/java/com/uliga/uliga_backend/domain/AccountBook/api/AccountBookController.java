@@ -366,4 +366,12 @@ public class AccountBookController {
         log.info("가계부 분석 - 월별 비교 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookMonthlyCompare(id, year, month));
     }
+
+    @Operation(summary = "가계부 분석용 예산과 비교용 API")
+    @GetMapping(value = "/{id}/analyze/budget/{year}/{month}")
+    public ResponseEntity<BudgetCompare> getAccountBookBudgetCompare(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
+
+        log.info("가계부 분석 - 예산과 비교 API 호출");
+        return ResponseEntity.ok(accountBookService.getBudgetCompare(id, year, month));
+    }
 }
