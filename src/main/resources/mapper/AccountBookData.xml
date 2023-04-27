@@ -27,6 +27,9 @@
         <if test="day != null">
             AND abd.day = ${day}
         </if>
+        <if test="type !=null">
+            AND abd.type = #{type}
+        </if>
         ORDER BY abd.year * 365 + abd.month * 31 + abd.day desc
         <choose>
             <when test="pageSize != null and offset != null">

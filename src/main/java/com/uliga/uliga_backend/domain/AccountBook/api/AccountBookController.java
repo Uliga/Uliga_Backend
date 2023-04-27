@@ -367,6 +367,14 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.getAccountBookMonthlyCompare(id, year, month));
     }
 
+    @Operation(summary = "가계부 분석용 한달 지출 조회 API")
+    @GetMapping(value = "/{id}/analyze/month/{year}/{month}")
+    public ResponseEntity<Page<AccountBookDataQ>> getAccountBookMonthlyRecord(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month, Pageable pageable) {
+
+        log.info("가계부 분석 - 월별 지출 조회 API 호출");
+        return ResponseEntity.ok(accountBookService.getAccountBookMonthlyRecord(id, year, month, pageable));
+    }
+
     @Operation(summary = "가계부 분석용 예산과 비교용 API")
     @GetMapping(value = "/{id}/analyze/budget/{year}/{month}")
     public ResponseEntity<BudgetCompare> getAccountBookBudgetCompare(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {

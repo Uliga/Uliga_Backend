@@ -577,6 +577,21 @@ public class AccountBookService {
     }
 
     @Transactional
+    public Page<AccountBookDataQ> getAccountBookMonthlyRecord(Long accountBookId, Long year, Long month, Pageable pageable) {
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("accountBookId", accountBookId);
+        map.put("year", year);
+        map.put("month", month);
+        map.put("offset", pageable.getOffset());
+        map.put("pageSize", pageable.getPageSize());
+        map.put("type", "RECORD");
+        List<AccountBookDataQ> accountBookData = accountBookDataMapper.findAccountBookData(map);
+        List<Long> counted = accountBookDataMapper.countQueryForAccountBookHistory(map);
+        return new PageImpl<>(accountBookData, pageable, counted.size());
+    }
+
+    @Transactional
     public BudgetCompare getBudgetCompare(Long accountBookId, Long year, Long month) {
         Long spend = recordRepository.getMonthlySumByAccountBookId(accountBookId, year, month).getValue();
         Long budgets = budgetRepository.getMonthlySumByAccountBookId(accountBookId, year, month).getValue();
