@@ -345,11 +345,25 @@ public class AccountBookController {
     }
 
     @Operation(summary = "가계부 분석용 한달 고정지출 조회용 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountScheduleAnalyze.class)))
+    })
     @GetMapping(value = "/{id}/analyze/schedule")
     public ResponseEntity<AccountScheduleAnalyze> getAccountBookScheduleAnalyze(@PathVariable("id") Long id) {
 
         log.info("가계부 분석 - 고정 지출 조회 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.getAccountBookScheduleAnalyze(id, currentMemberId));
+    }
+
+    @Operation(summary = "가계부 분석용 지난달과 분석용 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = MonthlyCompare.class)))
+    })
+    @GetMapping(value = "/{id}/analyze/compare/{year}/{month}")
+    public ResponseEntity<MonthlyCompare> getAccountBookMonthlyCompare(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
+
+        log.info("가계부 분석 - 월별 비교 API 호출");
+        return ResponseEntity.ok(accountBookService.getAccountBookMonthlyCompare(id, year, month));
     }
 }

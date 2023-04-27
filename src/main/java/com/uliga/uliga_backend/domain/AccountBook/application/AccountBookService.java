@@ -570,4 +570,9 @@ public class AccountBookService {
     public AccountScheduleAnalyze getAccountBookScheduleAnalyze(Long accountBookId, Long memberId) {
         return AccountScheduleAnalyze.builder().schedules(scheduleService.findAnalyze(accountBookId, memberId)).sum(accountBookRepository.getMonthlyScheduleValue(accountBookId, memberId).getValue()).build();
     }
+
+    @Transactional
+    public MonthlyCompare getAccountBookMonthlyCompare(Long accountBookId, Long year, Long month) {
+        return MonthlyCompare.builder().compare(accountBookRepository.getMonthlyCompare(accountBookId, year, month)).build();
+    }
 }

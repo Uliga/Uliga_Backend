@@ -539,4 +539,13 @@ public class AccountBookDTO {
         @Schema(description = "변경할 아바타")
         private String avatarUrl;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MonthlyCompare {
+        private List<MonthlyCompareQ> compare;
+
+    }
 }
