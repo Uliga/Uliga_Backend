@@ -608,7 +608,7 @@ public class AccountBookService {
 
             log.info(String.valueOf(calendar.get(Calendar.YEAR)));
             log.info(String.valueOf(calendar.get(Calendar.MONTH)));
-            Optional<MonthlyCompareQ> monthly = accountBookRepository.getMonthlyCompare(accountBookId, year, month);
+            Optional<MonthlyCompareQ> monthly = accountBookRepository.getMonthlyCompare(accountBookId, year, month - i);
             if (monthly.isPresent()) {
                 monthlyCompare.add(monthly.get());
             } else {
