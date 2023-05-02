@@ -121,10 +121,10 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long>{
             "SUM(r.value)) " +
             "FROM Record r " +
             "WHERE r.accountBook.id = :accountBookId " +
-            "AND -3L < r.date.year*12L + r.date.month - :year*12L - :month " +
-            "AND r.date.year*12L + r.date.month - :year*12L - :month <= 0L  " +
+            "AND -3L < r.date.year * 12L + r.date.month - :year * 12L - :month " +
+            "AND r.date.year * 12L + r.date.month - :year * 12L - :month <= 0L  " +
             "GROUP BY r.date.month " +
-            "ORDER BY r.date.year*12L + r.date.month - :year*12L - :month DESC LIMIT 3")
+            "ORDER BY r.date.year * 12L + r.date.month - :year * 12L - :month DESC LIMIT 3")
     List<MonthlyCompareQ> getMonthlyCompare(@Param("accountBookId") Long accountBookId, @Param("year") Long year, @Param("month") Long month);
 
     @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlyCompareQ(" +
@@ -133,10 +133,10 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long>{
             "SUM(r.value)) " +
             "FROM Record r " +
             "WHERE r.accountBook.id = :accountBookId " +
-            "AND -2L <  r.date.year * 12L + r.date.month - :year*12L - :month * 12L" +
-            "AND r.date.year*12L + r.date.month - :year*12L - :month <= 0L  " +
+            "AND -2L <  r.date.year * 12L + r.date.month - :year * 12L - :month " +
+            "AND r.date.year * 12L + r.date.month - :year * 12L - :month <= 0L  " +
             "GROUP BY r.date.month " +
-            "ORDER BY r.date.year*12L + r.date.month - :year*12L - :month DESC LIMIT 2")
+            "ORDER BY r.date.year * 12L + r.date.month - :year * 12L - :month DESC LIMIT 2")
     List<MonthlyCompareQ> getMonthlyCompareInDailyAnalyze(@Param("accountBookId") Long accountBookId, @Param("year") Long year, @Param("month") Long month);
     @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.WeeklySumQ(SUM(r.value)) " +
             "FROM Record r " +
