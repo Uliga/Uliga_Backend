@@ -41,6 +41,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -595,7 +596,24 @@ public class AccountBookService {
 
     @Transactional
     public MonthlyCompare getAccountBookMonthlyCompare(Long accountBookId, Long year, Long month) {
-        List<MonthlyCompareQ> monthlyCompare = accountBookRepository.getMonthlyCompare(accountBookId, year, month);
+        List<MonthlyCompareQ> monthlyCompare = new ArrayList<>();
+
+        Calendar calendar = Calendar.getInstance();
+        for (int i = 0; i < 3; i++) {
+            calendar.set(Math.toIntExact(year), month.intValue() - i, 1);
+
+            log.info(String.valueOf(calendar.get(Calendar.YEAR)));
+            log.info(String.valueOf(calendar.get(Calendar.MONTH)));
+            Optional<MonthlyCompareQ> monthly = accountBookRepository.getMonthlyCompare(accountBookId, year, month);
+            if (monthly.isPresent()) {
+                monthlyCompare.add(monthly.get());
+            } else {
+                MonthlyCompareQ build = MonthlyCompareQ.builder().year((long) calendar.get(Calendar.YEAR)).month((long) calendar.get(Calendar.MONTH)).value(0L).build();
+                monthlyCompare.add(build);
+            }
+        }
+
+
 
         return MonthlyCompare.builder().compare(monthlyCompare).build();
     }

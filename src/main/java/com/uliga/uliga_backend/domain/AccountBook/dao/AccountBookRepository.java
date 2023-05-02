@@ -122,11 +122,9 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long>{
             "SUM(r.value)) " +
             "FROM Record r " +
             "WHERE r.accountBook.id = :accountBookId " +
-            "AND -3L < r.date.year * 12L + r.date.month - :year * 12L - :month " +
-            "AND r.date.year * 12L + r.date.month - :year * 12L - :month <= 0L  " +
-            "GROUP BY r.date.month " +
-            "ORDER BY r.date.year * 12L + r.date.month - :year * 12L - :month DESC LIMIT 3")
-    List<MonthlyCompareQ> getMonthlyCompare(@Param("accountBookId") Long accountBookId, @Param("year") Long year, @Param("month") Long month);
+            "AND r.date.year = :year AND r.date.month = :month " +
+            "GROUP BY r.date.month ")
+    Optional<MonthlyCompareQ> getMonthlyCompare(@Param("accountBookId") Long accountBookId, @Param("year") Long year, @Param("month") Long month);
 
     @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlyCompareQ(" +
             "r.date.year, " +
