@@ -384,10 +384,14 @@ public class AccountBookService {
 
     @Transactional
     public GetAccountBookAssets getAccountBookAssets(Long id, Long year, Long month) {
+        MonthlySumQ budget = budgetRepository.getMonthlySumByAccountBookId(id, year, month).orElse(new MonthlySumQ(0L));
+        MonthlySumQ record = recordRepository.getMonthlySumByAccountBookId(id, year, month).orElse(new MonthlySumQ(0L));
+        MonthlySumQ income = incomeRepository.getMonthlySumByAccountBookId(id, year, month).orElse(new MonthlySumQ(0L));
+
         return GetAccountBookAssets.builder()
-                .budget(budgetRepository.getMonthlySumByAccountBookId(id, year, month).get())
-                .income(incomeRepository.getMonthlySumByAccountBookId(id, year, month))
-                .record(recordRepository.getMonthlySumByAccountBookId(id, year, month).get())
+                .budget(budget)
+                .income(income)
+                .record(record)
                 .build();
     }
 

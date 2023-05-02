@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IncomeRepository extends JpaRepository<Income, Long> {
 
@@ -45,7 +46,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
             "WHERE i.date.month=:month " +
             "AND ab.id=:id " +
             "AND i.date.year = :year GROUP BY ab.id")
-    MonthlySumQ getMonthlySumByAccountBookId(@Param("id") Long id, @Param("year") Long year, @Param("month") Long month);
+    Optional<MonthlySumQ> getMonthlySumByAccountBookId(@Param("id") Long id, @Param("year") Long year, @Param("month") Long month);
 
     @Query("select new com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ(" +
             "i.id," +
