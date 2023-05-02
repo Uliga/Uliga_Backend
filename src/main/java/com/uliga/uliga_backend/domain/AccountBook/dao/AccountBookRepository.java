@@ -121,9 +121,10 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long>{
             "SUM(r.value)) " +
             "FROM Record r " +
             "WHERE r.accountBook.id = :accountBookId " +
-            "AND r.date.year*366 + r.date.month - :year*366 - :month <= 0  " +
+            "AND -3 < r.date.year*12 + r.date.month - :year*12 - :month " +
+            "AND r.date.year*12 + r.date.month - :year*12 - :month <= 0  " +
             "GROUP BY r.date.month " +
-            "ORDER BY r.date.year*366 + r.date.month - :year*366 - :month DESC LIMIT 3")
+            "ORDER BY r.date.year*12 + r.date.month - :year*12 - :month DESC LIMIT 3")
     List<MonthlyCompareQ> getMonthlyCompare(@Param("accountBookId") Long accountBookId, @Param("year") Long year, @Param("month") Long month);
 
     @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlyCompareQ(" +
@@ -132,9 +133,10 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long>{
             "SUM(r.value)) " +
             "FROM Record r " +
             "WHERE r.accountBook.id = :accountBookId " +
-            "AND r.date.year*366 + r.date.month - :year*366 - :month <= 0  " +
+            "AND -2 <  r.date.year * 12 + r.date.month - :year*12 - :month * 12" +
+            "AND r.date.year*12 + r.date.month - :year*12 - :month <= 0  " +
             "GROUP BY r.date.month " +
-            "ORDER BY r.date.year*366 + r.date.month - :year*366 - :month DESC LIMIT 2")
+            "ORDER BY r.date.year*12 + r.date.month - :year*12 - :month DESC LIMIT 2")
     List<MonthlyCompareQ> getMonthlyCompareInDailyAnalyze(@Param("accountBookId") Long accountBookId, @Param("year") Long year, @Param("month") Long month);
     @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.WeeklySumQ(SUM(r.value)) " +
             "FROM Record r " +
