@@ -686,19 +686,6 @@ public class AccountBookService {
             startDay += 7;
 
         }
-        for (int i = 0; i < 4; i++) {
-            Optional<WeeklySumQ> weeklyRecordSum = accountBookRepository.getWeeklyRecordSum(accountBookId, year, month, startDay + i * 7, startDay + (i + 1) * 7);
-            if (weeklyRecordSum.isPresent()) {
-                WeeklySumQ weeklySumQ = weeklyRecordSum.get();
-                WeeklySum weeklySum = WeeklySum.builder().startDay(startDay + i * 7).endDay(startDay + (i + 1) * 7 - 1).value(weeklySumQ.getValue()).build();
-                result.add(weeklySum);
-                totalSum += weeklySum.getValue();
-            } else {
-                WeeklySum weeklySum = WeeklySum.builder().startDay(startDay + i * 7).endDay(startDay + (i + 1) * 7 - 1).value(0L).build();
-                result.add(weeklySum);
-            }
-
-        }
         return AccountBookWeeklyRecord.builder().weeklySums(result).sum(totalSum).build();
     }
 }
