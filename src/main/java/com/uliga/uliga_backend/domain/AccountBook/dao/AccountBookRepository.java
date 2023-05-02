@@ -56,7 +56,7 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long>{
             "c.id," +
             "c.name)" +
             "FROM " +
-            "AccountBook ab JOIN Category c on c.accountBook.id = ab.id WHERE ab.id = :id LIMIT 5")
+            "AccountBook ab JOIN Category c on c.accountBook.id = ab.id WHERE ab.id = :id ORDER BY c.name LIMIT 5")
     List<AccountBookCategoryInfoQ> findAccountBookCategoryAnalyze(@Param("id") Long id);
 
 
