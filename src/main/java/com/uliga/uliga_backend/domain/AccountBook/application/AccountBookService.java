@@ -620,7 +620,7 @@ public class AccountBookService {
             MonthlySumQ record = recordSum.get();
             return BudgetCompare.builder().spend(record.getValue()).budget(0L).diff(-record.getValue()).build();
         } else {
-            return BudgetCompare.builder().build();
+            return BudgetCompare.builder().spend(0L).budget(0L).diff(0L).build();
         }
     }
 
@@ -629,10 +629,17 @@ public class AccountBookService {
         Long totalSum = 0L;
         List<WeeklySum> result = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            WeeklySumQ weeklyRecordSum = accountBookRepository.getWeeklyRecordSum(accountBookId, year, month, startDay + i * 7, startDay + (i + 1) * 7);
-            WeeklySum weeklySum = WeeklySum.builder().startDay(startDay + i * 7).endDay(startDay + (i + 1) * 7 - 1).value(weeklyRecordSum.getValue()).build();
-            result.add(weeklySum);
-            totalSum += weeklyRecordSum.getValue();
+            Optional<WeeklySumQ> weeklyRecordSum = accountBookRepository.getWeeklyRecordSum(accountBookId, year, month, startDay + i * 7, startDay + (i + 1) * 7);
+            if (weeklyRecordSum.isPresent()) {
+                WeeklySumQ weeklySumQ = weeklyRecordSum.get();
+                WeeklySum weeklySum = WeeklySum.builder().startDay(startDay + i * 7).endDay(startDay + (i + 1) * 7 - 1).value(weeklySumQ.getValue()).build();
+                result.add(weeklySum);
+                totalSum += weeklySum.getValue();
+            } else {
+                WeeklySum weeklySum = WeeklySum.builder().startDay(startDay + i * 7).endDay(startDay + (i + 1) * 7 - 1).value(0L).build();
+                result.add(weeklySum);
+            }
+
         }
         return AccountBookWeeklyRecord.builder().weeklySums(result).sum(totalSum).build();
     }

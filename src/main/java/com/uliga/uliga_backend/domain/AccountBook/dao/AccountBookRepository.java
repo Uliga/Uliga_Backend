@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.parameters.P;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AccountBookRepository extends JpaRepository<AccountBook, Long>{
 
@@ -146,5 +147,5 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long>{
             "AND :startDay <= r.date.day " +
             "AND r.date.day < :endDay " +
             "GROUP BY r.date.month")
-    WeeklySumQ getWeeklyRecordSum(@Param("accountBookId") Long accountBookId, @Param("year") Long year, @Param("month") Long month, @Param("startDay") Long startDay, @Param("endDay") Long endDay);
+    Optional<WeeklySumQ> getWeeklyRecordSum(@Param("accountBookId") Long accountBookId, @Param("year") Long year, @Param("month") Long month, @Param("startDay") Long startDay, @Param("endDay") Long endDay);
 }
