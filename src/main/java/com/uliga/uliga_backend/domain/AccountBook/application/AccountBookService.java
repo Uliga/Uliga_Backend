@@ -384,9 +384,9 @@ public class AccountBookService {
     @Transactional
     public GetAccountBookAssets getAccountBookAssets(Long id, Long year, Long month) {
         return GetAccountBookAssets.builder()
-                .budget(budgetRepository.getMonthlySumByAccountBookId(id, year, month))
+                .budget(budgetRepository.getMonthlySumByAccountBookId(id, year, month).get())
                 .income(incomeRepository.getMonthlySumByAccountBookId(id, year, month))
-                .record(recordRepository.getMonthlySumByAccountBookId(id, year, month))
+                .record(recordRepository.getMonthlySumByAccountBookId(id, year, month).get())
                 .build();
     }
 
@@ -560,7 +560,7 @@ public class AccountBookService {
     @Transactional
     public AccountBookCategoryAnalyze getAccountBookCategoryAnalyze(Long id, Long year, Long month) {
         List<AccountBookCategoryAnalyzeQ> categoryAnalyze = accountBookRepository.findAccountBookCategoryAnalyze(id, year, month);
-        MonthlySumQ monthlySumQ = recordRepository.getMonthlySumByAccountBookId(id, year, month);
+        MonthlySumQ monthlySumQ = recordRepository.getMonthlySumByAccountBookId(id, year, month).get();
         Long compare = 0L;
         for (AccountBookCategoryAnalyzeQ analyzeQ : categoryAnalyze) {
             compare += analyzeQ.getValue();
@@ -606,10 +606,22 @@ public class AccountBookService {
 
     @Transactional
     public BudgetCompare getBudgetCompare(Long accountBookId, Long year, Long month) {
-        Long spend = recordRepository.getMonthlySumByAccountBookId(accountBookId, year, month).getValue();
-        Long budgets = budgetRepository.getMonthlySumByAccountBookId(accountBookId, year, month).getValue();
 
-        return BudgetCompare.builder().spend(spend).budget(budgets).diff(budgets - spend).build();
+        Optional<MonthlySumQ> recordSum = recordRepository.getMonthlySumByAccountBookId(accountBookId, year, month);
+        Optional<MonthlySumQ> budgetSum = budgetRepository.getMonthlySumByAccountBookId(accountBookId, year, month);
+        if (recordSum.isPresent() && budgetSum.isPresent()) {
+            MonthlySumQ record = recordSum.get();
+            MonthlySumQ budget = budgetSum.get();
+            return BudgetCompare.builder().spend(record.getValue()).budget(budget.getValue()).diff(budget.getValue() - record.getValue()).build();
+        } else if (budgetSum.isPresent()) {
+            MonthlySumQ budget = budgetSum.get();
+            return BudgetCompare.builder().spend(0L).budget(budget.getValue()).diff(budget.getValue()).build();
+        } else if (recordSum.isPresent()) {
+            MonthlySumQ record = recordSum.get();
+            return BudgetCompare.builder().spend(record.getValue()).budget(0L).diff(-record.getValue()).build();
+        } else {
+            return BudgetCompare.builder().build();
+        }
     }
 
     @Transactional

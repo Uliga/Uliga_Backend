@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RecordRepository extends JpaRepository<Record, Long> {
     @Query(
@@ -62,7 +63,7 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
             "WHERE ab.id=:id " +
             "AND r.date.month=:month " +
             "AND r.date.year = :year GROUP BY ab.id")
-    MonthlySumQ getMonthlySumByAccountBookId(@Param("id") Long id,@Param("year") Long year, @Param("month") Long month);
+    Optional<MonthlySumQ> getMonthlySumByAccountBookId(@Param("id") Long id, @Param("year") Long year, @Param("month") Long month);
     @Modifying
     @Query(nativeQuery = true, value = "DELETE FROM record where account_book_data_id = :id")
     void deleteByAccountBookDataIdNativeQ(@Param("id") Long id);

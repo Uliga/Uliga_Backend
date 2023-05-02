@@ -18,7 +18,7 @@ public interface BudgetRepository extends JpaRepository<Budget, Long> {
             "AND b.month=:month " +
             "AND b.year = :year " +
             "GROUP BY ab.id")
-    MonthlySumQ getMonthlySumByAccountBookId(@Param("id") Long id, @Param("year") Long year, @Param("month") Long month);
+    Optional<MonthlySumQ> getMonthlySumByAccountBookId(@Param("id") Long id, @Param("year") Long year, @Param("month") Long month);
 
     boolean existsBudgetByAccountBookIdAndYearAndMonth(Long accountBookId, Long year, Long month);
 
