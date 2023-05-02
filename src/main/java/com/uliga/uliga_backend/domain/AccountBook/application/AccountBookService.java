@@ -588,7 +588,7 @@ public class AccountBookService {
     }
 
     @Transactional
-    public Page<AccountBookDataQ> getAccountBookMonthlyRecord(Long accountBookId, Long year, Long month, Pageable pageable) {
+    public Page<AccountBookDataQ> getAccountBookMonthlyRecord(Long accountBookId, Long year, Long month, Pageable pageable, String category) {
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("accountBookId", accountBookId);
@@ -597,8 +597,10 @@ public class AccountBookService {
         map.put("offset", pageable.getOffset());
         map.put("pageSize", pageable.getPageSize());
         map.put("type", "RECORD");
-        List<AccountBookDataQ> accountBookData = accountBookDataMapper.findAccountBookData(map);
-        List<Long> counted = accountBookDataMapper.countQueryForAccountBookHistory(map);
+        map.put("category", category);
+
+        List<AccountBookDataQ> accountBookData = accountBookDataMapper.findAccountBookDataAnalyze(map);
+        List<Long> counted = accountBookDataMapper.countQueryForAccountBookDataAnalyze(map);
         return new PageImpl<>(accountBookData, pageable, counted.size());
     }
 
