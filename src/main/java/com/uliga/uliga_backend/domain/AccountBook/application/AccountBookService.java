@@ -580,7 +580,7 @@ public class AccountBookService {
                 return AccountBookCategoryAnalyze.builder().categories(categoryAnalyze).sum(monthlySumQ.getValue()).build();
             }
         } else {
-            List<AccountBookCategoryInfoQ> accountBookCategoryInfoById = accountBookRepository.findAccountBookCategoryInfoById(id);
+            List<AccountBookCategoryInfoQ> accountBookCategoryInfoById = accountBookRepository.findAccountBookCategoryAnalyze(id);
             List<AccountBookCategoryAnalyzeQ> result = new ArrayList<>();
             for (AccountBookCategoryInfoQ accountBookCategoryInfoQ : accountBookCategoryInfoById) {
                 AccountBookCategoryAnalyzeQ built = AccountBookCategoryAnalyzeQ.builder().id(accountBookCategoryInfoQ.getId()).name(accountBookCategoryInfoQ.getLabel()).value(0L).build();
@@ -603,7 +603,7 @@ public class AccountBookService {
         List<MonthlyCompareQ> monthlyCompare = new ArrayList<>();
 
         Calendar calendar = Calendar.getInstance();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 2; i > -1; i--) {
             calendar.set(Math.toIntExact(year), month.intValue() - i, 1);
 
             log.info(String.valueOf(calendar.get(Calendar.YEAR)));

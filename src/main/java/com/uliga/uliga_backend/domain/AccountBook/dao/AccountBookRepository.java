@@ -50,6 +50,16 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long>{
             "FROM " +
             "AccountBook ab JOIN Category c on c.accountBook.id = ab.id WHERE ab.id = :id")
     List<AccountBookCategoryInfoQ> findAccountBookCategoryInfoById(@Param("id") Long id);
+
+
+    @Query("select new com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategoryInfoQ(" +
+            "c.id," +
+            "c.name)" +
+            "FROM " +
+            "AccountBook ab JOIN Category c on c.accountBook.id = ab.id WHERE ab.id = :id LIMIT 5")
+    List<AccountBookCategoryInfoQ> findAccountBookCategoryAnalyze(@Param("id") Long id);
+
+
     @Query("SELECT ab " +
             "FROM AccountBook ab " +
             "JOIN AccountBookMember abm ON abm.accountBook.id = ab.id " +
