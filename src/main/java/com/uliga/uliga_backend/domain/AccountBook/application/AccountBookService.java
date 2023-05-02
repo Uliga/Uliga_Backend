@@ -575,7 +575,14 @@ public class AccountBookService {
                 return AccountBookCategoryAnalyze.builder().categories(categoryAnalyze).sum(monthlySumQ.getValue()).build();
             }
         } else {
-            return AccountBookCategoryAnalyze.builder().categories(categoryAnalyze).sum(0L).build();
+            List<AccountBookCategoryInfoQ> accountBookCategoryInfoById = accountBookRepository.findAccountBookCategoryInfoById(id);
+            List<AccountBookCategoryAnalyzeQ> result = new ArrayList<>();
+            for (AccountBookCategoryInfoQ accountBookCategoryInfoQ : accountBookCategoryInfoById) {
+                AccountBookCategoryAnalyzeQ built = AccountBookCategoryAnalyzeQ.builder().id(accountBookCategoryInfoQ.getId()).name(accountBookCategoryInfoQ.getLabel()).value(0L).build();
+                result.add(built);
+
+            }
+            return AccountBookCategoryAnalyze.builder().categories(result).sum(0L).build();
         }
 
 
