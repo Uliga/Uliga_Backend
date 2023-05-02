@@ -663,6 +663,29 @@ public class AccountBookService {
     public AccountBookWeeklyRecord getAccountBookWeeklyRecord(Long accountBookId, Long year, Long month, Long startDay) {
         Long totalSum = 0L;
         List<WeeklySum> result = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Math.toIntExact(year), Math.toIntExact(month) - 1, 1);
+        int actualMaximum = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        while (startDay <= actualMaximum) {
+            Optional<WeeklySumQ> weeklyRecordSum = accountBookRepository.getWeeklyRecordSum(accountBookId, year, month, startDay, startDay + 7);
+            long endDay;
+            if (startDay + 6 <= actualMaximum) {
+                endDay = startDay + 6;
+            } else {
+                endDay = (long) actualMaximum;
+            }
+            if (weeklyRecordSum.isPresent()) {
+                WeeklySumQ weeklySumQ = weeklyRecordSum.get();
+                WeeklySum weeklySum = WeeklySum.builder().startDay(startDay ).endDay(endDay).value(weeklySumQ.getValue()).build();
+                result.add(weeklySum);
+                totalSum += weeklySum.getValue();
+            } else {
+                WeeklySum weeklySum = WeeklySum.builder().startDay(startDay).endDay(endDay).value(0L).build();
+                result.add(weeklySum);
+            }
+            startDay += 7;
+
+        }
         for (int i = 0; i < 4; i++) {
             Optional<WeeklySumQ> weeklyRecordSum = accountBookRepository.getWeeklyRecordSum(accountBookId, year, month, startDay + i * 7, startDay + (i + 1) * 7);
             if (weeklyRecordSum.isPresent()) {
