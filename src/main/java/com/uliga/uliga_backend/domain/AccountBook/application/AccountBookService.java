@@ -560,18 +560,24 @@ public class AccountBookService {
     @Transactional
     public AccountBookCategoryAnalyze getAccountBookCategoryAnalyze(Long id, Long year, Long month) {
         List<AccountBookCategoryAnalyzeQ> categoryAnalyze = accountBookRepository.findAccountBookCategoryAnalyze(id, year, month);
-        MonthlySumQ monthlySumQ = recordRepository.getMonthlySumByAccountBookId(id, year, month).get();
-        Long compare = 0L;
-        for (AccountBookCategoryAnalyzeQ analyzeQ : categoryAnalyze) {
-            compare += analyzeQ.getValue();
-        }
-        if (compare.equals(monthlySumQ.getValue())) {
-            return AccountBookCategoryAnalyze.builder().categories(categoryAnalyze).sum(monthlySumQ.getValue()).build();
+        Optional<MonthlySumQ> monthlySum = recordRepository.getMonthlySumByAccountBookId(id, year, month);
+        if (monthlySum.isPresent()) {
+            MonthlySumQ monthlySumQ = monthlySum.get();
+            Long compare = 0L;
+            for (AccountBookCategoryAnalyzeQ analyzeQ : categoryAnalyze) {
+                compare += analyzeQ.getValue();
+            }
+            if (compare.equals(monthlySumQ.getValue())) {
+                return AccountBookCategoryAnalyze.builder().categories(categoryAnalyze).sum(monthlySumQ.getValue()).build();
+            } else {
+                AccountBookCategoryAnalyzeQ built = AccountBookCategoryAnalyzeQ.builder().name("그 외").value(monthlySumQ.getValue() - compare).build();
+                categoryAnalyze.add(built);
+                return AccountBookCategoryAnalyze.builder().categories(categoryAnalyze).sum(monthlySumQ.getValue()).build();
+            }
         } else {
-            AccountBookCategoryAnalyzeQ built = AccountBookCategoryAnalyzeQ.builder().name("그 외").value(monthlySumQ.getValue() - compare).build();
-            categoryAnalyze.add(built);
-            return AccountBookCategoryAnalyze.builder().categories(categoryAnalyze).sum(monthlySumQ.getValue()).build();
+            return AccountBookCategoryAnalyze.builder().categories(categoryAnalyze).sum(0L).build();
         }
+
 
     }
 
