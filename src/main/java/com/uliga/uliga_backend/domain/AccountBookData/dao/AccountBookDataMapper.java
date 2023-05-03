@@ -12,6 +12,10 @@ public interface AccountBookDataMapper {
 
     List<AccountBookDataQ> findAccountBookDataAnalyze(HashMap<String, Object> map);
 
+    List<AccountBookDataQ> findExtraAccountBookDataAnalyze(HashMap<String, Object> map);
+
+    List<Long> countQueryForExtraAccountBookDataAnalyze(HashMap<String, Object> map);
+
     List<Long> countQueryForAccountBookDataAnalyze(HashMap<String, Object> map);
 
     List<AccountBookDataQ> findAccountBookDataOrderByValue(HashMap<String, Object> map);
