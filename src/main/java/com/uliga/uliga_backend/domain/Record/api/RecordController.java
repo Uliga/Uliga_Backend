@@ -43,7 +43,7 @@ public class RecordController {
     @PatchMapping(value = "")
     public ResponseEntity<RecordUpdateRequest> updateRecord(@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "지출 업데이트 요청", content = @Content(schema = @Schema(implementation = RecordUpdateRequest.class)))
                                                             @RequestBody Map<String, Object> updates) {
-        log.info("지출 업데이트 API 호출");
+
         return ResponseEntity.ok(recordService.updateRecord(updates));
     }
 
@@ -54,7 +54,7 @@ public class RecordController {
     })
     @GetMapping(value = "")
     public ResponseEntity<Page<RecordInfoQ>> getMemberRecords(Pageable pageable) {
-        log.info("멤버 지출 전체 조회 API 호출");
+
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(recordService.getMemberRecords(currentMemberId, pageable));
 
@@ -68,7 +68,7 @@ public class RecordController {
     })
     @GetMapping(value = "/{id}")
     public ResponseEntity<RecordInfoDetail> getRecordInfoDetail(@Parameter(name = "id", description = "지출 아이디", in = PATH) @PathVariable("id") Long id) {
-        log.info("지출 상세 내력 조회 API 호출");
+
         return ResponseEntity.ok(recordService.getRecordInfoDetail(id));
     }
 
@@ -82,7 +82,7 @@ public class RecordController {
                                                                            @RequestParam(name = "categoryId", required = false) Long categoryId,
                                                                            @RequestParam(name = "year", required = false) Long year,
                                                                            @RequestParam(name = "month", required = false) Long month, Pageable pageable) {
-        log.info("멤버 가계부별 지출 전체 조회 API 호출");
+
         return ResponseEntity.ok(recordService.getMemberRecordsByAccountBook(id, categoryId, year, month, pageable));
     }
 

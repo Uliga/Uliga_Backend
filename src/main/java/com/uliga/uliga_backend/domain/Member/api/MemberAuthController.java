@@ -44,7 +44,6 @@ public class MemberAuthController {
     @PostMapping(value = "/signup")
     public ResponseEntity<SignUpResult> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
 
-        log.info("회원 가입 요청 API 호출");
         authService.signUp(signUpRequest);
         return ResponseEntity.ok(SignUpResult.builder().result("CREATED").build());
     }
@@ -57,7 +56,6 @@ public class MemberAuthController {
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<LoginResult> loginJson(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response, HttpServletRequest request) {
 
-        log.info("로그인 요청 API 호출 - json");
         return ResponseEntity.ok(authService.login(loginRequest, response, request));
     }
 
@@ -65,7 +63,6 @@ public class MemberAuthController {
     @GetMapping(value = "/social_login")
     public ResponseEntity<String> oAuthLogin() {
 
-        log.info("OAuth 로그인 성공");
         return ResponseEntity.ok("로그인성공");
     }
 
@@ -74,7 +71,6 @@ public class MemberAuthController {
     public ResponseEntity<LoginResult> loginForm
             (LoginRequest loginRequest, HttpServletResponse response, HttpServletRequest request) {
 
-        log.info("로그인 요청 API 호출 - form");
         return ResponseEntity.ok(authService.login(loginRequest, response, request));
     }
 
@@ -96,7 +92,6 @@ public class MemberAuthController {
     @PostMapping(value = "/reissue")
     public ResponseEntity<TokenIssueDTO> reissue(@RequestBody ReissueRequest reissueRequest) {
 
-        log.info("토큰 재발급 요청 API 호출");
         return ResponseEntity.ok(authService.reissue(reissueRequest));
     }
 
@@ -108,7 +103,6 @@ public class MemberAuthController {
     @PostMapping(value = "/mail", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EmailSentDto> mailConfirmJson(@Valid @RequestBody ConfirmEmailDto confirmEmailDto) throws Exception {
 
-        log.info("이메일 인증 요청 API 호출 - json");
         emailCertificationService.sendSimpleMessage(confirmEmailDto.getEmail());
         return ResponseEntity.ok(EmailSentDto.builder().email(confirmEmailDto.getEmail()).success(true).build());
     }
@@ -116,7 +110,6 @@ public class MemberAuthController {
     @PostMapping(value = "/mail", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<EmailSentDto> mailConfirmForm(ConfirmEmailDto confirmEmailDto) throws Exception {
 
-        log.info("이메일 인증 요청 API 호출 - form");
         emailCertificationService.sendSimpleMessage(confirmEmailDto.getEmail());
         return ResponseEntity.ok(EmailSentDto.builder().email(confirmEmailDto.getEmail()).success(true).build());
     }
@@ -132,7 +125,6 @@ public class MemberAuthController {
     @PostMapping(value = "/mail/code", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CodeConfirmDto> codeConfirmJson(@Valid @RequestBody EmailConfirmCodeDto emailConfirmCodeDto) {
 
-        log.info("코드 인증 요청 API 호출");
         return ResponseEntity.ok(emailCertificationService.confirmCode(emailConfirmCodeDto));
 
     }
@@ -140,7 +132,6 @@ public class MemberAuthController {
     @PostMapping(value = "/mail/code", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<CodeConfirmDto> codeConfirmForm(@RequestBody EmailConfirmCodeDto emailConfirmCodeDto) {
 
-        log.info("코드 인증 요청 API 호출");
         return ResponseEntity.ok(emailCertificationService.confirmCode(emailConfirmCodeDto));
 
     }
@@ -158,7 +149,6 @@ public class MemberAuthController {
     public ResponseEntity<ExistsCheckDto> emailExists(@Parameter(name = "email", description = "중복 확인 하려는 이메일", in = ParameterIn.PATH)
                                                       @PathVariable("email") String email) {
 
-        log.info("이메일 중복 확인 API 호출");
         return ResponseEntity.ok(authService.emailExists(email));
     }
 
@@ -173,7 +163,7 @@ public class MemberAuthController {
     @GetMapping(value = "/nickname/exists/{nickname}")
     public ResponseEntity<ExistsCheckDto> nicknameExists(@Parameter(name = "nickname", description = "중복 확인하려는 닉네임", in = ParameterIn.PATH)
                                                          @PathVariable("nickname") String nickname) {
-        log.info("닉네임 중복 확인 API 호출");
+
         return ResponseEntity.ok(authService.nicknameExists(nickname));
     }
 

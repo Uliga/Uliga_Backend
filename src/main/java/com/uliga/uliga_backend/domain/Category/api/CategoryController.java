@@ -26,7 +26,6 @@ public class CategoryController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCategory(@Parameter(name = "id", description = "카테고리 아이디", in = ParameterIn.PATH) @PathVariable("id") Long id) {
 
-        log.info("카테고리 삭제 api 호출");
         categoryService.deleteCategory(id);
         return ResponseEntity.ok("DELETED");
     }
@@ -35,7 +34,6 @@ public class CategoryController {
     @PatchMapping("/{id}")
     public ResponseEntity<CategoryUpdateRequest> updateCategory(@PathVariable("id") Long id, @RequestBody Map<String, Object> map) {
 
-        log.info("카테고리 업데이트 api 호출");
         return ResponseEntity.ok(categoryService.updateCategory(id, map));
     }
 }

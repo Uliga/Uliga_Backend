@@ -41,7 +41,6 @@ public class ScheduleController {
     @GetMapping(value = "")
     public ResponseEntity<GetMemberSchedules> getAccountBookSchedules() {
 
-        log.info("멤버 금융 일정 조회 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(scheduleService.getMemberSchedule(currentMemberId));
     }
@@ -54,7 +53,6 @@ public class ScheduleController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<ScheduleDetail> getScheduleDetail(@Parameter(name = "id", description = "금융일정 아이디", in = PATH)@PathVariable("id") Long id) {
 
-        log.info("금융 일정 세부 내용 조회 API 호출");
         return ResponseEntity.ok(scheduleService.getScheduleDetails(id));
     }
 
@@ -65,6 +63,7 @@ public class ScheduleController {
     })
     @PatchMapping(value = "")
     public ResponseEntity<ScheduleDTO.UpdateScheduleRequest> updateSchedule(@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "금융일정 업데이트 요청", content = @Content(schema = @Schema(implementation = ScheduleDTO.UpdateScheduleRequest.class))) @RequestBody Map<String, Object> updates) {
+
         return ResponseEntity.ok(scheduleService.updateSchedule(updates));
     }
 

@@ -633,9 +633,6 @@ public class AccountBookService {
         map.put("type", "RECORD");
         if (Objects.equals(category, "그 외")) {
             List<String> extraAccountBookCategory = accountBookRepository.findExtraAccountBookCategory(accountBookId, year, month);
-            for (String s : extraAccountBookCategory) {
-                log.info(s);
-            }
             if (extraAccountBookCategory.size() == 0) {
 
                 extraAccountBookCategory.add("기타");

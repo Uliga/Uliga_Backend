@@ -45,7 +45,6 @@ public class AccountBookController {
     @GetMapping(value = "")
     public ResponseEntity<GetAccountBookInfos> getMemberAccountBook() {
 
-        log.info("멤버 가계부 조회 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.getMemberAccountBook(id));
     }
@@ -58,7 +57,7 @@ public class AccountBookController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<AccountBookInfo> getSingleAccountBookInfo(@Parameter(name = "id", description = "가계부 아이디", in = PATH)
                                                                     @PathVariable("id") Long id) {
-        log.info("가계부 아이디로 조회 API 호출");
+
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.getSingleAccountBookInfo(id, memberId));
     }
@@ -85,7 +84,6 @@ public class AccountBookController {
     @PostMapping(value = "")
     public ResponseEntity<SimpleAccountBookInfo> createAccountBook(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "가계부 생성 요청") @RequestBody AccountBookCreateRequest accountBookCreateRequest) throws JsonProcessingException {
 
-        log.info("가계부 생성 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.createAccountBook(id, accountBookCreateRequest));
     }
@@ -99,7 +97,6 @@ public class AccountBookController {
     @PostMapping(value = "/invitation")
     public ResponseEntity<Invited> createInvitation(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "초대 생성 요청") @RequestBody GetInvitations invitations) throws JsonProcessingException {
 
-        log.info("멤버 초대 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.createInvitation(id, invitations));
     }
@@ -112,7 +109,6 @@ public class AccountBookController {
     @PostMapping(value = "/invitation/reply")
     public ResponseEntity<InvitationReplyResult> invitationReply(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "초대 응답 요청") @RequestBody InvitationReply invitationReply) throws JsonProcessingException {
 
-        log.info("초대 응답 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.invitationReply(id, invitationReply));
     }
@@ -127,7 +123,6 @@ public class AccountBookController {
                                                                             @Parameter(name = "year", description = "년도", in = PATH) @PathVariable("year") Long year,
                                                                             @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month) {
 
-        log.info("한달 가계부 수입/지출 조회 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookItems(id, year, month));
     }
 
@@ -143,7 +138,6 @@ public class AccountBookController {
                                                                                  @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month,
                                                                                  @Parameter(name = "day", description = "하루", in = PATH) @PathVariable("day") Long day) {
 
-        log.info("하루 수입/지출 내역 상세 조회");
         return ResponseEntity.ok(accountBookService.getAccountBookItemDetails(id, year, month, day));
     }
 
@@ -151,7 +145,6 @@ public class AccountBookController {
     @DeleteMapping(value = "/item")
     public ResponseEntity<String> deleteAccountBookItems(@Valid @RequestBody DeleteItemRequest deleteItemRequest) {
 
-        log.info("가계부 내역 삭제 API 호출");
         accountBookService.deleteAccountBookItems(deleteItemRequest);
         return ResponseEntity.ok("DELETED");
     }
@@ -166,7 +159,6 @@ public class AccountBookController {
                                                                      @Parameter(name = "year", description = "년도", in = PATH) @PathVariable("year") Long year,
                                                                      @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month) {
 
-        log.info("한달 가계부 지출/수입/예산 총합 조회 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookAssets(id, year, month));
     }
 
@@ -178,7 +170,6 @@ public class AccountBookController {
     @PostMapping(value = "/item")
     public ResponseEntity<CreateResult> createItems(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "수입/지출 생성 요청") @RequestBody CreateItems items) {
 
-        log.info("지출 혹은 수입 생성 API 호출");
         Long id = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.createItems(id, items));
     }
@@ -191,7 +182,6 @@ public class AccountBookController {
     @PostMapping(value = "/category")
     public ResponseEntity<CategoryCreateResult> createCategories(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "카테고리 생성 요청") @RequestBody CategoryCreateRequest createRequest) {
 
-        log.info("가계부에 카테고리 추가 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.createCategory(currentMemberId, createRequest));
     }
@@ -204,7 +194,6 @@ public class AccountBookController {
     @PostMapping(value = "/record")
     public ResponseEntity<AddRecordResult> addRecord(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "지출 한개 생성 요청") @RequestBody AddRecordRequest request) {
 
-        log.info("가계부에 지출 한개 추가 api 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.addRecord(currentMemberId, request));
     }
@@ -217,7 +206,6 @@ public class AccountBookController {
     @PostMapping(value = "/income")
     public ResponseEntity<AddIncomeResult> addIncome(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "수입 한개 생성 요청") @RequestBody AddIncomeRequest request) {
 
-        log.info("가계부에 수입 한개 추가 api 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.addIncome(currentMemberId, request));
     }
@@ -230,7 +218,6 @@ public class AccountBookController {
     @GetMapping(value = "/{id}/category")
     public ResponseEntity<AccountBookCategories> getAccountBookCategory(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id) {
 
-        log.info("가계부 카테고리 조회 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookCategories(id));
     }
 
@@ -242,7 +229,6 @@ public class AccountBookController {
     @GetMapping(value = "/{id}/member")
     public ResponseEntity<AccountBookMembers> getAccountBookMembers(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id) {
 
-        log.info("가계부 멤버 조회 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookMembers(id));
     }
 
@@ -257,7 +243,6 @@ public class AccountBookController {
             content = @Content(schema = @Schema(implementation = CreateBudgetDto.class)))
                                                  @RequestBody Map<String, Object> createBudgetDto) {
 
-        log.info("가계부 예산 추가 API 호출");
         return ResponseEntity.ok(accountBookService.addBudget(createBudgetDto));
     }
 
@@ -315,9 +300,7 @@ public class AccountBookController {
                                                                         @RequestParam(value = "year", required = false) Long year,
                                                                         @RequestParam(value = "month", required = false) Long month,
                                                                         Pageable pageable) {
-        // TODO 날짜랑 생성한 사람 아바타 URL 필요함
 
-        log.info("가계부 내역 조회 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookHistory(id, categoryId, year, month, pageable));
     }
 
@@ -329,7 +312,6 @@ public class AccountBookController {
     @GetMapping(value = "/{id}/analyze/{year}/{month}")
     public ResponseEntity<AccountBookDailyRecord> getAccountBookDailyValues(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
 
-        log.info("가계부 분석 - 날짜별 지출 조회 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookDailyRecord(id, year, month));
     }
 
@@ -340,7 +322,6 @@ public class AccountBookController {
     @GetMapping(value = "/{id}/analyze/category/{year}/{month}")
     public ResponseEntity<AccountBookCategoryAnalyze> getAccountBookCategoryAnalyze(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
 
-        log.info("가계부 분석 - 카테고리별 지출 조회 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookCategoryAnalyze(id, year, month));
     }
 
@@ -351,7 +332,6 @@ public class AccountBookController {
     @GetMapping(value = "/{id}/analyze/schedule")
     public ResponseEntity<AccountScheduleAnalyze> getAccountBookScheduleAnalyze(@PathVariable("id") Long id) {
 
-        log.info("가계부 분석 - 고정 지출 조회 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.getAccountBookScheduleAnalyze(id, currentMemberId));
     }
@@ -363,7 +343,6 @@ public class AccountBookController {
     @GetMapping(value = "/{id}/analyze/compare/{year}/{month}")
     public ResponseEntity<MonthlyCompare> getAccountBookMonthlyCompare(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
 
-        log.info("가계부 분석 - 월별 비교 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookMonthlyCompare(id, year, month));
     }
 
@@ -371,7 +350,6 @@ public class AccountBookController {
     @GetMapping(value = "/{id}/analyze/month/{year}/{month}")
     public ResponseEntity<Page<AccountBookDataQ>> getAccountBookMonthlyRecord(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month, @RequestParam(value = "category", required = false, defaultValue = "") String category, Pageable pageable) {
 
-        log.info("가계부 분석 - 월별 지출 조회 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookMonthlyRecord(id, year, month, pageable, category));
     }
 
@@ -379,7 +357,6 @@ public class AccountBookController {
     @GetMapping(value = "/{id}/analyze/budget/{year}/{month}")
     public ResponseEntity<BudgetCompare> getAccountBookBudgetCompare(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
 
-        log.info("가계부 분석 - 예산과 비교 API 호출");
         return ResponseEntity.ok(accountBookService.getBudgetCompare(id, year, month));
     }
 
@@ -387,7 +364,6 @@ public class AccountBookController {
     @GetMapping(value = "/{id}/analyze/weekly/{year}/{month}/{startDay}")
     public ResponseEntity<AccountBookWeeklyRecord> getAccountBookWeeklyCompare(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month, @PathVariable("startDay") Long startDay) {
 
-        log.info("가계부 분석 - 주차별 지출 금액 조회 API 호출");
         return ResponseEntity.ok(accountBookService.getAccountBookWeeklyRecord(id, year, month, startDay));
     }
 }

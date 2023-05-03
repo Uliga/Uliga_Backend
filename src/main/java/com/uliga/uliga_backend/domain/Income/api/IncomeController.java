@@ -39,7 +39,7 @@ public class IncomeController {
     })
     @PatchMapping(value = "")
     public ResponseEntity<IncomeUpdateRequest> updateIncome(@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "수입 업데이트 요청", content = @Content(schema = @Schema(implementation = IncomeUpdateRequest.class))) @RequestBody Map<String, Object> updates) {
-        log.info("수입 업데이트 API 호출");
+
         return ResponseEntity.ok(incomeService.updateIncome(updates));
     }
 
@@ -50,7 +50,7 @@ public class IncomeController {
     })
     @GetMapping("")
     public ResponseEntity<Page<IncomeInfoQ>> getMemberIncomes(Pageable pageable) {
-        log.info("멤버 수입 전체 조회 API 호출");
+
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(incomeService.getMemberIncomes(currentMemberId, pageable));
     }
@@ -65,7 +65,7 @@ public class IncomeController {
                                                                            @RequestParam(name = "categoryId", required = false) Long categoryId,
                                                                            @RequestParam(name = "year", required = false) Long year,
                                                                            @RequestParam(name = "month", required = false) Long month, Pageable pageable) {
-        log.info("멤버 수입 가계부별 전체 조회 API 호출");
+
         return ResponseEntity.ok(incomeService.getMemberIncomesByAccountBook(id, categoryId, year, month, pageable));
     }
 
