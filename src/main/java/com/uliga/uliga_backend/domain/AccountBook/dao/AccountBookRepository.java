@@ -117,15 +117,15 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long>{
             "order by SUM(r.value) DESC LIMIT 5")
     List<AccountBookCategoryAnalyzeQ> findAccountBookCategoryAnalyze(@Param("id") Long id, @Param("year") Long year, @Param("month") Long month);
 
-    @Query("SELECT " +
+    @Query(value = "SELECT " +
             "c.name " +
-            "FROM Category c " +
-            "JOIN Record r ON r.category.id = c.id " +
-            "WHERE c.accountBook.id = :id " +
-            "AND r.date.year = :year " +
-            "AND r.date.month = :month " +
-            "group by c " +
-            "order by SUM(r.value) OFFSET 6")
+            "FROM category c " +
+            "JOIN account_book_data r ON r.category_id = c.category_id " +
+            "WHERE c.account_book_id = :id " +
+            "AND r.year = :year " +
+            "AND r.month = :month " +
+            "group by r.category_id " +
+            "order by SUM(r.value) DESC LIMIT 5, 100", nativeQuery = true)
     List<String> findExtraAccountBookCategory(@Param("id") Long id, @Param("year") Long year, @Param("month") Long month);
 
     @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ(" +
