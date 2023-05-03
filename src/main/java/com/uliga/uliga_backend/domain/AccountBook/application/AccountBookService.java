@@ -633,8 +633,13 @@ public class AccountBookService {
         map.put("type", "RECORD");
         if (Objects.equals(category, "그외")) {
             List<String> extraAccountBookCategory = accountBookRepository.findExtraAccountBookCategory(accountBookId, year, month);
+            if (extraAccountBookCategory.size() == 0) {
 
+                extraAccountBookCategory.add("기타");
+            }
             map.put("category", extraAccountBookCategory);
+
+
 
             List<AccountBookDataQ> accountBookData = accountBookDataMapper.findExtraAccountBookDataAnalyze(map);
             List<Long> counted = accountBookDataMapper.countQueryForExtraAccountBookDataAnalyze(map);
