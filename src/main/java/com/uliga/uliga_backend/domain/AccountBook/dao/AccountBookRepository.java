@@ -125,7 +125,7 @@ public interface AccountBookRepository extends JpaRepository<AccountBook, Long>{
             "AND r.date.year = :year " +
             "AND r.date.month = :month " +
             "group by c " +
-            "order by SUM(r.value) OFFSET 5")
+            "order by SUM(r.value) OFFSET 6")
     List<String> findExtraAccountBookCategory(@Param("id") Long id, @Param("year") Long year, @Param("month") Long month);
 
     @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ(" +
