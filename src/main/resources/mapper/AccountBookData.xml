@@ -158,7 +158,7 @@
         </if>
         <if test="category != null">
             AND c.name in (
-                <foreach collection="list" item="item" separator=",">
+                <foreach collection="category" item="item" separator=",">
                     #{item}
                 </foreach>
             )
@@ -195,7 +195,7 @@
         </if>
         <if test="category != null">
             AND c.name in (
-            <foreach collection="list" item="item" separator=",">
+            <foreach collection="category" item="item" separator=",">
                 #{item}
             </foreach>
             )
