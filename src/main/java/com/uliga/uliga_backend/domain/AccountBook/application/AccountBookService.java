@@ -631,7 +631,7 @@ public class AccountBookService {
         map.put("offset", pageable.getOffset());
         map.put("pageSize", pageable.getPageSize());
         map.put("type", "RECORD");
-        if (Objects.equals(category, "그외")) {
+        if (Objects.equals(category, "그 외")) {
             List<String> extraAccountBookCategory = accountBookRepository.findExtraAccountBookCategory(accountBookId, year, month);
             if (extraAccountBookCategory.size() == 0) {
 
