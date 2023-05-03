@@ -157,7 +157,11 @@
             AND abd.month = ${month}
         </if>
         <if test="category != null">
-            AND c.name in ${category}
+            AND c.name in (
+                <foreach collection="list" item="item" separator=",">
+                    #{item}
+                </foreach>
+            )
         </if>
         ORDER BY abd.year * 365 + abd.month * 31 + abd.day desc
         <choose>
@@ -190,7 +194,11 @@
             AND abd.month = ${month}
         </if>
         <if test="category != null">
-            AND c.name in ${category}
+            AND c.name in (
+            <foreach collection="list" item="item" separator=",">
+                #{item}
+            </foreach>
+            )
         </if>
     </select>
 </mapper>
