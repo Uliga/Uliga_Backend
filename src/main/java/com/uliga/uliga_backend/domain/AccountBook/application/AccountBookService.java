@@ -636,8 +636,8 @@ public class AccountBookService {
 
             map.put("category", extraAccountBookCategory);
 
-            List<AccountBookDataQ> accountBookData = accountBookDataMapper.findAccountBookDataAnalyze(map);
-            List<Long> counted = accountBookDataMapper.countQueryForAccountBookDataAnalyze(map);
+            List<AccountBookDataQ> accountBookData = accountBookDataMapper.findExtraAccountBookDataAnalyze(map);
+            List<Long> counted = accountBookDataMapper.countQueryForExtraAccountBookDataAnalyze(map);
             return new PageImpl<>(accountBookData, pageable, counted.size());
 
 
