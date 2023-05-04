@@ -4,12 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.*;
-import com.uliga.uliga_backend.domain.AccountBookData.dao.AccountBookDataMapper;
-import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ;
 import com.uliga.uliga_backend.domain.AccountBook.exception.*;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
+import com.uliga.uliga_backend.domain.AccountBookData.dao.AccountBookDataMapper;
 import com.uliga.uliga_backend.domain.AccountBookData.dao.AccountBookDataRepository;
+import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ;
 import com.uliga.uliga_backend.domain.Budget.application.BudgetService;
 import com.uliga.uliga_backend.domain.Budget.dao.BudgetRepository;
 import com.uliga.uliga_backend.domain.Budget.dto.NativeQ.BudgetInfoQ;
@@ -41,8 +41,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
 
 import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
@@ -80,6 +78,12 @@ public class AccountBookService {
                     "기타")
     );
 
+    /**
+     * 가계부 정보 조회
+     * @param id 가계부 아이디
+     * @param memberId 멤버 아이디
+     * @return 가계부 정보
+     */
     @Transactional
     public AccountBookInfo getSingleAccountBookInfo(Long id, Long memberId) {
         AccountBookInfoQ bookInfoById = accountBookRepository.findAccountBookInfoById(id, memberId);
@@ -93,6 +97,11 @@ public class AccountBookService {
                 .categories(accountBookRepository.findAccountBookCategoryInfoById(id)).build();
     }
 
+    /**
+     * 멤버 가계부 조회
+     * @param id 멤버 아이디
+     * @return 멤버 가계부 정보 리스트
+     */
     @Transactional
     public GetAccountBookInfos getMemberAccountBook(Long id) {
         List<AccountBookInfo> result = new ArrayList<>();
@@ -109,6 +118,12 @@ public class AccountBookService {
                 .accountBooks(result).build();
     }
 
+    /**
+     * 멤버 개인 가계부 생성
+     * @param member 멤버
+     * @param createRequest 가계부 생성 요청
+     * @return 멤버 개인 가계부
+     */
     @Transactional
     public AccountBook createAccountBookPrivate(Member member, CreateRequestPrivate createRequest) {
         AccountBook accountBook = createRequest.toEntity();
@@ -131,6 +146,13 @@ public class AccountBookService {
         return accountBook;
     }
 
+    /**
+     * 가계부 생성 요청
+     * @param id 멤버 아이디
+     * @param accountBookCreateRequest 가계부 생성 요청
+     * @return 생성한 가계부 정보
+     * @throws JsonProcessingException Json 처리 예외
+     */
     @Transactional
     public SimpleAccountBookInfo createAccountBook(Long id, AccountBookCreateRequest accountBookCreateRequest) throws JsonProcessingException {
 
@@ -166,6 +188,13 @@ public class AccountBookService {
         return accountBook.toInfoDto();
     }
 
+    /**
+     * 멤버 초대
+     * @param id 초대자 ID
+     * @param invitations 초대하려는 사람들
+     * @return 초대된 사람들 수
+     * @throws JsonProcessingException Json 처리 예외
+     */
     @Transactional
     public Invited createInvitation(Long id, GetInvitations invitations) throws JsonProcessingException {
         Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
@@ -189,6 +218,13 @@ public class AccountBookService {
         return Invited.builder().invited(result).build();
     }
 
+    /**
+     * 초대에 대한 응답
+     * @param id 응답자 아이디
+     * @param invitationReply 초대에 대한 응답
+     * @return 응답 결과
+     * @throws JsonProcessingException Json 처리 예외
+     */
     @Transactional
     public InvitationReplyResult invitationReply(Long id, InvitationReply invitationReply) throws JsonProcessingException {
         Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
@@ -218,6 +254,12 @@ public class AccountBookService {
 
     }
 
+    /**
+     * 가계부에 수입/지출 추가
+     * @param id 생성하려는 멤버 아이디
+     * @param createItems 생성하려는 데이터들
+     * @return 생성 결과
+     */
     @Transactional
     public CreateResult createItems(Long id, CreateItems createItems) {
         long r = 0L;
@@ -322,19 +364,34 @@ public class AccountBookService {
                 .created(createResult).build();
     }
 
+    /**
+     * 가계부 카테고리 정보 조회
+     * @param id 가계부 아이디
+     * @return 가계부 카테고리 정보
+     */
     @Transactional
     public AccountBookCategories getAccountBookCategories(Long id) {
         return AccountBookCategories.builder()
                 .categories(accountBookRepository.findAccountBookCategoryInfoById(id)).build();
     }
 
+    /**
+     * 가계부 멤버 조회
+     * @param id 가계부 아이디
+     * @return 가계부 멤버 정보
+     */
     @Transactional
     public AccountBookMembers getAccountBookMembers(Long id) {
         return AccountBookMembers.builder()
                 .members(accountBookRepository.findAccountBookMemberInfoById(id)).build();
     }
 
-
+    /**
+     * 가계부에 카테고리 추가
+     * @param memberId 멤버 아이디
+     * @param createRequest 카테고리 생성 요청
+     * @return 카테고리 생성 요청 결과
+     */
     @Transactional
     public CategoryCreateResult createCategory(Long memberId, CategoryCreateRequest createRequest) {
         Long id = createRequest.getId();
@@ -354,6 +411,13 @@ public class AccountBookService {
                 .created(result).build();
     }
 
+    /**
+     * 가계부 해당 달 날짜별 수입/지출 총합 조회
+     * @param id 가계부 아이디
+     * @param year 년도
+     * @param month 월
+     * @return 해당 달 날짜별 수입/지출 총합
+     */
     @Transactional
     public AccountBookIncomesAndRecords getAccountBookItems(Long id, Long year, Long month) {
 
@@ -362,7 +426,14 @@ public class AccountBookService {
                 .records(accountBookRepository.getMonthlyRecord(id, year, month)).build();
     }
 
-
+    /**
+     * 가계부 기간 내 수입/지출 정보 조회
+     * @param id 가계부 아이디
+     * @param year 년도
+     * @param month 달
+     * @param day 날짜
+     * @return 수입&지출 정보 리스트
+     */
     @Transactional
     public RecordAndIncomeDetails getAccountBookItemDetails(Long id, Long year, Long month, Long day) {
         HashMap<String, Object> map = new HashMap<>();
@@ -376,12 +447,23 @@ public class AccountBookService {
                 .build();
     }
 
+    /**
+     * 가계부 수입/지출 삭제
+     * @param deleteItemRequest 아이템 삭제 요청
+     */
     @Transactional
     public void deleteAccountBookItems(DeleteItemRequest deleteItemRequest) {
 
         accountBookDataRepository.deleteAllById(deleteItemRequest.getDeleteIds());
     }
 
+    /**
+     * 가계부 예산, 지출, 수입 총합 조회
+     * @param id 가계부 아이디
+     * @param year 년도
+     * @param month 월
+     * @return 월별 예산, 지출, 수입 총합 조회
+     */
     @Transactional
     public GetAccountBookAssets getAccountBookAssets(Long id, Long year, Long month) {
         MonthlySumQ budget = budgetRepository.getMonthlySumByAccountBookId(id, year, month).orElse(new MonthlySumQ(0L));
@@ -395,7 +477,12 @@ public class AccountBookService {
                 .build();
     }
 
-
+    /**
+     * 가계부에 수입 추가
+     * @param memberId 멤버 아이디
+     * @param request 수입 추가 요청
+     * @return 추가 결과
+     */
     @Transactional
     public AddIncomeResult addIncome(Long memberId, AddIncomeRequest request) {
         AccountBook accountBook = accountBookRepository.findById(request.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
@@ -409,6 +496,12 @@ public class AccountBookService {
         return incomeService.addSingleIncomeToAccountBook(request, category, date, accountBook, member);
     }
 
+    /**
+     * 가계부에 지출 추가
+     * @param memberId 멤버 아이디
+     * @param request 지출 추가 요청
+     * @return 지출 추가 결과
+     */
     @Transactional
     public AddRecordResult addRecord(Long memberId, AddRecordRequest request) {
         AccountBook accountBook = accountBookRepository.findById(request.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
@@ -422,7 +515,11 @@ public class AccountBookService {
         return recordService.addSingleItemToAccountBook(request, category, date, accountBook, member);
     }
 
-
+    /**
+     * 가계부 예산 설정
+     * @param dto 생성 요청
+     * @return 예산 정보
+     */
     @Transactional
     public BudgetInfoQ addBudget(Map<String, Object> dto) {
         CreateBudgetDto createBudgetDto = objectMapper.convertValue(dto, CreateBudgetDto.class);
@@ -430,6 +527,13 @@ public class AccountBookService {
         return budgetService.addBudgetToAccountBook(createBudgetDto);
     }
 
+    /**
+     * 가계부 금융 일정 추가
+     * @param memberId 멤버 아이디
+     * @param addSchedules 추가할 일정들
+     * @return 추가 결과
+     * @throws JsonProcessingException Json 처리 예외
+     */
     @Transactional
     public AddScheduleResult addSchedule(Long memberId, AddSchedules addSchedules) throws JsonProcessingException {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
@@ -437,6 +541,12 @@ public class AccountBookService {
         return scheduleService.addSchedule(member, accountBook, addSchedules.getSchedules());
     }
 
+    /**
+     * 가계부 금융 일정 조회
+     * @param memberId 멤버 아이디
+     * @param accountBookId 가계부 아이디
+     * @return 가계부 금융 일정 조회
+     */
     @Transactional
     public GetAccountBookSchedules getAccountBookSchedules(Long memberId, Long accountBookId) {
         if (accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(memberId, accountBookId)) {
@@ -447,6 +557,12 @@ public class AccountBookService {
         }
     }
 
+    /**
+     * 가계부 삭제
+     * @param id 가계부 아이디
+     * @param memberId 멤버 아이디
+     * @return DELETED
+     */
     @Transactional
     public String deleteAccountBook(Long id, Long memberId) {
         AccountBook accountBook = accountBookRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
@@ -458,6 +574,15 @@ public class AccountBookService {
         return "DELETED";
     }
 
+    /**
+     * 가계부 내역 조회
+     * @param accountBookId 가계부 아이디
+     * @param categoryId 카테고리 아이디
+     * @param year 년도
+     * @param month 월
+     * @param pageable 페이징 정보
+     * @return 가계부 내역
+     */
     @Transactional
     public Page<AccountBookDataQ> getAccountBookHistory(Long accountBookId, Long categoryId, Long year, Long month, Pageable pageable) {
         HashMap<String, Object> map = new HashMap<>();
@@ -473,12 +598,23 @@ public class AccountBookService {
 
     }
 
-
+    /**
+     * 가계부 데이터 삭제
+     * @param dataDeleteRequest 삭제 요청
+     */
     @Transactional
-    public void deleteAccountBookData(Long memberId, AccountBookDataDeleteRequest dataDeleteRequest) {
+    public void deleteAccountBookData(AccountBookDataDeleteRequest dataDeleteRequest) {
         accountBookDataRepository.deleteAllById(dataDeleteRequest.getIds());
     }
 
+    /**
+     * 가계부 정보 업데이트 요청
+     * @param memberId 멤버 아이디
+     * @param accountBookId 가계부 아이디
+     * @param map 업데이트 요청
+     * @return 업데이트 결과
+     * @throws JsonProcessingException Json 처리 예외
+     */
     @Transactional
     public AccountBookUpdateRequest updateAccountBookInfo(Long memberId, Long accountBookId, Map<String, Object> map) throws JsonProcessingException {
         AccountBookUpdateRequest request = objectMapper.convertValue(map, AccountBookUpdateRequest.class);
@@ -523,6 +659,13 @@ public class AccountBookService {
         return request;
     }
 
+    /**
+     * 가계부 분석 - 날짜별 지출 총액 조회
+     * @param id 가계부 아이디
+     * @param year 년도
+     * @param month 달
+     * @return 날짜별 지출 총합
+     */
     @Transactional
     public AccountBookDailyRecord getAccountBookDailyRecord(Long id, Long year, Long month) {
         List<DailyValueQ> monthlyRecord = accountBookRepository.getMonthlyRecord(id, year, month);
@@ -562,6 +705,13 @@ public class AccountBookService {
 
     }
 
+    /**
+     * 가계부 분석 - 카테고리별 지출 총합 조회
+     * @param id 가계부 아이디
+     * @param year 년도
+     * @param month 달
+     * @return 분석 정보
+     */
     @Transactional
     public AccountBookCategoryAnalyze getAccountBookCategoryAnalyze(Long id, Long year, Long month) {
         List<AccountBookCategoryAnalyzeQ> categoryAnalyze = accountBookRepository.findAccountBookCategoryAnalyze(id, year, month);
@@ -593,11 +743,24 @@ public class AccountBookService {
 
     }
 
+    /**
+     * 가계부 분석 - 고정 지출 조회
+     * @param accountBookId 가계부 아이디
+     * @param memberId 멤버 아이디
+     * @return 고정 지출 분석 결과
+     */
     @Transactional
     public AccountScheduleAnalyze getAccountBookScheduleAnalyze(Long accountBookId, Long memberId) {
         return AccountScheduleAnalyze.builder().schedules(scheduleService.findAnalyze(accountBookId, memberId)).sum(accountBookRepository.getMonthlyScheduleValue(accountBookId, memberId).getValue()).build();
     }
 
+    /**
+     * 가계부 분석 - 전월 대비 지출 양 분석
+     * @param accountBookId 가계부 아이디
+     * @param year 년도
+     * @param month 달
+     * @return 비교 결과
+     */
     @Transactional
     public MonthlyCompare getAccountBookMonthlyCompare(Long accountBookId, Long year, Long month) {
         List<MonthlyCompareQ> monthlyCompare = new ArrayList<>();
@@ -622,6 +785,15 @@ public class AccountBookService {
         return MonthlyCompare.builder().compare(monthlyCompare).build();
     }
 
+    /**
+     * 가계부 분석 - 내역 조회
+     * @param accountBookId 가계부 아이디
+     * @param year 년도
+     * @param month 달
+     * @param pageable 페이징 정보
+     * @param category 카테고리
+     * @return 내역
+     */
     @Transactional
     public Page<AccountBookDataQ> getAccountBookMonthlyRecord(Long accountBookId, Long year, Long month, Pageable pageable, String category) {
         HashMap<String, Object> map = new HashMap<>();
@@ -657,6 +829,13 @@ public class AccountBookService {
 
     }
 
+    /**
+     * 가계부 분석 - 예산과 비교
+     * @param accountBookId 가계부 아이디
+     * @param year 년도
+     * @param month 달
+     * @return 비교 결과
+     */
     @Transactional
     public BudgetCompare getBudgetCompare(Long accountBookId, Long year, Long month) {
 
@@ -677,6 +856,14 @@ public class AccountBookService {
         }
     }
 
+    /**
+     * 가계부 분석 - 주차별 조회
+     * @param accountBookId 가계부 아이디
+     * @param year 년도
+     * @param month 달
+     * @param startDay 분석 시작 일
+     * @return 주차별 분석 결과
+     */
     @Transactional
     public AccountBookWeeklyRecord getAccountBookWeeklyRecord(Long accountBookId, Long year, Long month, Long startDay) {
         Long totalSum = 0L;
@@ -690,7 +877,7 @@ public class AccountBookService {
             if (startDay + 6 <= actualMaximum) {
                 endDay = startDay + 6;
             } else {
-                endDay = (long) actualMaximum;
+                endDay = actualMaximum;
             }
             if (weeklyRecordSum.isPresent()) {
                 WeeklySumQ weeklySumQ = weeklyRecordSum.get();

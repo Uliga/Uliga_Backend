@@ -286,7 +286,7 @@ public class AccountBookController {
     @DeleteMapping(value = "/data")
     public ResponseEntity<String> deleteAccountBookData(@Valid @RequestBody AccountBookDataDeleteRequest dataDeleteRequest) {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        accountBookService.deleteAccountBookData(currentMemberId, dataDeleteRequest);
+        accountBookService.deleteAccountBookData(dataDeleteRequest);
         return ResponseEntity.ok("DELETED");
     }
 
