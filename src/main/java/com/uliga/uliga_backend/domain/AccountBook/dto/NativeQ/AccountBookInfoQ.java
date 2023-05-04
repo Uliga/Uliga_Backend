@@ -21,14 +21,16 @@ public class AccountBookInfoQ {
     private String relationShip;
 
     private Boolean getNotification;
+    @Schema(description = "아바타 색상", defaultValue = "avatarUrl")
+    private String avatarUrl;
 
-
-    public AccountBookInfoQ(Long accountBookId, Boolean isPrivate, String accountBookName, AccountBookAuthority accountBookAuthority, Boolean getNotification, String relationShip) {
+    public AccountBookInfoQ(Long accountBookId, Boolean isPrivate, String accountBookName, AccountBookAuthority accountBookAuthority, Boolean getNotification, String relationShip, String avatarUrl) {
         this.accountBookId = accountBookId;
         this.isPrivate = isPrivate;
         this.accountBookName = accountBookName;
         this.accountBookAuthority = accountBookAuthority;
         this.getNotification = getNotification;
         this.relationShip = relationShip;
+        this.avatarUrl = avatarUrl;
     }
 }
