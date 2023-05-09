@@ -37,12 +37,24 @@ public class MemberService {
     private final RedisTemplate<String, Object> objectRedisTemplate;
     private final ObjectMapper objectMapper;
 
+    /**
+     * 멤버 개인 가계부 아이디 조회
+     * @param id 멤버 아이디
+     * @return 멤버 개인 가계부 아이디
+     */
     @Transactional
     public Long getMemberPrivateAccountBookId(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
         return member.getPrivateAccountBook().getId();
     }
 
+    /**
+     * 로그인한 멤버 정보 조회 메서드
+     * @param id 멤버 아이디
+     * @param pageable 페이징 정보
+     * @return 로그인한 멤버 정보
+     * @throws JsonProcessingException 레디스 관련 예외
+     */
     @Transactional
     public GetMemberInfo getCurrentMemberInfo(Long id, Pageable pageable) throws JsonProcessingException {
 
@@ -74,12 +86,24 @@ public class MemberService {
                 .notifications(notificationInfos).build();
     }
 
+    /**
+     * 애플리케이션 비밀번호 확인 메서드
+     * @param id 멤버 아이디
+     * @param passwordCheck 유저가 입력한 애플리케이션 비밀번호
+     * @return 비밀번호 일치 여부
+     */
     @Transactional
     public boolean checkApplicationPassword(Long id, ApplicationPasswordCheck passwordCheck) {
         Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
         return passwordEncoder.matches(passwordCheck.getApplicationPassword(), member.getApplicationPassword());
     }
 
+    /**
+     * 비밀번호 확인 메서드
+     * @param id 멤버 아이디
+     * @param passwordCheck 확인할 비밀번호
+     * @return 비밀번호 일치여부
+     */
     @Transactional
     public boolean checkPassword(Long id, PasswordCheck passwordCheck) {
         Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
@@ -87,6 +111,12 @@ public class MemberService {
 
     }
 
+    /**
+     * 닉네임 중복 여부 확인 메서드
+     * @param id 멤버 아이디
+     * @param nicknameCheckDto 중복 확인할 닉네임
+     * @return 중복 여부
+     */
     @Transactional
     public boolean nicknameExists(Long id, NicknameCheckDto nicknameCheckDto) {
         Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
@@ -97,6 +127,10 @@ public class MemberService {
         }
     }
 
+    /**
+     * 멤버 탈퇴 메서드
+     * @param id 멤버 아이디
+     */
     @Transactional
     public void deleteMember(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
@@ -114,6 +148,12 @@ public class MemberService {
 
     }
 
+    /**
+     * 이메일로 존재하는 멤버 검색 메서드
+     * @param accountBookId 가계부 아이디
+     * @param byEmail 찾을 이메일
+     * @return 이메일 검색 결과
+     */
     @Transactional
     public SearchEmailResult findMemberByEmail(Long accountBookId, SearchMemberByEmail byEmail) {
         Member member = memberRepository.findByEmailAndDeleted(byEmail.getEmail(), false).orElseThrow(UserNotFoundByEmail::new);
@@ -129,6 +169,12 @@ public class MemberService {
                 .userName(member.getUserName()).build();
     }
 
+    /**
+     * 멤버 정보 업데이트
+     * @param id 멤버 아이디
+     * @param updates 업데이트할 정보 map
+     * @return 업데이트 결과
+     */
     @Transactional
     public MemberInfoUpdateRequest updateMemberInfo(Long id, Map<String, Object> updates) {
         MemberInfoUpdateRequest memberInfoUpdateRequest = objectMapper.convertValue(updates, MemberInfoUpdateRequest.class);
@@ -147,6 +193,10 @@ public class MemberService {
         return memberInfoUpdateRequest;
     }
 
+    /**
+     * 멤버 알림 삭제 메서드
+     * @param id 멤버 아이디
+     */
     @Transactional
     public void deleteMemberNotification(Long id) {
         SetOperations<String, Object> setOperations = objectRedisTemplate.opsForSet();
@@ -158,6 +208,11 @@ public class MemberService {
         }
     }
 
+    /**
+     * 가계부 멤버 삭제 메서드
+     * @param accountBookId 가계부 아이디
+     * @param memberId 삭제하려는 멤버 아이디
+     */
     @Transactional
     public void deleteAccountBookMember(Long accountBookId, Long memberId) {
         accountBookMemberRepository.deleteAccountBookMemberByAccountBookIdAndMemberId(accountBookId, memberId);
