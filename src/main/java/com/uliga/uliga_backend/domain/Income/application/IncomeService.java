@@ -45,11 +45,24 @@ public class IncomeService {
     private final CategoryRepository categoryRepository;
     private final ObjectMapper objectMapper;
 
+    /**
+     * 다른 가계부에 수입 추가할때 쓰이는 메서드
+     * @param incomeList 수입 리스트
+     */
     @Transactional
     public void addIncomeToOtherAccountBooks(List<Income> incomeList) {
         incomeRepository.saveAll(incomeList);
     }
 
+    /**
+     * 다른 가계부에 추가할 수입 생성하는 메서드
+     * @param dto 수입 정보 DTO
+     * @param accountBook 추가할 가계부
+     * @param member 생성한 멤버
+     * @param date 수입의 날짜
+     * @param category 수입의 카테고리
+     * @return 생성된 수입
+     */
     @Transactional
     public CreateItemResult addItemToAccountBook(CreateRecordOrIncomeDto dto, AccountBook accountBook, Member member, Date date, Category category) {
         Income build = Income.builder()
@@ -77,7 +90,15 @@ public class IncomeService {
     }
 
 
-
+    /**
+     * 가계부에 수입 한개 추가
+     * @param request 수입 생성 요청
+     * @param category 수입 카테고리
+     * @param date 수입의 날짜
+     * @param accountBook 추가할 가계부
+     * @param member 수입 생성하려는 멤버
+     * @return 수입 추가 결과
+     */
     @Transactional
     public AddIncomeResult addSingleIncomeToAccountBook(AddIncomeRequest request, Category category, Date date, AccountBook accountBook, Member member) {
         Income income = Income.builder()
@@ -122,6 +143,12 @@ public class IncomeService {
                 .accountBookId(accountBook.getId())
                 .incomeInfo(income.toInfoQ()).build();
     }
+
+    /**
+     * 수입 정보 업데이트
+     * @param updates 업데이트할 정보 map
+     * @return 업데이트 결과
+     */
     @Transactional
     public IncomeUpdateRequest updateIncome(Map<String, Object> updates) {
         IncomeUpdateRequest patchIncome = objectMapper.convertValue(updates, IncomeUpdateRequest.class);
@@ -156,6 +183,15 @@ public class IncomeService {
         return patchIncome;
     }
 
+    /**
+     * 해당 가계부 멤버 수입 조회
+     * @param accountBookId 가계부 아이디
+     * @param categoryId 카테고리 아이디
+     * @param year 조회할 년도
+     * @param month 조회할 달
+     * @param pageable 페이징 정보
+     * @return 조회 결과
+     */
     @Transactional
     public Page<IncomeInfoQ> getMemberIncomesByAccountBook(Long accountBookId, Long categoryId, Long year, Long month, Pageable pageable) {
         HashMap<String, Object> map = new HashMap<>();
@@ -172,11 +208,22 @@ public class IncomeService {
 
     }
 
+    /**
+     * 멤버 수입 전체 조회
+     * @param id 멤버 아이디
+     * @param pageable 페이징 정보
+     * @return 수입 조회 결과
+     */
     @Transactional
     public Page<IncomeInfoQ> getMemberIncomes(Long id, Pageable pageable) {
         return incomeRepository.getMemberIncomes(id, pageable);
     }
 
+    /**
+     * 수입 삭제
+     * @param id 멤버 아이디
+     * @param incomeId 삭제할 수입 아이디
+     */
     @Transactional
     public void deleteIncome(Long id, Long incomeId) {
         Income income = incomeRepository.findById(incomeId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 수입이 없습니다"));
