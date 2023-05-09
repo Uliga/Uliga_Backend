@@ -44,6 +44,11 @@ public class ScheduleService {
     private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper mapper;
 
+    /**
+     * 멤버 금융 일정 조회
+     * @param id 멤버 아이디
+     * @return 금융 일정 조회 결과
+     */
     @Transactional
     public GetMemberSchedules getMemberSchedule(Long id) {
         LocalDate now = LocalDate.now();
@@ -51,6 +56,14 @@ public class ScheduleService {
                 .schedules(scheduleRepository.findByMemberId(id,  now.getDayOfMonth())).build();
     }
 
+    /**
+     * 금융 일정 추가
+     * @param member 멤버
+     * @param accountBook 가계부
+     * @param scheduleRequests 금융 일정 추가 요청
+     * @return 금융 일정 추가 결과
+     * @throws JsonProcessingException 레디스 오류
+     */
     @Transactional
     public AddScheduleResult addSchedule(Member member, AccountBook accountBook, List<CreateScheduleRequest> scheduleRequests) throws JsonProcessingException {
         SetOperations<String, String> setOperations = redisTemplate.opsForSet();
@@ -93,6 +106,11 @@ public class ScheduleService {
                 .result(result).build();
     }
 
+    /**
+     * 금융 일정 정보 업데이트
+     * @param updates 업데이트 요청
+     * @return 업데이트 결과
+     */
     @Transactional
     public UpdateScheduleRequest updateSchedule(Map<String, Object> updates) {
         UpdateScheduleRequest scheduleRequest = mapper.convertValue(updates, UpdateScheduleRequest.class);
@@ -119,6 +137,11 @@ public class ScheduleService {
         return scheduleRequest;
     }
 
+    /**
+     * 금융 일정 상세 정보 조회
+     * @param id 금융 일정 아이디
+     * @return 금융 일정 정보
+     */
     @Transactional
     public ScheduleDetail getScheduleDetails(Long id) {
 
@@ -127,6 +150,11 @@ public class ScheduleService {
                 .assignments(scheduleRepository.findScheduleMemberInfoById(id)).build();
     }
 
+    /**
+     * 가계부 금융 일정 조회
+     * @param accountBookId 가계부 아이디
+     * @return 가계부 금융 일정
+     */
     @Transactional
     public GetAccountBookSchedules getAccountBookSchedules(Long accountBookId) {
         List<ScheduleDetail> result = new ArrayList<>();
@@ -151,6 +179,11 @@ public class ScheduleService {
         return accountBookSchedules;
     }
 
+    /**
+     * 금융 일정 삭제
+     * @param id
+     * @param currentMemberId
+     */
     @Transactional
     public void deleteSchedule(Long id, Long currentMemberId) {
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 금융일정이 없습니다"));
@@ -163,6 +196,12 @@ public class ScheduleService {
 
     }
 
+    /**
+     * 고정 지출 조회
+     * @param id 가계부 아이디
+     * @param memberId 멤버 아이디
+     * @return 가계부 고정 지출 조회 결과
+     */
     @Transactional
     public List<ScheduleAnalyzeQ> findAnalyze(Long id, Long memberId) {
         return scheduleRepository.findScheduleAnalyzeByAccountBookId(id, memberId);
