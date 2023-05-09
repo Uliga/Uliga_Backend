@@ -39,7 +39,11 @@ public class AuthService {
     private final RedisTemplate<String, String> redisTemplate;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-
+    /**
+     * 회원가입 메서드
+     * @param signUpRequest 회원가입 요청 dto
+     * @return 회원가입 결과
+     */
     @Transactional
     public Long signUp(SignUpRequest signUpRequest) {
         signUpRequest.encrypt(passwordEncoder);
@@ -51,7 +55,13 @@ public class AuthService {
         return member.getId();
     }
 
-
+    /**
+     * 로그인 메서드
+     * @param loginRequest 로그인 요청
+     * @param response httpServletResponse
+     * @param request httpServletRequest
+     * @return 로그인 결과
+     */
     @Transactional
     public LoginResult login(LoginRequest loginRequest, HttpServletResponse response, HttpServletRequest request) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = loginRequest.toAuthentication();
@@ -70,6 +80,11 @@ public class AuthService {
                 .build();
     }
 
+    /**
+     * 토큰 재발급 메서드
+     * @param reissueRequest 재발급 요청
+     * @return 토큰 재발급 결과
+     */
     @Transactional
     public TokenIssueDTO reissue(ReissueRequest reissueRequest) {
 
@@ -103,18 +118,32 @@ public class AuthService {
         return tokenInfoDTO.toTokenIssueDTO();
     }
 
+    /**
+     * 이메일 중복 조회
+     * @param email 중복 조회할 이메일
+     * @return 중복 조회 결과
+     */
     @Transactional
     public ExistsCheckDto emailExists(String email) {
         return ExistsCheckDto.builder()
                 .exists(memberRepository.existsByEmailAndDeleted(email, false)).build();
     }
 
+    /**
+     * 닉네임 중복 조회
+     * @param nickname 중복 조회할 닉네임
+     * @return 중복 조회 결과
+     */
     @Transactional
     public ExistsCheckDto nicknameExists(String nickname) {
         return ExistsCheckDto.builder()
                 .exists(memberRepository.existsByNickNameAndDeleted(nickname, false)).build();
     }
 
+    /**
+     * 비밀번호 초기화 메서드
+     * @param resetPasswordRequest 비밀번호 초기화 요청
+     */
     @Transactional
     public void resetPassword(ResetPasswordRequest resetPasswordRequest) {
 
