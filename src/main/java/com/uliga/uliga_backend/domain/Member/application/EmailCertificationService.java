@@ -31,6 +31,13 @@ public class EmailCertificationService {
     // 인증 번호
     private String ePw;
 
+    /**
+     * 이메일 인증 메시지 생성 메서드
+     * @param to 수신자 이메일
+     * @return 이메일 메시지
+     * @throws MessagingException
+     * @throws UnsupportedEncodingException
+     */
     public MimeMessage createMessage(String to) throws MessagingException, UnsupportedEncodingException {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         mimeMessage.addRecipients(RecipientType.TO, to);
@@ -38,18 +45,6 @@ public class EmailCertificationService {
 
 
         String msg = "";
-//        msg += "<div style = 'margin:100px;'>";
-//        msg += "<h1> 안녕하세요 </h1>";
-//        msg += "<h1> 공유 가계부 우리가 입니다.</h1>";
-//        msg += "<br>";
-//        msg += "<p>아래 코드를 앱으로 돌아가서 입력해주세요</p>";
-//        msg += "<br>";
-//        msg += "<div align='center' style = 'border:1px solid black; font-family:verdana';>";
-//        msg += "<h3 style = 'color:blue;'>회원가입 인증 코드입니다.</h3>";
-//        msg += "<div style='font-style:130%'>";
-//        msg += "CODE: <strong>";
-//        msg += ePw + "</strong><div><br/>";
-//        msg += "</div>";
         msg += "<meta charset='UTF-8'>\n" +
                 "<table align='center' border='0' cellpadding='0' cellspacing='0' width='100%'\n" +
                 "       style='padding:60px 0 60px 0;color:#555;font-size:16px;word-break:keep-all;'>\n" +
@@ -112,6 +107,10 @@ public class EmailCertificationService {
         return mimeMessage;
     }
 
+    /**
+     * 이메일 인증 번호 생성
+     * @return 인증번호
+     */
     public String createKey() {
         StringBuilder key = new StringBuilder();
         Random random = new Random();
@@ -122,7 +121,11 @@ public class EmailCertificationService {
         return key.toString();
     }
 
-    // 메일 발송
+    /**
+     * 이메일 발송 메서드
+     * @param to 수신자 이메일
+     * @throws Exception 발송 실패 예외
+     */
     public void sendSimpleMessage(String to) throws Exception {
         ePw = createKey();
         MimeMessage message = createMessage(to);
@@ -139,7 +142,11 @@ public class EmailCertificationService {
 
     }
 
-    // 코드 검증
+    /**
+     * 코드 검증 메서드
+     * @param emailConfirmCodeDto 코드 검증 요청 dto
+     * @return 코드 일치 여부
+     */
     public CodeConfirmDto confirmCode(EmailConfirmCodeDto emailConfirmCodeDto) {
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         String code = valueOperations.get(emailConfirmCodeDto.getEmail());
