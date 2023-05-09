@@ -34,6 +34,11 @@ public class BudgetService {
     private final CategoryRepository categoryRepository;
     private final ObjectMapper mapper;
 
+    /**
+     * 가계부에 예산 추가
+     * @param dto 예산 정보
+     * @return 생성된 예산 정보
+     */
     @Transactional
     public BudgetInfoQ addBudgetToAccountBook(CreateBudgetDto dto) {
         AccountBook accountBook = accountBookRepository.findById(dto.getId()).orElseThrow(()->new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
@@ -61,6 +66,11 @@ public class BudgetService {
         }
     }
 
+    /**
+     * 예산 정보 업데이트
+     * @param updates 업데이트할 항목들 map
+     * @return 업데이트 결과
+     */
     @Transactional
     public BudgetUpdateRequest updateBudget(Map<String, Object> updates) {
         BudgetUpdateRequest updateRequest = mapper.convertValue(updates, BudgetUpdateRequest.class);
