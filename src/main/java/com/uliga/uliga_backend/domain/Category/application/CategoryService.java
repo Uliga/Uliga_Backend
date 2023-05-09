@@ -22,7 +22,11 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final ObjectMapper mapper;
 
-
+    /**
+     * 가계부 카테고리 생성
+     * @param categoryNames 생성할 카테고리 이름 리스트
+     * @param accountBook 카테고리를 생성할 가계부
+     */
     @Transactional
     public void createCategories(List<String> categoryNames, AccountBook accountBook) {
         Set<String> createCategories = new HashSet<>();
@@ -40,6 +44,11 @@ public class CategoryService {
         categoryRepository.saveAll(categories);
     }
 
+    /**
+     * 가계부에 카테고리 한개 추가
+     * @param accountBook 추가할 가계부
+     * @param name 생성할 카테고리 이름
+     */
     @Transactional
     public void addCategoryToAccountBook(AccountBook accountBook, String name) {
         Category newCategory = Category.builder()
@@ -49,6 +58,12 @@ public class CategoryService {
         categoryRepository.save(newCategory);
     }
 
+    /**
+     * 카테고리 업데이트
+     * @param categoryId 업데이트 할 카테고리 아이디
+     * @param map 업데이트할 정보 map
+     * @return 업데이트 결과
+     */
     @Transactional
     public CategoryUpdateRequest updateCategory(Long categoryId, Map<String, Object> map) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 카테고리가 없습니다"));
@@ -64,6 +79,10 @@ public class CategoryService {
         return null;
     }
 
+    /**
+     * 카테고리 삭제
+     * @param id 삭제할 카테고리 아이디
+     */
     @Transactional
     public void deleteCategory(Long id) {
         if (categoryRepository.existsById(id)) {
