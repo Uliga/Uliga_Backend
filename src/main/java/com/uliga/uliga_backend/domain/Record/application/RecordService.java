@@ -52,10 +52,24 @@ public class RecordService {
     private final CategoryRepository categoryRepository;
     private final ObjectMapper objectMapper;
 
+    /**
+     * 지출 리스트 다른 가계부에 추가하는 메서드
+     * @param records 지출 리스트
+     */
     @Transactional
     public void addRecordToOtherAccountBooks(List<Record> records) {
         recordRepository.saveAll(records);
     }
+
+    /**
+     * 수입/지출 한개 가계부에 추가
+     * @param dto 지출 dto
+     * @param accountBook 추가할 가계부
+     * @param member 생성한 멤버
+     * @param date 지출 날짜
+     * @param category 지출 카테고리
+     * @return 추가 결과
+     */
     @Transactional
     public CreateItemResult addItemToAccountBook(CreateRecordOrIncomeDto dto, AccountBook accountBook, Member member, Date date, Category category) {
         Record build = Record.builder()
@@ -82,7 +96,15 @@ public class RecordService {
                 .build();
     }
 
-
+    /**
+     * 지출 한개 가계부에 추가
+     * @param request 지출 dto
+     * @param category 지출 카테고리
+     * @param date 지출 날짜
+     * @param accountBook 추가할 가계부
+     * @param member 생성한 멤버
+     * @return 지출 추가 결과
+     */
     @Transactional
     public AddRecordResult addSingleItemToAccountBook(AddRecordRequest request, Category category, Date date, AccountBook accountBook, Member member) {
         Record record = Record.builder()
@@ -128,6 +150,11 @@ public class RecordService {
                 .recordInfo(record.toInfoQ()).build();
     }
 
+    /**
+     * 지출 정보 업데이트
+     * @param updates 업데이트 정보 map
+     * @return 업데이트 결과
+     */
     @Transactional
     public RecordUpdateRequest updateRecord(Map<String, Object> updates) {
         RecordUpdateRequest patchRecord = objectMapper.convertValue(updates, RecordUpdateRequest.class);
@@ -164,6 +191,15 @@ public class RecordService {
         return patchRecord;
     }
 
+    /**
+     * 가계부 지출 페이징으로 조회
+     * @param accountBookId 가계부 아이디
+     * @param categoryId 카테고리 아이디
+     * @param year 년도
+     * @param month 달
+     * @param pageable 페이징 정보
+     * @return 조회 결과
+     */
     @Transactional
     public Page<RecordInfoQ> getMemberRecordsByAccountBook(Long accountBookId, Long categoryId, Long year, Long month, Pageable pageable) {
         HashMap<String, Object> map = new HashMap<>();
@@ -178,12 +214,23 @@ public class RecordService {
         return new PageImpl<>(accountBookMemberRecords, pageable, counted.size());
     }
 
+    /**
+     * 멤버 전체 지출 조회
+     * @param id 멤버 아이디
+     * @param pageable 페이징 정보
+     * @return 조회 결과
+     */
     @Transactional
     public Page<RecordInfoQ> getMemberRecords(Long id, Pageable pageable) {
 
         return recordRepository.getMemberRecords(id, pageable);
     }
 
+    /**
+     * 지출 삭제
+     * @param id 멤버 아이디
+     * @param recordId 지출 아이디
+     */
     @Transactional
     public void deleteRecord(Long id, Long recordId) {
         Record record = recordRepository.findById(recordId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 지출이 없습니다"));
@@ -195,12 +242,22 @@ public class RecordService {
 
     }
 
-
+    /**
+     * 지출에 댓글 추가
+     * @param id 지출 아이디
+     * @param createDto 댓글 정보
+     * @return 댓글 추가 결과
+     */
     @Transactional
     public RecordCommentInfoQ addCommentToRecord(Long id, RecordCommentCreateDto createDto) {
         return null;
     }
 
+    /**
+     * 지출 상세 정보 조회
+     * @param id 지출 아이디
+     * @return 지출 상세 정보
+     */
     @Transactional
     public RecordInfoDetail getRecordInfoDetail(Long id) {
         return null;
