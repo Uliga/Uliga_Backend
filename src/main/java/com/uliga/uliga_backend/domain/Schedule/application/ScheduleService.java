@@ -181,8 +181,8 @@ public class ScheduleService {
 
     /**
      * 금융 일정 삭제
-     * @param id
-     * @param currentMemberId
+     * @param id 금융 일정 아이디
+     * @param currentMemberId 멤버 아이디
      */
     @Transactional
     public void deleteSchedule(Long id, Long currentMemberId) {
