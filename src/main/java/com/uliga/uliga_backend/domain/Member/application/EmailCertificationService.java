@@ -10,6 +10,7 @@ import jakarta.mail.Message.RecipientType;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -152,6 +153,7 @@ public class EmailCertificationService {
      * 비밀번호 초기화 메서드
      * @param resetPasswordRequest 비밀번호 초기화할 이메일
      */
+    @Transactional
     public void resetPassword(ResetPasswordRequest resetPasswordRequest) throws MessagingException, UnsupportedEncodingException {
         Member member = memberRepository.findByEmailAndDeleted(resetPasswordRequest.getEmail(), false).orElseThrow(UserNotFoundByEmail::new);
         String newPassword = createRandomPassword();
