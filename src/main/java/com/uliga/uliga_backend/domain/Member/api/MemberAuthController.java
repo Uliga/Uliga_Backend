@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -22,6 +23,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.UnsupportedEncodingException;
 
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
 
@@ -169,9 +172,9 @@ public class MemberAuthController {
 
     @Operation(summary = "비밀번호 찾기 요청 API", description = "비밀번호 찾기 요청 API 입니다")
     @PostMapping(value = "/password/reset")
-    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
+    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) throws MessagingException, UnsupportedEncodingException {
 
-        authService.resetPassword(resetPasswordRequest);
+        emailCertificationService.resetPassword(resetPasswordRequest);
         return ResponseEntity.ok("RESET");
     }
 }

@@ -140,13 +140,6 @@ public class AuthService {
                 .exists(memberRepository.existsByNickNameAndDeleted(nickname, false)).build();
     }
 
-    /**
-     * 비밀번호 초기화 메서드
-     * @param resetPasswordRequest 비밀번호 초기화 요청
-     */
-    @Transactional
-    public void resetPassword(ResetPasswordRequest resetPasswordRequest) {
 
-    }
 
 }
