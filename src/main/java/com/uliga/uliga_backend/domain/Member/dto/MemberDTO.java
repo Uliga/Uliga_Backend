@@ -212,6 +212,7 @@ public class MemberDTO {
     @NoArgsConstructor
     @Getter
     public static class ResetPasswordRequest {
+        @Schema(description = "비밀번호 초기화할 이메일", defaultValue = "test@email.com")
         private String email;
     }
 

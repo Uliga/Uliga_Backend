@@ -170,7 +170,7 @@ public class MemberAuthController {
         return ResponseEntity.ok(authService.nicknameExists(nickname));
     }
 
-    @Operation(summary = "비밀번호 찾기 요청 API", description = "비밀번호 찾기 요청 API 입니다")
+    @Operation(summary = "비밀번호 초기화 요청 API", description = "비밀번호 초기화 요청 API 입니다")
     @PostMapping(value = "/password/reset")
     public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) throws MessagingException, UnsupportedEncodingException {
 
