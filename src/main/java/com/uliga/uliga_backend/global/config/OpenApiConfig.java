@@ -12,8 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @OpenAPIDefinition(
         info = @Info(title = "<우리가>",
                 description = "공유 가계부 <우리가> API 명세서",
-                version = "1.0",
-                contact = @Contact(name = "<우리가> 개발팀", url = "https://github.com/Uliga", email = "uliga_dev_team@naver.com")
+                version = "1.0"
         )
 
 )
