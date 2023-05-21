@@ -10,6 +10,7 @@ import com.uliga.uliga_backend.domain.Member.model.UserLoginType;
 import com.uliga.uliga_backend.domain.Member.model.UserPrincipal;
 import com.uliga.uliga_backend.global.oauth2.OAuth2UserInfo;
 import com.uliga.uliga_backend.global.oauth2.OAuth2UserInfoFactory;
+import com.uliga.uliga_backend.global.oauth2.exception.NotInitializedInception;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +46,9 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         Member member;
         if (byEmailAndDeleted.isPresent()) {
             member = byEmailAndDeleted.get();
+            if (member.getApplicationPassword() == null || member.getNickName() == null) {
+                throw new NotInitializedInception();
+            }
         } else {
             member = createUser(userInfo, loginType);
             AccountBookDTO.CreateRequestPrivate requestPrivate = AccountBookDTO.CreateRequestPrivate.builder().name(member.getUserName() + " 님의 가계부").relationship("개인").isPrivate(true).build();
