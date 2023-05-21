@@ -46,9 +46,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         Member member;
         if (byEmailAndDeleted.isPresent()) {
             member = byEmailAndDeleted.get();
-            if (member.getApplicationPassword() == null || member.getNickName() == null) {
-                return null;
-            }
         } else {
             member = createUser(userInfo, loginType);
             AccountBookDTO.CreateRequestPrivate requestPrivate = AccountBookDTO.CreateRequestPrivate.builder().name(member.getUserName() + " 님의 가계부").relationship("개인").isPrivate(true).build();
@@ -66,7 +63,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         String encode = passwordEncoder.encode(memberInfo.getEmail());
         Member member = Member.builder().email(memberInfo.getEmail())
                 .userName(memberInfo.getName())
-                .nickName(memberInfo.getName())
                 .password(encode)
                 .deleted(false)
                 .userLoginType(loginType)

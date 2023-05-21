@@ -71,12 +71,25 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         if (byId.isPresent()) {
             Member member = byId.get();
             if (member.getApplicationPassword() == null) {
-                UriComponents uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
-                        .queryParam("token", tokenDto.getAccessToken())
-                        .queryParam("email", member.getEmail())
-                        .queryParam("created", true)
-                        .build();
-                return uriComponents.toUriString();
+                if (member.getNickName() == null) {
+                    UriComponents uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
+                            .queryParam("token", tokenDto.getAccessToken())
+                            .queryParam("email", member.getEmail())
+                            .queryParam("created", true)
+                            .queryParam("nickname","null")
+                            .queryParam("applicationPassword", "null")
+                            .build();
+                    return uriComponents.toUriString();
+                } else {
+                    UriComponents uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
+                            .queryParam("token", tokenDto.getAccessToken())
+                            .queryParam("email", member.getEmail())
+                            .queryParam("created", true)
+                            .queryParam("applicationPassword", "null")
+                            .queryParam("nickname", member.getNickName())
+                            .build();
+                    return uriComponents.toUriString();
+                }
             } else {
                 UriComponents uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
                         .queryParam("token", tokenDto.getAccessToken())
