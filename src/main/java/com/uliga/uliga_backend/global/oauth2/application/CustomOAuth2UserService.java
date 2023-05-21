@@ -47,7 +47,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         if (byEmailAndDeleted.isPresent()) {
             member = byEmailAndDeleted.get();
             if (member.getApplicationPassword() == null || member.getNickName() == null) {
-                throw new NotInitializedInception();
+                return null;
             }
         } else {
             member = createUser(userInfo, loginType);
