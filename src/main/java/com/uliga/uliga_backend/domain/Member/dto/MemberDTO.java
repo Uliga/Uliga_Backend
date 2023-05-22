@@ -127,6 +127,23 @@ public class MemberDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
+    @Schema(name = "소셜 로그인 회원가입 요청")
+    public static class SocialLoginRequest {
+        @Email
+        @Schema(description = "로그인할 이메일", defaultValue = "test@email.com")
+        private String email;
+        @Schema(description = "사용자 본명")
+        private String userName;
+        @Schema(description = "사용자 닉네임")
+        private String nickName;
+        @Schema(description = "유저 로그인타입")
+        private UserLoginType loginType;
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
     @Schema(name = "로그인 후 리턴 데이터")
     public static class LoginResult {
         @Schema(name = "멤버 정보")

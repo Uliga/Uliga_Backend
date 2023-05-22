@@ -17,12 +17,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -46,6 +49,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
 
         log.info("authentication : "+authentication.getName());
+        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         Optional<Member> byId = memberRepository.findById(Long.parseLong(authentication.getName()));
 
         if (response.isCommitted()) {
@@ -66,14 +70,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         // redis에 쿠키 저장
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-        valueOperations.set(authentication.getName(), tokenDto.getRefreshToken());
-        redisTemplate.expire(authentication.getName(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
         if (byId.isPresent()) {
             Member member = byId.get();
             if (member.getApplicationPassword() == null) {
                 if (member.getNickName() == null) {
                     UriComponents uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
-                            .queryParam("token", tokenDto.getAccessToken())
                             .queryParam("email", member.getEmail())
                             .queryParam("created", true)
                             .queryParam("nickname","null")
@@ -82,11 +83,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                     return uriComponents.toUriString();
                 } else {
                     UriComponents uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
-                            .queryParam("token", tokenDto.getAccessToken())
                             .queryParam("email", member.getEmail())
                             .queryParam("created", true)
                             .queryParam("applicationPassword", "null")
-                            .queryParam("nickname", member.getNickName())
+                            .queryParam("nickname", URLEncoder.encode(member.getNickName(), StandardCharsets.UTF_8))
                             .build();
                     return uriComponents.toUriString();
                 }
@@ -96,13 +96,15 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                         .queryParam("email", member.getEmail())
                         .queryParam("created", false)
                         .build();
+
+                valueOperations.set(authentication.getName(), tokenDto.getRefreshToken());
+                redisTemplate.expire(authentication.getName(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
                 return uriComponents.toUriString();
             }
 
 
         } else {
             UriComponents uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
-                    .queryParam("token", tokenDto.getAccessToken())
                     .queryParam("email", "NULL")
                     .build();
             return uriComponents.toUriString();

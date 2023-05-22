@@ -62,6 +62,16 @@ public class MemberAuthController {
         return ResponseEntity.ok(authService.login(loginRequest, response, request));
     }
 
+    @Operation(summary = "소셜 로그인 API", description = "소셜 로그인 API입니다")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "소셜 로그인 성공시", content = @Content(schema = @Schema(implementation = LoginResult.class)))
+    })
+    @PostMapping(value = "/social-login")
+    public ResponseEntity<LoginResult> socialLogin(@RequestBody SocialLoginRequest socialLoginRequest) {
+
+        return ResponseEntity.ok(authService.socialLogin(socialLoginRequest));
+    }
+
     @Operation(summary = "OAuth 로그인 성공", description = "OAuth 로그인 성공시 이동할 url 입니다")
     @GetMapping(value = "/social_login")
     public ResponseEntity<String> oAuthLogin() {

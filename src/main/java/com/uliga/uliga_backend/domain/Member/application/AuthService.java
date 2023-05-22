@@ -81,6 +81,16 @@ public class AuthService {
     }
 
     /**
+     * 소셜 로그인 회원가입 메서드
+     * @param socialLoginRequest
+     * @return
+     */
+    @Transactional
+    public LoginResult socialLogin(SocialLoginRequest socialLoginRequest) {
+        return null;
+    }
+
+    /**
      * 토큰 재발급 메서드
      * @param reissueRequest 재발급 요청
      * @return 토큰 재발급 결과
