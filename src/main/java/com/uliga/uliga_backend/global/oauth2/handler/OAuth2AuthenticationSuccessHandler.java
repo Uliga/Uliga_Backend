@@ -48,26 +48,31 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         log.info("authentication success");
 
 
-
-        log.info("authentication : "+authentication.getName());
+        log.info("authentication : " + authentication.getName());
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         Map<String, Object> attributes = oAuth2User.getAttributes();
         for (String s : attributes.keySet()) {
             log.info("key : {} ", s);
             log.info("value : {} ", attributes.get(s));
         }
-        Optional<Member> byId = memberRepository.findById(Long.parseLong(authentication.getName()));
+        String targetUrl;
+        if (authentication.getName() == null) {
+            targetUrl = determineTargetUrlForFirstLogin(request, response, authentication, attributes);
+        } else {
+            targetUrl = determineTargetUrlForLoginAgain(request, response, authentication);
+        }
+
 
         if (response.isCommitted()) {
             return;
         }
-        String targetUrl = determineTargetUrl(request, response, authentication, byId);
-        log.info("target url : "+targetUrl);
+
+        log.info("target url : " + targetUrl);
         clearAuthenticationAttributes(request, response);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
-    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication, Optional<Member> byId) {
+    protected String determineTargetUrlForLoginAgain(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
@@ -76,48 +81,48 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         // redis에 쿠키 저장
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-        if (byId.isPresent()) {
-            Member member = byId.get();
-            if (member.getApplicationPassword() == null) {
-                if (member.getNickName() == null) {
-                    UriComponents uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
-                            .queryParam("email", member.getEmail())
-                            .queryParam("created", true)
-                            .queryParam("nickname","null")
-                            .queryParam("applicationPassword", "null")
-                            .build();
-                    return uriComponents.toUriString();
-                } else {
-                    UriComponents uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
-                            .queryParam("email", member.getEmail())
-                            .queryParam("created", true)
-                            .queryParam("applicationPassword", "null")
-                            .queryParam("nickname", URLEncoder.encode(member.getNickName(), StandardCharsets.UTF_8))
-                            .build();
-                    return uriComponents.toUriString();
-                }
-            } else {
-                UriComponents uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
-                        .queryParam("token", tokenDto.getAccessToken())
-                        .queryParam("email", member.getEmail())
-                        .queryParam("created", false)
-                        .build();
+        // 기존에 회원가입한 멤버 존재
 
-                valueOperations.set(authentication.getName(), tokenDto.getRefreshToken());
-                redisTemplate.expire(authentication.getName(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
-                return uriComponents.toUriString();
-            }
+        UriComponents uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
+                .queryParam("token", tokenDto.getAccessToken())
+                .queryParam("created", false)
+                .build();
 
-
-        } else {
-            UriComponents uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
-                    .queryParam("email", "NULL")
-                    .build();
-            return uriComponents.toUriString();
-        }
+        valueOperations.set(authentication.getName(), tokenDto.getRefreshToken());
+        redisTemplate.expire(authentication.getName(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
+        return uriComponents.toUriString();
 
 
     }
+
+    protected String determineTargetUrlForFirstLogin(HttpServletRequest request, HttpServletResponse response, Authentication authentication,  Map<String, Object> attributes) {
+        Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
+                .map(Cookie::getValue);
+        String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
+        UriComponents uriComponents;
+        if (attributes.containsKey("kakao_account")) {
+            Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
+            Map<String, String> properties = (Map<String, String>) kakaoAccount.get("properties");
+            uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
+                    .queryParam("created", false)
+                    .queryParam("email", kakaoAccount.get("email"))
+                    .queryParam("userName", URLEncoder.encode(properties.get("nickname"), StandardCharsets.UTF_8))
+                    .queryParam("loginType","KAKAO")
+                    .build();
+        } else {
+
+            uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
+                    .queryParam("created", false)
+                    .queryParam("email", attributes.get("email"))
+                    .queryParam("userName", URLEncoder.encode((String) attributes.get("name"), StandardCharsets.UTF_8))
+                    .queryParam("loginType", "GOOGLE")
+                    .build();
+        }
+
+        return uriComponents.toUriString();
+    }
+
+
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
         super.clearAuthenticationAttributes(request);
         authorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
