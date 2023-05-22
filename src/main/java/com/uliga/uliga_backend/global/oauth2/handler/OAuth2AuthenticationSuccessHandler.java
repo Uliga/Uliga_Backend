@@ -50,16 +50,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         log.info("authentication : " + authentication.getName());
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         Map<String, Object> attributes = oAuth2User.getAttributes();
-        for (String s : attributes.keySet()) {
-            log.info("key : {} ", s);
-            log.info("value : {} ", attributes.get(s));
-        }
         String targetUrl;
         if (Objects.equals(authentication.getName(), "null")) {
-            log.info("이거 보여야함");
             targetUrl = determineTargetUrlForFirstLogin(request, response, authentication, attributes);
         } else {
-            log.info("보이면 절망하셈");
             targetUrl = determineTargetUrlForLoginAgain(request, response, authentication);
         }
 
