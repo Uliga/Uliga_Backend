@@ -26,6 +26,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -50,6 +51,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         log.info("authentication : "+authentication.getName());
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        Map<String, Object> attributes = oAuth2User.getAttributes();
+        for (String s : attributes.keySet()) {
+            log.info("key : {} ", s);
+            log.info("value : {} ", attributes.get(s));
+        }
         Optional<Member> byId = memberRepository.findById(Long.parseLong(authentication.getName()));
 
         if (response.isCommitted()) {
