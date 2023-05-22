@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -54,7 +55,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             log.info("value : {} ", attributes.get(s));
         }
         String targetUrl;
-        if (authentication.getName() == null) {
+        if (Objects.equals(authentication.getName(), "null")) {
             log.info("이거 보여야함");
             targetUrl = determineTargetUrlForFirstLogin(request, response, authentication, attributes);
         } else {
