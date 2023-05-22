@@ -82,12 +82,29 @@ public class AuthService {
 
     /**
      * 소셜 로그인 회원가입 메서드
-     * @param socialLoginRequest
-     * @return
+     * @param socialLoginRequest 소셜로그인시 회원가입 요청
+     * @return 로그인 결과
      */
     @Transactional
     public LoginResult socialLogin(SocialLoginRequest socialLoginRequest) {
-        return null;
+        Member entity = socialLoginRequest.toEntity(passwordEncoder);
+        memberRepository.save(entity);
+        CreateRequestPrivate requestPrivate = CreateRequestPrivate.builder().name(socialLoginRequest.getUserName() + " 님의 가계부").relationship("개인").isPrivate(true).build();
+        accountBookService.createAccountBookPrivate(entity, requestPrivate);
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = socialLoginRequest.toAuthentication();
+
+        Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(usernamePasswordAuthenticationToken);
+
+        TokenInfoDTO tokenInfoDTO = jwtTokenProvider.generateTokenDto(authenticate);
+        log.info("로그인 API 중 토큰 생성 로직 실행");
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        valueOperations.set(authenticate.getName(), tokenInfoDTO.getRefreshToken());
+        redisTemplate.expire(authenticate.getName(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
+
+        return LoginResult.builder()
+                .memberInfo(memberRepository.findMemberInfoById(Long.parseLong(authenticate.getName())))
+                .tokenInfo(tokenInfoDTO.toTokenIssueDTO())
+                .build();
     }
 
     /**

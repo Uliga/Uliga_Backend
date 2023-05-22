@@ -138,6 +138,25 @@ public class MemberDTO {
         private String nickName;
         @Schema(description = "유저 로그인타입")
         private UserLoginType loginType;
+        @Schema(description = "유저 애플리케이션 비밀번호")
+        private String applicationPassword;
+
+        public Member toEntity(PasswordEncoder passwordEncoder) {
+            return Member.builder()
+                    .email(email)
+                    .nickName(nickName)
+                    .userName(userName)
+                    .applicationPassword(passwordEncoder.encode(applicationPassword))
+                    .password(passwordEncoder.encode(applicationPassword))
+                    .deleted(false)
+                    .authority(ROLE_USER)
+                    .userLoginType(loginType)
+                    .build();
+        }
+
+        public UsernamePasswordAuthenticationToken toAuthentication() {
+            return new UsernamePasswordAuthenticationToken(email, applicationPassword);
+        }
     }
 
     @Builder
