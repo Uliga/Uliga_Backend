@@ -55,7 +55,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             log.info("value : {} ", attributes.get(s));
         }
         String targetUrl;
-        if (Objects.equals(authentication.getName(), "null")) {
+        if (Objects.equals(authentication.getName(), null)) {
             log.info("이거 보여야함");
             targetUrl = determineTargetUrlForFirstLogin(request, response, authentication, attributes);
         } else {
