@@ -103,11 +103,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         UriComponents uriComponents;
         if (attributes.containsKey("kakao_account")) {
             Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
-            Map<String, String> properties = (Map<String, String>) kakaoAccount.get("properties");
+            Map<String, String> profile = (Map<String, String>) kakaoAccount.get("profile");
             uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
                     .queryParam("created", true)
                     .queryParam("email", kakaoAccount.get("email"))
-                    .queryParam("userName", URLEncoder.encode(properties.get("nickname"), StandardCharsets.UTF_8))
+                    .queryParam("userName", URLEncoder.encode(profile.get("nickname"), StandardCharsets.UTF_8))
                     .queryParam("loginType","KAKAO")
                     .build();
         } else {
