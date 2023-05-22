@@ -40,8 +40,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate<String, String> redisTemplate;
     private final OAuth2AuthorizationRequestBasedOnCookieRepository authorizationRequestRepository;
-    private final MemberRepository memberRepository;
-
     @Override
     @Transactional
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -104,7 +102,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
             Map<String, String> properties = (Map<String, String>) kakaoAccount.get("properties");
             uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
-                    .queryParam("created", false)
+                    .queryParam("created", true)
                     .queryParam("email", kakaoAccount.get("email"))
                     .queryParam("userName", URLEncoder.encode(properties.get("nickname"), StandardCharsets.UTF_8))
                     .queryParam("loginType","KAKAO")
@@ -112,7 +110,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         } else {
 
             uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
-                    .queryParam("created", false)
+                    .queryParam("created", true)
                     .queryParam("email", attributes.get("email"))
                     .queryParam("userName", URLEncoder.encode((String) attributes.get("name"), StandardCharsets.UTF_8))
                     .queryParam("loginType", "GOOGLE")
