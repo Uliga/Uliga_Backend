@@ -21,4 +21,8 @@ public interface AccountBookDataMapper {
     List<AccountBookDataQ> findAccountBookDataOrderByValue(HashMap<String, Object> map);
 
     List<Long> countQueryForAccountBookHistory(HashMap<String, Object> map);
+
+    List<AccountBookDataQ> findCustomAccountBookData(HashMap<String, Object> map);
+
+    List<Long> countQueryForCustomAccountBookData(HashMap<String, Object> map);
 }

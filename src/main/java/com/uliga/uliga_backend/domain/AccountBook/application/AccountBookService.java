@@ -888,4 +888,21 @@ public class AccountBookService {
         }
         return AccountBookWeeklyRecord.builder().weeklySums(result).sum(totalSum).build();
     }
+
+    @Transactional
+    public Page<AccountBookDataQ> getCustomAccountBookData(Long id, Long year, Long month, Long startDay, Long endDay, String category, Pageable pageable) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("accountBookId", id);
+        map.put("year", year);
+        map.put("month", month);
+        map.put("startDay", startDay);
+        map.put("endDay", endDay);
+        map.put("offset", pageable.getOffset());
+        map.put("pageSize", pageable.getPageSize());
+        map.put("category", category);
+
+        List<AccountBookDataQ> accountBookData = accountBookDataMapper.findCustomAccountBookData(map);
+        List<Long> counted = accountBookDataMapper.countQueryForCustomAccountBookData(map);
+        return new PageImpl<>(accountBookData, pageable, counted.size());
+    }
 }

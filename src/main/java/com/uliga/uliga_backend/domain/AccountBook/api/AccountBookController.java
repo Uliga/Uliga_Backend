@@ -368,5 +368,10 @@ public class AccountBookController {
     }
 
     @Operation(summary = "기간 별 내역 조회", description = "기간 별 내역 조회 API 입니다")
+    @GetMapping("/{id}/analyze/custom/{year}/{month}/{startDay}/{endDay}")
+    public ResponseEntity<Page<AccountBookDataQ>> getCustomAccountBookData(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month, @PathVariable("startDay") Long startDay, @PathVariable("endDay") Long endDay, @RequestParam(value = "category", required = false, defaultValue = "") String category, Pageable pageable) {
+
+        return ResponseEntity.ok(accountBookService.getCustomAccountBookData(id, year, month, startDay, endDay, category, pageable));
+    }
 
 }
