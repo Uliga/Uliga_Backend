@@ -134,14 +134,10 @@ public class MemberService {
     @Transactional
     public void deleteMember(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
-        List<AccountBookInfoQ> accountBookInfosByMemberId = accountBookRepository.findAccountBookInfosByMemberId(id);
 
         member.delete();
-        for (AccountBookInfoQ accountBookInfoQ : accountBookInfosByMemberId) {
-            if (accountBookInfoQ.getIsPrivate()) {
-                accountBookRepository.deleteById(accountBookInfoQ.getAccountBookId());
-            }
-        }
+
+        accountBookRepository.deleteById(member.getPrivateAccountBook().getId());
 
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         valueOperations.getAndDelete(Long.toString(id));
