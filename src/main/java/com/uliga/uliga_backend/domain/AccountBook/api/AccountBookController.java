@@ -232,7 +232,7 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.getAccountBookMembers(id));
     }
 
-    @Operation(summary = "가계부 예산 추가")
+    @Operation(summary = "가계부 예산 추가", description = "가계부 예산 추가 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = BudgetInfoQ.class))),
             @ApiResponse(responseCode = "409", description = "해당 년도/달에 예산 이미 존재시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
@@ -246,7 +246,7 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.addBudget(createBudgetDto));
     }
 
-    @Operation(summary = "가계부에 금융 일정 추가")
+    @Operation(summary = "가계부에 금융 일정 추가", description = "가계부에 금융 일정 추가 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = AddScheduleResult.class)))
     })
@@ -257,7 +257,7 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.addSchedule(memberId, addSchedules));
     }
 
-    @Operation(summary = "가계부 금융 일정 세부 조회")
+    @Operation(summary = "가계부 금융 일정 세부 조회", description = "가계부 금융 일정 세부 조회 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = GetAccountBookSchedules.class)))
     })
@@ -268,7 +268,7 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.getAccountBookSchedules(memberId, id));
     }
 
-    @Operation(summary = "가계부 삭제 요청")
+    @Operation(summary = "가계부 삭제 요청", description = "가계부 삭제 요청 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "삭제 성공시")
     })
@@ -279,7 +279,7 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.deleteAccountBook(id, currentMemberId));
     }
 
-    @Operation(summary = "가계부 내역 다수 삭제 요청")
+    @Operation(summary = "가계부 내역 다수 삭제 요청", description = "가계부 내역 다수 삭제 요청 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "삭제 성공시")
     })
@@ -290,7 +290,7 @@ public class AccountBookController {
         return ResponseEntity.ok("DELETED");
     }
 
-    @Operation(summary = "가계부 전체 내역 전체/년도별/월별 조회")
+    @Operation(summary = "가계부 전체 내역 전체/년도별/월별 조회", description = "가계부 전체 내역 조회 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountBookDataQ.class)))
     })
@@ -305,7 +305,7 @@ public class AccountBookController {
     }
 
 
-    @Operation(summary = "가계부 분석용 날짜별 지출 조회 API")
+    @Operation(summary = "가계부 분석용 날짜별 지출 조회 API", description = "가계부 분석용 날짜별 지출 조회 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountBookDailyRecord.class)))
     })
@@ -315,7 +315,7 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.getAccountBookDailyRecord(id, year, month));
     }
 
-    @Operation(summary = "가계부 분석용 한달 카테고리 별 지출 조회 API")
+    @Operation(summary = "가계부 분석용 한달 카테고리 별 지출 조회 API", description = "가계부 분석용 한달 카테고리 별 지출 조회 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountBookCategoryAnalyze.class)))
     })
@@ -325,7 +325,7 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.getAccountBookCategoryAnalyze(id, year, month));
     }
 
-    @Operation(summary = "가계부 분석용 한달 고정지출 조회용 API")
+    @Operation(summary = "가계부 분석용 한달 고정지출 조회용 API", description = "가계부 분석용 한달 고정 지출 조회용 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountScheduleAnalyze.class)))
     })
@@ -336,7 +336,7 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.getAccountBookScheduleAnalyze(id, currentMemberId));
     }
 
-    @Operation(summary = "가계부 분석용 지난달과 분석용 API")
+    @Operation(summary = "가계부 분석용 지난달과 분석용 API", description = "가계부 분석용 지난달과 분석용 API입니")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = MonthlyCompare.class)))
     })
@@ -346,24 +346,27 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.getAccountBookMonthlyCompare(id, year, month));
     }
 
-    @Operation(summary = "가계부 분석용 한달 지출 조회 API")
+    @Operation(summary = "가계부 분석용 한달 지출 조회 API", description = "가계부 분석용 한달 지출 조회 API 입니다")
     @GetMapping(value = "/{id}/analyze/month/{year}/{month}")
     public ResponseEntity<Page<AccountBookDataQ>> getAccountBookMonthlyRecord(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month, @RequestParam(value = "category", required = false, defaultValue = "") String category, Pageable pageable) {
 
         return ResponseEntity.ok(accountBookService.getAccountBookMonthlyRecord(id, year, month, pageable, category));
     }
 
-    @Operation(summary = "가계부 분석용 예산과 비교용 API")
+    @Operation(summary = "가계부 분석용 예산과 비교용 API", description = "가계부 분석용 예산과 비교용 API 입니다")
     @GetMapping(value = "/{id}/analyze/budget/{year}/{month}")
     public ResponseEntity<BudgetCompare> getAccountBookBudgetCompare(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
 
         return ResponseEntity.ok(accountBookService.getBudgetCompare(id, year, month));
     }
 
-    @Operation(summary = "가계부 분석용 주차별 지출 금액 조회")
+    @Operation(summary = "가계부 분석용 주차별 지출 금액 조회", description = "가계부 분석용 주차별 지출 금액 조회 API 입니다")
     @GetMapping(value = "/{id}/analyze/weekly/{year}/{month}/{startDay}")
     public ResponseEntity<AccountBookWeeklyRecord> getAccountBookWeeklyCompare(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month, @PathVariable("startDay") Long startDay) {
 
         return ResponseEntity.ok(accountBookService.getAccountBookWeeklyRecord(id, year, month, startDay));
     }
+
+    @Operation(summary = "기간 별 내역 조회", description = "기간 별 내역 조회 API 입니다")
+
 }
