@@ -768,9 +768,6 @@ public class AccountBookService {
         Calendar calendar = Calendar.getInstance();
         for (int i = 2; i > -1; i--) {
             calendar.set(Math.toIntExact(year), month.intValue() - i, 1);
-
-            log.info(String.valueOf(calendar.get(Calendar.YEAR)));
-            log.info(String.valueOf(calendar.get(Calendar.MONTH)));
             Optional<MonthlyCompareQ> monthly = accountBookRepository.getMonthlyCompare(accountBookId, year, month - i);
             if (monthly.isPresent()) {
                 monthlyCompare.add(monthly.get());
@@ -810,8 +807,6 @@ public class AccountBookService {
                 extraAccountBookCategory.add("기타");
             }
             map.put("category", extraAccountBookCategory);
-
-
 
             List<AccountBookDataQ> accountBookData = accountBookDataMapper.findExtraAccountBookDataAnalyze(map);
             List<Long> counted = accountBookDataMapper.countQueryForExtraAccountBookDataAnalyze(map);

@@ -240,6 +240,8 @@ public class MemberDTO {
     public static class ExistsCheckDto {
         @Schema(description = "존재여부", defaultValue = "true")
         private boolean exists;
+        @Schema(description = "유저 로그인 타입")
+        private UserLoginType loginType;
     }
 
 

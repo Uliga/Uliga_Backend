@@ -4,6 +4,7 @@ import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.CreateRequestPrivate;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.model.Member;
+import com.uliga.uliga_backend.domain.Member.model.UserLoginType;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.ReissueRequest;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenInfoDTO;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenIssueDTO;
@@ -23,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
@@ -152,8 +154,14 @@ public class AuthService {
      */
     @Transactional
     public ExistsCheckDto emailExists(String email) {
-        return ExistsCheckDto.builder()
-                .exists(memberRepository.existsByEmailAndDeleted(email, false)).build();
+        Optional<Member> byEmailAndDeleted = memberRepository.findByEmailAndDeleted(email, false);
+        if (byEmailAndDeleted.isPresent()) {
+            Member member = byEmailAndDeleted.get();
+            return ExistsCheckDto.builder().exists(true).loginType(member.getUserLoginType()).build();
+        } else {
+            return ExistsCheckDto.builder().loginType(UserLoginType.EMAIL).exists(false).build();
+        }
+
     }
 
     /**
