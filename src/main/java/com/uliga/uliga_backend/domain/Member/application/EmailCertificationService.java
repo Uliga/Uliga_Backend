@@ -256,16 +256,29 @@ public class EmailCertificationService {
      * @return 새로운 비밀번호
      */
     public String createRandomPassword() {
-        int leftLimit = 35; // special character #
-        int rightLimit = 122; // letter 'z'
-        int targetStringLength = 10;
         Random random = new Random();
 
-        return random.ints(leftLimit, rightLimit + 1)
-                .filter(i ->(i < 39 || i >= 48) &&  (i <= 57 || i >= 65) && (i <= 90 || i >= 97) )
-                .limit(targetStringLength)
+        String spc = random.ints(35, 39)
+                .limit(3)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
+
+        String numeral = random.ints(48, 58)
+                .limit(4)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+
+
+        String lower = random.ints(65, 91)
+                .limit(3)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+
+        String upper = random.ints(97, 123)
+                .limit(3)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+        return upper + spc + lower + numeral;
     }
     /**
      * 코드 검증 메서드
