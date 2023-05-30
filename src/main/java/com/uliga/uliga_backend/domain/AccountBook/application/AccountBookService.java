@@ -694,11 +694,10 @@ public class AccountBookService {
             Long diff = monthlyCompareInDailyAnalyze.get(0).getValue() - monthlyCompareInDailyAnalyze.get(1).getValue();
             return AccountBookDailyRecord.builder().records(result).sum(monthlyCompareInDailyAnalyze.get(0).getValue()).diff(diff).build();
         } else {
-            if (monthlyCompareInDailyAnalyze.get(0).getMonth().equals(month)) {
-
-                return AccountBookDailyRecord.builder().records(result).sum(monthlyCompareInDailyAnalyze.get(0).getValue()).build();
-            } else {
+            if (monthlyCompareInDailyAnalyze.size() == 0) {
                 return AccountBookDailyRecord.builder().records(result).sum(0L).build();
+            } else {
+                return AccountBookDailyRecord.builder().records(result).sum(monthlyCompareInDailyAnalyze.get(0).getValue()).build();
             }
 
         }
