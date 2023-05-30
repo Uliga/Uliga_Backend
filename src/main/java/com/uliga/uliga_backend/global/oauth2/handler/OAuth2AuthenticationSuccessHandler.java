@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenInfoDTO;
+import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import com.uliga.uliga_backend.global.jwt.JwtTokenProvider;
 import com.uliga.uliga_backend.global.oauth2.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.uliga.uliga_backend.global.util.CookieUtil;
@@ -41,6 +42,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate<String, String> redisTemplate;
     private final OAuth2AuthorizationRequestBasedOnCookieRepository authorizationRequestRepository;
+    private final MemberRepository memberRepository;
     @Override
     @Transactional
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -77,9 +79,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         // redis에 쿠키 저장
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         // 기존에 회원가입한 멤버 존재
+        Member member = memberRepository.findById(Long.parseLong(authentication.getName())).orElseThrow(NotFoundByIdException::new);
+
 
         UriComponents uriComponents = UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", tokenDto.getAccessToken())
+                .queryParam("privateAccountBook", member.getPrivateAccountBook().getId())
                 .queryParam("created", false)
                 .build();
 
