@@ -62,7 +62,6 @@ jobs:
         script: |
           sudo docker rm -f $(docker ps -qa)
           sudo docker pull ${{ secrets.DOCKER_REPO }}/uliga_backend 
-          sudo docker pull ${{ secrets.DOCKER_REPO }}/uliga-backend-nginx
           docker-compose up -d
           docker image prune -f
 
