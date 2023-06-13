@@ -20,6 +20,8 @@ repositories {
 }
 
 dependencies {
+    // thymeleaf
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     // 스프링 부트 3
     implementation 'org.springframework.boot:spring-boot-starter-web'
     // 스프링 데이터 JPA
