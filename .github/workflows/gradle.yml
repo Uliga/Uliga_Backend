@@ -64,6 +64,7 @@ jobs:
         key: ${{ secrets.PEM_KEY }}
         port: 22
         script: |
+          sh deploy.sh
           sudo docker rm -f $(docker ps -qa)
           sudo docker pull ${{ secrets.DOCKER_REPO }}/uliga_backend 
           docker-compose up -d
