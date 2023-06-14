@@ -37,8 +37,12 @@ jobs:
         # application.yml 파일 생성
         touch ./application.yml
         
+        # profile-application.yml 파일 생성
+        
         # GitHub-Actions 에서 설정한 값을 application.yml 파일에 쓰기
         echo "${{ secrets.APPLICATION }}" >> ./application.yml
+        
+        echo "${{ secrets.PROFILE_APPLICATION }}" >> ./profile-application.yml
       shell: bash
 
     - name: Build with Gradle
