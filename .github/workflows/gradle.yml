@@ -32,13 +32,13 @@ jobs:
     - name: make application.yml
       run: |
         # sh 파일 생성
-        touch ./deploy.sh
+        touch deploy.sh
         
         # deploy.sh 파일 작성
-        echo "${{ secrets.DEPLOY }}" >> ./deploy.sh
+        echo "${{ secrets.DEPLOY }}" >> deploy.sh
         
         # deploy.sh 파일 실행
-        sh ./deploy.sh
+        sh deploy.sh
         
         # create application.yml
         cd ./src/main/resources
