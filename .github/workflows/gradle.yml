@@ -38,6 +38,15 @@ jobs:
         touch ./application.yml
         
         # profile-application.yml 파일 생성
+        touch ./profile-application.yml
+        
+        # sh 파일 생성
+        touch ./deploy.sh
+        
+        # deploy.sh 파일 작성하고 실행
+        echo "${{ secrets.DEPLOY }}" >> ./deploy.sh
+        
+        sh deploy.sh
         
         # GitHub-Actions 에서 설정한 값을 application.yml 파일에 쓰기
         echo "${{ secrets.APPLICATION }}" >> ./application.yml
@@ -64,7 +73,6 @@ jobs:
         key: ${{ secrets.PEM_KEY }}
         port: 22
         script: |
-          sh deploy.sh
           sudo docker rm -f $(docker ps -qa)
           sudo docker pull ${{ secrets.DOCKER_REPO }}/uliga_backend 
           docker-compose up -d
