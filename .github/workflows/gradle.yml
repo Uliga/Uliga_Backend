@@ -38,7 +38,7 @@ jobs:
         echo "${{ secrets.DEPLOY }}" >> ./deploy.sh
         
         # deploy.sh 파일 실행
-        sh deploy.sh
+        sh ./deploy.sh
         
         # create application.yml
         cd ./src/main/resources
