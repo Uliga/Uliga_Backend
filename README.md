@@ -10,7 +10,7 @@
 
 ## 배포 링크
 
-> **우리가** : https://main.d211p9c5e1szy2.amplifyapp.com/
+> **우리가** : https://www.ouruliga.com/
 > <br/>
 > **API 문서 배포 링크** : [https://uliga.site/swagger-ui/index.html](https://uliga.site/swagger-ui/index.html)
 
