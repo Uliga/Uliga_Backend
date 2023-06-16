@@ -9,7 +9,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOriginPatterns("https://main.d211p9c5e1szy2.amplifyapp.com/")
+                .allowedOriginPatterns("https://www.ouruliga.com/")
                 .allowedMethods("GET", "POST", "PATCH", "DELETE", "HEAD", "OPTIONS")
                 .allowCredentials(true)
                 .maxAge(3000);
