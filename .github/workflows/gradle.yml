@@ -33,6 +33,7 @@ jobs:
       run: |
         # create application.yml
         cd ./src/main/resources
+        
         # deploy.sh 작성
         touch ./deploy.sh
         
