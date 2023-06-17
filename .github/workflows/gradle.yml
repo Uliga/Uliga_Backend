@@ -34,8 +34,6 @@ jobs:
         # deploy.sh 작성
         touch ./deploy.sh
         
-        ls -al
-        
         sudo chmod -R 777 deploy.sh
         
         ls -al
