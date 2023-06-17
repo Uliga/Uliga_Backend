@@ -43,7 +43,7 @@ jobs:
         
         echo "${{ secrets.DEPLOY }}" >> ./deploy.sh
         
-         bash ./deploy.sh
+        bash ./deploy.sh
         
         # application.yml 파일 생성
         touch ./application.yml
