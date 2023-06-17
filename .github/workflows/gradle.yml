@@ -36,7 +36,7 @@ jobs:
         
         ls -al
         
-        echo "${{ secrets.DEPLOY }}" >> ./deploy.sh
+        echo "${{ secrets.DEPLOY }}" >> deploy.sh
         
         # bash ./deploy.sh
         
