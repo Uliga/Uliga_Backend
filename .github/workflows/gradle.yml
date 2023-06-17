@@ -36,9 +36,11 @@ jobs:
         
         ls -al
         
+        sudo chmod 777 deploy.sh
+        
         echo "${{ secrets.DEPLOY }}" >> deploy.sh
         
-        # bash ./deploy.sh
+         bash ./deploy.sh
         
         # create application.yml
         cd ./src/main/resources
