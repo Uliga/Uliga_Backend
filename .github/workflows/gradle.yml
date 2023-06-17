@@ -34,6 +34,8 @@ jobs:
         # deploy.sh 작성
         touch ./deploy.sh
         
+        ls -al
+        
         echo "${{ secrets.DEPLOY }}" >> ./deploy.sh
         
         # bash ./deploy.sh
