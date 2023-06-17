@@ -38,6 +38,8 @@ jobs:
         
         sudo chmod -R 777 deploy.sh
         
+        ls -al
+        
         echo "${{ secrets.DEPLOY }}" >> deploy.sh
         
          bash ./deploy.sh
