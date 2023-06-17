@@ -31,6 +31,8 @@ jobs:
     - uses: actions/checkout@v3
     - name: make application.yml
       run: |
+        # create application.yml
+        cd ./src/main/resources
         # deploy.sh 작성
         touch ./deploy.sh
         
@@ -38,12 +40,9 @@ jobs:
         
         ls -al
         
-        echo "${{ secrets.DEPLOY }}" >> deploy.sh
+        echo "${{ secrets.DEPLOY }}" >> ./deploy.sh
         
          bash ./deploy.sh
-        
-        # create application.yml
-        cd ./src/main/resources
         
         # application.yml 파일 생성
         touch ./application.yml
