@@ -74,28 +74,13 @@ class IncomeControllerTest {
         doReturn(result).when(incomeService).getMemberIncomesByAccountBook(any(), any(), any(), any(), any());
 
         // then
-        mvc.perform(get(BASE_URL + "/1")
+        mvc.perform(get(BASE_URL + "/accountBook/1")
                         .with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString().equals(mapper.writeValueAsString(result));
     }
 
-    @Test
-    @WithMockCustomUser
-    @DisplayName("수입 카테고리 별 조회 성공 테스트")
-     void getMemberIncomeWithCategoryTestToSuccess() throws Exception{
-        // given
-        Page<IncomeInfoQ> result = new PageImpl<>(new ArrayList<>());
 
-        // when
-        doReturn(result).when(incomeService).getMemberIncomesByAccountBook(any(), any(), any(), any(), any());
-
-        // then
-        mvc.perform(get(BASE_URL + "/1/기타")
-                        .with(csrf()))
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString().equals(mapper.writeValueAsString(result));
-    }
 
 
 }

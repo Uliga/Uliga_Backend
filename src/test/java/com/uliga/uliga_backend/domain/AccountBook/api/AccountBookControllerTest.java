@@ -972,29 +972,13 @@ class AccountBookControllerTest {
         // when
         doReturn("DELETE").when(accountBookService).deleteAccountBook(any(), any());
         // then
-        mvc.perform(delete(BASE_URL)
-                        .with(csrf())
-                        .content(value)
-                        .contentType(APPLICATION_JSON))
+        mvc.perform(delete(BASE_URL+"/1")
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString().equals("DELETE");
     }
 
-    @Test
-    @WithMockCustomUser
-    @DisplayName("Null id - 가계부 삭제 실패 테스트")
-     void deleteAccountBookTestToFailByNullId() throws Exception{
-        // given
-        AccountBookDeleteRequest deleteRequest = AccountBookDeleteRequest.builder().build();
-        String value = mapper.writeValueAsString(deleteRequest);
 
-        // then
-        mvc.perform(delete(BASE_URL)
-                        .with(csrf())
-                        .content(value)
-                        .contentType(APPLICATION_JSON))
-                .andExpect(status().isConflict());
-    }
 
     @Test
     @WithMockCustomUser
@@ -1007,10 +991,8 @@ class AccountBookControllerTest {
         // when
         doThrow(InvalidAccountBookDeleteRequest.class).when(accountBookService).deleteAccountBook(any(), any());
         // then
-        mvc.perform(delete(BASE_URL)
-                        .with(csrf())
-                        .content(value)
-                        .contentType(APPLICATION_JSON))
+        mvc.perform(delete(BASE_URL+"/1")
+                        .with(csrf()))
                 .andExpect(status().isConflict());
     }
 }

@@ -78,20 +78,5 @@ class RecordControllerTest {
                 .andReturn().getResponse().getContentAsString().equals(mapper.writeValueAsString(result));
     }
 
-    @Test
-    @WithMockCustomUser
-    @DisplayName("멤버 지출 카테고리별 조회 성공 테스트")
-    void getMemberRecordsByCategory() throws Exception {
-        // given
-        Page<RecordInfoQ> result = new PageImpl<>(new ArrayList<>());
 
-        // when
-        doReturn(result).when(recordService).getMemberRecordsByAccountBook(any(), any(), any(), any(), any());
-
-        // then
-        mvc.perform(get(BASE_URL + "/1/기타")
-                        .with(csrf()))
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString().equals(mapper.writeValueAsString(result));
-    }
 }
