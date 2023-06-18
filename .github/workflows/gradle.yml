@@ -34,27 +34,12 @@ jobs:
         # create application.yml
         cd ./src/main/resources
         
-        # deploy.sh 작성
-        touch ./deploy.sh
-        
-        sudo chmod -R 777 deploy.sh
-        
-        ls -al
-        
-        echo "${{ secrets.DEPLOY }}" >> ./deploy.sh
-        
-        bash ./deploy.sh
-        
         # application.yml 파일 생성
         touch ./application.yml
-        
-        # profile-application.yml 파일 생성
-        touch ./profile-application.yml
-        
+      
         # GitHub-Actions 에서 설정한 값을 application.yml 파일에 쓰기
         echo "${{ secrets.APPLICATION }}" >> ./application.yml
-        
-        echo "${{ secrets.PROFILE_APPLICATION }}" >> ./profile-application.yml
+
       shell: bash
 
     - name: Build with Gradle
@@ -76,9 +61,8 @@ jobs:
         key: ${{ secrets.PEM_KEY }}
         port: 22
         script: |
-          sudo docker rm -f $(docker ps -qa)
           sudo docker pull ${{ secrets.DOCKER_REPO }}/uliga_backend 
-          docker-compose up -d
+          sh deploy.sh
           docker image prune -f
 
 
