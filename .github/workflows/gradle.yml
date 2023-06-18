@@ -79,4 +79,4 @@ jobs:
         port: 22
         script: |
           sudo docker pull ${{ secrets.DOCKER_REPO }}/uliga_backend 
-          sh deploy.sh
+          bash deploy.sh
