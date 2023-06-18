@@ -5,9 +5,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 /src/main/resources/application.yml
-/src/main/resources/profile-application.yml
 /src/main/resources/server.yml
-/src/main/resources/deploy.sh
 **.env.json
 ### STS ###
 .apt_generated
