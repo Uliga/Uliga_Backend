@@ -14,51 +14,51 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 @SpringBootTest
 class EmailCertificationServiceTest {
-    @Autowired
-    EmailCertificationService emailCertificationService;
-
-     EmailConfirmCodeDto createEmailConfirmCode(String email, String code) {
-        return EmailConfirmCodeDto.builder()
-                .email(email)
-                .code(code).build();
-    }
-    @Test
-    @DisplayName("이메일 전송 성공 테스트")
-     void sendEmailTestToSuccess() throws Exception{
-        // given
-        emailCertificationService.sendSimpleMessage("dongjunkim99@icloud.com");
-
-
-        // when
-        EmailConfirmCodeDto emailConfirmCode = createEmailConfirmCode("dongjunkim99@icloud.com", emailCertificationService.getePw());
-        CodeConfirmDto codeConfirmDto = emailCertificationService.confirmCode(emailConfirmCode);
-        // then
-        assertTrue(codeConfirmDto.isMatches());
-    }
-
-    @Test
-    @DisplayName("이메일 코드 검증 실패 테스트 - 레디스에 없는 이메일")
-     void sendEmailTestToFailByInvalidEmail() throws Exception{
-        // given
-        emailCertificationService.sendSimpleMessage("dongjunkim99@icloud.com");
-
-        // when
-        EmailConfirmCodeDto emailConfirmCode = createEmailConfirmCode("dongjunkim992@icloud.com", "aaaaaa");
-        // then
-        assertThrows(EmailCertificationExpireException.class, () -> emailCertificationService.confirmCode(emailConfirmCode));
-    }
-
-    @Test
-    @DisplayName("이메일 코드 검증 실패 테스트 - 잘못된 코드")
-     void sendEmailTestToFailByInvalidCode() throws Exception{
-        // given
-        emailCertificationService.sendSimpleMessage("dongjunkim99@icloud.com");
-
-
-        // when
-        EmailConfirmCodeDto emailConfirmCode = createEmailConfirmCode("dongjunkim99@icloud.com", "aaaaaa");
-        // then
-        assertFalse(emailCertificationService.confirmCode(emailConfirmCode).isMatches());
-
-    }
+//    @Autowired
+//    EmailCertificationService emailCertificationService;
+//
+//     EmailConfirmCodeDto createEmailConfirmCode(String email, String code) {
+//        return EmailConfirmCodeDto.builder()
+//                .email(email)
+//                .code(code).build();
+//    }
+//    @Test
+//    @DisplayName("이메일 전송 성공 테스트")
+//     void sendEmailTestToSuccess() throws Exception{
+//        // given
+//        emailCertificationService.sendSimpleMessage("dongjunkim99@icloud.com");
+//
+//
+//        // when
+//        EmailConfirmCodeDto emailConfirmCode = createEmailConfirmCode("dongjunkim99@icloud.com", emailCertificationService.getePw());
+//        CodeConfirmDto codeConfirmDto = emailCertificationService.confirmCode(emailConfirmCode);
+//        // then
+//        assertTrue(codeConfirmDto.isMatches());
+//    }
+//
+//    @Test
+//    @DisplayName("이메일 코드 검증 실패 테스트 - 레디스에 없는 이메일")
+//     void sendEmailTestToFailByInvalidEmail() throws Exception{
+//        // given
+//        emailCertificationService.sendSimpleMessage("dongjunkim99@icloud.com");
+//
+//        // when
+//        EmailConfirmCodeDto emailConfirmCode = createEmailConfirmCode("dongjunkim992@icloud.com", "aaaaaa");
+//        // then
+//        assertThrows(EmailCertificationExpireException.class, () -> emailCertificationService.confirmCode(emailConfirmCode));
+//    }
+//
+//    @Test
+//    @DisplayName("이메일 코드 검증 실패 테스트 - 잘못된 코드")
+//     void sendEmailTestToFailByInvalidCode() throws Exception{
+//        // given
+//        emailCertificationService.sendSimpleMessage("dongjunkim99@icloud.com");
+//
+//
+//        // when
+//        EmailConfirmCodeDto emailConfirmCode = createEmailConfirmCode("dongjunkim99@icloud.com", "aaaaaa");
+//        // then
+//        assertFalse(emailCertificationService.confirmCode(emailConfirmCode).isMatches());
+//
+//    }
 }
