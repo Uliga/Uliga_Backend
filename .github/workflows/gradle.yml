@@ -47,28 +47,29 @@ jobs:
 
     - name: Build with Gradle
       run: |
-        ./gradlew bootJar
         ./gradlew build
+
     - name: Save test result
       uses: EnricoMi/publish-unit-test-result-action@v1
       if: always()
       with:
         files: '**/build/test-results/test/TEST-*.xml'
         token: ${{ secrets.TOKEN_GITHUB }}
+
     - name: Saves check comment when test fails
       uses: mikepenz/action-junit-report@v3
       if: always()
       with:
         report_paths: '**/build/test-results/test/TEST-*.xml'
         token: ${{ github.token }}
-      ## 웹 이미지 빌드 및 도커허브에 push
+
     - name: web docker build and push
       run: |
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
         docker build -t ${{ secrets.DOCKER_REPO }}/uliga_backend .
         docker push ${{ secrets.DOCKER_REPO }}/uliga_backend
 
-      ## docker compose up
+
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@v0.1.7
       with:
@@ -79,5 +80,3 @@ jobs:
         script: |
           sudo docker pull ${{ secrets.DOCKER_REPO }}/uliga_backend 
           sh deploy.sh
-
-
