@@ -51,6 +51,7 @@ jobs:
       if: always()
       with:
         files: '**/build/test-results/test/TEST-*.xml'
+        token: ${{ github.token }}
     - name: Saves check comment when test fails
       uses: mikepenz/action-junit-report@v3
       if: always()
