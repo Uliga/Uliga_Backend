@@ -53,7 +53,7 @@ jobs:
         files: '**/build/test-results/test/TEST-*.xml'
     - name: Saves check comment when test fails
       uses: mikepenz/action-junit-report@v3
-      if: alawys()
+      if: always()
       with:
         report_paths: '**/build/test-results/test/TEST-*.xml'
         token: ${{ github.token }}
