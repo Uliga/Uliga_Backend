@@ -64,5 +64,5 @@ jobs:
           sudo docker pull ${{ secrets.DOCKER_REPO }}/uliga_backend 
           sh deploy.sh
           docker image prune -f
-
+인
 
