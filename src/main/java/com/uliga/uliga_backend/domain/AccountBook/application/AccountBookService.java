@@ -114,18 +114,18 @@ public class AccountBookService {
             result.add(build);
         }
 
-        return GetAccountBookInfos.builder()
-                .accountBooks(result).build();
+        return new GetAccountBookInfos(result);
     }
+
 
     /**
      * 멤버 개인 가계부 생성
-     * @param member 멤버
+     *
+     * @param member        멤버
      * @param createRequest 가계부 생성 요청
-     * @return 멤버 개인 가계부
      */
     @Transactional
-    public AccountBook createAccountBookPrivate(Member member, CreateRequestPrivate createRequest) {
+    public void createAccountBookPrivate(Member member, CreateRequestPrivate createRequest) {
         AccountBook accountBook = createRequest.toEntity();
         accountBookRepository.save(accountBook);
         member.setPrivateAccountBook(accountBook);
@@ -143,7 +143,6 @@ public class AccountBookService {
                     .name(cat).build();
             categoryRepository.save(category);
         }
-        return accountBook;
     }
 
     /**
@@ -171,12 +170,7 @@ public class AccountBookService {
         categoryService.createCategories(accountBookCreateRequest.getCategories(), accountBook);
 
         for (String email : accountBookCreateRequest.getEmails()) {
-            InvitationInfo info = InvitationInfo.builder()
-                    .id(accountBook.getId())
-                    .memberName(member.getUserName())
-                    .accountBookName(accountBook.getName())
-                    .build();
-
+            InvitationInfo info = new InvitationInfo(accountBook.getId(), member.getUserName(), accountBook.getName());
             SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
             try {
 
@@ -201,11 +195,7 @@ public class AccountBookService {
         AccountBook accountBook = accountBookRepository.findById(invitations.getId()).orElseThrow(() -> new NotFoundByIdException("가계부 초대에 아이디 값이 없습니다"));
         long result = 0L;
         for (String email : invitations.getEmails()) {
-            InvitationInfo info = InvitationInfo.builder()
-                    .id(accountBook.getId())
-                    .memberName(member.getUserName())
-                    .accountBookName(accountBook.getName())
-                    .build();
+            InvitationInfo info = new InvitationInfo(accountBook.getId(), member.getUserName(), accountBook.getName());
             SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
             try {
 
@@ -215,7 +205,7 @@ public class AccountBookService {
             }
             result += 1;
         }
-        return Invited.builder().invited(result).build();
+        return new Invited(result);
     }
 
     /**
@@ -248,9 +238,7 @@ public class AccountBookService {
                 .build();
         SetOperations<String, Object> setOperations = redisTemplate.opsForSet();
         setOperations.remove(member.getEmail(), objectMapper.writeValueAsString(build));
-        return InvitationReplyResult.builder()
-                .id(invitationReply.getId())
-                .join(invitationReply.getJoin()).build();
+        return new InvitationReplyResult(invitationReply.getId(), invitationReply.getJoin());
 
     }
 
@@ -358,10 +346,7 @@ public class AccountBookService {
             recordService.addRecordToOtherAccountBooks(addRecordToOtherAccountBooks.get(ab));
         }
 
-        return CreateResult.builder()
-                .income(i)
-                .record(r)
-                .created(createResult).build();
+        return new CreateResult(i, r, createResult);
     }
 
     /**
@@ -371,8 +356,7 @@ public class AccountBookService {
      */
     @Transactional
     public AccountBookCategories getAccountBookCategories(Long id) {
-        return AccountBookCategories.builder()
-                .categories(accountBookRepository.findAccountBookCategoryInfoById(id)).build();
+        return new AccountBookCategories(accountBookRepository.findAccountBookCategoryInfoById(id));
     }
 
     /**
@@ -382,8 +366,7 @@ public class AccountBookService {
      */
     @Transactional
     public AccountBookMembers getAccountBookMembers(Long id) {
-        return AccountBookMembers.builder()
-                .members(accountBookRepository.findAccountBookMemberInfoById(id)).build();
+        return new AccountBookMembers(accountBookRepository.findAccountBookMemberInfoById(id));
     }
 
     /**
@@ -406,9 +389,7 @@ public class AccountBookService {
                 result.add(cat);
             }
         }
-        return CategoryCreateResult.builder()
-                .id(id)
-                .created(result).build();
+        return new CategoryCreateResult(id, result);
     }
 
     /**
@@ -441,10 +422,7 @@ public class AccountBookService {
         map.put("year", year);
         map.put("month", month);
         map.put("day", day);
-        return RecordAndIncomeDetails
-                .builder()
-                .items(accountBookDataMapper.findAccountBookDataOrderByValue(map))
-                .build();
+        return new RecordAndIncomeDetails(accountBookDataMapper.findAccountBookDataOrderByValue(map));
     }
 
     /**
@@ -681,23 +659,22 @@ public class AccountBookService {
                     result.add(monthlyRecord.get(index));
                     index += 1;
                 } else {
-                    result.add(DailyValueQ.builder().day((long) i).value(0L).build());
-
+                    result.add(new DailyValueQ((long) i, 0L));
                 }
             } else {
-                result.add(DailyValueQ.builder().day((long) i).value(0L).build());
+                result.add(new DailyValueQ((long) i, 0L));
 
             }
         }
         List<MonthlyCompareQ> monthlyCompareInDailyAnalyze = accountBookRepository.getMonthlyCompareInDailyAnalyze(id, year, month);
         if (monthlyCompareInDailyAnalyze.size() == 2) {
             Long diff = monthlyCompareInDailyAnalyze.get(0).getValue() - monthlyCompareInDailyAnalyze.get(1).getValue();
-            return AccountBookDailyRecord.builder().records(result).sum(monthlyCompareInDailyAnalyze.get(0).getValue()).diff(diff).build();
+            return new AccountBookDailyRecord(result, monthlyCompareInDailyAnalyze.get(0).getValue(), diff);
         } else {
             if (monthlyCompareInDailyAnalyze.size() == 0) {
-                return AccountBookDailyRecord.builder().records(result).sum(0L).build();
+                return new AccountBookDailyRecord(result, 0L, null);
             } else {
-                return AccountBookDailyRecord.builder().records(result).sum(monthlyCompareInDailyAnalyze.get(0).getValue()).build();
+                return new AccountBookDailyRecord(result, monthlyCompareInDailyAnalyze.get(0).getValue(), null);
             }
 
         }
@@ -722,21 +699,21 @@ public class AccountBookService {
                 compare += analyzeQ.getValue();
             }
             if (compare.equals(monthlySumQ.getValue())) {
-                return AccountBookCategoryAnalyze.builder().categories(categoryAnalyze).sum(monthlySumQ.getValue()).build();
+                return new AccountBookCategoryAnalyze(categoryAnalyze, monthlySumQ.getValue());
             } else {
-                AccountBookCategoryAnalyzeQ built = AccountBookCategoryAnalyzeQ.builder().name("그 외").value(monthlySumQ.getValue() - compare).build();
+                AccountBookCategoryAnalyzeQ built = new AccountBookCategoryAnalyzeQ(null, "그 외", monthlySumQ.getValue() - compare);
                 categoryAnalyze.add(built);
-                return AccountBookCategoryAnalyze.builder().categories(categoryAnalyze).sum(monthlySumQ.getValue()).build();
+                return new AccountBookCategoryAnalyze(categoryAnalyze, monthlySumQ.getValue());
             }
         } else {
             List<AccountBookCategoryInfoQ> accountBookCategoryInfoById = accountBookRepository.findAccountBookCategoryAnalyze(id);
             List<AccountBookCategoryAnalyzeQ> result = new ArrayList<>();
             for (AccountBookCategoryInfoQ accountBookCategoryInfoQ : accountBookCategoryInfoById) {
-                AccountBookCategoryAnalyzeQ built = AccountBookCategoryAnalyzeQ.builder().id(accountBookCategoryInfoQ.getId()).name(accountBookCategoryInfoQ.getLabel()).value(0L).build();
+                AccountBookCategoryAnalyzeQ built = new AccountBookCategoryAnalyzeQ(accountBookCategoryInfoQ.getId(), accountBookCategoryInfoQ.getLabel(), 0L);
                 result.add(built);
 
             }
-            return AccountBookCategoryAnalyze.builder().categories(result).sum(0L).build();
+            return new AccountBookCategoryAnalyze(result, 0L);
         }
 
 
@@ -778,7 +755,8 @@ public class AccountBookService {
 
 
 
-        return MonthlyCompare.builder().compare(monthlyCompare).build();
+//        return MonthlyCompare.builder().compare(monthlyCompare).build();
+        return new MonthlyCompare(monthlyCompare);
     }
 
     /**
@@ -838,15 +816,15 @@ public class AccountBookService {
         if (recordSum.isPresent() && budgetSum.isPresent()) {
             MonthlySumQ record = recordSum.get();
             MonthlySumQ budget = budgetSum.get();
-            return BudgetCompare.builder().spend(record.getValue()).budget(budget.getValue()).diff(budget.getValue() - record.getValue()).build();
+            return new BudgetCompare(record.getValue(), budget.getValue(), budget.getValue() - record.getValue());
         } else if (budgetSum.isPresent()) {
             MonthlySumQ budget = budgetSum.get();
-            return BudgetCompare.builder().spend(0L).budget(budget.getValue()).diff(budget.getValue()).build();
+            return new BudgetCompare(0L, budget.getValue(), budget.getValue());
         } else if (recordSum.isPresent()) {
             MonthlySumQ record = recordSum.get();
-            return BudgetCompare.builder().spend(record.getValue()).budget(0L).diff(-record.getValue()).build();
+            return new BudgetCompare(record.getValue(), 0L, -record.getValue());
         } else {
-            return BudgetCompare.builder().spend(0L).budget(0L).diff(0L).build();
+            return new BudgetCompare(0L, 0L, 0L);
         }
     }
 
@@ -885,8 +863,20 @@ public class AccountBookService {
             startDay += 7;
 
         }
-        return AccountBookWeeklyRecord.builder().weeklySums(result).sum(totalSum).build();
+        return new AccountBookWeeklyRecord(result, totalSum);
     }
+
+    /**
+     * 가계부 분석 - 사용자 지정 날짜 기간동안 가계부 내역 조회
+     * @param id 가계부 아이디
+     * @param year 년도
+     * @param month 달
+     * @param startDay 시작일
+     * @param endDay 종료일
+     * @param category 카테고리
+     * @param pageable 페이지 정보
+     * @return 해당 기간 가계부 내역 데이터
+     */
 
     @Transactional
     public Page<AccountBookDataQ> getCustomAccountBookData(Long id, Long year, Long month, Long startDay, Long endDay, String category, Pageable pageable) {
