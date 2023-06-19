@@ -28,7 +28,7 @@ public class CategoryService {
      * @param accountBook 카테고리를 생성할 가계부
      */
     @Transactional
-    public void createCategories(List<String> categoryNames, AccountBook accountBook) {
+    public List<String> createCategories(List<String> categoryNames, AccountBook accountBook) {
         Set<String> createCategories = new HashSet<>();
         List<Category> categories = new ArrayList<>();
         for (String category : categoryNames){
@@ -42,6 +42,7 @@ public class CategoryService {
             }
         }
         categoryRepository.saveAll(categories);
+        return categoryNames;
     }
 
     /**

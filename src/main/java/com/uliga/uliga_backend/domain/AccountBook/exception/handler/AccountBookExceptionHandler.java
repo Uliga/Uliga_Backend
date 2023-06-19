@@ -1,5 +1,7 @@
 package com.uliga.uliga_backend.domain.AccountBook.exception.handler;
 
+import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO;
+import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.SimpleAccountBookInfo;
 import com.uliga.uliga_backend.domain.AccountBook.exception.*;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -60,8 +62,16 @@ public class AccountBookExceptionHandler {
         log.info("레디스 저장중 오류 발생");
         return new ResponseEntity<>(ErrorResponse.builder()
                 .errorCode(409L)
-                .message(ex.getMessage()).build(),
+                .message("멤버 초대 과정에서 오류가 발생하였습니다.").build(),
                 HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(InvitationSaveErrorWithCreation.class)
+    protected final ResponseEntity<SimpleAccountBookInfo> handleInvitationSaveErrorWithCreation(
+            InvitationSaveErrorWithCreation ex, WebRequest request
+    ) {
+        log.info("가계부는 생성되었지만, 과정에서 오류 발생");
+        return new ResponseEntity<>(ex.getSimpleAccountBookInfo(), HttpStatus.ACCEPTED);
     }
 
     @ExceptionHandler(BudgetAlreadyExists.class)

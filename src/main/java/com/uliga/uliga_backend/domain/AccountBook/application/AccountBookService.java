@@ -176,7 +176,7 @@ public class AccountBookService {
 
                 setOperations.add(email, objectMapper.writeValueAsString(info));
             } catch (RedisSystemException e) {
-                throw new InvitationSaveError();
+                throw new InvitationSaveErrorWithCreation(accountBook.toInfoDto());
             }
         }
         return accountBook.toInfoDto();
