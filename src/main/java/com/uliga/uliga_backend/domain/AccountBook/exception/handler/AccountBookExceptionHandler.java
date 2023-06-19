@@ -18,7 +18,7 @@ public class AccountBookExceptionHandler {
     protected final ResponseEntity<ErrorResponse> handleUnauthorizedAccountBook(
             UnauthorizedAccountBookAccessException ex, WebRequest request
     ) {
-        log.info("권한이 없는 가계부 접근 요청임");
+        log.warn("권한이 없는 가계부 접근 요청임");
         return new ResponseEntity<>(ErrorResponse.builder()
                 .message(ex.getMessage())
                 .errorCode(400L).build(), HttpStatus.BAD_REQUEST);
@@ -28,7 +28,7 @@ public class AccountBookExceptionHandler {
     protected final ResponseEntity<ErrorResponse> handleUnauthorizedCategory(
             UnauthorizedAccountBookCategoryCreateException ex, WebRequest request
     ) {
-        log.info("권한이 없는 카테고리 생성 요청임");
+        log.warn("권한이 없는 카테고리 생성 요청임");
         return new ResponseEntity<>(ErrorResponse.builder()
                 .message(ex.getMessage())
                 .errorCode(400L).build(), HttpStatus.BAD_REQUEST);
@@ -38,7 +38,7 @@ public class AccountBookExceptionHandler {
     protected final ResponseEntity<ErrorResponse> handleCategoryNotFound(
             CategoryNotFoundException ex, WebRequest request
     ) {
-        log.info("가계부에 존재하지 않는 카테고리로 지출 혹은 수입 생성 요청이 들어옴");
+        log.warn("가계부에 존재하지 않는 카테고리로 지출 혹은 수입 생성 요청이 들어옴");
         return new ResponseEntity<>(ErrorResponse.builder()
                 .message(ex.getMessage())
                 .errorCode(404L).build(), HttpStatus.NOT_FOUND);
@@ -48,7 +48,7 @@ public class AccountBookExceptionHandler {
     protected final ResponseEntity<ErrorResponse> handleInvalidAccountBookDeleteRequest(
             InvalidAccountBookDeleteRequest ex, WebRequest request
     ) {
-        log.info("해당 가계부에 속하지 않아서 삭제할 수 없습니다");
+        log.warn("해당 가계부에 속하지 않아서 삭제할 수 없습니다");
         return new ResponseEntity<>(ErrorResponse.builder()
                 .errorCode(409L)
                 .message(ex.getMessage()).build(),
@@ -59,7 +59,7 @@ public class AccountBookExceptionHandler {
     protected final ResponseEntity<ErrorResponse> handleInvitationSaveError(
             InvitationSaveError ex, WebRequest request
     ) {
-        log.info("레디스 저장중 오류 발생");
+        log.warn("레디스 저장중 오류 발생");
         return new ResponseEntity<>(ErrorResponse.builder()
                 .errorCode(409L)
                 .message("멤버 초대 과정에서 오류가 발생하였습니다.").build(),
@@ -70,7 +70,7 @@ public class AccountBookExceptionHandler {
     protected final ResponseEntity<SimpleAccountBookInfo> handleInvitationSaveErrorWithCreation(
             InvitationSaveErrorWithCreation ex, WebRequest request
     ) {
-        log.info("가계부는 생성되었지만, 과정에서 오류 발생");
+        log.warn("가계부는 생성되었지만, 과정에서 오류 발생");
         return new ResponseEntity<>(ex.getSimpleAccountBookInfo(), HttpStatus.ACCEPTED);
     }
 
@@ -78,7 +78,7 @@ public class AccountBookExceptionHandler {
     protected final ResponseEntity<ErrorResponse> handleBudgetAlreadyExists(
             BudgetAlreadyExists ex, WebRequest request
     ) {
-        log.info("이미 존재하는 예산입니다");
+        log.warn("이미 존재하는 예산입니다");
         return new ResponseEntity<>(ErrorResponse.builder()
                 .message(ex.getMessage())
                 .errorCode(409L).build(),

@@ -21,7 +21,7 @@ public class MemberExceptionHandler {
     protected final ResponseEntity<ErrorResponse> handleEmailCertificationExpireException(
             EmailCertificationExpireException ex, WebRequest request
     ) {
-        log.info("만료된 이메일 인증 코드입니다");
+        log.warn("만료된 이메일 인증 코드입니다");
         return new ResponseEntity<>(
                 ErrorResponse.builder()
                         .errorCode(409L)
@@ -35,7 +35,7 @@ public class MemberExceptionHandler {
     protected final ResponseEntity<ErrorResponse> handleMessagingException(
             MessagingException ex, WebRequest request
     ) {
-        log.info("이메일 전송중 오류가 발생했습니다");
+        log.warn("이메일 전송중 오류가 발생했습니다");
         return new ResponseEntity<>(
                 ErrorResponse.builder()
                         .errorCode(500L)
@@ -48,7 +48,7 @@ public class MemberExceptionHandler {
     protected final ResponseEntity<ErrorResponse> handleInvalidApplicationPasswordException(
             InvalidApplicationPasswordException ex, WebRequest request
     ) {
-        log.info("애플리케이션 비밀번호가 잘못되었습니다");
+        log.warn("애플리케이션 비밀번호가 잘못되었습니다");
         return new ResponseEntity<>(
                 ErrorResponse.builder()
                         .errorCode(409L)
@@ -63,7 +63,7 @@ public class MemberExceptionHandler {
     protected final ResponseEntity<ErrorResponse> handleUnknownLoginException(
             UnknownLoginException ex, WebRequest request
     ) {
-        log.info(ex.getMessage());
+        log.warn(ex.getMessage());
         return new ResponseEntity<>(
                 ErrorResponse.builder()
                         .errorCode(409L)
@@ -76,7 +76,7 @@ public class MemberExceptionHandler {
     protected final ResponseEntity<SearchEmailResult> handleUserNotFoundByEmail(
             UserNotFoundByEmail ex, WebRequest request
     ) {
-        log.info(ex.getMessage());
+        log.warn(ex.getMessage());
         return ResponseEntity.ok(SearchEmailResult.builder()
                 .id(null)
                 .nickName("null")
@@ -87,7 +87,7 @@ public class MemberExceptionHandler {
     protected final ResponseEntity<SearchEmailResult> handleUserExistsInAccountBook(
             UserExistsInAccountBook ex, WebRequest request
     ) {
-        log.info(ex.getMessage()+"이미 존재하는 유저입니다");
+        log.warn(ex.getMessage()+"이미 존재하는 유저입니다");
         return ResponseEntity.ok(SearchEmailResult.builder()
                 .id(null)
                 .userName(ex.getMessage()+" 는/은 이미 존재하는 유저입니다")
@@ -98,7 +98,7 @@ public class MemberExceptionHandler {
     protected final ResponseEntity<ErrorResponse> handleCannotLoginException(
             CannotLoginException ex, WebRequest request
     ) {
-        log.info("로그인 불가");
+        log.warn("로그인 불가");
         return new ResponseEntity<>(ErrorResponse.builder()
                 .errorCode(409L).message(ex.getMessage()).build(), HttpStatus.CONFLICT);
     }
