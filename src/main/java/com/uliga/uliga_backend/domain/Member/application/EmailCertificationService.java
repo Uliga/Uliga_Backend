@@ -140,7 +140,6 @@ public class EmailCertificationService {
         MimeMessage message = createMessage(to);
         try {
             emailSender.send(message);
-            log.info("secret code = " + ePw);
             ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
             valueOperations.set(to, ePw);
             redisTemplate.expire(to, EMAIL_CERTIFICATION_TIME, TimeUnit.MILLISECONDS);
@@ -163,7 +162,6 @@ public class EmailCertificationService {
         MimeMessage passwordMessage = createPasswordMessage(resetPasswordRequest.getEmail(), newPassword);
         try {
             emailSender.send(passwordMessage);
-            log.info("new Password" + newPassword);
         } catch (MailException es) {
             log.info(es.getLocalizedMessage());
             throw new IllegalArgumentException(es.getLocalizedMessage());
