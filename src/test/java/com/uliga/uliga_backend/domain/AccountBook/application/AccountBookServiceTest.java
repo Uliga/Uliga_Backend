@@ -5,6 +5,7 @@ import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.AccountBookCreateRequest;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.GetAccountBookInfos;
+import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.GetInvitations;
 import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.SimpleAccountBookInfo;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategoryInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
@@ -43,6 +44,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
 import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.AccountBookInfo;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -219,5 +221,55 @@ class AccountBookServiceTest {
         // then
         assertThrows(NotFoundByIdException.class, () -> accountBookService.createAccountBook(1L, new AccountBookCreateRequest()));
 
+    }
+
+    @Test
+    @DisplayName("가계부 멤버 초대 성공 테스트")
+    public void createInvitationSuccessTest() throws Exception{
+        // given
+        Optional<Member> member = Optional.of(new Member());
+        Optional<AccountBook> accountBook = Optional.of(new AccountBook());
+
+        // when
+        when(memberRepository.findById(1L)).thenReturn(member);
+        when(accountBookRepository.findById(1L)).thenReturn(accountBook);
+        GetInvitations invitations = GetInvitations.builder().emails(new ArrayList<>()).id(1L).build();
+
+        Invited invitation = accountBookService.createInvitation(1L, invitations);
+
+        // then
+        assertEquals(invitation.getInvited(), 0L);
+
+    }
+
+    @Test
+    @DisplayName("가계부 멤버 초대 실패 테스트 - null member")
+    public void createInvitationFailByNullMemberTest() throws Exception{
+        // given
+        Optional<Member> member = Optional.empty();
+
+        // when
+        when(memberRepository.findById(1L)).thenReturn(member);
+        GetInvitations invitations = GetInvitations.builder().emails(new ArrayList<>()).id(1L).build();
+
+        // then
+        assertThrows(NotFoundByIdException.class, () -> accountBookService.createInvitation(1L, invitations));
+    }
+
+    @Test
+    @DisplayName("가계부 멤버 초대 실패 테스트 - null accountBook")
+    public void createInvitationFailByNullAccountBookTest() throws Exception{
+        // given
+        Optional<Member> member = Optional.of(new Member());
+        Optional<AccountBook> accountBook = Optional.empty();
+
+        // when
+        when(memberRepository.findById(1L)).thenReturn(member);
+        when(accountBookRepository.findById(1L)).thenReturn(accountBook);
+        GetInvitations invitations = GetInvitations.builder().emails(new ArrayList<>()).id(1L).build();
+
+
+        // then
+        assertThrows(NotFoundByIdException.class, () -> accountBookService.createInvitation(1L, invitations));
     }
 }
