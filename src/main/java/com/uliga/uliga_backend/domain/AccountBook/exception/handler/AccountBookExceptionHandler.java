@@ -21,7 +21,7 @@ public class AccountBookExceptionHandler {
         log.info("권한이 없는 가계부 접근 요청임");
         return new ResponseEntity<>(ErrorResponse.builder()
                 .message(ex.getMessage())
-                .errorCode(401L).build(), HttpStatus.BAD_REQUEST);
+                .errorCode(400L).build(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UnauthorizedAccountBookCategoryCreateException.class)
@@ -31,7 +31,7 @@ public class AccountBookExceptionHandler {
         log.info("권한이 없는 카테고리 생성 요청임");
         return new ResponseEntity<>(ErrorResponse.builder()
                 .message(ex.getMessage())
-                .errorCode(401L).build(), HttpStatus.BAD_REQUEST);
+                .errorCode(400L).build(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(CategoryNotFoundException.class)
