@@ -12,6 +12,7 @@ import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookMemberInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MembersQ;
 import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookAccessException;
+import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookCategoryCreateException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
 import com.uliga.uliga_backend.domain.AccountBookData.dao.AccountBookDataMapper;
@@ -20,6 +21,7 @@ import com.uliga.uliga_backend.domain.Budget.application.BudgetService;
 import com.uliga.uliga_backend.domain.Budget.dao.BudgetRepository;
 import com.uliga.uliga_backend.domain.Category.application.CategoryService;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
+import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Income.application.IncomeService;
 import com.uliga.uliga_backend.domain.Income.dao.IncomeRepository;
 import com.uliga.uliga_backend.domain.JoinTable.dao.AccountBookMemberRepository;
@@ -272,4 +274,111 @@ class AccountBookServiceTest {
         // then
         assertThrows(NotFoundByIdException.class, () -> accountBookService.createInvitation(1L, invitations));
     }
+
+   @Test
+   @DisplayName("가계부 카테고리 조회 성공 테스트")
+   public void getAccountBookCategoriesSuccessTest() throws Exception{
+       // given
+       List<AccountBookCategoryInfoQ> categoryInfoQS = new ArrayList<>();
+
+
+       // when
+       when(accountBookRepository.findAccountBookCategoryInfoById(1L)).thenReturn(categoryInfoQS);
+
+       AccountBookCategories accountBookCategories = accountBookService.getAccountBookCategories(1L);
+
+       // then
+       assertEquals(accountBookCategories.getCategories(), categoryInfoQS);
+   }
+
+   @Test
+   @DisplayName("가계부 멤버 조회 성공 테스트")
+   public void getAccountBookMemberSuccessTest() throws Exception{
+       // given
+       List<AccountBookMemberInfoQ> memberInfoQS = new ArrayList<>();
+
+
+       // when
+       when(accountBookRepository.findAccountBookMemberInfoById(1L)).thenReturn(memberInfoQS);
+
+       AccountBookMembers accountBookMembers = accountBookService.getAccountBookMembers(1L);
+       // then
+       assertEquals(accountBookMembers.getMembers(), memberInfoQS);
+   }
+
+    @Test
+    @DisplayName("가계부에 카테고리 추가 성공 테스트")
+    public void createCategorySuccessTest() throws Exception{
+        // given
+        Optional<AccountBook> accountBook = Optional.of(new AccountBook());
+        CategoryCreateRequest createRequest = CategoryCreateRequest.builder().id(1L).categories(new ArrayList<>()).build();
+
+        // when
+        when(accountBookRepository.findById(1L)).thenReturn(accountBook);
+        when(accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(1L, 1L)).thenReturn(true);
+        CategoryCreateResult category = accountBookService.createCategory(1L, createRequest);
+
+        // then
+        assertEquals(category.getId(), 1L);
+
+    }
+
+    @Test
+    @DisplayName("가계부에 카테고리 추가 실패 테스트 - 가계부 & 멤버 Conflict")
+    public void createCategoryFailByConflict() throws Exception{
+        // given
+        Optional<AccountBook> accountBook = Optional.of(new AccountBook());
+        CategoryCreateRequest createRequest = CategoryCreateRequest.builder().id(1L).categories(new ArrayList<>()).build();
+
+        // when
+        when(accountBookRepository.findById(1L)).thenReturn(accountBook);
+        when(accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(1L, 1L)).thenReturn(false);
+
+        // then
+        assertThrows(UnauthorizedAccountBookCategoryCreateException.class, () -> accountBookService.createCategory(1L, createRequest));
+    }
+
+    @Test
+    @DisplayName("가계부에 수입 1개 추가 성공 테스트")
+    public void addIncomeSuccessTest() throws Exception{
+        // given
+        Optional<AccountBook> accountBook = Optional.of(new AccountBook());
+        Optional<Category> category = Optional.of(new Category());
+        Optional<Member> member = Optional.of(new Member());
+        AddIncomeRequest request = AddIncomeRequest.builder().id(1L).date("2023-06-21").category("카테고리").build();
+        AddIncomeResult result = new AddIncomeResult();
+        // when
+
+        when(accountBookRepository.findById(1L)).thenReturn(accountBook);
+        when(categoryRepository.findByAccountBookAndName(accountBook.get(), "카테고리")).thenReturn(category);
+        when(memberRepository.findById(1L)).thenReturn(member);
+        when(incomeService.addSingleIncomeToAccountBook(any(), any(), any(), any(), any())).thenReturn(result);
+
+        AddIncomeResult addIncomeResult = accountBookService.addIncome(1L, request);
+        // then
+        assertEquals(result, addIncomeResult);
+    }
+
+    @Test
+    @DisplayName("가계부에 지출 1개 추가 성공 테스트")
+    public void addRecordSuccessTest() throws Exception{
+        // given
+        Optional<AccountBook> accountBook = Optional.of(new AccountBook());
+        Optional<Category> category = Optional.of(new Category());
+        Optional<Member> member = Optional.of(new Member());
+        AddRecordRequest request = AddRecordRequest.builder().id(1L).date("2023-06-21").category("카테고리").build();
+        AddRecordResult result = new AddRecordResult();
+        // when
+
+        when(accountBookRepository.findById(1L)).thenReturn(accountBook);
+        when(categoryRepository.findByAccountBookAndName(accountBook.get(), "카테고리")).thenReturn(category);
+        when(memberRepository.findById(1L)).thenReturn(member);
+        when(recordService.addSingleItemToAccountBook(any(), any(), any(), any(), any())).thenReturn(result);
+
+        AddRecordResult addRecordResult = accountBookService.addRecord(1L, request);
+        // then
+        assertEquals(result, addRecordResult);
+    }
+
+
 }
