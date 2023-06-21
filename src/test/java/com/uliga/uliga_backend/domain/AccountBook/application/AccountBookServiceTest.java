@@ -11,6 +11,7 @@ import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategor
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookMemberInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MembersQ;
+import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookAccessException;
 import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookCategoryCreateException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
@@ -360,6 +361,54 @@ class AccountBookServiceTest {
     }
 
     @Test
+    @DisplayName("가계부에 수입 1개 추가 실패 테스트 - null accountBookId")
+    public void addIncomeFailByAccountBookIdTest() throws Exception{
+        // given
+        Optional<AccountBook> accountBook = Optional.empty();
+        AddIncomeRequest request = AddIncomeRequest.builder().id(1L).date("2023-06-21").category("카테고리").build();
+
+
+        // when
+        when(accountBookRepository.findById(1L)).thenReturn(accountBook);
+
+        // then
+        assertThrows(NotFoundByIdException.class, () -> accountBookService.addIncome(1L, request));
+    }
+
+    @Test
+    @DisplayName("가계부에 수입 1개 추가 실패 테스트 - invalid category")
+    public void addIncomeFailByCategory() throws Exception{
+        // given
+        AddIncomeRequest request = AddIncomeRequest.builder().id(1L).date("2023-06-21").category("카테고리").build();
+        Optional<AccountBook> accountBook = Optional.of(new AccountBook());
+        Optional<Category> category = Optional.empty();
+        // when
+        when(accountBookRepository.findById(1L)).thenReturn(accountBook);
+        when(categoryRepository.findByAccountBookAndName(accountBook.get(), "카테고리")).thenReturn(category);
+        // then
+        assertThrows(CategoryNotFoundException.class, () -> accountBookService.addIncome(1L, request));
+    }
+
+    @Test
+    @DisplayName("가계부에 수입 1개 추가 실패 테스트 - null memberId")
+    public void addIncomeFailByMemberIdTest() throws Exception{
+        // given
+        Optional<AccountBook> accountBook = Optional.of(new AccountBook());
+        Optional<Category> category = Optional.of(new Category());
+        Optional<Member> member = Optional.empty();
+        AddIncomeRequest request = AddIncomeRequest.builder().id(1L).date("2023-06-21").category("카테고리").build();
+
+
+        // when
+        when(accountBookRepository.findById(1L)).thenReturn(accountBook);
+        when(categoryRepository.findByAccountBookAndName(accountBook.get(), "카테고리")).thenReturn(category);
+        when(memberRepository.findById(1L)).thenReturn(member);
+
+        // then
+        assertThrows(NotFoundByIdException.class, () -> accountBookService.addIncome(1L, request));
+    }
+
+    @Test
     @DisplayName("가계부에 지출 1개 추가 성공 테스트")
     public void addRecordSuccessTest() throws Exception{
         // given
@@ -380,5 +429,54 @@ class AccountBookServiceTest {
         assertEquals(result, addRecordResult);
     }
 
+    @Test
+    @DisplayName("가계부에 지출 1개 추가 실패 테스트 - null accountBookId")
+    public void addRecordFailByAccountBookId() throws Exception{
+        // given
+        Optional<AccountBook> accountBook = Optional.empty();
+        AddRecordRequest request = AddRecordRequest.builder().id(1L).date("2023-06-21").category("카테고리").build();
+
+
+        // when
+        when(accountBookRepository.findById(1L)).thenReturn(accountBook);
+
+        // then
+        assertThrows(NotFoundByIdException.class, () -> accountBookService.addRecord(1L, request));
+    }
+
+    @Test
+    @DisplayName("가계부에 지출 1개 추가 실패 테스트 - null memberId")
+    public void addRecordFailByMemberId() throws Exception{
+        // given
+        Optional<AccountBook> accountBook = Optional.of(new AccountBook());
+        Optional<Category> category = Optional.of(new Category());
+        Optional<Member> member = Optional.empty();
+        AddRecordRequest request = AddRecordRequest.builder().id(1L).date("2023-06-21").category("카테고리").build();
+
+
+        // when
+        when(accountBookRepository.findById(1L)).thenReturn(accountBook);
+        when(categoryRepository.findByAccountBookAndName(accountBook.get(), "카테고리")).thenReturn(category);
+        when(memberRepository.findById(1L)).thenReturn(member);
+        // then
+        assertThrows(NotFoundByIdException.class, () -> accountBookService.addRecord(1L, request));
+    }
+
+    @Test
+    @DisplayName("가계부에 지출 1개 추가 실패 테스트 - invalid category")
+    public void addRecordFailByCategory() throws Exception{
+        // given
+        Optional<AccountBook> accountBook = Optional.of(new AccountBook());
+        Optional<Category> category = Optional.empty();
+        AddRecordRequest request = AddRecordRequest.builder().id(1L).date("2023-06-21").category("카테고리").build();
+
+
+        // when
+
+        when(accountBookRepository.findById(1L)).thenReturn(accountBook);
+        when(categoryRepository.findByAccountBookAndName(accountBook.get(), "카테고리")).thenReturn(category);
+        // then
+        assertThrows(CategoryNotFoundException.class, () -> accountBookService.addRecord(1L, request));
+    }
 
 }
