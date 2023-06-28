@@ -1,4 +1,4 @@
-name: WAS1 CI/CD
+name: CI/CD
 
 on:
   push:
@@ -15,9 +15,7 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
@@ -62,9 +60,11 @@ jobs:
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
         docker build -t ${{ secrets.DOCKER_REPO }}/uliga_backend .
         docker push ${{ secrets.DOCKER_REPO }}/uliga_backend
-
-
-    - name: executing remote ssh commands using password
+  deploy_was1:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: was1 무중단 배포
       uses: appleboy/ssh-action@v0.1.7
       with:
         host: ${{ secrets.WAS1_HOST }}
@@ -74,3 +74,43 @@ jobs:
         script: |
           sudo docker pull ${{ secrets.DOCKER_REPO }}/uliga_backend 
           bash deploy.sh
+  deploy_was2:
+    needs: deploy_was1
+    runs-on: ubuntu-latest
+    steps:
+      - name: was2 무중단 배포
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.WAS2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.WAS2_PEM_KEY }}
+          port: 22
+          script: |
+            sudo docker pull ${{ secrets.DOCKER_REPO }}/uliga_backend 
+            bash deploy.sh
+  deploy_web1:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: was1 nginx 무중단 배포
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.WEB_HOST }}
+          username: ubuntu
+          key: ${{ secrets.WEB_PEM_KEY }}
+          port: 22
+          script: |
+            bash deploy_was1.sh
+  deploy_web2:
+    needs: deploy_web1
+    runs-on: ubuntu-latest
+    steps:
+      - name: was2 nginx 무중단 배포
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.WEB_HOST }}
+          username: ubuntu
+          key: ${{ secrets.WEB_PEM_KEY }}
+          port: 22
+          script: |
+            bash deploy_was2.sh
