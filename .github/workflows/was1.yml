@@ -1,4 +1,4 @@
-name: CI/CD
+name: WAS1 CI/CD
 
 on:
   push:
@@ -67,9 +67,9 @@ jobs:
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@v0.1.7
       with:
-        host: ${{ secrets.HOST }}
+        host: ${{ secrets.WAS1_HOST }}
         username: ubuntu
-        key: ${{ secrets.PEM_KEY }}
+        key: ${{ secrets.WAS1_PEM_KEY }}
         port: 22
         script: |
           sudo docker pull ${{ secrets.DOCKER_REPO }}/uliga_backend 
