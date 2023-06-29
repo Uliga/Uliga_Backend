@@ -24,7 +24,7 @@ import java.util.List;
 @Table(name = "account_book", catalog = "uliga_db")
 public class AccountBook extends BaseTimeEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_book_id")
     private Long id;
     @Column(name = "is_private")

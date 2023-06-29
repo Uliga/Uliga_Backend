@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "schedule_member", catalog = "uliga_db")
 public class ScheduleMember {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "schedule_member_id")
     private Long id;
 

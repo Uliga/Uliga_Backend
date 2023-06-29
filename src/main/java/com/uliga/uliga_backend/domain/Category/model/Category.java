@@ -19,7 +19,7 @@ import java.util.List;
 @Table(name = "category", catalog = "uliga_db")
 public class Category {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
     private Long id;
 

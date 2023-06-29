@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "account_book_data", catalog = "uliga_db")
 public class AccountBookData extends BaseTimeEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_book_data_id")
     private Long id;
 

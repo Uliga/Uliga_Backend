@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "post_comment", catalog = "uliga_db")
 public class PostComment {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_comment_id")
     private Long id;
 

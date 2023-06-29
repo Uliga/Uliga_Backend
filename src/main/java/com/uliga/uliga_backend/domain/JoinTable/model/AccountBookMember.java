@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "account_book_member", catalog = "uliga_db")
 public class AccountBookMember {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_book_member_id")
     private Long id;
 

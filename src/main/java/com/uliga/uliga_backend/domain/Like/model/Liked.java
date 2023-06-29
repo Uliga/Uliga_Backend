@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "liked", catalog = "uliga_db")
 public class Liked {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "liked_id")
     private Long id;
 

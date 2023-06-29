@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "budget", catalog = "uliga_db")
 public class Budget extends BaseTimeEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "budget_id")
     private Long id;
     private Long value;

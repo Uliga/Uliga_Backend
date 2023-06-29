@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "record_comment", catalog = "uliga_db")
 public class RecordComment extends BaseTimeEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "record_comment_id")
     private Long id;
 

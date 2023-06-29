@@ -20,7 +20,7 @@ import java.util.List;
 @Table(name = "schedule", catalog = "uliga_db")
 public class Schedule extends BaseTimeEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "schedule_id")
     private Long id;
     private String name;
