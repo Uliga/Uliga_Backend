@@ -14,6 +14,7 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor
+@Table(name = "post", catalog = "uliga_db")
 public class Post extends BaseTimeEntity {
 
     @Id

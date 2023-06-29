@@ -9,10 +9,11 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "post_comment", catalog = "uliga_db")
 public class PostComment {
     @Id
     @GeneratedValue
-    @Column(name = "postComment_id")
+    @Column(name = "post_comment_id")
     private Long id;
 
     private String content;

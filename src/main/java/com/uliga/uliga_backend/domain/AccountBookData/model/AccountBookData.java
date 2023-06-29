@@ -15,10 +15,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "account_book_data", catalog = "uliga_db")
 public class AccountBookData extends BaseTimeEntity {
     @Id
     @GeneratedValue
-    @Column(name = "accountBookData_id")
+    @Column(name = "account_book_data_id")
     private Long id;
 
     private Long value;
@@ -41,7 +42,7 @@ public class AccountBookData extends BaseTimeEntity {
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "accountBook_id")
+    @JoinColumn(name = "account_book_id")
     private AccountBook accountBook;
     public void setValue(Long value) {
         this.value = value;

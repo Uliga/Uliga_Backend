@@ -11,24 +11,26 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor
+@Table(name = "account_book_member", catalog = "uliga_db")
 public class AccountBookMember {
     @Id
     @GeneratedValue
-    @Column(name = "accountBookMember_id")
+    @Column(name = "account_book_member_id")
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "accountBook_id")
+    @JoinColumn(name = "account_book_id")
     private AccountBook accountBook;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
-
+    @Column(name = "avatar_url")
     private String avatarUrl;
-
+    @Column(name = "get_notification")
     private Boolean getNotification;
     @Enumerated(EnumType.STRING)
+    @Column(name = "account_book_authority")
     private AccountBookAuthority accountBookAuthority;
     @Builder
     public AccountBookMember(AccountBook accountBook, Member member, Boolean getNotification, AccountBookAuthority accountBookAuthority, String avatarUrl) {

@@ -10,10 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Entity
+@Table(name = "record_comment", catalog = "uliga_db")
 public class RecordComment extends BaseTimeEntity {
     @Id
     @GeneratedValue
-    @Column(name = "recordComment_id")
+    @Column(name = "record_comment_id")
     private Long id;
 
     private String content;

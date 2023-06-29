@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "liked", catalog = "uliga_db")
 public class Liked {
     @Id
     @GeneratedValue

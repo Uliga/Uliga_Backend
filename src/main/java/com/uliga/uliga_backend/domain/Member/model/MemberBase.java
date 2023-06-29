@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "member_base", catalog = "uliga_db")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class MemberBase extends BaseTimeEntity {
     @Id
@@ -20,13 +21,14 @@ public class MemberBase extends BaseTimeEntity {
     private String email;
 
     private String password;
-
+    @Column(name = "application_password")
     private String applicationPassword;
 
     @Enumerated(EnumType.STRING)
     protected Authority authority;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "user_login_type")
     private UserLoginType userLoginType;
 
     public void updatePassword(String newPassword) {

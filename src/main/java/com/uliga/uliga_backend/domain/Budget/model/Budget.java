@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "budget", catalog = "uliga_db")
 public class Budget extends BaseTimeEntity {
     @Id
     @GeneratedValue
@@ -26,7 +27,7 @@ public class Budget extends BaseTimeEntity {
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "accountBook_id")
+    @JoinColumn(name = "account_book_id")
     private AccountBook accountBook;
     @Builder
     public Budget(Long value, Long year, Long month, Category category, AccountBook accountBook) {

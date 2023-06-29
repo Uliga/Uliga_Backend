@@ -23,14 +23,16 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "member", catalog = "uliga_db")
 public class Member extends MemberBase {
     private Boolean deleted;
+    @Column(name = "user_name")
     private String userName;
-
+    @Column(name = "nick_name")
     private String nickName;
 
     @OneToOne
-    @JoinColumn(name = "accountBook_id")
+    @JoinColumn(name = "account_book_id")
     private AccountBook privateAccountBook;
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private final List<AccountBookMember> accountBooks = new ArrayList<>();

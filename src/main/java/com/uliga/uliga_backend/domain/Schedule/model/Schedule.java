@@ -17,13 +17,16 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "schedule", catalog = "uliga_db")
 public class Schedule extends BaseTimeEntity {
     @Id
     @GeneratedValue
     @Column(name = "schedule_id")
     private Long id;
     private String name;
+    @Column(name = "is_income")
     private Boolean isIncome;
+    @Column(name = "notification_date")
     private Long notificationDate;
 
     private Long value;
@@ -35,7 +38,7 @@ public class Schedule extends BaseTimeEntity {
     private Member creator;
 
     @ManyToOne
-    @JoinColumn(name = "accountBook_id")
+    @JoinColumn(name = "account_book_id")
     private AccountBook accountBook;
     @Builder
     public Schedule(Long id, String name, Boolean isIncome, Long notificationDate, Long value, Member creator, AccountBook accountBook) {

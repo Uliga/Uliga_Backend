@@ -10,10 +10,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor
+@Table(name = "schedule_member", catalog = "uliga_db")
 public class ScheduleMember {
     @Id
     @GeneratedValue
-    @Column(name = "scheduleMember_id")
+    @Column(name = "schedule_member_id")
     private Long id;
 
     @ManyToOne

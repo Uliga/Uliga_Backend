@@ -16,6 +16,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "category", catalog = "uliga_db")
 public class Category {
     @Id
     @GeneratedValue
@@ -34,7 +35,7 @@ public class Category {
     private List<AccountBookData> incomes = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "accountBook_id")
+    @JoinColumn(name = "account_book_id")
     private AccountBook accountBook;
 
     @Builder

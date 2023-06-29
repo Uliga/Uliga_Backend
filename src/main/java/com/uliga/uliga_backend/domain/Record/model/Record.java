@@ -21,6 +21,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "record", catalog = "uliga_db")
 public class Record extends AccountBookData {
 
     @OneToMany(mappedBy = "record", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)

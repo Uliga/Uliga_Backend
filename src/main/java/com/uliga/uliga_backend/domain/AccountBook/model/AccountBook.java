@@ -21,16 +21,17 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "account_book", catalog = "uliga_db")
 public class AccountBook extends BaseTimeEntity {
     @Id
     @GeneratedValue
-    @Column(name = "accountBook_id")
+    @Column(name = "account_book_id")
     private Long id;
-
+    @Column(name = "is_private")
     private Boolean isPrivate;
 
     private String name;
-
+    @Column(name = "relation_ship")
     private String relationShip;
     @Builder
     public AccountBook(Boolean isPrivate, String name, String relationShip) {

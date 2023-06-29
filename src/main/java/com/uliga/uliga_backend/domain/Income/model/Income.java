@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "income", catalog = "uliga_db")
 public class Income extends AccountBookData {
 
     @Builder
