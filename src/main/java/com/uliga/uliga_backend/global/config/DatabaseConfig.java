@@ -51,7 +51,6 @@ public class DatabaseConfig {
     public DataSource routingDataSource(){
         ReplicationRoutingDataSource replicationRoutingDataSource = new ReplicationRoutingDataSource();
         DataSource master = routingDataProperty(databaseProperty.getUrl());
-        log.info("master "+databaseProperty.getUrl());
 
 
         Map<Object,Object> dataSourceMap = new LinkedHashMap<>();
@@ -59,7 +58,6 @@ public class DatabaseConfig {
 
         databaseProperty.getSlaveList().forEach(slave -> {
             dataSourceMap.put(slave.getName() , routingDataProperty(slave.getUrl()));
-            log.info(slave.getName() + " " + slave.getUrl());
         });
 
         replicationRoutingDataSource.setTargetDataSources(dataSourceMap);
