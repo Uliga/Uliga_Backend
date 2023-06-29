@@ -18,7 +18,7 @@ import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleMonthSum;
 import com.uliga.uliga_backend.domain.Schedule.exception.InvalidScheduleDelete;
 import com.uliga.uliga_backend.domain.Schedule.model.Schedule;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -49,7 +49,7 @@ public class ScheduleService {
      * @param id 멤버 아이디
      * @return 금융 일정 조회 결과
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public GetMemberSchedules getMemberSchedule(Long id) {
         LocalDate now = LocalDate.now();
         return GetMemberSchedules.builder()
@@ -142,7 +142,7 @@ public class ScheduleService {
      * @param id 금융 일정 아이디
      * @return 금융 일정 정보
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public ScheduleDetail getScheduleDetails(Long id) {
 
         return ScheduleDetail.builder()
@@ -155,7 +155,7 @@ public class ScheduleService {
      * @param accountBookId 가계부 아이디
      * @return 가계부 금융 일정
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public GetAccountBookSchedules getAccountBookSchedules(Long accountBookId) {
         List<ScheduleDetail> result = new ArrayList<>();
         LocalDate date = LocalDate.now();
@@ -202,7 +202,7 @@ public class ScheduleService {
      * @param memberId 멤버 아이디
      * @return 가계부 고정 지출 조회 결과
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ScheduleAnalyzeQ> findAnalyze(Long id, Long memberId) {
         return scheduleRepository.findScheduleAnalyzeByAccountBookId(id, memberId);
     }

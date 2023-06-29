@@ -15,8 +15,7 @@ import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.global.error.exception.IdNotFoundException;
 import com.uliga.uliga_backend.global.error.exception.InvalidDataValueException;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

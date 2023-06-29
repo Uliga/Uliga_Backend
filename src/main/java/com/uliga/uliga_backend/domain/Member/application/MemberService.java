@@ -11,7 +11,7 @@ import com.uliga.uliga_backend.domain.Member.exception.UserExistsInAccountBook;
 import com.uliga.uliga_backend.domain.Member.exception.UserNotFoundByEmail;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -42,7 +42,7 @@ public class MemberService {
      * @param id 멤버 아이디
      * @return 멤버 개인 가계부 아이디
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public Long getMemberPrivateAccountBookId(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
         return member.getPrivateAccountBook().getId();
@@ -55,7 +55,7 @@ public class MemberService {
      * @return 로그인한 멤버 정보
      * @throws JsonProcessingException 레디스 관련 예외
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public GetMemberInfo getCurrentMemberInfo(Long id, Pageable pageable) throws JsonProcessingException {
 
         MemberInfoNativeQ memberInfoById = memberRepository.findMemberInfoById(id);
@@ -92,7 +92,7 @@ public class MemberService {
      * @param passwordCheck 유저가 입력한 애플리케이션 비밀번호
      * @return 비밀번호 일치 여부
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public boolean checkApplicationPassword(Long id, ApplicationPasswordCheck passwordCheck) {
         Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
         return passwordEncoder.matches(passwordCheck.getApplicationPassword(), member.getApplicationPassword());
@@ -104,7 +104,7 @@ public class MemberService {
      * @param passwordCheck 확인할 비밀번호
      * @return 비밀번호 일치여부
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public boolean checkPassword(Long id, PasswordCheck passwordCheck) {
         Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
         return passwordEncoder.matches(passwordCheck.getPassword(), member.getPassword());
@@ -117,7 +117,7 @@ public class MemberService {
      * @param nicknameCheckDto 중복 확인할 닉네임
      * @return 중복 여부
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public boolean nicknameExists(Long id, NicknameCheckDto nicknameCheckDto) {
         Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
         if (member.getNickName().equals(nicknameCheckDto.getNickname())) {
@@ -151,7 +151,7 @@ public class MemberService {
      * @param byEmail 찾을 이메일
      * @return 이메일 검색 결과
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public SearchEmailResult findMemberByEmail(Long accountBookId, SearchMemberByEmail byEmail) {
         Member member = memberRepository.findByEmailAndDeleted(byEmail.getEmail(), false).orElseThrow(UserNotFoundByEmail::new);
         if (accountBookId != null) {

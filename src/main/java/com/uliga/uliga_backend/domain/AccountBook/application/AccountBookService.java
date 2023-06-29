@@ -30,7 +30,7 @@ import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import com.uliga.uliga_backend.domain.Record.model.Record;
 import com.uliga.uliga_backend.domain.Schedule.application.ScheduleService;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -84,7 +84,7 @@ public class AccountBookService {
      * @param memberId 멤버 아이디
      * @return 가계부 정보
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public AccountBookInfo getSingleAccountBookInfo(Long id, Long memberId) {
         AccountBookInfoQ bookInfoById = accountBookRepository.findAccountBookInfoById(id, memberId);
         if (bookInfoById == null) {
@@ -102,7 +102,7 @@ public class AccountBookService {
      * @param id 멤버 아이디
      * @return 멤버 가계부 정보 리스트
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public GetAccountBookInfos getMemberAccountBook(Long id) {
         List<AccountBookInfo> result = new ArrayList<>();
         List<AccountBookInfoQ> accountBookInfosByMemberId = accountBookRepository.findAccountBookInfosByMemberId(id);
@@ -354,7 +354,7 @@ public class AccountBookService {
      * @param id 가계부 아이디
      * @return 가계부 카테고리 정보
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public AccountBookCategories getAccountBookCategories(Long id) {
         return new AccountBookCategories(accountBookRepository.findAccountBookCategoryInfoById(id));
     }
@@ -364,7 +364,7 @@ public class AccountBookService {
      * @param id 가계부 아이디
      * @return 가계부 멤버 정보
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public AccountBookMembers getAccountBookMembers(Long id) {
         return new AccountBookMembers(accountBookRepository.findAccountBookMemberInfoById(id));
     }
@@ -399,7 +399,7 @@ public class AccountBookService {
      * @param month 월
      * @return 해당 달 날짜별 수입/지출 총합
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public AccountBookIncomesAndRecords getAccountBookItems(Long id, Long year, Long month) {
 
         return AccountBookIncomesAndRecords.builder()
@@ -415,7 +415,7 @@ public class AccountBookService {
      * @param day 날짜
      * @return 수입&지출 정보 리스트
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public RecordAndIncomeDetails getAccountBookItemDetails(Long id, Long year, Long month, Long day) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("accountBookId", id);
@@ -442,7 +442,7 @@ public class AccountBookService {
      * @param month 월
      * @return 월별 예산, 지출, 수입 총합 조회
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public GetAccountBookAssets getAccountBookAssets(Long id, Long year, Long month) {
         MonthlySumQ budget = budgetRepository.getMonthlySumByAccountBookId(id, year, month).orElse(new MonthlySumQ(0L));
         MonthlySumQ record = recordRepository.getMonthlySumByAccountBookId(id, year, month).orElse(new MonthlySumQ(0L));
@@ -525,7 +525,7 @@ public class AccountBookService {
      * @param accountBookId 가계부 아이디
      * @return 가계부 금융 일정 조회
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public GetAccountBookSchedules getAccountBookSchedules(Long memberId, Long accountBookId) {
         if (accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(memberId, accountBookId)) {
 
@@ -561,7 +561,7 @@ public class AccountBookService {
      * @param pageable 페이징 정보
      * @return 가계부 내역
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<AccountBookDataQ> getAccountBookHistory(Long accountBookId, Long categoryId, Long year, Long month, Pageable pageable) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("accountBookId", accountBookId);
@@ -644,7 +644,7 @@ public class AccountBookService {
      * @param month 달
      * @return 날짜별 지출 총합
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public AccountBookDailyRecord getAccountBookDailyRecord(Long id, Long year, Long month) {
         List<DailyValueQ> monthlyRecord = accountBookRepository.getMonthlyRecord(id, year, month);
 
@@ -688,7 +688,7 @@ public class AccountBookService {
      * @param month 달
      * @return 분석 정보
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public AccountBookCategoryAnalyze getAccountBookCategoryAnalyze(Long id, Long year, Long month) {
         List<AccountBookCategoryAnalyzeQ> categoryAnalyze = accountBookRepository.findAccountBookCategoryAnalyze(id, year, month);
         Optional<MonthlySumQ> monthlySum = recordRepository.getMonthlySumByAccountBookId(id, year, month);
@@ -725,7 +725,7 @@ public class AccountBookService {
      * @param memberId 멤버 아이디
      * @return 고정 지출 분석 결과
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public AccountScheduleAnalyze getAccountBookScheduleAnalyze(Long accountBookId, Long memberId) {
         return AccountScheduleAnalyze.builder().schedules(scheduleService.findAnalyze(accountBookId, memberId)).sum(accountBookRepository.getMonthlyScheduleValue(accountBookId, memberId).getValue()).build();
     }
@@ -737,7 +737,7 @@ public class AccountBookService {
      * @param month 달
      * @return 비교 결과
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public MonthlyCompare getAccountBookMonthlyCompare(Long accountBookId, Long year, Long month) {
         List<MonthlyCompareQ> monthlyCompare = new ArrayList<>();
 
@@ -768,7 +768,7 @@ public class AccountBookService {
      * @param category 카테고리
      * @return 내역
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<AccountBookDataQ> getAccountBookMonthlyRecord(Long accountBookId, Long year, Long month, Pageable pageable, String category) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("accountBookId", accountBookId);
@@ -808,7 +808,7 @@ public class AccountBookService {
      * @param month 달
      * @return 비교 결과
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public BudgetCompare getBudgetCompare(Long accountBookId, Long year, Long month) {
 
         Optional<MonthlySumQ> recordSum = recordRepository.getMonthlySumByAccountBookId(accountBookId, year, month);
@@ -836,7 +836,7 @@ public class AccountBookService {
      * @param startDay 분석 시작 일
      * @return 주차별 분석 결과
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public AccountBookWeeklyRecord getAccountBookWeeklyRecord(Long accountBookId, Long year, Long month, Long startDay) {
         Long totalSum = 0L;
         List<WeeklySum> result = new ArrayList<>();
@@ -877,8 +877,7 @@ public class AccountBookService {
      * @param pageable 페이지 정보
      * @return 해당 기간 가계부 내역 데이터
      */
-
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<AccountBookDataQ> getCustomAccountBookData(Long id, Long year, Long month, Long startDay, Long endDay, String category, Pageable pageable) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("accountBookId", id);

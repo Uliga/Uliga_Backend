@@ -13,7 +13,7 @@ import com.uliga.uliga_backend.domain.Token.exception.InvalidRefreshTokenExcepti
 import com.uliga.uliga_backend.global.jwt.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -152,7 +152,7 @@ public class AuthService {
      * @param email 중복 조회할 이메일
      * @return 중복 조회 결과
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public ExistsCheckDto emailExists(String email) {
         Optional<Member> byEmailAndDeleted = memberRepository.findByEmailAndDeleted(email, false);
         if (byEmailAndDeleted.isPresent()) {
@@ -169,7 +169,7 @@ public class AuthService {
      * @param nickname 중복 조회할 닉네임
      * @return 중복 조회 결과
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public ExistsCheckDto nicknameExists(String nickname) {
         return ExistsCheckDto.builder()
                 .exists(memberRepository.existsByNickNameAndDeleted(nickname, false)).build();

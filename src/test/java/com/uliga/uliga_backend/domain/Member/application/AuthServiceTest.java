@@ -9,7 +9,7 @@ import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.LoginRequest;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SignUpRequest;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

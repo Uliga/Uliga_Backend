@@ -34,7 +34,7 @@ import com.uliga.uliga_backend.domain.Record.application.RecordService;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import com.uliga.uliga_backend.domain.Schedule.application.ScheduleService;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

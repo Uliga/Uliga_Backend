@@ -19,7 +19,7 @@ import com.uliga.uliga_backend.domain.Record.dao.RecordMapper;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import com.uliga.uliga_backend.global.error.exception.IdNotFoundException;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -192,7 +192,7 @@ public class IncomeService {
      * @param pageable 페이징 정보
      * @return 조회 결과
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<IncomeInfoQ> getMemberIncomesByAccountBook(Long accountBookId, Long categoryId, Long year, Long month, Pageable pageable) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("accountBookId", accountBookId);
@@ -214,7 +214,7 @@ public class IncomeService {
      * @param pageable 페이징 정보
      * @return 수입 조회 결과
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<IncomeInfoQ> getMemberIncomes(Long id, Pageable pageable) {
         return incomeRepository.getMemberIncomes(id, pageable);
     }

@@ -8,15 +8,11 @@ import com.uliga.uliga_backend.domain.AccountBookData.model.AccountBookDataType;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.Date;
-import com.uliga.uliga_backend.domain.Income.dao.IncomeMapper;
 import com.uliga.uliga_backend.domain.Income.dao.IncomeRepository;
-import com.uliga.uliga_backend.domain.Income.model.Income;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Record.dao.RecordMapper;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
-import com.uliga.uliga_backend.domain.Record.dto.RecordDTO;
-import com.uliga.uliga_backend.domain.Record.dto.RecordDTO.RecordDeleteRequest;
 import com.uliga.uliga_backend.domain.Record.dto.RecordDTO.RecordInfoDetail;
 import com.uliga.uliga_backend.domain.Record.dto.RecordDTO.RecordUpdateRequest;
 import com.uliga.uliga_backend.domain.Record.exception.InvalidRecordDelete;
@@ -25,13 +21,13 @@ import com.uliga.uliga_backend.domain.RecordComment.dto.NativeQ.RecordCommentInf
 import com.uliga.uliga_backend.domain.RecordComment.dto.RecordCommentDto.RecordCommentCreateDto;
 import com.uliga.uliga_backend.global.error.exception.IdNotFoundException;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -200,7 +196,7 @@ public class RecordService {
      * @param pageable 페이징 정보
      * @return 조회 결과
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<RecordInfoQ> getMemberRecordsByAccountBook(Long accountBookId, Long categoryId, Long year, Long month, Pageable pageable) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("accountBookId", accountBookId);
@@ -220,7 +216,7 @@ public class RecordService {
      * @param pageable 페이징 정보
      * @return 조회 결과
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<RecordInfoQ> getMemberRecords(Long id, Pageable pageable) {
 
         return recordRepository.getMemberRecords(id, pageable);
