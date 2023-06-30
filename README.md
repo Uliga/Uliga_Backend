@@ -1,10 +1,12 @@
 # 우리가
 
 ![메인](https://github.com/Uliga/Uliga_Frontend/assets/79246447/27ae04c1-a81e-4108-90e9-9096022d1226)
-
 > **효율적인 지출 관리를 위한 공유 가계부 웹 애플리케이션, 우리의 가계부**
 > <br/>
 > **개발 기간 : 2023.03~2023.05**
+> 프로젝트에 대한 자세한 정보는 위키 페이지를 확인해주세요.
+> <br/>
+> (Wiki)[https://github.com/Uliga/Uliga_Backend/wiki]
 
 <br/>
 
