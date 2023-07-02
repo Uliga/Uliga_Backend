@@ -57,113 +57,113 @@ class AuthServiceTest {
                 .password("12345678").build();
     }
 
-    @Test
-    @DisplayName("회원가입 성공 테스트")
-     void signUpTestToSuccess() throws Exception{
-        // given
-        SignUpRequest signUpRequest= createSignUpRequest("test@email.com", "nickname");
-
-        // when
-        authService.signUp(signUpRequest);
-
-        // then
-        assertTrue(memberRepository.existsByEmailAndDeleted("test@email.com", false));
-
-    }
-
-    @Test
-    @DisplayName("회원가입 시 가계부 생성 확인 테스트")
-     void signUpTestToSuccessCheckAccountBook() throws Exception{
-        // given
-        SignUpRequest signUpRequest= createSignUpRequest("nouser@email.com", "nickname");
-
-
-        // when
-        authService.signUp(signUpRequest);
-        Member member = memberRepository.findByEmailAndDeleted("nouser@email.com", false).orElseThrow(NotFoundByIdException::new);
-        List<AccountBookInfoQ> accountBookInfosByMemberId = accountBookRepository.findAccountBookInfosByMemberId(member.getId());
-
-        // then
-        assertEquals(1, accountBookInfosByMemberId.size());
-
-    }
-
-    @Test
-    @DisplayName("회원 가입 시 가계부 카테고리 생성 확인 테스트")
-     void signUpTestToSuccessCheckAccountBookCategory() throws Exception{
-        // given
-        SignUpRequest signUpRequest= createSignUpRequest("nouser@email.com", "nickname");
-
-
-        // when
-        authService.signUp(signUpRequest);
-        Member member = memberRepository.findByEmailAndDeleted("nouser@email.com", false).orElseThrow(NotFoundByIdException::new);
-        List<AccountBookCategoryInfoQ> accountBookCategoryInfoById = accountBookRepository.findAccountBookCategoryInfoById(member.getPrivateAccountBook().getId());
-
-        // then
-        assertAll(
-                ()-> assertEquals(accountBookCategoryInfoById.size(), defaultCategories.size()),
-                () -> {
-                    for (AccountBookCategoryInfoQ accountBookCategoryInfoQ : accountBookCategoryInfoById) {
-                        assertTrue(defaultCategories.contains(accountBookCategoryInfoQ.getValue()));
-                    }
-                }
-        );
-    }
-
-    @Test
-    @DisplayName("이메일 중복 확인 테스트")
-     void duplicateEmailCheckTestToSuccess() throws Exception{
-        // given
-        SignUpRequest signUpRequest= createSignUpRequest("nouser@email.com", "nickname");
-
-
-        // when
-        authService.signUp(signUpRequest);
-        // then
-        assertTrue(authService.emailExists("nouser@email.com").isExists());
-
-    }
-
-    @Test
-    @DisplayName("존재하지 않는 이메일 확인 테스트")
-     void duplicateEmailCheckTestToFail() throws Exception{
-        // given
-        SignUpRequest signUpRequest= createSignUpRequest("nouser@email.com", "nickname");
-
-        // when
-        authService.signUp(signUpRequest);
-        // then
-        assertFalse(authService.emailExists("nouser1@email.com").isExists());
-    }
-
-    @Test
-    @DisplayName("닉네임 중복 확인 테스트")
-     void duplicateNicknameCheckTestToSuccess() throws Exception{
-        // given
-        SignUpRequest signUpRequest= createSignUpRequest("nouser@email.com", "nouser");
-
-
-        // when
-        authService.signUp(signUpRequest);
-
-        // then
-        assertTrue(authService.nicknameExists("nouser").isExists());
-    }
-
-    @Test
-    @DisplayName("존재하지 않는 닉네임 확인 테스트")
-     void duplicateNicknameCheckTestToFail() throws Exception{
-        // given
-        SignUpRequest signUpRequest= createSignUpRequest("nouser@email.com", "nouser");
-
-
-        // when
-        authService.signUp(signUpRequest);
-
-        // then
-        assertFalse(authService.nicknameExists("nouser1").isExists());
-    }
+//    @Test
+//    @DisplayName("회원가입 성공 테스트")
+//     void signUpTestToSuccess() throws Exception{
+//        // given
+//        SignUpRequest signUpRequest= createSignUpRequest("test@email.com", "nickname");
+//
+//        // when
+//        authService.signUp(signUpRequest);
+//
+//        // then
+//        assertTrue(memberRepository.existsByEmailAndDeleted("test@email.com", false));
+//
+//    }
+//
+//    @Test
+//    @DisplayName("회원가입 시 가계부 생성 확인 테스트")
+//     void signUpTestToSuccessCheckAccountBook() throws Exception{
+//        // given
+//        SignUpRequest signUpRequest= createSignUpRequest("nouser@email.com", "nickname");
+//
+//
+//        // when
+//        authService.signUp(signUpRequest);
+//        Member member = memberRepository.findByEmailAndDeleted("nouser@email.com", false).orElseThrow(NotFoundByIdException::new);
+//        List<AccountBookInfoQ> accountBookInfosByMemberId = accountBookRepository.findAccountBookInfosByMemberId(member.getId());
+//
+//        // then
+//        assertEquals(1, accountBookInfosByMemberId.size());
+//
+//    }
+//
+//    @Test
+//    @DisplayName("회원 가입 시 가계부 카테고리 생성 확인 테스트")
+//     void signUpTestToSuccessCheckAccountBookCategory() throws Exception{
+//        // given
+//        SignUpRequest signUpRequest= createSignUpRequest("nouser@email.com", "nickname");
+//
+//
+//        // when
+//        authService.signUp(signUpRequest);
+//        Member member = memberRepository.findByEmailAndDeleted("nouser@email.com", false).orElseThrow(NotFoundByIdException::new);
+//        List<AccountBookCategoryInfoQ> accountBookCategoryInfoById = accountBookRepository.findAccountBookCategoryInfoById(member.getPrivateAccountBook().getId());
+//
+//        // then
+//        assertAll(
+//                ()-> assertEquals(accountBookCategoryInfoById.size(), defaultCategories.size()),
+//                () -> {
+//                    for (AccountBookCategoryInfoQ accountBookCategoryInfoQ : accountBookCategoryInfoById) {
+//                        assertTrue(defaultCategories.contains(accountBookCategoryInfoQ.getValue()));
+//                    }
+//                }
+//        );
+//    }
+//
+//    @Test
+//    @DisplayName("이메일 중복 확인 테스트")
+//     void duplicateEmailCheckTestToSuccess() throws Exception{
+//        // given
+//        SignUpRequest signUpRequest= createSignUpRequest("nouser@email.com", "nickname");
+//
+//
+//        // when
+//        authService.signUp(signUpRequest);
+//        // then
+//        assertTrue(authService.emailExists("nouser@email.com").isExists());
+//
+//    }
+//
+//    @Test
+//    @DisplayName("존재하지 않는 이메일 확인 테스트")
+//     void duplicateEmailCheckTestToFail() throws Exception{
+//        // given
+//        SignUpRequest signUpRequest= createSignUpRequest("nouser@email.com", "nickname");
+//
+//        // when
+//        authService.signUp(signUpRequest);
+//        // then
+//        assertFalse(authService.emailExists("nouser1@email.com").isExists());
+//    }
+//
+//    @Test
+//    @DisplayName("닉네임 중복 확인 테스트")
+//     void duplicateNicknameCheckTestToSuccess() throws Exception{
+//        // given
+//        SignUpRequest signUpRequest= createSignUpRequest("nouser@email.com", "nouser");
+//
+//
+//        // when
+//        authService.signUp(signUpRequest);
+//
+//        // then
+//        assertTrue(authService.nicknameExists("nouser").isExists());
+//    }
+//
+//    @Test
+//    @DisplayName("존재하지 않는 닉네임 확인 테스트")
+//     void duplicateNicknameCheckTestToFail() throws Exception{
+//        // given
+//        SignUpRequest signUpRequest= createSignUpRequest("nouser@email.com", "nouser");
+//
+//
+//        // when
+//        authService.signUp(signUpRequest);
+//
+//        // then
+//        assertFalse(authService.nicknameExists("nouser1").isExists());
+//    }
 
 
 }

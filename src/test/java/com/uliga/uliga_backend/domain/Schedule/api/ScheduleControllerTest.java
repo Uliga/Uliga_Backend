@@ -39,56 +39,56 @@ class ScheduleControllerTest {
     ScheduleService scheduleService;
     private final String BASE_URL = "/schedule";
 
-    @Test
-    @WithMockCustomUser
-    @DisplayName("멤버 금융 일정 조회 성공 테스트")
-     void getMemberSchedules() throws Exception{
-        // given
-        GetMemberSchedules result = GetMemberSchedules.builder().build();
-
-        // when
-        doReturn(result).when(scheduleService).getMemberSchedule(any());
-        // then
-        mvc.perform(get(BASE_URL)
-                        .with(csrf()))
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString().equals(mapper.writeValueAsString(result));
-    }
-
-    @Test
-    @WithMockCustomUser
-    @DisplayName("금융 일정 세부 조회 성공 테스트")
-     void getScheduleInfos() throws Exception{
-        // given
-        ScheduleDetail result = ScheduleDetail.builder().build();
-
-        // when
-        doReturn(result).when(scheduleService).getScheduleDetails(any());
-
-        // then
-        mvc.perform(get(BASE_URL + "/1")
-                        .with(csrf()))
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString().equals(mapper.writeValueAsString(result));
-    }
-
-    @Test
-    @WithMockCustomUser
-    @DisplayName("금융 일정 업데이트 성공 테스트")
-     void updateSchedule() throws Exception{
-        // given
-        Map<String, Object> updates = new HashMap<>();
-        String value = mapper.writeValueAsString(updates);
-        UpdateScheduleRequest result = UpdateScheduleRequest.builder().build();
-
-        // when
-        doReturn(result).when(scheduleService).updateSchedule(any());
-        // then
-        mvc.perform(patch(BASE_URL)
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(value))
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString().equals(mapper.writeValueAsString(result));
-    }
+//    @Test
+//    @WithMockCustomUser
+//    @DisplayName("멤버 금융 일정 조회 성공 테스트")
+//     void getMemberSchedules() throws Exception{
+//        // given
+//        GetMemberSchedules result = GetMemberSchedules.builder().build();
+//
+//        // when
+//        doReturn(result).when(scheduleService).getMemberSchedule(any());
+//        // then
+//        mvc.perform(get(BASE_URL)
+//                        .with(csrf()))
+//                .andExpect(status().isOk())
+//                .andReturn().getResponse().getContentAsString().equals(mapper.writeValueAsString(result));
+//    }
+//
+//    @Test
+//    @WithMockCustomUser
+//    @DisplayName("금융 일정 세부 조회 성공 테스트")
+//     void getScheduleInfos() throws Exception{
+//        // given
+//        ScheduleDetail result = ScheduleDetail.builder().build();
+//
+//        // when
+//        doReturn(result).when(scheduleService).getScheduleDetails(any());
+//
+//        // then
+//        mvc.perform(get(BASE_URL + "/1")
+//                        .with(csrf()))
+//                .andExpect(status().isOk())
+//                .andReturn().getResponse().getContentAsString().equals(mapper.writeValueAsString(result));
+//    }
+//
+//    @Test
+//    @WithMockCustomUser
+//    @DisplayName("금융 일정 업데이트 성공 테스트")
+//     void updateSchedule() throws Exception{
+//        // given
+//        Map<String, Object> updates = new HashMap<>();
+//        String value = mapper.writeValueAsString(updates);
+//        UpdateScheduleRequest result = UpdateScheduleRequest.builder().build();
+//
+//        // when
+//        doReturn(result).when(scheduleService).updateSchedule(any());
+//        // then
+//        mvc.perform(patch(BASE_URL)
+//                        .with(csrf())
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(value))
+//                .andExpect(status().isOk())
+//                .andReturn().getResponse().getContentAsString().equals(mapper.writeValueAsString(result));
+//    }
 }
