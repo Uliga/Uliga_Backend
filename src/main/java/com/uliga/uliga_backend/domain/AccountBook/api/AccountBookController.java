@@ -330,7 +330,7 @@ public class AccountBookController {
     }
 
 
-    @Operation(summary = "가계부 분석용 날짜별 지출 조회 API", description = "가계부 분석용 날짜별 지출 조회 API 입니다")
+    @Operation(summary = "가계부 분석용 - 날짜별 지출 조회 API", description = "가계부 분석용 날짜별 지출 조회 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountBookDailyRecordSumAndMonthlySum.class)))
     })
@@ -348,42 +348,40 @@ public class AccountBookController {
         return ResponseEntity.ok(recordService.getMonthlyRecordSumPerCategories(id, year, month));
     }
 
-    @Operation(summary = "가계부 분석용 한달 고정지출 조회용 API", description = "가계부 분석용 한달 고정 지출 조회용 API 입니다")
+    @Operation(summary = "가계부 분석용 - 한달 고정지출 조회용 API", description = "가계부 분석용 한달 고정 지출 조회용 API 입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = ScheduleDTO.AccountBookScheduleAnalyze.class)))
     })
     @GetMapping(value = "/{id}/analyze/schedule")
     public ResponseEntity<ScheduleDTO.AccountBookScheduleAnalyze> getAccountBookScheduleAnalyze(@PathVariable("id") Long id) {
-        // TODO: 리팩터링 필요
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(scheduleService.getScheduleAnalyze(id, currentMemberId));
     }
 
-    @Operation(summary = "가계부 분석용 지난달과 분석용 API", description = "가계부 분석용 지난달과 분석용 API입니다")
+    @Operation(summary = "가계부 분석용 - 지난달과 분석용 API", description = "가계부 분석용 지난달과 분석용 API입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = MonthlyCompare.class)))
     })
     @GetMapping(value = "/{id}/analyze/compare/{year}/{month}")
     public ResponseEntity<MonthlyCompare> getAccountBookMonthlyCompare(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
-        // TODO: 리팩터링 필요
         return ResponseEntity.ok(accountBookDataService.getAccountBookDataMonthlyCompare(id, year, month));
     }
 
-    @Operation(summary = "가계부 분석용 한달 지출 조회 API", description = "가계부 분석용 한달 지출 조회 API 입니다")
+    @Operation(summary = "가계부 분석용 - 한달 가계부 내역 조회 API", description = "가계부 분석용 한달 내역 조회 API 입니다")
     @GetMapping(value = "/{id}/analyze/month/{year}/{month}")
-    public ResponseEntity<Page<AccountBookDataQ>> getAccountBookMonthlyRecord(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month, @RequestParam(value = "category", required = false, defaultValue = "") String category, Pageable pageable) {
-        // TODO: 리팩터링 필요
-        return ResponseEntity.ok(accountBookService.getAccountBookMonthlyRecord(id, year, month, pageable, category));
+    public ResponseEntity<Page<AccountBookDataQ>> getAccountBookMonthlyDetail(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month, @RequestParam(value = "category", required = false, defaultValue = "") String category, Pageable pageable) {
+        return ResponseEntity.ok(accountBookDataService.getMonthlyAccountBookDetail(id, year, month, pageable, category));
     }
 
-    @Operation(summary = "가계부 분석용 예산과 비교용 API", description = "가계부 분석용 예산과 비교용 API 입니다")
+    @Operation(summary = "가계부 분석용 - 예산과 비교용 API", description = "가계부 분석용 예산과 비교용 API 입니다")
     @GetMapping(value = "/{id}/analyze/budget/{year}/{month}")
     public ResponseEntity<BudgetDTO.BudgetCompare> getAccountBookBudgetCompare(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
         // TODO: 리팩터링 필요
+        return ResponseEntity.ok(budgetService.compareWithBudget(id, year, month));
         return ResponseEntity.ok(accountBookService.getBudgetCompare(id, year, month));
     }
 
-    @Operation(summary = "가계부 분석용 주차별 지출 금액 조회", description = "가계부 분석용 주차별 지출 금액 조회 API 입니다")
+    @Operation(summary = "가계부 분석용 - 주차별 지출 금액 조회", description = "가계부 분석용 주차별 지출 금액 조회 API 입니다")
     @GetMapping(value = "/{id}/analyze/weekly/{year}/{month}/{startDay}")
     public ResponseEntity<AccountBookWeeklyRecord> getAccountBookWeeklyCompare(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month, @PathVariable("startDay") Long startDay) {
         // TODO: 리팩터링 필요

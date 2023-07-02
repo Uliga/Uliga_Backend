@@ -431,6 +431,7 @@ public class AccountBookService {
                     categoryRepository.delete(category);
                 }
             }
+            //TODO 여기 카테고리 추가 어떻게해야함
 //            createCategory(memberId, CategoryCreateRequest.builder().id(accountBookId).categories(createCategories).build());
         }
 
@@ -440,50 +441,6 @@ public class AccountBookService {
         return request;
     }
 
-
-
-
-    /**
-     * 가계부 분석 - 내역 조회
-     * @param accountBookId 가계부 아이디
-     * @param year 년도
-     * @param month 달
-     * @param pageable 페이징 정보
-     * @param category 카테고리
-     * @return 내역
-     */
-    @Transactional(readOnly = true)
-    public Page<AccountBookDataQ> getAccountBookMonthlyRecord(Long accountBookId, Long year, Long month, Pageable pageable, String category) {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("accountBookId", accountBookId);
-        map.put("year", year);
-        map.put("month", month);
-        map.put("offset", pageable.getOffset());
-        map.put("pageSize", pageable.getPageSize());
-        map.put("type", "RECORD");
-        if (Objects.equals(category, "그 외")) {
-            List<String> extraAccountBookCategory = categoryRepository.findExtraAccountBookCategory(accountBookId, year, month);
-            if (extraAccountBookCategory.size() == 0) {
-
-                extraAccountBookCategory.add("기타");
-            }
-            map.put("category", extraAccountBookCategory);
-
-            List<AccountBookDataQ> accountBookData = accountBookDataMapper.findExtraAccountBookDataAnalyze(map);
-            List<Long> counted = accountBookDataMapper.countQueryForExtraAccountBookDataAnalyze(map);
-            return new PageImpl<>(accountBookData, pageable, counted.size());
-
-
-        } else {
-            map.put("category", category);
-
-            List<AccountBookDataQ> accountBookData = accountBookDataMapper.findAccountBookDataAnalyze(map);
-            List<Long> counted = accountBookDataMapper.countQueryForAccountBookDataAnalyze(map);
-            return new PageImpl<>(accountBookData, pageable, counted.size());
-        }
-
-
-    }
 
     /**
      * 가계부 분석 - 예산과 비교

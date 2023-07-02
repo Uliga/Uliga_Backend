@@ -7,6 +7,7 @@ import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.AddRecordRequest;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.AddRecordResult;
+import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.DailyValueQ;
 import com.uliga.uliga_backend.domain.AccountBookData.model.AccountBookDataType;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
@@ -53,6 +54,7 @@ public class RecordService {
     private final IncomeRepository incomeRepository;
     private final CategoryRepository categoryRepository;
     private final MemberRepository memberRepository;
+    private final RecordMapper recordMapper;
     private final ObjectMapper objectMapper;
 
     /**

@@ -1,5 +1,6 @@
 package com.uliga.uliga_backend.domain.AccountBookData.application;
 
+import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.MonthlyCompareQ;
 import com.uliga.uliga_backend.domain.AccountBookData.dao.AccountBookDataMapper;
 import com.uliga.uliga_backend.domain.AccountBookData.dao.AccountBookDataRepository;
@@ -27,6 +28,7 @@ public class AccountBookDataService {
     private final IncomeRepository incomeRepository;
     private final RecordRepository recordRepository;
     private final AccountBookDataMapper accountBookDataMapper;
+    private final CategoryRepository categoryRepository;
 
     /**
      * 한달 가계부 수입/지출 조회
@@ -114,9 +116,10 @@ public class AccountBookDataService {
 
     /**
      * 과거 2달과 지출 총액 비교
+     *
      * @param accountBookId 가계부 아이디
-     * @param year 년도
-     * @param month 달
+     * @param year          년도
+     * @param month         달
      * @return 조회 결과
      */
     @Transactional(readOnly = true)
@@ -136,5 +139,45 @@ public class AccountBookDataService {
         }
 
         return new AccountBookDataDTO.MonthlyCompare(monthlyCompare);
+    }
+
+    /**
+     * 가계부 분석 - 내역 조회
+     * @param accountBookId 가계부 아이디
+     * @param year 년도
+     * @param month 달
+     * @param pageable 페이징 정보
+     * @param category 카테고리
+     * @return 내역
+     */
+    @Transactional(readOnly = true)
+    public Page<AccountBookDataQ> getMonthlyAccountBookDetail(Long accountBookId, Long year, Long month, Pageable pageable, String category) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("accountBookId", accountBookId);
+        map.put("year", year);
+        map.put("month", month);
+        map.put("offset", pageable.getOffset());
+        map.put("pageSize", pageable.getPageSize());
+        map.put("type", "RECORD");
+        if (Objects.equals(category, "그 외")) {
+            List<String> extraAccountBookCategory = categoryRepository.findExtraAccountBookCategory(accountBookId, year, month);
+            if (extraAccountBookCategory.size() == 0) {
+
+                extraAccountBookCategory.add("기타");
+            }
+            map.put("category", extraAccountBookCategory);
+
+            List<AccountBookDataQ> accountBookData = accountBookDataMapper.findExtraAccountBookDataAnalyze(map);
+            List<Long> counted = accountBookDataMapper.countQueryForExtraAccountBookDataAnalyze(map);
+            return new PageImpl<>(accountBookData, pageable, counted.size());
+
+
+        } else {
+            map.put("category", category);
+
+            List<AccountBookDataQ> accountBookData = accountBookDataMapper.findAccountBookDataAnalyze(map);
+            List<Long> counted = accountBookDataMapper.countQueryForAccountBookDataAnalyze(map);
+            return new PageImpl<>(accountBookData, pageable, counted.size());
+        }
     }
 }
