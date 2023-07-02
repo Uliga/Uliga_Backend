@@ -363,15 +363,6 @@ public class AccountBookService {
         return new AccountBookDataDTO.CreateResult(i, r, createResult);
     }
 
-    /**
-     * 가계부 카테고리 정보 조회
-     * @param id 가계부 아이디
-     * @return 가계부 카테고리 정보
-     */
-    @Transactional(readOnly = true)
-    public CategoryDTO.AccountBookCategories getAccountBookCategories(Long id) {
-        return new CategoryDTO.AccountBookCategories(accountBookRepository.findAccountBookCategoryInfoById(id));
-    }
 
     /**
      * 가계부 멤버 조회

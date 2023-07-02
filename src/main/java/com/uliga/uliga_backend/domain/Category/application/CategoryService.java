@@ -87,18 +87,9 @@ public class CategoryService {
     }
 
 
-    /**
-     * 가계부에 카테고리 한개 추가
-     * @param accountBook 추가할 가계부
-     * @param name 생성할 카테고리 이름
-     */
-    @Transactional
-    public void addCategoryToAccountBook(AccountBook accountBook, String name) {
-        Category newCategory = Category.builder()
-                .accountBook(accountBook)
-                .name(name)
-                .build();
-        categoryRepository.save(newCategory);
+    @Transactional(readOnly = true)
+    public CategoryDTO.AccountBookCategories getAccountBookCategories(Long accountBookId) {
+        return new CategoryDTO.AccountBookCategories(accountBookRepository.findAccountBookCategoryInfoById(accountBookId));
     }
 
     /**

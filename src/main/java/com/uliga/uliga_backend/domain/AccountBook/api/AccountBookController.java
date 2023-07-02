@@ -12,6 +12,7 @@ import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO.GetAccountBookAssets;
 import com.uliga.uliga_backend.domain.Budget.dto.NativeQ.BudgetInfoQ;
 import com.uliga.uliga_backend.domain.Category.application.CategoryService;
 import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO;
+import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.AccountBookCategories;
 import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryCreateRequest;
 import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryCreateResult;
 import com.uliga.uliga_backend.domain.Income.application.IncomeService;
@@ -235,19 +236,17 @@ public class AccountBookController {
     public ResponseEntity<AddIncomeResult> addIncome(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "수입 한개 생성 요청") @RequestBody AddIncomeRequest request) {
 
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        // TODO: accountBookDataService로 리팩터링해야될듯
         return ResponseEntity.ok(incomeService.addIncome(currentMemberId, request));
     }
 
     @Operation(summary = "가계부 카테고리 조회 API", description = "가계부 카테고리 조회 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = CategoryDTO.AccountBookCategories.class))),
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountBookCategories.class))),
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "/{id}/category")
-    public ResponseEntity<CategoryDTO.AccountBookCategories> getAccountBookCategory(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id) {
-
-        return ResponseEntity.ok(accountBookService.getAccountBookCategories(id));
+    public ResponseEntity<AccountBookCategories> getAccountBookCategory(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id) {
+        return ResponseEntity.ok(categoryService.getAccountBookCategories(id));
     }
 
     @Operation(summary = "가계부 멤버 조회 API", description = "가계부 멤버 조회 API 입니다")
