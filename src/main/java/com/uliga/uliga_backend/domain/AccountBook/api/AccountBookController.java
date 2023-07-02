@@ -12,6 +12,7 @@ import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO.GetAccountBookAssets;
 import com.uliga.uliga_backend.domain.Budget.dto.NativeQ.BudgetInfoQ;
 import com.uliga.uliga_backend.domain.Category.application.CategoryService;
 import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO;
+import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryCreateRequest;
 import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryCreateResult;
 import com.uliga.uliga_backend.domain.Income.application.IncomeService;
 import com.uliga.uliga_backend.domain.Record.application.RecordService;
@@ -206,12 +207,11 @@ public class AccountBookController {
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/category")
-    public ResponseEntity<CategoryCreateResult> createCategories(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "카테고리 생성 요청") @RequestBody CategoryDTO.CategoryCreateRequest createRequest) {
+    public ResponseEntity<CategoryCreateResult> createCategories(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "카테고리 생성 요청") @RequestBody CategoryCreateRequest createRequest) {
 
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        // TODO : category service
+        return ResponseEntity.ok(categoryService.createCategories(currentMemberId, createRequest));
 
-        return ResponseEntity.ok(accountBookService.createCategory(currentMemberId, createRequest));
     }
 
     @Operation(summary = "가계부에 지출 추가 API", description = "가계부에 지출 추가하는 API 입니다")

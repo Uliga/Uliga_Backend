@@ -75,14 +75,6 @@ public class AccountBookService {
     private final IncomeService incomeService;
     private final ScheduleService scheduleService;
     private final BudgetService budgetService;
-    private final List<String> defaultCategories = new ArrayList<>(
-            Arrays.asList("\uD83C\uDF7D️ 식비",
-                    "☕ 카페 · 간식",
-                    "\uD83C\uDFE0 생활",
-                    "\uD83C\uDF59 편의점,마트,잡화",
-                    "\uD83D\uDC55 쇼핑",
-                    "기타")
-    );
 
     /**
      * 가계부 정보 조회
@@ -143,15 +135,15 @@ public class AccountBookService {
                 .getNotification(true).build();
 
         accountBookMemberRepository.save(bookMember);
-        for (String cat : defaultCategories) {
-            Category category = Category.builder()
-                    .accountBook(accountBook)
-                    .name(cat).build();
-            categoryRepository.save(category);
-        }
         return accountBook;
     }
 
+    /**
+     * 첫 소셜 로그인시 가계부 생성
+     * @param memberId 멤버 아이디
+     * @param createRequest 가계부 생성 요청
+     * @return 생성된 가계부
+     */
     @Transactional
     public AccountBook createAccountBookPrivateSocialLogin(Long memberId, CreateRequestPrivate createRequest) {
         AccountBook accountBook = createRequest.toEntity();
@@ -166,12 +158,6 @@ public class AccountBookService {
                 .getNotification(true).build();
 
         accountBookMemberRepository.save(bookMember);
-        for (String cat : defaultCategories) {
-            Category category = Category.builder()
-                    .accountBook(accountBook)
-                    .name(cat).build();
-            categoryRepository.save(category);
-        }
         return accountBook;
     }
 
@@ -196,8 +182,6 @@ public class AccountBookService {
                 .getNotification(true).build();
         accountBookMemberRepository.save(bookMember);
 
-
-        categoryService.createCategories(accountBookCreateRequest.getCategories(), accountBook);
 
         for (String email : accountBookCreateRequest.getEmails()) {
             InvitationInfo info = new InvitationInfo(accountBook.getId(), member.getUserName(), accountBook.getName());
@@ -399,58 +383,6 @@ public class AccountBookService {
         return new AccountBookMembers(accountBookRepository.findAccountBookMemberInfoById(id));
     }
 
-    /**
-     * 가계부에 카테고리 추가
-     * @param memberId 멤버 아이디
-     * @param createRequest 카테고리 생성 요청
-     * @return 카테고리 생성 요청 결과
-     */
-    @Transactional
-    public CategoryCreateResult createCategory(Long memberId, CategoryCreateRequest createRequest) {
-        Long id = createRequest.getId();
-        AccountBook accountBook = accountBookRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
-        if (!accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(memberId, id)) {
-            throw new UnauthorizedAccountBookCategoryCreateException();
-        }
-        List<String> result = new ArrayList<>();
-        for (String cat : createRequest.getCategories()) {
-            if (!categoryRepository.existsByAccountBookIdAndName(id, cat)) {
-                categoryService.addCategoryToAccountBook(accountBook, cat);
-                result.add(cat);
-            }
-        }
-        return new CategoryCreateResult(id, result);
-    }
-
-
-
-    /**
-     * 가계부 기간 내 수입/지출 정보 조회
-     * @param id 가계부 아이디
-     * @param year 년도
-     * @param month 달
-     * @param day 날짜
-     * @return 수입&지출 정보 리스트
-     */
-    @Transactional(readOnly = true)
-    public AccountBookDataDTO.DailyAccountBookDataDetails getAccountBookItemDetails(Long id, Long year, Long month, Long day) {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("accountBookId", id);
-        map.put("year", year);
-        map.put("month", month);
-        map.put("day", day);
-        return new AccountBookDataDTO.DailyAccountBookDataDetails(accountBookDataMapper.findAccountBookDataOrderByValue(map));
-    }
-
-    /**
-     * 가계부 수입/지출 삭제
-     * @param deleteItemRequest 아이템 삭제 요청
-     */
-    @Transactional
-    public void deleteAccountBookItems(AccountBookDataDTO.DeleteItemRequest deleteItemRequest) {
-
-        accountBookDataRepository.deleteAllById(deleteItemRequest.getDeleteIds());
-    }
 
 
 
@@ -627,7 +559,7 @@ public class AccountBookService {
                     categoryRepository.delete(category);
                 }
             }
-            createCategory(memberId, CategoryCreateRequest.builder().id(accountBookId).categories(createCategories).build());
+//            createCategory(memberId, CategoryCreateRequest.builder().id(accountBookId).categories(createCategories).build());
         }
 
         if (request.getRelationship() != null) {

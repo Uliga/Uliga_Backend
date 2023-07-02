@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +15,9 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     boolean existsByAccountBookIdAndName(Long id, String name);
 
     void deleteById(Long id);
+
+    @Query("SELECT c.name FROM Category c WHERE c.accountBook.id = :accountBookId")
+    HashSet<String> findCategoryNamesByAccountBookId(@Param("accountBookId") Long accountBookId);
 
     Optional<Category> findByAccountBookIdAndName(Long accountBookId, String name);
 

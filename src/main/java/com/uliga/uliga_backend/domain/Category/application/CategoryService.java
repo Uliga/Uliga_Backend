@@ -1,12 +1,17 @@
 package com.uliga.uliga_backend.domain.Category.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
+import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookCategoryCreateException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
 import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO;
+import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryCreateRequest;
+import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryCreateResult;
 import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryUpdateRequest;
 import com.uliga.uliga_backend.domain.Category.exception.DuplicateCategoryException;
 import com.uliga.uliga_backend.domain.Category.model.Category;
+import com.uliga.uliga_backend.domain.JoinTable.dao.AccountBookMemberRepository;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +24,10 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
+    private final AccountBookRepository accountBookRepository;
     private final CategoryRepository categoryRepository;
     private final ObjectMapper mapper;
+    private final AccountBookMemberRepository accountBookMemberRepository;
 
     private final List<String> defaultCategories = new ArrayList<>(
             Arrays.asList("\uD83C\uDF7D️ 식비",
@@ -46,27 +53,39 @@ public class CategoryService {
 
 
     /**
-     * 가계부 카테고리 생성
-     * @param categoryNames 생성할 카테고리 이름 리스트
-     * @param accountBook 카테고리를 생성할 가계부
+     * 카테고리 생성
+     * @param currentMemberId 현재 멤버 아이디
+     * @param categoryCreateRequest 카테고리 생성 요청
+     * @return 카테고리 생성 결과
      */
     @Transactional
-    public List<String> createCategories(List<String> categoryNames, AccountBook accountBook) {
-        Set<String> createCategories = new HashSet<>();
+    public CategoryCreateResult createCategories(Long currentMemberId, CategoryCreateRequest categoryCreateRequest) {
+        Long accountBookId = categoryCreateRequest.getId();
+        AccountBook accountBook = accountBookRepository.findById(accountBookId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
+        if (!accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(currentMemberId, accountBookId)) {
+            throw new UnauthorizedAccountBookCategoryCreateException();
+        }
+
+        HashSet<String> categoryNamesByAccountBookId = categoryRepository.findCategoryNamesByAccountBookId(accountBook.getId());
+
         List<Category> categories = new ArrayList<>();
-        for (String category : categoryNames){
-            if (!createCategories.contains(category)) {
+        List<String> result = new ArrayList<>();
+        for (String category : categoryCreateRequest.getCategories()) {
+            if (!categoryNamesByAccountBookId.contains(category)) {
                 Category newCategory = Category.builder()
                         .accountBook(accountBook)
                         .name(category)
                         .build();
                 categories.add(newCategory);
-                createCategories.add(category);
+                result.add(category);
+                categoryNamesByAccountBookId.add(category);
             }
         }
         categoryRepository.saveAll(categories);
-        return categoryNames;
+
+        return CategoryCreateResult.builder().id(accountBook.getId()).created(result).build();
     }
+
 
     /**
      * 가계부에 카테고리 한개 추가
