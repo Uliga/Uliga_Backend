@@ -2,10 +2,8 @@ package com.uliga.uliga_backend.domain.Income.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
-import com.uliga.uliga_backend.domain.Record.dto.NativeQ.MonthlySumQ;
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
-import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.AddIncomeRequest;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.AddIncomeResult;
 import com.uliga.uliga_backend.domain.AccountBookData.model.AccountBookDataType;
@@ -21,15 +19,16 @@ import com.uliga.uliga_backend.domain.Income.model.Income;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
+import com.uliga.uliga_backend.domain.Record.dto.NativeQ.MonthlySumQ;
 import com.uliga.uliga_backend.global.error.exception.IdNotFoundException;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
-import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,17 +41,18 @@ import java.util.Map;
 public class IncomeService {
     private final AccountBookRepository accountBookRepository;
     private final IncomeRepository incomeRepository;
-    private final IncomeMapper incomeMapper;
     private final RecordRepository recordRepository;
     private final CategoryRepository categoryRepository;
     private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper;
+    private final IncomeMapper incomeMapper;
 
     /**
      * 한달 가계부 수입 총합 조회
+     *
      * @param accountBookId 가계부 아이디
-     * @param year 년도
-     * @param month 달
+     * @param year          년도
+     * @param month         달
      * @return 조회 결과
      */
     @Transactional(readOnly = true)
@@ -115,55 +115,10 @@ public class IncomeService {
 
     }
 
-    /**
-     * 다른 가계부에 수입 추가할때 쓰이는 메서드
-     * @param incomeList 수입 리스트
-     */
-    @Transactional
-    public void addIncomeToOtherAccountBooks(List<Income> incomeList) {
-        incomeRepository.saveAll(incomeList);
-    }
-
-    /**
-     * 다른 가계부에 추가할 수입 생성하는 메서드
-     * @param dto 수입 정보 DTO
-     * @param accountBook 추가할 가계부
-     * @param member 생성한 멤버
-     * @param date 수입의 날짜
-     * @param category 수입의 카테고리
-     * @return 생성된 수입
-     */
-    @Transactional
-    public AccountBookDataDTO.CreateItemResult addItemToAccountBook(AccountBookDataDTO.CreateRecordOrIncomeDto dto, AccountBook accountBook, Member member, Date date, Category category) {
-        Income build = Income.builder()
-                .payment(dto.getPayment())
-                .account(dto.getAccount())
-                .creator(member)
-                .accountBook(accountBook)
-                .value(dto.getValue())
-                .memo(dto.getMemo())
-                .date(date)
-                .category(category).build();
-        incomeRepository.save(build);
-        return AccountBookDataDTO.CreateItemResult.builder()
-                .id(build.getId())
-                .account(dto.getAccount())
-                .isIncome(true)
-                .category(category.getName())
-                .memo(dto.getMemo())
-                .payment(dto.getPayment())
-                .value(dto.getValue())
-                .year(date.getYear())
-                .month(date.getMonth())
-                .day(date.getDay())
-                .build();
-    }
-
-
-
 
     /**
      * 수입 정보 업데이트
+     *
      * @param updates 업데이트할 정보 map
      * @return 업데이트 결과
      */
@@ -203,11 +158,12 @@ public class IncomeService {
 
     /**
      * 해당 가계부 멤버 수입 조회
+     *
      * @param accountBookId 가계부 아이디
-     * @param categoryId 카테고리 아이디
-     * @param year 조회할 년도
-     * @param month 조회할 달
-     * @param pageable 페이징 정보
+     * @param categoryId    카테고리 아이디
+     * @param year          조회할 년도
+     * @param month         조회할 달
+     * @param pageable      페이징 정보
      * @return 조회 결과
      */
     @Transactional(readOnly = true)
@@ -228,7 +184,8 @@ public class IncomeService {
 
     /**
      * 멤버 수입 전체 조회
-     * @param id 멤버 아이디
+     *
+     * @param id       멤버 아이디
      * @param pageable 페이징 정보
      * @return 수입 조회 결과
      */
@@ -239,7 +196,8 @@ public class IncomeService {
 
     /**
      * 수입 삭제
-     * @param id 멤버 아이디
+     *
+     * @param id       멤버 아이디
      * @param incomeId 삭제할 수입 아이디
      */
     @Transactional

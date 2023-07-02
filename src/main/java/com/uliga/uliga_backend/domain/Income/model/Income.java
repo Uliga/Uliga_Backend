@@ -1,14 +1,15 @@
 package com.uliga.uliga_backend.domain.Income.model;
 
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
+import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.CreateItemResult;
 import com.uliga.uliga_backend.domain.AccountBookData.model.AccountBookData;
 import com.uliga.uliga_backend.domain.AccountBookData.model.AccountBookDataType;
 import com.uliga.uliga_backend.domain.Category.model.Category;
-import com.uliga.uliga_backend.domain.Common.BaseTimeEntity;
 import com.uliga.uliga_backend.domain.Common.Date;
 import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
 import com.uliga.uliga_backend.domain.Member.model.Member;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,6 +42,20 @@ public class Income extends AccountBookData {
                 .month(super.getDate().getMonth())
                 .day(super.getDate().getDay())
                 .creator(super.getCreator().getNickName())
+                .build();
+    }
+
+    public CreateItemResult toCreateItemResult() {
+        return CreateItemResult.builder()
+                .id(super.getId())
+                .account(super.getAccount())
+                .value(super.getValue())
+                .category(super.getCategory().getName())
+                .payment(super.getPayment())
+                .memo(super.getMemo())
+                .year(super.getDate().getYear())
+                .month(super.getDate().getMonth())
+                .day(super.getDate().getDay())
                 .build();
     }
 

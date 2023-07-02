@@ -8,7 +8,6 @@ import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.AccountBookWeeklyRecord;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.AddRecordRequest;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.AddRecordResult;
-import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.DailyValueQ;
 import com.uliga.uliga_backend.domain.AccountBookData.model.AccountBookDataType;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
@@ -56,14 +55,14 @@ public class RecordService {
     private final IncomeRepository incomeRepository;
     private final CategoryRepository categoryRepository;
     private final MemberRepository memberRepository;
-    private final RecordMapper recordMapper;
     private final ObjectMapper objectMapper;
 
     /**
      * 한달 가계부 지출 총합 조회
+     *
      * @param accountBookId 가계부 아이디
-     * @param year 년도
-     * @param month 달
+     * @param year          년도
+     * @param month         달
      * @return 조회 결과
      */
     @Transactional(readOnly = true)
@@ -73,7 +72,8 @@ public class RecordService {
 
     /**
      * 가계부에 지출 추가
-     * @param currentMemberId 멤버 아이디
+     *
+     * @param currentMemberId  멤버 아이디
      * @param addRecordRequest 지출 추가 요청
      * @return 지출 추가 결과
      */
@@ -132,54 +132,10 @@ public class RecordService {
 
     }
 
-    /**
-     * 지출 리스트 다른 가계부에 추가하는 메서드
-     * @param records 지출 리스트
-     */
-    @Transactional
-    public void addRecordToOtherAccountBooks(List<Record> records) {
-        recordRepository.saveAll(records);
-    }
-
-    /**
-     * 수입/지출 한개 가계부에 추가
-     * @param dto 지출 dto
-     * @param accountBook 추가할 가계부
-     * @param member 생성한 멤버
-     * @param date 지출 날짜
-     * @param category 지출 카테고리
-     * @return 추가 결과
-     */
-    @Transactional
-    public AccountBookDataDTO.CreateItemResult addItemToAccountBook(AccountBookDataDTO.CreateRecordOrIncomeDto dto, AccountBook accountBook, Member member, Date date, Category category) {
-        Record build = Record.builder()
-                .payment(dto.getPayment())
-                .account(dto.getAccount())
-                .creator(member)
-                .accountBook(accountBook)
-                .spend(dto.getValue())
-                .memo(dto.getMemo())
-                .date(date)
-                .category(category).build();
-        recordRepository.save(build);
-        return AccountBookDataDTO.CreateItemResult.builder()
-                .id(build.getId())
-                .account(dto.getAccount())
-                .isIncome(true)
-                .category(category.getName())
-                .memo(dto.getMemo())
-                .payment(dto.getPayment())
-                .value(dto.getValue())
-                .year(date.getYear())
-                .month(date.getMonth())
-                .day(date.getDay())
-                .build();
-    }
-
-
 
     /**
      * 지출 정보 업데이트
+     *
      * @param updates 업데이트 정보 map
      * @return 업데이트 결과
      */
@@ -221,11 +177,12 @@ public class RecordService {
 
     /**
      * 가계부 지출 페이징으로 조회
+     *
      * @param accountBookId 가계부 아이디
-     * @param categoryId 카테고리 아이디
-     * @param year 년도
-     * @param month 달
-     * @param pageable 페이징 정보
+     * @param categoryId    카테고리 아이디
+     * @param year          년도
+     * @param month         달
+     * @param pageable      페이징 정보
      * @return 조회 결과
      */
     @Transactional(readOnly = true)
@@ -236,7 +193,8 @@ public class RecordService {
         map.put("year", year);
         map.put("month", month);
         map.put("offset", pageable.getOffset());
-        map.put("pageSize", pageable.getPageSize());;
+        map.put("pageSize", pageable.getPageSize());
+        ;
         List<RecordInfoQ> accountBookMemberRecords = mapper.findAccountBookMemberRecords(map);
         List<Long> counted = mapper.countQueryForRecordHistory(map);
         return new PageImpl<>(accountBookMemberRecords, pageable, counted.size());
@@ -244,7 +202,8 @@ public class RecordService {
 
     /**
      * 멤버 전체 지출 조회
-     * @param id 멤버 아이디
+     *
+     * @param id       멤버 아이디
      * @param pageable 페이징 정보
      * @return 조회 결과
      */
@@ -256,7 +215,8 @@ public class RecordService {
 
     /**
      * 지출 삭제
-     * @param id 멤버 아이디
+     *
+     * @param id       멤버 아이디
      * @param recordId 지출 아이디
      */
     @Transactional
@@ -272,9 +232,10 @@ public class RecordService {
 
     /**
      * 가계부 분석 -날짜별 지출 총합, 월별 지출 총합 그리고 예산과 비교
+     *
      * @param accountBookId 가계부 아이디
-     * @param year 조회할 년도
-     * @param month 조회할 달
+     * @param year          조회할 년도
+     * @param month         조회할 달
      * @return 조회 결과
      */
     @Transactional(readOnly = true)
@@ -317,9 +278,10 @@ public class RecordService {
 
     /**
      * 한달 카테고리 별 지출 총합 조회
+     *
      * @param accountBookId 가계부 아이디
-     * @param year 조회할 년도
-     * @param month 조회할 달
+     * @param year          조회할 년도
+     * @param month         조회할 달
      * @return 조회 결과
      */
     @Transactional(readOnly = true)
@@ -354,10 +316,11 @@ public class RecordService {
 
     /**
      * 가계부 분석 - 주차별 조회
+     *
      * @param accountBookId 가계부 아이디
-     * @param year 년도
-     * @param month 달
-     * @param startDay 분석 시작 일
+     * @param year          년도
+     * @param month         달
+     * @param startDay      분석 시작 일
      * @return 주차별 분석 결과
      */
     @Transactional(readOnly = true)
@@ -377,7 +340,7 @@ public class RecordService {
             }
             if (weeklyRecordSum.isPresent()) {
                 WeeklySumQ weeklySumQ = weeklyRecordSum.get();
-                AccountBookDataDTO.WeeklySum weeklySum = AccountBookDataDTO.WeeklySum.builder().startDay(startDay ).endDay(endDay).value(weeklySumQ.getValue()).build();
+                AccountBookDataDTO.WeeklySum weeklySum = AccountBookDataDTO.WeeklySum.builder().startDay(startDay).endDay(endDay).value(weeklySumQ.getValue()).build();
                 result.add(weeklySum);
                 totalSum += weeklySum.getValue();
             } else {
@@ -391,10 +354,10 @@ public class RecordService {
     }
 
 
-
     /**
      * 지출에 댓글 추가
-     * @param id 지출 아이디
+     *
+     * @param id        지출 아이디
      * @param createDto 댓글 정보
      * @return 댓글 추가 결과
      */
@@ -405,6 +368,7 @@ public class RecordService {
 
     /**
      * 지출 상세 정보 조회
+     *
      * @param id 지출 아이디
      * @return 지출 상세 정보
      */

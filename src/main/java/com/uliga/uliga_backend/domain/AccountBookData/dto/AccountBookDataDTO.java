@@ -1,10 +1,16 @@
 package com.uliga.uliga_backend.domain.AccountBookData.dto;
 
+import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.DailyValueQ;
+import com.uliga.uliga_backend.domain.Category.model.Category;
+import com.uliga.uliga_backend.domain.Common.Date;
+import com.uliga.uliga_backend.domain.Income.model.Income;
+import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.MonthlyCompareQ;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ;
 import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
+import com.uliga.uliga_backend.domain.Record.model.Record;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -72,6 +78,37 @@ public class AccountBookDataDTO {
         @NotNull
         @Schema(description = "추가할 공유 가계부들")
         private List<Long> sharedAccountBook;
+
+        public CreateItemResult toCreateItemResult() {
+            return CreateItemResult.builder()
+                    .build();
+        }
+
+        public Record toRecord(AccountBook accountBook, Member member, Date date, Category category) {
+            return Record.builder()
+                    .accountBook(accountBook)
+                    .creator(member)
+                    .date(date)
+                    .category(category)
+                    .memo(this.memo)
+                    .payment(this.payment)
+                    .spend(this.value)
+                    .account(this.account)
+                    .build();
+        }
+
+        public Income toIncome(AccountBook accountBook, Member member, Date date, Category category) {
+            return Income.builder()
+                    .accountBook(accountBook)
+                    .creator(member)
+                    .date(date)
+                    .category(category)
+                    .memo(this.memo)
+                    .payment(this.payment)
+                    .value(this.value)
+                    .account(this.account)
+                    .build();
+        }
     }
 
     @Builder

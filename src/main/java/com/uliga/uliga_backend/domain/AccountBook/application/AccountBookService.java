@@ -10,27 +10,13 @@ import com.uliga.uliga_backend.domain.AccountBook.exception.InvitationSaveErrorW
 import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookAccessException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
-import com.uliga.uliga_backend.domain.AccountBookData.dao.AccountBookDataMapper;
-import com.uliga.uliga_backend.domain.AccountBookData.dao.AccountBookDataRepository;
-import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO;
-import com.uliga.uliga_backend.domain.Budget.application.BudgetService;
-import com.uliga.uliga_backend.domain.Budget.dao.BudgetRepository;
-import com.uliga.uliga_backend.domain.Category.application.CategoryService;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
 import com.uliga.uliga_backend.domain.Category.model.Category;
-import com.uliga.uliga_backend.domain.Common.Date;
-import com.uliga.uliga_backend.domain.Income.application.IncomeService;
-import com.uliga.uliga_backend.domain.Income.dao.IncomeRepository;
-import com.uliga.uliga_backend.domain.Income.model.Income;
 import com.uliga.uliga_backend.domain.JoinTable.dao.AccountBookMemberRepository;
 import com.uliga.uliga_backend.domain.JoinTable.model.AccountBookMember;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.InvitationInfo;
 import com.uliga.uliga_backend.domain.Member.model.Member;
-import com.uliga.uliga_backend.domain.Record.application.RecordService;
-import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
-import com.uliga.uliga_backend.domain.Record.model.Record;
-import com.uliga.uliga_backend.domain.Schedule.application.ScheduleService;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,15 +41,15 @@ public class AccountBookService {
     private final AccountBookRepository accountBookRepository;
     private final AccountBookMemberRepository accountBookMemberRepository;
     private final MemberRepository memberRepository;
+    private final CategoryRepository categoryRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
-
-    private final CategoryRepository categoryRepository;
 
 
     /**
      * 가계부 정보 조회
-     * @param id 가계부 아이디
+     *
+     * @param id       가계부 아이디
      * @param memberId 멤버 아이디
      * @return 가계부 정보
      */
@@ -82,6 +68,7 @@ public class AccountBookService {
 
     /**
      * 멤버 가계부 조회
+     *
      * @param id 멤버 아이디
      * @return 멤버 가계부 정보 리스트
      */
@@ -103,7 +90,8 @@ public class AccountBookService {
 
     /**
      * 개인 가계부 생성
-     * @param member 멤버
+     *
+     * @param member        멤버
      * @param createRequest 개인 가계부 생성 요청
      * @return 생성된 가계부
      */
@@ -125,7 +113,8 @@ public class AccountBookService {
 
     /**
      * 첫 소셜 로그인시 가계부 생성
-     * @param memberId 멤버 아이디
+     *
+     * @param memberId      멤버 아이디
      * @param createRequest 가계부 생성 요청
      * @return 생성된 가계류
      */
@@ -148,7 +137,8 @@ public class AccountBookService {
 
     /**
      * 가계부 생성 요청
-     * @param id 멤버 아이디
+     *
+     * @param id                       멤버 아이디
      * @param accountBookCreateRequest 가계부 생성 요청
      * @return 생성한 가계부 정보
      * @throws JsonProcessingException Json 처리 예외
@@ -183,7 +173,8 @@ public class AccountBookService {
 
     /**
      * 멤버 초대
-     * @param id 초대자 ID
+     *
+     * @param id          초대자 ID
      * @param invitations 초대하려는 사람들
      * @return 초대된 사람들 수
      * @throws JsonProcessingException Json 처리 예외
@@ -209,7 +200,8 @@ public class AccountBookService {
 
     /**
      * 초대에 대한 응답
-     * @param id 응답자 아이디
+     *
+     * @param id              응답자 아이디
      * @param invitationReply 초대에 대한 응답
      * @return 응답 결과
      * @throws JsonProcessingException Json 처리 예외
@@ -241,116 +233,10 @@ public class AccountBookService {
 
     }
 
-    /**
-     * 가계부에 수입/지출 추가
-     * @param id 생성하려는 멤버 아이디
-     * @param createItems 생성하려는 데이터들
-     * @return 생성 결과
-     */
-    @Transactional
-    public AccountBookDataDTO.CreateResult createItems(Long id, AccountBookDataDTO.CreateItems createItems) {
-        long r = 0L;
-        long i = 0L;
-        // 아이템 작성자
-        Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
-        // 현재 작성하고 있는 가계부
-        AccountBook accountBook = accountBookRepository.findById(createItems.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
-        // 현재 작성하고 있는 가계부의 카테고리
-        List<Category> categories = accountBook.getCategories();
-        // 카테고리 이름 - 카테고리 객체
-        HashMap<String, Category> categoryDict = new HashMap<>();
-        // 다른 가계부들의 기타 카테고리 객체
-        List<Category> otherAccountBookDefaultCategories = categoryRepository.findCategoriesByMemberIdAndName(id, "기타");
-        // 다른 공유 가계부 객체
-        List<AccountBook> accountBooks = accountBookRepository.findAccountBooksByMemberId(id);
-        // 다른 가계부들 아이디 - 다른 가계부들 기타 카테고리 객체
-        HashMap<Long, Category> defaultCategories = new HashMap<>();
-        // 다른 가계부들 아이디 - 다른 가계부들 객체
-        HashMap<Long, AccountBook> otherAccountBooks = new HashMap<>();
-        // 카테고리 이름과 카테고리 객체 매핑
-        for (Category cat : categories) {
-            categoryDict.put(cat.getName(), cat);
-        }
-        // 다른 가계부들 아이디와 기타 카테고리 객체 매핑
-        for (Category cat : otherAccountBookDefaultCategories) {
-            defaultCategories.put(cat.getAccountBook().getId(), cat);
-        }
-        // 다른 가계부 객체 - 아이템 생성 요청 리퀘스트
-        Map<AccountBook, List<Income>> addIncomeToOtherAccountBooks = new HashMap<>();
-        Map<AccountBook, List<Record>> addRecordToOtherAccountBooks = new HashMap<>();
-        // 다른 가계부 아이디와 다른 가계부 객체 매핑
-        for (AccountBook ab : accountBooks) {
-            otherAccountBooks.put(ab.getId(), ab);
-            addIncomeToOtherAccountBooks.put(ab, new ArrayList<>());
-            addRecordToOtherAccountBooks.put(ab, new ArrayList<>());
-        }
-        List<AccountBookDataDTO.CreateItemResult> createResult = new ArrayList<>();
-        for (AccountBookDataDTO.CreateRecordOrIncomeDto dto : createItems.getCreateRequest()) {
-            String[] split = dto.getDate().split("-");
-            Date date = Date.builder()
-                    .year(Long.parseLong(split[0]))
-                    .month(Long.parseLong(split[1]))
-                    .day(Long.parseLong(split[2])).build();
-            Category category = categoryDict.get(dto.getCategory());
-            if (dto.getIsIncome()) {
-                // 수입 생성
-                AccountBookDataDTO.CreateItemResult createItemResult = incomeService.addItemToAccountBook(dto, accountBook, member, date, category);
-                createResult.add(createItemResult);
-                for (Long accountBookId : dto.getSharedAccountBook()) {
-                    AccountBook sharedAccountBook = otherAccountBooks.get(accountBookId);
-                    Category defaultCategory = defaultCategories.get(accountBookId);
-                    List<Income> addIncomeToAccountBooks = addIncomeToOtherAccountBooks.get(sharedAccountBook);
-
-                    addIncomeToAccountBooks.add(
-                            Income.builder()
-                                    .account(dto.getAccount())
-                                    .value(dto.getValue())
-                                    .accountBook(sharedAccountBook)
-                                    .memo(dto.getMemo())
-                                    .category(defaultCategory)
-                                    .creator(member)
-                                    .payment(dto.getPayment())
-                                    .date(date).build());
-                }
-                i += 1;
-
-            } else {
-                // 지출 생성
-                AccountBookDataDTO.CreateItemResult createItemResult = recordService.addItemToAccountBook(dto, accountBook, member, date, category);
-                createResult.add(createItemResult);
-                for (Long accountBookId : dto.getSharedAccountBook()) {
-                    AccountBook sharedAccountBook = otherAccountBooks.get(accountBookId);
-                    Category defaultCategory = defaultCategories.get(accountBookId);
-                    List<Record> addRecordToAccountBooks = addRecordToOtherAccountBooks.get(sharedAccountBook);
-                    addRecordToAccountBooks.add(
-                            Record.builder()
-                                    .account(dto.getAccount())
-                                    .spend(dto.getValue())
-                                    .accountBook(sharedAccountBook)
-                                    .memo(dto.getMemo())
-                                    .category(defaultCategory)
-                                    .creator(member)
-                                    .payment(dto.getPayment())
-                                    .date(date).build());
-                }
-                r += 1;
-
-
-            }
-
-        }
-
-        for (AccountBook ab : accountBooks) {
-            incomeService.addIncomeToOtherAccountBooks(addIncomeToOtherAccountBooks.get(ab));
-            recordService.addRecordToOtherAccountBooks(addRecordToOtherAccountBooks.get(ab));
-        }
-
-        return new AccountBookDataDTO.CreateResult(i, r, createResult);
-    }
-
 
     /**
      * 가계부 멤버 조회
+     *
      * @param id 가계부 아이디
      * @return 가계부 멤버 정보
      */
@@ -361,7 +247,8 @@ public class AccountBookService {
 
     /**
      * 가계부 삭제
-     * @param id 가계부 아이디
+     *
+     * @param id       가계부 아이디
      * @param memberId 멤버 아이디
      * @return DELETED
      */
@@ -379,9 +266,10 @@ public class AccountBookService {
 
     /**
      * 가계부 정보 업데이트 요청
-     * @param memberId 멤버 아이디
+     *
+     * @param memberId      멤버 아이디
      * @param accountBookId 가계부 아이디
-     * @param map 업데이트 요청
+     * @param map           업데이트 요청
      * @return 업데이트 결과
      * @throws JsonProcessingException Json 처리 예외
      */
@@ -420,7 +308,7 @@ public class AccountBookService {
                     categoryRepository.delete(category);
                 }
             }
-            //TODO 여기 카테고리 추가 어떻게해야함
+            //TODO 여기 카테고리 추가 어떻게해야링
 //            createCategory(memberId, CategoryCreateRequest.builder().id(accountBookId).categories(createCategories).build());
         }
 
