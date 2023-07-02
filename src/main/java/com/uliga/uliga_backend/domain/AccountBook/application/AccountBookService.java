@@ -14,12 +14,9 @@ import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDat
 import com.uliga.uliga_backend.domain.Budget.application.BudgetService;
 import com.uliga.uliga_backend.domain.Budget.dao.BudgetRepository;
 import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO;
-import com.uliga.uliga_backend.domain.Budget.dto.NativeQ.BudgetInfoQ;
 import com.uliga.uliga_backend.domain.Category.application.CategoryService;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
 import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO;
-import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryCreateRequest;
-import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryCreateResult;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.Date;
 import com.uliga.uliga_backend.domain.Income.application.IncomeService;
@@ -35,7 +32,6 @@ import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import com.uliga.uliga_backend.domain.Record.model.Record;
 import com.uliga.uliga_backend.domain.Schedule.application.ScheduleService;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO;
-import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.AddSchedules;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +47,6 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
-import static com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO.CreateBudgetDto;
 
 @Slf4j
 @Service
@@ -445,49 +440,6 @@ public class AccountBookService {
         return request;
     }
 
-    /**
-     * 가계부 분석 - 날짜별 지출 총액 조회
-     * @param id 가계부 아이디
-     * @param year 년도
-     * @param month 달
-     * @return 날짜별 지출 총합
-     */
-    @Transactional(readOnly = true)
-    public AccountBookDataDTO.AccountBookDailyRecord getAccountBookDailyRecord(Long id, Long year, Long month) {
-        List<DailyValueQ> monthlyRecord = accountBookRepository.getMonthlyRecord(id, year, month);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Math.toIntExact(year), Math.toIntExact(month) - 1, 1);
-        int actualMaximum = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-        int index = 0;
-        List<DailyValueQ> result = new ArrayList<>();
-        for (int i = 1; i <= actualMaximum; i++) {
-            if (index < monthlyRecord.size()) {
-                if (monthlyRecord.get(index).getDay().equals((long) i)) {
-                    result.add(monthlyRecord.get(index));
-                    index += 1;
-                } else {
-                    result.add(new DailyValueQ((long) i, 0L));
-                }
-            } else {
-                result.add(new DailyValueQ((long) i, 0L));
-
-            }
-        }
-        List<MonthlyCompareQ> monthlyCompareInDailyAnalyze = accountBookRepository.getMonthlyCompareInDailyAnalyze(id, year, month);
-        if (monthlyCompareInDailyAnalyze.size() == 2) {
-            Long diff = monthlyCompareInDailyAnalyze.get(0).getValue() - monthlyCompareInDailyAnalyze.get(1).getValue();
-            return new AccountBookDataDTO.AccountBookDailyRecord(result, monthlyCompareInDailyAnalyze.get(0).getValue(), diff);
-        } else {
-            if (monthlyCompareInDailyAnalyze.size() == 0) {
-                return new AccountBookDataDTO.AccountBookDailyRecord(result, 0L, null);
-            } else {
-                return new AccountBookDataDTO.AccountBookDailyRecord(result, monthlyCompareInDailyAnalyze.get(0).getValue(), null);
-            }
-
-        }
-
-    }
 
     /**
      * 가계부 분석 - 카테고리별 지출 총합 조회

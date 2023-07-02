@@ -2,6 +2,8 @@ package com.uliga.uliga_backend.domain.Record.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.DailyValueQ;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlyCompareQ;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ;
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
@@ -34,10 +36,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -263,6 +262,50 @@ public class RecordService {
 
     }
 
+    /**
+     * 가계부 분석 -날짜별 지출 총합, 월별 지출 총합 그리고 예산과 비교
+     * @param accountBookId 가계부 아이디
+     * @param year 조회할 년도
+     * @param month 조회할 달
+     * @return 조회 결과
+     */
+    @Transactional(readOnly = true)
+    public AccountBookDataDTO.AccountBookDailyRecordSumAndMonthlySum getDailyRecordSumAndMonthlySum(Long accountBookId, Long year, Long month) {
+        List<DailyValueQ> monthlyRecord = recordRepository.getDailyRecordSumOfMonth(accountBookId, year, month);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Math.toIntExact(year), Math.toIntExact(month) - 1, 1);
+        int actualMaximum = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        int index = 0;
+        List<DailyValueQ> result = new ArrayList<>();
+        for (int i = 1; i <= actualMaximum; i++) {
+            if (index < monthlyRecord.size()) {
+                if (monthlyRecord.get(index).getDay().equals((long) i)) {
+                    result.add(monthlyRecord.get(index));
+                    index += 1;
+                } else {
+                    result.add(new DailyValueQ((long) i, 0L));
+                }
+            } else {
+                result.add(new DailyValueQ((long) i, 0L));
+
+            }
+        }
+        List<MonthlyCompareQ> monthlyCompareInDailyAnalyze = accountBookRepository.getMonthlyCompareInDailyAnalyze(accountBookId, year, month);
+        if (monthlyCompareInDailyAnalyze.size() == 2) {
+            Long diff = monthlyCompareInDailyAnalyze.get(0).getValue() - monthlyCompareInDailyAnalyze.get(1).getValue();
+            return new AccountBookDataDTO.AccountBookDailyRecordSumAndMonthlySum(result, monthlyCompareInDailyAnalyze.get(0).getValue(), diff);
+        } else {
+            if (monthlyCompareInDailyAnalyze.size() == 0) {
+                return new AccountBookDataDTO.AccountBookDailyRecordSumAndMonthlySum(result, 0L, null);
+            } else {
+                return new AccountBookDataDTO.AccountBookDailyRecordSumAndMonthlySum(result, monthlyCompareInDailyAnalyze.get(0).getValue(), null);
+            }
+
+        }
+
+
+    }
     /**
      * 지출에 댓글 추가
      * @param id 지출 아이디

@@ -114,7 +114,7 @@ public class AccountBookDataDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema(description = "분석용 한달 지출 조회")
-    public static class AccountBookDailyRecord {
+    public static class AccountBookDailyRecordSumAndMonthlySum {
         @Schema(description = "날짜별 지출들")
         private List<DailyValueQ> records;
         private Long sum;

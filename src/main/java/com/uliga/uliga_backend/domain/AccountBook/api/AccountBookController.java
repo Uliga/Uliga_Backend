@@ -38,9 +38,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
@@ -335,13 +332,11 @@ public class AccountBookController {
 
     @Operation(summary = "가계부 분석용 날짜별 지출 조회 API", description = "가계부 분석용 날짜별 지출 조회 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountBookDailyRecord.class)))
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountBookDailyRecordSumAndMonthlySum.class)))
     })
     @GetMapping(value = "/{id}/analyze/{year}/{month}")
-    public ResponseEntity<AccountBookDailyRecord> getAccountBookDailyValues(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
-        // TODO: accountBookDataService로 리팩터링해야될듯
-
-        return ResponseEntity.ok(accountBookService.getAccountBookDailyRecord(id, year, month));
+    public ResponseEntity<AccountBookDailyRecordSumAndMonthlySum> getAccountBookDailyValues(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
+        return ResponseEntity.ok(recordService.getDailyRecordSumAndMonthlySum(id, year, month));
     }
 
     @Operation(summary = "가계부 분석용 한달 카테고리 별 지출 조회 API", description = "가계부 분석용 한달 카테고리 별 지출 조회 API 입니다")
