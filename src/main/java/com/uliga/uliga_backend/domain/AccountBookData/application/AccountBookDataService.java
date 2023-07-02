@@ -180,4 +180,32 @@ public class AccountBookDataService {
             return new PageImpl<>(accountBookData, pageable, counted.size());
         }
     }
+
+    /**
+     * 가계부 분석 - 사용자 지정 날짜 기간동안 가계부 내역 조회
+     * @param id 가계부 아이디
+     * @param year 년도
+     * @param month 달
+     * @param startDay 시작일
+     * @param endDay 종료일
+     * @param category 카테고리
+     * @param pageable 페이지 정보
+     * @return 해당 기간 가계부 내역 데이터
+     */
+    @Transactional(readOnly = true)
+    public Page<AccountBookDataQ> getCustomAccountBookData(Long id, Long year, Long month, Long startDay, Long endDay, String category, Pageable pageable) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("accountBookId", id);
+        map.put("year", year);
+        map.put("month", month);
+        map.put("startDay", startDay);
+        map.put("endDay", endDay);
+        map.put("offset", pageable.getOffset());
+        map.put("pageSize", pageable.getPageSize());
+        map.put("category", category);
+
+        List<AccountBookDataQ> accountBookData = accountBookDataMapper.findCustomAccountBookData(map);
+        List<Long> counted = accountBookDataMapper.countQueryForCustomAccountBookData(map);
+        return new PageImpl<>(accountBookData, pageable, counted.size());
+    }
 }

@@ -3,17 +3,18 @@ package com.uliga.uliga_backend.domain.AccountBook.application;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.*;
-import com.uliga.uliga_backend.domain.AccountBook.exception.*;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
+import com.uliga.uliga_backend.domain.AccountBook.exception.InvalidAccountBookDeleteRequest;
+import com.uliga.uliga_backend.domain.AccountBook.exception.InvitationSaveError;
+import com.uliga.uliga_backend.domain.AccountBook.exception.InvitationSaveErrorWithCreation;
+import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookAccessException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
 import com.uliga.uliga_backend.domain.AccountBookData.dao.AccountBookDataMapper;
 import com.uliga.uliga_backend.domain.AccountBookData.dao.AccountBookDataRepository;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO;
-import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ;
 import com.uliga.uliga_backend.domain.Budget.application.BudgetService;
 import com.uliga.uliga_backend.domain.Budget.dao.BudgetRepository;
-import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO;
 import com.uliga.uliga_backend.domain.Category.application.CategoryService;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
 import com.uliga.uliga_backend.domain.Category.model.Category;
@@ -28,23 +29,21 @@ import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.InvitationInfo;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Record.application.RecordService;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
-import com.uliga.uliga_backend.domain.Record.dto.NativeQ.MonthlySumQ;
-import com.uliga.uliga_backend.domain.Record.dto.NativeQ.WeeklySumQ;
 import com.uliga.uliga_backend.domain.Record.model.Record;
 import com.uliga.uliga_backend.domain.Schedule.application.ScheduleService;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
-import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.RedisSystemException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
 
@@ -55,22 +54,12 @@ public class AccountBookService {
 
     private final AccountBookRepository accountBookRepository;
     private final AccountBookMemberRepository accountBookMemberRepository;
-    private final AccountBookDataRepository accountBookDataRepository;
-    private final AccountBookDataMapper accountBookDataMapper;
     private final MemberRepository memberRepository;
-    private final IncomeRepository incomeRepository;
-    private final RecordRepository recordRepository;
-    private final BudgetRepository budgetRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
 
     private final CategoryRepository categoryRepository;
 
-    private final CategoryService categoryService;
-    private final RecordService recordService;
-    private final IncomeService incomeService;
-    private final ScheduleService scheduleService;
-    private final BudgetService budgetService;
 
     /**
      * 가계부 정보 조회
@@ -441,33 +430,4 @@ public class AccountBookService {
         return request;
     }
 
-
-
-    /**
-     * 가계부 분석 - 사용자 지정 날짜 기간동안 가계부 내역 조회
-     * @param id 가계부 아이디
-     * @param year 년도
-     * @param month 달
-     * @param startDay 시작일
-     * @param endDay 종료일
-     * @param category 카테고리
-     * @param pageable 페이지 정보
-     * @return 해당 기간 가계부 내역 데이터
-     */
-    @Transactional(readOnly = true)
-    public Page<AccountBookDataQ> getCustomAccountBookData(Long id, Long year, Long month, Long startDay, Long endDay, String category, Pageable pageable) {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("accountBookId", id);
-        map.put("year", year);
-        map.put("month", month);
-        map.put("startDay", startDay);
-        map.put("endDay", endDay);
-        map.put("offset", pageable.getOffset());
-        map.put("pageSize", pageable.getPageSize());
-        map.put("category", category);
-
-        List<AccountBookDataQ> accountBookData = accountBookDataMapper.findCustomAccountBookData(map);
-        List<Long> counted = accountBookDataMapper.countQueryForCustomAccountBookData(map);
-        return new PageImpl<>(accountBookData, pageable, counted.size());
-    }
 }
