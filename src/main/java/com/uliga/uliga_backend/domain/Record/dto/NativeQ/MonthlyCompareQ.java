@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ;
+package com.uliga.uliga_backend.domain.Record.dto.NativeQ;
 
 import lombok.Builder;
 import lombok.Data;

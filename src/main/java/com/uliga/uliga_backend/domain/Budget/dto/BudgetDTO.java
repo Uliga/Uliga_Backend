@@ -1,6 +1,6 @@
 package com.uliga.uliga_backend.domain.Budget.dto;
 
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ;
+import com.uliga.uliga_backend.domain.Record.dto.NativeQ.MonthlySumQ;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

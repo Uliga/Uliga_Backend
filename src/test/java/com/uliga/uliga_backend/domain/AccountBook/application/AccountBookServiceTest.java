@@ -2,42 +2,21 @@ package com.uliga.uliga_backend.domain.AccountBook.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
-import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO;
-import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.AccountBookCreateRequest;
-import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.GetAccountBookInfos;
-import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.GetInvitations;
-import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.SimpleAccountBookInfo;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategoryInfoQ;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookMemberInfoQ;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MembersQ;
-import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
-import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookAccessException;
-import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookCategoryCreateException;
-import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
-import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
 import com.uliga.uliga_backend.domain.AccountBookData.dao.AccountBookDataMapper;
 import com.uliga.uliga_backend.domain.AccountBookData.dao.AccountBookDataRepository;
 import com.uliga.uliga_backend.domain.Budget.application.BudgetService;
 import com.uliga.uliga_backend.domain.Budget.dao.BudgetRepository;
 import com.uliga.uliga_backend.domain.Category.application.CategoryService;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
-import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Income.application.IncomeService;
 import com.uliga.uliga_backend.domain.Income.dao.IncomeRepository;
 import com.uliga.uliga_backend.domain.JoinTable.dao.AccountBookMemberRepository;
-import com.uliga.uliga_backend.domain.JoinTable.model.AccountBookMember;
-import com.uliga.uliga_backend.domain.Member.application.AuthService;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
-import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Record.application.RecordService;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import com.uliga.uliga_backend.domain.Schedule.application.ScheduleService;
-import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import org.springframework.transaction.annotation.Transactional;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -45,12 +24,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-
-import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
-import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.AccountBookInfo;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 @Transactional
 @SpringBootTest

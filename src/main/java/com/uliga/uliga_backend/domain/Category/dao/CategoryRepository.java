@@ -1,11 +1,10 @@
 package com.uliga.uliga_backend.domain.Category.dao;
 
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategoryAnalyzeQ;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategoryInfoQ;
+import com.uliga.uliga_backend.domain.Category.dto.NativeQ.AccountBookCategoryAnalyzeQ;
+import com.uliga.uliga_backend.domain.Category.dto.NativeQ.AccountBookCategoryInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 

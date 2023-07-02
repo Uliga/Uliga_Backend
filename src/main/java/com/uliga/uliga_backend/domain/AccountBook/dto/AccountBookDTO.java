@@ -2,6 +2,7 @@ package com.uliga.uliga_backend.domain.AccountBook.dto;
 
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.*;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
+import com.uliga.uliga_backend.domain.Category.dto.NativeQ.AccountBookCategoryInfoQ;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

@@ -1,15 +1,14 @@
 package com.uliga.uliga_backend.domain.Record.dao;
 
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.DailyValueQ;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlyCompareQ;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.WeeklySumQ;
+import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.DailyValueQ;
+import com.uliga.uliga_backend.domain.Record.dto.NativeQ.MonthlyCompareQ;
+import com.uliga.uliga_backend.domain.Record.dto.NativeQ.MonthlySumQ;
+import com.uliga.uliga_backend.domain.Record.dto.NativeQ.WeeklySumQ;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
 import com.uliga.uliga_backend.domain.Record.model.Record;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

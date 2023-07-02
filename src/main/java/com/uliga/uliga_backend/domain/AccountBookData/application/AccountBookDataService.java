@@ -1,6 +1,6 @@
 package com.uliga.uliga_backend.domain.AccountBookData.application;
 
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlyCompareQ;
+import com.uliga.uliga_backend.domain.Record.dto.NativeQ.MonthlyCompareQ;
 import com.uliga.uliga_backend.domain.AccountBookData.dao.AccountBookDataMapper;
 import com.uliga.uliga_backend.domain.AccountBookData.dao.AccountBookDataRepository;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.*;

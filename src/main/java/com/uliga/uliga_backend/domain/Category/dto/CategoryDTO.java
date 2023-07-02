@@ -1,7 +1,7 @@
 package com.uliga.uliga_backend.domain.Category.dto;
 
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategoryAnalyzeQ;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategoryInfoQ;
+import com.uliga.uliga_backend.domain.Category.dto.NativeQ.AccountBookCategoryAnalyzeQ;
+import com.uliga.uliga_backend.domain.Category.dto.NativeQ.AccountBookCategoryInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import io.swagger.v3.oas.annotations.media.Schema;

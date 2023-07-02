@@ -1,7 +1,7 @@
 package com.uliga.uliga_backend.domain.AccountBookData.dto;
 
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.DailyValueQ;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlyCompareQ;
+import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.DailyValueQ;
+import com.uliga.uliga_backend.domain.Record.dto.NativeQ.MonthlyCompareQ;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ;
 import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;

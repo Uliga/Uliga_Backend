@@ -2,7 +2,7 @@ package com.uliga.uliga_backend.domain.Income.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ;
+import com.uliga.uliga_backend.domain.Record.dto.NativeQ.MonthlySumQ;
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO;
