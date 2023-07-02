@@ -1,5 +1,6 @@
 package com.uliga.uliga_backend.domain.Income.dao;
 
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.DailyValueQ;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ;
 import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
 import com.uliga.uliga_backend.domain.Income.model.Income;
@@ -15,6 +16,19 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IncomeRepository extends JpaRepository<Income, Long> {
+
+    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.DailyValueQ(" +
+            "i.date.day, " +
+            "SUM(i.value)) " +
+            "FROM Income i " +
+            "WHERE i.accountBook.id = :id " +
+            "AND i.date.year = :year " +
+            "AND i.date.month = :month " +
+            "GROUP BY i.date " +
+            "ORDER BY i.date.day ASC")
+    List<DailyValueQ> getDailyIncomeSumOfMonth(@Param("id") Long id,
+                                       @Param("year") Long year,
+                                       @Param("month") Long month);
 
     @Query(
             "select new com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ(" +

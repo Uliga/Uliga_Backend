@@ -102,7 +102,7 @@ public class AccountBookDataDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema(description = "한달 대략적 수입/지출조회")
-    public static class AccountBookIncomesAndRecords {
+    public static class AccountBookDataDailySum {
         @Schema(description = "날짜별 수입들")
         private List<DailyValueQ> incomes;
         @Schema(description = "날짜별 지출들")

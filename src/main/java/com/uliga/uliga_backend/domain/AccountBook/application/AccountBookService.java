@@ -404,9 +404,9 @@ public class AccountBookService {
      * @return 해당 달 날짜별 수입/지출 총합
      */
     @Transactional(readOnly = true)
-    public AccountBookDataDTO.AccountBookIncomesAndRecords getAccountBookItems(Long id, Long year, Long month) {
+    public AccountBookDataDTO.AccountBookDataDailySum getAccountBookItems(Long id, Long year, Long month) {
 
-        return AccountBookDataDTO.AccountBookIncomesAndRecords.builder()
+        return AccountBookDataDTO.AccountBookDataDailySum.builder()
                 .incomes(accountBookRepository.getMonthlyIncome(id, year, month))
                 .records(accountBookRepository.getMonthlyRecord(id, year, month)).build();
     }

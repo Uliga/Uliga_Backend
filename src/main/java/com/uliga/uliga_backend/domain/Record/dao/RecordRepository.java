@@ -1,5 +1,6 @@
 package com.uliga.uliga_backend.domain.Record.dao;
 
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.DailyValueQ;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
 import com.uliga.uliga_backend.domain.Record.model.Record;
@@ -15,6 +16,20 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RecordRepository extends JpaRepository<Record, Long> {
+
+    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.DailyValueQ(" +
+            "r.date.day, " +
+            "SUM(r.value)) " +
+            "FROM Record r " +
+            "WHERE r.accountBook.id = :id " +
+            "AND r.date.year = :year " +
+            "AND r.date.month = :month " +
+            "GROUP BY r.date " +
+            "ORDER BY r.date.day ASC")
+    List<DailyValueQ> getDailyRecordSumOfMonth(@Param("id") Long id,
+                                               @Param("year") Long year,
+                                               @Param("month") Long month);
+
     @Query(
             "SELECT NEW com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ(" +
                     "r.id," +
