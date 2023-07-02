@@ -2,6 +2,7 @@ package com.uliga.uliga_backend.global.jwt;
 
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.model.Member;
+import com.uliga.uliga_backend.domain.Member.model.UserLoginType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.Optional;
 
+import static com.uliga.uliga_backend.domain.Member.model.UserLoginType.EMAIL;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -23,7 +26,7 @@ public class UserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Member> byEmail = memberRepository.findByEmailAndDeleted(username, false);
+        Optional<Member> byEmail = memberRepository.findByEmailAndDeletedAndUserLoginType(username, false, EMAIL);
         if (byEmail.isPresent()) {
             return createUserDetails(byEmail.get());
         } else {
