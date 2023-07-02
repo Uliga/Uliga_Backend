@@ -2,6 +2,8 @@ package com.uliga.uliga_backend.domain.Budget.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
+import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO;
+import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.MonthlySumQ;
 import com.uliga.uliga_backend.domain.AccountBook.exception.BudgetAlreadyExists;
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
@@ -20,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Optional;
 
 import static com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO.*;
 
@@ -31,6 +34,7 @@ public class BudgetService {
     private final BudgetRepository budgetRepository;
     private final AccountBookRepository accountBookRepository;
     private final CategoryRepository categoryRepository;
+    private final RecordRepository recordRepository;
     private final ObjectMapper mapper;
 
     /**
@@ -74,8 +78,31 @@ public class BudgetService {
 
 
     }
-
-
+    /**
+     * 가계부 분석 - 예산과 비교
+     * @param accountBookId 가계부 아이디
+     * @param year 년도
+     * @param month 달
+     * @return 비교 결과
+     */
+    @Transactional(readOnly = true)
+    public BudgetCompare compareWithBudget(Long accountBookId, Long year, Long month) {
+        Optional<MonthlySumQ> recordSum = recordRepository.getMonthlySumByAccountBookId(accountBookId, year, month);
+        Optional<MonthlySumQ> budgetSum = budgetRepository.getMonthlySumByAccountBookId(accountBookId, year, month);
+        if (recordSum.isPresent() && budgetSum.isPresent()) {
+            MonthlySumQ record = recordSum.get();
+            MonthlySumQ budget = budgetSum.get();
+            return new BudgetDTO.BudgetCompare(record.getValue(), budget.getValue(), budget.getValue() - record.getValue());
+        } else if (budgetSum.isPresent()) {
+            MonthlySumQ budget = budgetSum.get();
+            return new BudgetDTO.BudgetCompare(0L, budget.getValue(), budget.getValue());
+        } else if (recordSum.isPresent()) {
+            MonthlySumQ record = recordSum.get();
+            return new BudgetDTO.BudgetCompare(record.getValue(), 0L, -record.getValue());
+        } else {
+            return new BudgetDTO.BudgetCompare(0L, 0L, 0L);
+        }
+    }
     /**
      * 예산 정보 업데이트
      * @param updates 업데이트할 항목들 map

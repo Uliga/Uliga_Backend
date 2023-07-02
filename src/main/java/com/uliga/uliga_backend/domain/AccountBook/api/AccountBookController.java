@@ -376,9 +376,7 @@ public class AccountBookController {
     @Operation(summary = "가계부 분석용 - 예산과 비교용 API", description = "가계부 분석용 예산과 비교용 API 입니다")
     @GetMapping(value = "/{id}/analyze/budget/{year}/{month}")
     public ResponseEntity<BudgetDTO.BudgetCompare> getAccountBookBudgetCompare(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
-        // TODO: 리팩터링 필요
         return ResponseEntity.ok(budgetService.compareWithBudget(id, year, month));
-        return ResponseEntity.ok(accountBookService.getBudgetCompare(id, year, month));
     }
 
     @Operation(summary = "가계부 분석용 - 주차별 지출 금액 조회", description = "가계부 분석용 주차별 지출 금액 조회 API 입니다")

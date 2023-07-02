@@ -442,32 +442,6 @@ public class AccountBookService {
     }
 
 
-    /**
-     * 가계부 분석 - 예산과 비교
-     * @param accountBookId 가계부 아이디
-     * @param year 년도
-     * @param month 달
-     * @return 비교 결과
-     */
-    @Transactional(readOnly = true)
-    public BudgetDTO.BudgetCompare getBudgetCompare(Long accountBookId, Long year, Long month) {
-
-        Optional<MonthlySumQ> recordSum = recordRepository.getMonthlySumByAccountBookId(accountBookId, year, month);
-        Optional<MonthlySumQ> budgetSum = budgetRepository.getMonthlySumByAccountBookId(accountBookId, year, month);
-        if (recordSum.isPresent() && budgetSum.isPresent()) {
-            MonthlySumQ record = recordSum.get();
-            MonthlySumQ budget = budgetSum.get();
-            return new BudgetDTO.BudgetCompare(record.getValue(), budget.getValue(), budget.getValue() - record.getValue());
-        } else if (budgetSum.isPresent()) {
-            MonthlySumQ budget = budgetSum.get();
-            return new BudgetDTO.BudgetCompare(0L, budget.getValue(), budget.getValue());
-        } else if (recordSum.isPresent()) {
-            MonthlySumQ record = recordSum.get();
-            return new BudgetDTO.BudgetCompare(record.getValue(), 0L, -record.getValue());
-        } else {
-            return new BudgetDTO.BudgetCompare(0L, 0L, 0L);
-        }
-    }
 
     /**
      * 가계부 분석 - 주차별 조회
