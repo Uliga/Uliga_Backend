@@ -44,13 +44,6 @@ public class TokenDTO {
 
     }
 
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Getter
-    public static class AccessTokenDTO {
-        private String accessToken;
-    }
 
     @Builder
     @NoArgsConstructor
