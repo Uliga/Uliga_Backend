@@ -47,14 +47,12 @@ public class AuthService {
      * @return 회원가입 결과
      */
     @Transactional
-    public Long signUp(SignUpRequest signUpRequest) {
+    public Member signUp(SignUpRequest signUpRequest) {
         signUpRequest.encrypt(passwordEncoder);
         Member member = signUpRequest.toEntity();
         memberRepository.save(member);
 
-        CreateRequestPrivate requestPrivate = CreateRequestPrivate.builder().name(member.getUserName() + " 님의 가계부").relationship("개인").isPrivate(true).build();
-        accountBookService.createAccountBookPrivate(member, requestPrivate);
-        return member.getId();
+        return member;
     }
 
     /**

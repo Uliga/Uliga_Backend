@@ -22,6 +22,29 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final ObjectMapper mapper;
 
+    private final List<String> defaultCategories = new ArrayList<>(
+            Arrays.asList("\uD83C\uDF7D️ 식비",
+                    "☕ 카페 · 간식",
+                    "\uD83C\uDFE0 생활",
+                    "\uD83C\uDF59 편의점,마트,잡화",
+                    "\uD83D\uDC55 쇼핑",
+                    "기타")
+    );
+
+    @Transactional
+    public void createDefaultCategories(AccountBook accountBook) {
+        List<Category> categories = new ArrayList<>();
+        for (String defaultCategory : defaultCategories) {
+            Category newCategory = Category.builder()
+                    .accountBook(accountBook)
+                    .name(defaultCategory)
+                    .build();
+            categories.add(newCategory);
+        }
+        categoryRepository.saveAll(categories);
+    }
+
+
     /**
      * 가계부 카테고리 생성
      * @param categoryNames 생성할 카테고리 이름 리스트

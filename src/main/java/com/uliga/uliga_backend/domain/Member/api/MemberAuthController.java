@@ -1,7 +1,13 @@
 package com.uliga.uliga_backend.domain.Member.api;
 
+import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService;
+import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO;
+import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.CreateRequestPrivate;
+import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
+import com.uliga.uliga_backend.domain.Category.application.CategoryService;
 import com.uliga.uliga_backend.domain.Member.application.AuthService;
 import com.uliga.uliga_backend.domain.Member.application.EmailCertificationService;
+import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.ReissueRequest;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenIssueDTO;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
@@ -37,6 +43,8 @@ import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
 public class MemberAuthController {
     private final AuthService authService;
     private final EmailCertificationService emailCertificationService;
+    private final AccountBookService accountBookService;
+    private final CategoryService categoryService;
 
 
     @Operation(summary = "회원가입 API", description = "회원가입 API 입니다")
@@ -47,7 +55,12 @@ public class MemberAuthController {
     @PostMapping(value = "/signup")
     public ResponseEntity<SignUpResult> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
 
-        authService.signUp(signUpRequest);
+        Member member = authService.signUp(signUpRequest);
+
+        CreateRequestPrivate requestPrivate = CreateRequestPrivate.builder().name(member.getUserName() + " 님의 가계부").relationship("개인").isPrivate(true).build();
+        AccountBook accountBookPrivate = accountBookService.createAccountBookPrivate(member, requestPrivate);
+        categoryService.createDefaultCategories(accountBookPrivate);
+
         return ResponseEntity.ok(SignUpResult.builder().result("CREATED").build());
     }
 
@@ -69,15 +82,15 @@ public class MemberAuthController {
     @PostMapping(value = "/social-login")
     public ResponseEntity<LoginResult> socialLogin(@RequestBody SocialLoginRequest socialLoginRequest) {
 
-        return ResponseEntity.ok(authService.socialLogin(socialLoginRequest));
+        LoginResult body = authService.socialLogin(socialLoginRequest);
+        CreateRequestPrivate requestPrivate = CreateRequestPrivate.builder().name(body.getMemberInfo().getUserName() + " 님의 가계부").relationship("개인").isPrivate(true).build();
+        AccountBook accountBookPrivateSocialLogin = accountBookService.createAccountBookPrivateSocialLogin(body.getMemberInfo().getId(), requestPrivate);
+        categoryService.createDefaultCategories(accountBookPrivateSocialLogin);
+
+        return ResponseEntity.ok(body);
     }
 
-    @Operation(summary = "OAuth 로그인 성공", description = "OAuth 로그인 성공시 이동할 url 입니다")
-    @GetMapping(value = "/social_login")
-    public ResponseEntity<String> oAuthLogin() {
 
-        return ResponseEntity.ok("로그인성공");
-    }
 
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)

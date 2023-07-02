@@ -2,6 +2,7 @@ package com.uliga.uliga_backend.domain.AccountBook.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService;
+import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBookData.application.AccountBookDataService;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ;
 import com.uliga.uliga_backend.domain.Budget.application.BudgetService;
@@ -9,7 +10,9 @@ import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO;
 import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO.CreateBudgetDto;
 import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO.GetAccountBookAssets;
 import com.uliga.uliga_backend.domain.Budget.dto.NativeQ.BudgetInfoQ;
+import com.uliga.uliga_backend.domain.Category.application.CategoryService;
 import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO;
+import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryCreateResult;
 import com.uliga.uliga_backend.domain.Income.application.IncomeService;
 import com.uliga.uliga_backend.domain.Record.application.RecordService;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO;
@@ -30,6 +33,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
@@ -48,7 +54,7 @@ public class AccountBookController {
     private final BudgetService budgetService;
     private final IncomeService incomeService;
     private final RecordService recordService;
-
+    private final CategoryService categoryService;
 
     @Operation(summary = "멤버 가계부 조회 API", description = "멤버 가계부 조회 API 입니다")
     @ApiResponses(value = {
@@ -98,7 +104,9 @@ public class AccountBookController {
     public ResponseEntity<SimpleAccountBookInfo> createAccountBook(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "가계부 생성 요청") @RequestBody AccountBookCreateRequest accountBookCreateRequest) throws JsonProcessingException {
 
         Long id = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(accountBookService.createAccountBook(id, accountBookCreateRequest));
+        AccountBook accountBook = accountBookService.createAccountBook(id, accountBookCreateRequest);
+        categoryService.createDefaultCategories(accountBook);
+        return ResponseEntity.ok(accountBook.toInfoDto());
     }
 
 
@@ -194,14 +202,15 @@ public class AccountBookController {
 
     @Operation(summary = "가계부에 카테고리 추가 API", description = "가계부에 카테고리 추가하는 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = CategoryDTO.CategoryCreateResult.class))),
+            @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = CategoryCreateResult.class))),
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/category")
-    public ResponseEntity<CategoryDTO.CategoryCreateResult> createCategories(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "카테고리 생성 요청") @RequestBody CategoryDTO.CategoryCreateRequest createRequest) {
+    public ResponseEntity<CategoryCreateResult> createCategories(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "카테고리 생성 요청") @RequestBody CategoryDTO.CategoryCreateRequest createRequest) {
 
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         // TODO : category service
+
         return ResponseEntity.ok(accountBookService.createCategory(currentMemberId, createRequest));
     }
 

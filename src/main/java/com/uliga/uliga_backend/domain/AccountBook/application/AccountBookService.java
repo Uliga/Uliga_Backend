@@ -18,6 +18,8 @@ import com.uliga.uliga_backend.domain.Budget.dto.NativeQ.BudgetInfoQ;
 import com.uliga.uliga_backend.domain.Category.application.CategoryService;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
 import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO;
+import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryCreateRequest;
+import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryCreateResult;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.Date;
 import com.uliga.uliga_backend.domain.Income.application.IncomeService;
@@ -123,13 +125,13 @@ public class AccountBookService {
 
 
     /**
-     * 멤버 개인 가계부 생성
-     *
-     * @param member        멤버
-     * @param createRequest 가계부 생성 요청
+     * 개인 가계부 생성
+     * @param member 멤버
+     * @param createRequest 개인 가계부 생성 요청
+     * @return 생성된 가계부
      */
     @Transactional
-    public void createAccountBookPrivate(Member member, CreateRequestPrivate createRequest) {
+    public AccountBook createAccountBookPrivate(Member member, CreateRequestPrivate createRequest) {
         AccountBook accountBook = createRequest.toEntity();
         accountBookRepository.save(accountBook);
         member.setPrivateAccountBook(accountBook);
@@ -147,6 +149,30 @@ public class AccountBookService {
                     .name(cat).build();
             categoryRepository.save(category);
         }
+        return accountBook;
+    }
+
+    @Transactional
+    public AccountBook createAccountBookPrivateSocialLogin(Long memberId, CreateRequestPrivate createRequest) {
+        AccountBook accountBook = createRequest.toEntity();
+        accountBookRepository.save(accountBook);
+        Member member = memberRepository.findById(memberId).orElseThrow(NotFoundByIdException::new);
+        member.setPrivateAccountBook(accountBook);
+        AccountBookMember bookMember = AccountBookMember.builder()
+                .accountBook(accountBook)
+                .member(member)
+                .accountBookAuthority(AccountBookAuthority.ADMIN)
+                .avatarUrl("default")
+                .getNotification(true).build();
+
+        accountBookMemberRepository.save(bookMember);
+        for (String cat : defaultCategories) {
+            Category category = Category.builder()
+                    .accountBook(accountBook)
+                    .name(cat).build();
+            categoryRepository.save(category);
+        }
+        return accountBook;
     }
 
     /**
@@ -157,7 +183,7 @@ public class AccountBookService {
      * @throws JsonProcessingException Json 처리 예외
      */
     @Transactional
-    public SimpleAccountBookInfo createAccountBook(Long id, AccountBookCreateRequest accountBookCreateRequest) throws JsonProcessingException {
+    public AccountBook createAccountBook(Long id, AccountBookCreateRequest accountBookCreateRequest) throws JsonProcessingException {
 
         Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
         AccountBook accountBook = accountBookCreateRequest.toEntity();
@@ -183,7 +209,7 @@ public class AccountBookService {
                 throw new InvitationSaveErrorWithCreation(accountBook.toInfoDto());
             }
         }
-        return accountBook.toInfoDto();
+        return accountBook;
     }
 
     /**
@@ -380,7 +406,7 @@ public class AccountBookService {
      * @return 카테고리 생성 요청 결과
      */
     @Transactional
-    public CategoryDTO.CategoryCreateResult createCategory(Long memberId, CategoryDTO.CategoryCreateRequest createRequest) {
+    public CategoryCreateResult createCategory(Long memberId, CategoryCreateRequest createRequest) {
         Long id = createRequest.getId();
         AccountBook accountBook = accountBookRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
         if (!accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(memberId, id)) {
@@ -393,7 +419,7 @@ public class AccountBookService {
                 result.add(cat);
             }
         }
-        return new CategoryDTO.CategoryCreateResult(id, result);
+        return new CategoryCreateResult(id, result);
     }
 
 
@@ -601,7 +627,7 @@ public class AccountBookService {
                     categoryRepository.delete(category);
                 }
             }
-            createCategory(memberId, CategoryDTO.CategoryCreateRequest.builder().id(accountBookId).categories(createCategories).build());
+            createCategory(memberId, CategoryCreateRequest.builder().id(accountBookId).categories(createCategories).build());
         }
 
         if (request.getRelationship() != null) {
