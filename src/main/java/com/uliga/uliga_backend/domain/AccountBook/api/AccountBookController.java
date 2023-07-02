@@ -17,7 +17,9 @@ import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryCreateReq
 import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryCreateResult;
 import com.uliga.uliga_backend.domain.Income.application.IncomeService;
 import com.uliga.uliga_backend.domain.Record.application.RecordService;
+import com.uliga.uliga_backend.domain.Schedule.application.ScheduleService;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO;
+import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.AddScheduleResult;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import com.uliga.uliga_backend.global.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -57,6 +59,7 @@ public class AccountBookController {
     private final IncomeService incomeService;
     private final RecordService recordService;
     private final CategoryService categoryService;
+    private final ScheduleService scheduleService;
 
     @Operation(summary = "멤버 가계부 조회 API", description = "멤버 가계부 조회 API 입니다")
     @ApiResponses(value = {
@@ -267,20 +270,20 @@ public class AccountBookController {
     })
     @PostMapping(value = "/budget")
     public ResponseEntity<BudgetInfoQ> addBudget(@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "예산 생성 요청", content = @Content(schema = @Schema(implementation = CreateBudgetDto.class)))
-                                                 @RequestBody Map<String, Object> createBudgetDto) {
+                                                 @RequestBody Map<String, Object> createBudgetDto) {링
         return ResponseEntity.ok(budgetService.addBudget(createBudgetDto));
     }
 
     @Operation(summary = "가계부에 금융 일정 추가", description = "가계부에 금융 일정 추가 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = ScheduleDTO.AddScheduleResult.class)))
+            @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = AddScheduleResult.class)))
     })
     @PostMapping(value = "/schedule")
-    public ResponseEntity<ScheduleDTO.AddScheduleResult> addSchedule(@Valid @RequestBody ScheduleDTO.AddSchedules addSchedules) throws JsonProcessingException {
+    public ResponseEntity<AddScheduleResult> addSchedule(@Valid @RequestBody ScheduleDTO.AddSchedules addSchedules) throws JsonProcessingException {
         // TODO: scheduleService로 리팩터링해야될듯
 
         Long memberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(accountBookService.addSchedule(memberId, addSchedules));
+        return ResponseEntity.ok(scheduleService.addSchedule(memberId, addSchedules));
     }
 
     @Operation(summary = "가계부 금융 일정 세부 조회", description = "가계부 금융 일정 세부 조회 API 입니다")

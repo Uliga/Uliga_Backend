@@ -2,6 +2,7 @@ package com.uliga.uliga_backend.domain.Schedule.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.AddScheduleResult;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.GetAccountBookSchedules;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
@@ -40,6 +41,7 @@ public class ScheduleService {
     private final ScheduleMapper scheduleMapper;
     private final ScheduleMemberRepository scheduleMemberRepository;
     private final MemberRepository memberRepository;
+    private final AccountBookRepository accountBookRepository;
     private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper mapper;
 
@@ -57,14 +59,17 @@ public class ScheduleService {
 
     /**
      * 금융 일정 추가
-     * @param member 멤버
-     * @param accountBook 가계부
-     * @param scheduleRequests 금융 일정 추가 요청
-     * @return 금융 일정 추가 결과
-     * @throws JsonProcessingException 레디스 오류
+     * @param currentMemberId 현재 멤버 아이디
+     * @param addSchedules 금융 일정 추가 요청
+     * @return 금융일정 추가 결과
+     * @throws JsonProcessingException 레디스 저장 과정에서 발생할 수 있는 오류
      */
     @Transactional
-    public AddScheduleResult addSchedule(Member member, AccountBook accountBook, List<CreateScheduleRequest> scheduleRequests) throws JsonProcessingException {
+    public AddScheduleResult addSchedule(Long currentMemberId, AddSchedules addSchedules) throws JsonProcessingException {
+
+        Member member = memberRepository.findById(currentMemberId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
+        AccountBook accountBook = accountBookRepository.findById(addSchedules.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
+
         SetOperations<String, String> setOperations = redisTemplate.opsForSet();
         List<CreateScheduleRequest> result = new ArrayList<>();
         List<Member> memberByAccountBookId = memberRepository.findMemberByAccountBookId(accountBook.getId());
@@ -73,6 +78,7 @@ public class ScheduleService {
         for (Member m : memberByAccountBookId) {
             memberMap.put(m.getId(), m);
         }
+        List<CreateScheduleRequest> scheduleRequests = addSchedules.getSchedules();
         for (CreateScheduleRequest scheduleRequest : scheduleRequests) {
             Schedule schedule = Schedule.builder()
                     .accountBook(accountBook)

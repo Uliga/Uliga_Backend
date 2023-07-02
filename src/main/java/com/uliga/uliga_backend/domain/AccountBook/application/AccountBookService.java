@@ -35,6 +35,7 @@ import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import com.uliga.uliga_backend.domain.Record.model.Record;
 import com.uliga.uliga_backend.domain.Schedule.application.ScheduleService;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO;
+import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.AddSchedules;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -142,7 +143,7 @@ public class AccountBookService {
      * 첫 소셜 로그인시 가계부 생성
      * @param memberId 멤버 아이디
      * @param createRequest 가계부 생성 요청
-     * @return 생성된 가계부
+     * @return 생성된 가계류
      */
     @Transactional
     public AccountBook createAccountBookPrivateSocialLogin(Long memberId, CreateRequestPrivate createRequest) {
@@ -372,23 +373,6 @@ public class AccountBookService {
     @Transactional(readOnly = true)
     public AccountBookMembers getAccountBookMembers(Long id) {
         return new AccountBookMembers(accountBookRepository.findAccountBookMemberInfoById(id));
-    }
-
-
-
-
-    /**
-     * 가계부 금융 일정 추가
-     * @param memberId 멤버 아이디
-     * @param addSchedules 추가할 일정들
-     * @return 추가 결과
-     * @throws JsonProcessingException Json 처리 예외
-     */
-    @Transactional
-    public ScheduleDTO.AddScheduleResult addSchedule(Long memberId, ScheduleDTO.AddSchedules addSchedules) throws JsonProcessingException {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
-        AccountBook accountBook = accountBookRepository.findById(addSchedules.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
-        return scheduleService.addSchedule(member, accountBook, addSchedules.getSchedules());
     }
 
     /**
