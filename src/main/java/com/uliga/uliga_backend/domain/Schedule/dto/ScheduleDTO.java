@@ -1,13 +1,11 @@
 package com.uliga.uliga_backend.domain.Schedule.dto;
 
+import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleAnalyzeQ;
 import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleInfoQ;
 import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleMemberInfoQ;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 import java.util.Map;
@@ -112,4 +110,43 @@ public class ScheduleDTO {
     }
 
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AddSchedules {
+        @NotNull
+        private Long id;
+        @NotNull
+        private List<CreateScheduleRequest> schedules;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AddScheduleResult {
+        private List<CreateScheduleRequest> result;
+    }
+
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GetAccountBookSchedules {
+        private Long incomeSum;
+        private Long recordSum;
+        private List<ScheduleDetail> schedules;
+    }
+
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class AccountScheduleAnalyze {
+        private List<ScheduleAnalyzeQ> schedules;
+        private Long sum;
+    }
 }

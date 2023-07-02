@@ -2,9 +2,13 @@ package com.uliga.uliga_backend.domain.AccountBook.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService;
+import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ;
+import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO;
 import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO.CreateBudgetDto;
 import com.uliga.uliga_backend.domain.Budget.dto.NativeQ.BudgetInfoQ;
+import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO;
+import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import com.uliga.uliga_backend.global.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -115,35 +119,38 @@ public class AccountBookController {
 
     @Operation(summary = "한달 가계부 수입/지출 조회 API", description = "한달동안의 가계부 수입/지출조회 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountBookIncomesAndRecords.class))),
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountBookDataDTO.AccountBookIncomesAndRecords.class))),
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "/{id}/item/{year}/{month}")
-    public ResponseEntity<AccountBookIncomesAndRecords> getAccountBookItems(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
-                                                                            @Parameter(name = "year", description = "년도", in = PATH) @PathVariable("year") Long year,
-                                                                            @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month) {
-
+    public ResponseEntity<AccountBookDataDTO.AccountBookIncomesAndRecords> getAccountBookItems(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
+                                                                                               @Parameter(name = "year", description = "년도", in = PATH) @PathVariable("year") Long year,
+                                                                                               @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month) {
+        // TODO: accountBookDataService로 리팩터링해야될듯
         return ResponseEntity.ok(accountBookService.getAccountBookItems(id, year, month));
     }
 
 
     @Operation(summary = "하루 수입/지출 내역 상세 조회", description = "하루 가계부 수입/지출 조회 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = RecordAndIncomeDetails.class))),
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountBookDataDTO.RecordAndIncomeDetails.class))),
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "/{id}/item/{year}/{month}/{day}")
-    public ResponseEntity<RecordAndIncomeDetails> getAccountBookItemDetailsByDay(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
-                                                                                 @Parameter(name = "year", description = "년도", in = PATH) @PathVariable("year") Long year,
-                                                                                 @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month,
-                                                                                 @Parameter(name = "day", description = "하루", in = PATH) @PathVariable("day") Long day) {
+    public ResponseEntity<AccountBookDataDTO.RecordAndIncomeDetails> getAccountBookItemDetailsByDay(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
+                                                                                                    @Parameter(name = "year", description = "년도", in = PATH) @PathVariable("year") Long year,
+                                                                                                    @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month,
+                                                                                                    @Parameter(name = "day", description = "하루", in = PATH) @PathVariable("day") Long day) {
+        // TODO: accountBookDataService로 리팩터링해야될듯
 
         return ResponseEntity.ok(accountBookService.getAccountBookItemDetails(id, year, month, day));
     }
 
     @Operation(summary = "가계부 내역 삭제", description = "가계부 내역 삭제 API 입니다")
     @DeleteMapping(value = "/item")
-    public ResponseEntity<String> deleteAccountBookItems(@Valid @RequestBody DeleteItemRequest deleteItemRequest) {
+    public ResponseEntity<String> deleteAccountBookItems(@Valid @RequestBody AccountBookDataDTO.DeleteItemRequest deleteItemRequest) {
+
+        // TODO: accountBookDataService로 리팩터링해야될듯
 
         accountBookService.deleteAccountBookItems(deleteItemRequest);
         return ResponseEntity.ok("DELETED");
@@ -151,36 +158,39 @@ public class AccountBookController {
 
     @Operation(summary = "한달 가계부 지출/수입/예산 총합 조회 API", description = "한달 동안의 가계부 수입/지출/예산 총합 조회 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = GetAccountBookAssets.class))),
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = BudgetDTO.GetAccountBookAssets.class))),
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "/{id}/asset/{year}/{month}")
-    public ResponseEntity<GetAccountBookAssets> getAccountBookAssets(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
-                                                                     @Parameter(name = "year", description = "년도", in = PATH) @PathVariable("year") Long year,
-                                                                     @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month) {
+    public ResponseEntity<BudgetDTO.GetAccountBookAssets> getAccountBookAssets(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
+                                                                               @Parameter(name = "year", description = "년도", in = PATH) @PathVariable("year") Long year,
+                                                                               @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month) {
 
+        // TODO: accountBookDataService, budgetService로 리팩터링해야될듯
         return ResponseEntity.ok(accountBookService.getAccountBookAssets(id, year, month));
     }
 
     @Operation(summary = "수입/지출 추가 API", description = "수입/지출 한번에 추가 API")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = CreateResult.class))),
+            @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = AccountBookDataDTO.CreateResult.class))),
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/item")
-    public ResponseEntity<CreateResult> createItems(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "수입/지출 생성 요청") @RequestBody CreateItems items) {
+    public ResponseEntity<AccountBookDataDTO.CreateResult> createItems(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "수입/지출 생성 요청") @RequestBody AccountBookDataDTO.CreateItems items) {
 
         Long id = SecurityUtil.getCurrentMemberId();
+        // TODO: accountBookDataService로 리팩터링해야될듯
+
         return ResponseEntity.ok(accountBookService.createItems(id, items));
     }
 
     @Operation(summary = "가계부에 카테고리 추가 API", description = "가계부에 카테고리 추가하는 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = CategoryCreateResult.class))),
+            @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = CategoryDTO.CategoryCreateResult.class))),
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/category")
-    public ResponseEntity<CategoryCreateResult> createCategories(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "카테고리 생성 요청") @RequestBody CategoryCreateRequest createRequest) {
+    public ResponseEntity<CategoryDTO.CategoryCreateResult> createCategories(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "카테고리 생성 요청") @RequestBody CategoryDTO.CategoryCreateRequest createRequest) {
 
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.createCategory(currentMemberId, createRequest));
@@ -188,35 +198,39 @@ public class AccountBookController {
 
     @Operation(summary = "가계부에 지출 추가 API", description = "가계부에 지출 추가하는 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = AddRecordResult.class))),
+            @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = AccountBookDataDTO.AddRecordResult.class))),
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/record")
-    public ResponseEntity<AddRecordResult> addRecord(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "지출 한개 생성 요청") @RequestBody AddRecordRequest request) {
+    public ResponseEntity<AccountBookDataDTO.AddRecordResult> addRecord(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "지출 한개 생성 요청") @RequestBody AccountBookDataDTO.AddRecordRequest request) {
 
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        // TODO: accountBookDataService로 리팩터링해야될듯
+
         return ResponseEntity.ok(accountBookService.addRecord(currentMemberId, request));
     }
 
     @Operation(summary = "가계부에 수입 추가 API", description = "가계부에 수입 추가하는 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = AddIncomeResult.class))),
+            @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = AccountBookDataDTO.AddIncomeResult.class))),
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/income")
-    public ResponseEntity<AddIncomeResult> addIncome(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "수입 한개 생성 요청") @RequestBody AddIncomeRequest request) {
+    public ResponseEntity<AccountBookDataDTO.AddIncomeResult> addIncome(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "수입 한개 생성 요청") @RequestBody AccountBookDataDTO.AddIncomeRequest request) {
 
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        // TODO: accountBookDataService로 리팩터링해야될듯
+
         return ResponseEntity.ok(accountBookService.addIncome(currentMemberId, request));
     }
 
     @Operation(summary = "가계부 카테고리 조회 API", description = "가계부 카테고리 조회 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountBookCategories.class))),
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = CategoryDTO.AccountBookCategories.class))),
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "/{id}/category")
-    public ResponseEntity<AccountBookCategories> getAccountBookCategory(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id) {
+    public ResponseEntity<CategoryDTO.AccountBookCategories> getAccountBookCategory(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id) {
 
         return ResponseEntity.ok(accountBookService.getAccountBookCategories(id));
     }
@@ -242,16 +256,17 @@ public class AccountBookController {
             description = "예산 생성 요청",
             content = @Content(schema = @Schema(implementation = CreateBudgetDto.class)))
                                                  @RequestBody Map<String, Object> createBudgetDto) {
-
+        // TODO: budgetService로 리팩터링해야될듯
         return ResponseEntity.ok(accountBookService.addBudget(createBudgetDto));
     }
 
     @Operation(summary = "가계부에 금융 일정 추가", description = "가계부에 금융 일정 추가 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = AddScheduleResult.class)))
+            @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = ScheduleDTO.AddScheduleResult.class)))
     })
     @PostMapping(value = "/schedule")
-    public ResponseEntity<AddScheduleResult> addSchedule(@Valid @RequestBody AddSchedules addSchedules) throws JsonProcessingException {
+    public ResponseEntity<ScheduleDTO.AddScheduleResult> addSchedule(@Valid @RequestBody ScheduleDTO.AddSchedules addSchedules) throws JsonProcessingException {
+        // TODO: scheduleService로 리팩터링해야될듯
 
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.addSchedule(memberId, addSchedules));
@@ -259,11 +274,11 @@ public class AccountBookController {
 
     @Operation(summary = "가계부 금융 일정 세부 조회", description = "가계부 금융 일정 세부 조회 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = GetAccountBookSchedules.class)))
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = ScheduleDTO.GetAccountBookSchedules.class)))
     })
     @GetMapping(value = "/{id}/schedule")
-    public ResponseEntity<GetAccountBookSchedules> getAccountBookSchedules(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id) {
-
+    public ResponseEntity<ScheduleDTO.GetAccountBookSchedules> getAccountBookSchedules(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id) {
+        // TODO: scheduleService로 리팩터링해야될듯
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.getAccountBookSchedules(memberId, id));
     }
@@ -284,7 +299,9 @@ public class AccountBookController {
             @ApiResponse(responseCode = "200", description = "삭제 성공시")
     })
     @DeleteMapping(value = "/data")
-    public ResponseEntity<String> deleteAccountBookData(@Valid @RequestBody AccountBookDataDeleteRequest dataDeleteRequest) {
+    public ResponseEntity<String> deleteAccountBookData(@Valid @RequestBody AccountBookDataDTO.AccountBookDataDeleteRequest dataDeleteRequest) {
+        // TODO: accountBookDataService로 리팩터링해야될듯
+
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         accountBookService.deleteAccountBookData(dataDeleteRequest);
         return ResponseEntity.ok("DELETED");
@@ -300,6 +317,7 @@ public class AccountBookController {
                                                                         @RequestParam(value = "year", required = false) Long year,
                                                                         @RequestParam(value = "month", required = false) Long month,
                                                                         Pageable pageable) {
+        // TODO: accountBookDataService로 리팩터링해야될듯
 
         return ResponseEntity.ok(accountBookService.getAccountBookHistory(id, categoryId, year, month, pageable));
     }
@@ -307,70 +325,71 @@ public class AccountBookController {
 
     @Operation(summary = "가계부 분석용 날짜별 지출 조회 API", description = "가계부 분석용 날짜별 지출 조회 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountBookDailyRecord.class)))
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountBookDataDTO.AccountBookDailyRecord.class)))
     })
     @GetMapping(value = "/{id}/analyze/{year}/{month}")
-    public ResponseEntity<AccountBookDailyRecord> getAccountBookDailyValues(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
+    public ResponseEntity<AccountBookDataDTO.AccountBookDailyRecord> getAccountBookDailyValues(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
+        // TODO: accountBookDataService로 리팩터링해야될듯
 
         return ResponseEntity.ok(accountBookService.getAccountBookDailyRecord(id, year, month));
     }
 
     @Operation(summary = "가계부 분석용 한달 카테고리 별 지출 조회 API", description = "가계부 분석용 한달 카테고리 별 지출 조회 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountBookCategoryAnalyze.class)))
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = CategoryDTO.AccountBookCategoryAnalyze.class)))
     })
     @GetMapping(value = "/{id}/analyze/category/{year}/{month}")
-    public ResponseEntity<AccountBookCategoryAnalyze> getAccountBookCategoryAnalyze(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
-
+    public ResponseEntity<CategoryDTO.AccountBookCategoryAnalyze> getAccountBookCategoryAnalyze(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
+        // TODO: categoryService로 리팩터링해야될듯?
         return ResponseEntity.ok(accountBookService.getAccountBookCategoryAnalyze(id, year, month));
     }
 
     @Operation(summary = "가계부 분석용 한달 고정지출 조회용 API", description = "가계부 분석용 한달 고정 지출 조회용 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountScheduleAnalyze.class)))
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = ScheduleDTO.AccountScheduleAnalyze.class)))
     })
     @GetMapping(value = "/{id}/analyze/schedule")
-    public ResponseEntity<AccountScheduleAnalyze> getAccountBookScheduleAnalyze(@PathVariable("id") Long id) {
-
+    public ResponseEntity<ScheduleDTO.AccountScheduleAnalyze> getAccountBookScheduleAnalyze(@PathVariable("id") Long id) {
+        // TODO: 리팩터링 필요
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(accountBookService.getAccountBookScheduleAnalyze(id, currentMemberId));
     }
 
     @Operation(summary = "가계부 분석용 지난달과 분석용 API", description = "가계부 분석용 지난달과 분석용 API입니")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = MonthlyCompare.class)))
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = AccountBookDataDTO.MonthlyCompare.class)))
     })
     @GetMapping(value = "/{id}/analyze/compare/{year}/{month}")
-    public ResponseEntity<MonthlyCompare> getAccountBookMonthlyCompare(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
-
+    public ResponseEntity<AccountBookDataDTO.MonthlyCompare> getAccountBookMonthlyCompare(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
+        // TODO: 리팩터링 필요
         return ResponseEntity.ok(accountBookService.getAccountBookMonthlyCompare(id, year, month));
     }
 
     @Operation(summary = "가계부 분석용 한달 지출 조회 API", description = "가계부 분석용 한달 지출 조회 API 입니다")
     @GetMapping(value = "/{id}/analyze/month/{year}/{month}")
     public ResponseEntity<Page<AccountBookDataQ>> getAccountBookMonthlyRecord(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month, @RequestParam(value = "category", required = false, defaultValue = "") String category, Pageable pageable) {
-
+        // TODO: 리팩터링 필요
         return ResponseEntity.ok(accountBookService.getAccountBookMonthlyRecord(id, year, month, pageable, category));
     }
 
     @Operation(summary = "가계부 분석용 예산과 비교용 API", description = "가계부 분석용 예산과 비교용 API 입니다")
     @GetMapping(value = "/{id}/analyze/budget/{year}/{month}")
-    public ResponseEntity<BudgetCompare> getAccountBookBudgetCompare(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
-
+    public ResponseEntity<BudgetDTO.BudgetCompare> getAccountBookBudgetCompare(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
+        // TODO: 리팩터링 필요
         return ResponseEntity.ok(accountBookService.getBudgetCompare(id, year, month));
     }
 
     @Operation(summary = "가계부 분석용 주차별 지출 금액 조회", description = "가계부 분석용 주차별 지출 금액 조회 API 입니다")
     @GetMapping(value = "/{id}/analyze/weekly/{year}/{month}/{startDay}")
-    public ResponseEntity<AccountBookWeeklyRecord> getAccountBookWeeklyCompare(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month, @PathVariable("startDay") Long startDay) {
-
+    public ResponseEntity<AccountBookDataDTO.AccountBookWeeklyRecord> getAccountBookWeeklyCompare(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month, @PathVariable("startDay") Long startDay) {
+        // TODO: 리팩터링 필요
         return ResponseEntity.ok(accountBookService.getAccountBookWeeklyRecord(id, year, month, startDay));
     }
 
     @Operation(summary = "기간 별 내역 조회", description = "기간 별 내역 조회 API 입니다")
     @GetMapping("/{id}/analyze/custom/{year}/{month}/{startDay}/{endDay}")
     public ResponseEntity<Page<AccountBookDataQ>> getCustomAccountBookData(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month, @PathVariable("startDay") Long startDay, @PathVariable("endDay") Long endDay, @RequestParam(value = "category", required = false, defaultValue = "") String category, Pageable pageable) {
-
+        // TODO: 리팩터링 필요
         return ResponseEntity.ok(accountBookService.getCustomAccountBookData(id, year, month, startDay, endDay, category, pageable));
     }
 

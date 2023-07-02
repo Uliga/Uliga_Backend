@@ -9,12 +9,15 @@ import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
 import com.uliga.uliga_backend.domain.AccountBookData.dao.AccountBookDataMapper;
 import com.uliga.uliga_backend.domain.AccountBookData.dao.AccountBookDataRepository;
+import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ;
 import com.uliga.uliga_backend.domain.Budget.application.BudgetService;
 import com.uliga.uliga_backend.domain.Budget.dao.BudgetRepository;
+import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO;
 import com.uliga.uliga_backend.domain.Budget.dto.NativeQ.BudgetInfoQ;
 import com.uliga.uliga_backend.domain.Category.application.CategoryService;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
+import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.Date;
 import com.uliga.uliga_backend.domain.Income.application.IncomeService;
@@ -29,6 +32,7 @@ import com.uliga.uliga_backend.domain.Record.application.RecordService;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import com.uliga.uliga_backend.domain.Record.model.Record;
 import com.uliga.uliga_backend.domain.Schedule.application.ScheduleService;
+import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -249,7 +253,7 @@ public class AccountBookService {
      * @return 생성 결과
      */
     @Transactional
-    public CreateResult createItems(Long id, CreateItems createItems) {
+    public AccountBookDataDTO.CreateResult createItems(Long id, AccountBookDataDTO.CreateItems createItems) {
         long r = 0L;
         long i = 0L;
         // 아이템 작성자
@@ -285,8 +289,8 @@ public class AccountBookService {
             addIncomeToOtherAccountBooks.put(ab, new ArrayList<>());
             addRecordToOtherAccountBooks.put(ab, new ArrayList<>());
         }
-        List<CreateItemResult> createResult = new ArrayList<>();
-        for (CreateRecordOrIncomeDto dto : createItems.getCreateRequest()) {
+        List<AccountBookDataDTO.CreateItemResult> createResult = new ArrayList<>();
+        for (AccountBookDataDTO.CreateRecordOrIncomeDto dto : createItems.getCreateRequest()) {
             String[] split = dto.getDate().split("-");
             Date date = Date.builder()
                     .year(Long.parseLong(split[0]))
@@ -295,7 +299,7 @@ public class AccountBookService {
             Category category = categoryDict.get(dto.getCategory());
             if (dto.getIsIncome()) {
                 // 수입 생성
-                CreateItemResult createItemResult = incomeService.addItemToAccountBook(dto, accountBook, member, date, category);
+                AccountBookDataDTO.CreateItemResult createItemResult = incomeService.addItemToAccountBook(dto, accountBook, member, date, category);
                 createResult.add(createItemResult);
                 for (Long accountBookId : dto.getSharedAccountBook()) {
                     AccountBook sharedAccountBook = otherAccountBooks.get(accountBookId);
@@ -317,7 +321,7 @@ public class AccountBookService {
 
             } else {
                 // 지출 생성
-                CreateItemResult createItemResult = recordService.addItemToAccountBook(dto, accountBook, member, date, category);
+                AccountBookDataDTO.CreateItemResult createItemResult = recordService.addItemToAccountBook(dto, accountBook, member, date, category);
                 createResult.add(createItemResult);
                 for (Long accountBookId : dto.getSharedAccountBook()) {
                     AccountBook sharedAccountBook = otherAccountBooks.get(accountBookId);
@@ -346,7 +350,7 @@ public class AccountBookService {
             recordService.addRecordToOtherAccountBooks(addRecordToOtherAccountBooks.get(ab));
         }
 
-        return new CreateResult(i, r, createResult);
+        return new AccountBookDataDTO.CreateResult(i, r, createResult);
     }
 
     /**
@@ -355,8 +359,8 @@ public class AccountBookService {
      * @return 가계부 카테고리 정보
      */
     @Transactional(readOnly = true)
-    public AccountBookCategories getAccountBookCategories(Long id) {
-        return new AccountBookCategories(accountBookRepository.findAccountBookCategoryInfoById(id));
+    public CategoryDTO.AccountBookCategories getAccountBookCategories(Long id) {
+        return new CategoryDTO.AccountBookCategories(accountBookRepository.findAccountBookCategoryInfoById(id));
     }
 
     /**
@@ -376,7 +380,7 @@ public class AccountBookService {
      * @return 카테고리 생성 요청 결과
      */
     @Transactional
-    public CategoryCreateResult createCategory(Long memberId, CategoryCreateRequest createRequest) {
+    public CategoryDTO.CategoryCreateResult createCategory(Long memberId, CategoryDTO.CategoryCreateRequest createRequest) {
         Long id = createRequest.getId();
         AccountBook accountBook = accountBookRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
         if (!accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(memberId, id)) {
@@ -389,7 +393,7 @@ public class AccountBookService {
                 result.add(cat);
             }
         }
-        return new CategoryCreateResult(id, result);
+        return new CategoryDTO.CategoryCreateResult(id, result);
     }
 
     /**
@@ -400,9 +404,9 @@ public class AccountBookService {
      * @return 해당 달 날짜별 수입/지출 총합
      */
     @Transactional(readOnly = true)
-    public AccountBookIncomesAndRecords getAccountBookItems(Long id, Long year, Long month) {
+    public AccountBookDataDTO.AccountBookIncomesAndRecords getAccountBookItems(Long id, Long year, Long month) {
 
-        return AccountBookIncomesAndRecords.builder()
+        return AccountBookDataDTO.AccountBookIncomesAndRecords.builder()
                 .incomes(accountBookRepository.getMonthlyIncome(id, year, month))
                 .records(accountBookRepository.getMonthlyRecord(id, year, month)).build();
     }
@@ -416,13 +420,13 @@ public class AccountBookService {
      * @return 수입&지출 정보 리스트
      */
     @Transactional(readOnly = true)
-    public RecordAndIncomeDetails getAccountBookItemDetails(Long id, Long year, Long month, Long day) {
+    public AccountBookDataDTO.RecordAndIncomeDetails getAccountBookItemDetails(Long id, Long year, Long month, Long day) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("accountBookId", id);
         map.put("year", year);
         map.put("month", month);
         map.put("day", day);
-        return new RecordAndIncomeDetails(accountBookDataMapper.findAccountBookDataOrderByValue(map));
+        return new AccountBookDataDTO.RecordAndIncomeDetails(accountBookDataMapper.findAccountBookDataOrderByValue(map));
     }
 
     /**
@@ -430,7 +434,7 @@ public class AccountBookService {
      * @param deleteItemRequest 아이템 삭제 요청
      */
     @Transactional
-    public void deleteAccountBookItems(DeleteItemRequest deleteItemRequest) {
+    public void deleteAccountBookItems(AccountBookDataDTO.DeleteItemRequest deleteItemRequest) {
 
         accountBookDataRepository.deleteAllById(deleteItemRequest.getDeleteIds());
     }
@@ -443,12 +447,12 @@ public class AccountBookService {
      * @return 월별 예산, 지출, 수입 총합 조회
      */
     @Transactional(readOnly = true)
-    public GetAccountBookAssets getAccountBookAssets(Long id, Long year, Long month) {
+    public BudgetDTO.GetAccountBookAssets getAccountBookAssets(Long id, Long year, Long month) {
         MonthlySumQ budget = budgetRepository.getMonthlySumByAccountBookId(id, year, month).orElse(new MonthlySumQ(0L));
         MonthlySumQ record = recordRepository.getMonthlySumByAccountBookId(id, year, month).orElse(new MonthlySumQ(0L));
         MonthlySumQ income = incomeRepository.getMonthlySumByAccountBookId(id, year, month).orElse(new MonthlySumQ(0L));
 
-        return GetAccountBookAssets.builder()
+        return BudgetDTO.GetAccountBookAssets.builder()
                 .budget(budget)
                 .income(income)
                 .record(record)
@@ -462,7 +466,7 @@ public class AccountBookService {
      * @return 추가 결과
      */
     @Transactional
-    public AddIncomeResult addIncome(Long memberId, AddIncomeRequest request) {
+    public AccountBookDataDTO.AddIncomeResult addIncome(Long memberId, AccountBookDataDTO.AddIncomeRequest request) {
         AccountBook accountBook = accountBookRepository.findById(request.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
         Category category = categoryRepository.findByAccountBookAndName(accountBook, request.getCategory()).orElseThrow(CategoryNotFoundException::new);
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
@@ -481,7 +485,7 @@ public class AccountBookService {
      * @return 지출 추가 결과
      */
     @Transactional
-    public AddRecordResult addRecord(Long memberId, AddRecordRequest request) {
+    public AccountBookDataDTO.AddRecordResult addRecord(Long memberId, AccountBookDataDTO.AddRecordRequest request) {
         AccountBook accountBook = accountBookRepository.findById(request.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
         Category category = categoryRepository.findByAccountBookAndName(accountBook, request.getCategory()).orElseThrow(CategoryNotFoundException::new);
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
@@ -513,7 +517,7 @@ public class AccountBookService {
      * @throws JsonProcessingException Json 처리 예외
      */
     @Transactional
-    public AddScheduleResult addSchedule(Long memberId, AddSchedules addSchedules) throws JsonProcessingException {
+    public ScheduleDTO.AddScheduleResult addSchedule(Long memberId, ScheduleDTO.AddSchedules addSchedules) throws JsonProcessingException {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
         AccountBook accountBook = accountBookRepository.findById(addSchedules.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
         return scheduleService.addSchedule(member, accountBook, addSchedules.getSchedules());
@@ -526,7 +530,7 @@ public class AccountBookService {
      * @return 가계부 금융 일정 조회
      */
     @Transactional(readOnly = true)
-    public GetAccountBookSchedules getAccountBookSchedules(Long memberId, Long accountBookId) {
+    public ScheduleDTO.GetAccountBookSchedules getAccountBookSchedules(Long memberId, Long accountBookId) {
         if (accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(memberId, accountBookId)) {
 
             return scheduleService.getAccountBookSchedules(accountBookId);
@@ -581,7 +585,7 @@ public class AccountBookService {
      * @param dataDeleteRequest 삭제 요청
      */
     @Transactional
-    public void deleteAccountBookData(AccountBookDataDeleteRequest dataDeleteRequest) {
+    public void deleteAccountBookData(AccountBookDataDTO.AccountBookDataDeleteRequest dataDeleteRequest) {
         accountBookDataRepository.deleteAllById(dataDeleteRequest.getIds());
     }
 
@@ -628,7 +632,7 @@ public class AccountBookService {
                     categoryRepository.delete(category);
                 }
             }
-            createCategory(memberId, CategoryCreateRequest.builder().id(accountBookId).categories(createCategories).build());
+            createCategory(memberId, CategoryDTO.CategoryCreateRequest.builder().id(accountBookId).categories(createCategories).build());
         }
 
         if (request.getRelationship() != null) {
@@ -645,7 +649,7 @@ public class AccountBookService {
      * @return 날짜별 지출 총합
      */
     @Transactional(readOnly = true)
-    public AccountBookDailyRecord getAccountBookDailyRecord(Long id, Long year, Long month) {
+    public AccountBookDataDTO.AccountBookDailyRecord getAccountBookDailyRecord(Long id, Long year, Long month) {
         List<DailyValueQ> monthlyRecord = accountBookRepository.getMonthlyRecord(id, year, month);
 
         Calendar calendar = Calendar.getInstance();
@@ -669,12 +673,12 @@ public class AccountBookService {
         List<MonthlyCompareQ> monthlyCompareInDailyAnalyze = accountBookRepository.getMonthlyCompareInDailyAnalyze(id, year, month);
         if (monthlyCompareInDailyAnalyze.size() == 2) {
             Long diff = monthlyCompareInDailyAnalyze.get(0).getValue() - monthlyCompareInDailyAnalyze.get(1).getValue();
-            return new AccountBookDailyRecord(result, monthlyCompareInDailyAnalyze.get(0).getValue(), diff);
+            return new AccountBookDataDTO.AccountBookDailyRecord(result, monthlyCompareInDailyAnalyze.get(0).getValue(), diff);
         } else {
             if (monthlyCompareInDailyAnalyze.size() == 0) {
-                return new AccountBookDailyRecord(result, 0L, null);
+                return new AccountBookDataDTO.AccountBookDailyRecord(result, 0L, null);
             } else {
-                return new AccountBookDailyRecord(result, monthlyCompareInDailyAnalyze.get(0).getValue(), null);
+                return new AccountBookDataDTO.AccountBookDailyRecord(result, monthlyCompareInDailyAnalyze.get(0).getValue(), null);
             }
 
         }
@@ -689,7 +693,7 @@ public class AccountBookService {
      * @return 분석 정보
      */
     @Transactional(readOnly = true)
-    public AccountBookCategoryAnalyze getAccountBookCategoryAnalyze(Long id, Long year, Long month) {
+    public CategoryDTO.AccountBookCategoryAnalyze getAccountBookCategoryAnalyze(Long id, Long year, Long month) {
         List<AccountBookCategoryAnalyzeQ> categoryAnalyze = accountBookRepository.findAccountBookCategoryAnalyze(id, year, month);
         Optional<MonthlySumQ> monthlySum = recordRepository.getMonthlySumByAccountBookId(id, year, month);
         if (monthlySum.isPresent()) {
@@ -699,11 +703,11 @@ public class AccountBookService {
                 compare += analyzeQ.getValue();
             }
             if (compare.equals(monthlySumQ.getValue())) {
-                return new AccountBookCategoryAnalyze(categoryAnalyze, monthlySumQ.getValue());
+                return new CategoryDTO.AccountBookCategoryAnalyze(categoryAnalyze, monthlySumQ.getValue());
             } else {
                 AccountBookCategoryAnalyzeQ built = new AccountBookCategoryAnalyzeQ(null, "그 외", monthlySumQ.getValue() - compare);
                 categoryAnalyze.add(built);
-                return new AccountBookCategoryAnalyze(categoryAnalyze, monthlySumQ.getValue());
+                return new CategoryDTO.AccountBookCategoryAnalyze(categoryAnalyze, monthlySumQ.getValue());
             }
         } else {
             List<AccountBookCategoryInfoQ> accountBookCategoryInfoById = accountBookRepository.findAccountBookCategoryAnalyze(id);
@@ -713,7 +717,7 @@ public class AccountBookService {
                 result.add(built);
 
             }
-            return new AccountBookCategoryAnalyze(result, 0L);
+            return new CategoryDTO.AccountBookCategoryAnalyze(result, 0L);
         }
 
 
@@ -726,8 +730,8 @@ public class AccountBookService {
      * @return 고정 지출 분석 결과
      */
     @Transactional(readOnly = true)
-    public AccountScheduleAnalyze getAccountBookScheduleAnalyze(Long accountBookId, Long memberId) {
-        return AccountScheduleAnalyze.builder().schedules(scheduleService.findAnalyze(accountBookId, memberId)).sum(accountBookRepository.getMonthlyScheduleValue(accountBookId, memberId).getValue()).build();
+    public ScheduleDTO.AccountScheduleAnalyze getAccountBookScheduleAnalyze(Long accountBookId, Long memberId) {
+        return ScheduleDTO.AccountScheduleAnalyze.builder().schedules(scheduleService.findAnalyze(accountBookId, memberId)).sum(accountBookRepository.getMonthlyScheduleValue(accountBookId, memberId).getValue()).build();
     }
 
     /**
@@ -738,7 +742,7 @@ public class AccountBookService {
      * @return 비교 결과
      */
     @Transactional(readOnly = true)
-    public MonthlyCompare getAccountBookMonthlyCompare(Long accountBookId, Long year, Long month) {
+    public AccountBookDataDTO.MonthlyCompare getAccountBookMonthlyCompare(Long accountBookId, Long year, Long month) {
         List<MonthlyCompareQ> monthlyCompare = new ArrayList<>();
 
         Calendar calendar = Calendar.getInstance();
@@ -756,7 +760,7 @@ public class AccountBookService {
 
 
 //        return MonthlyCompare.builder().compare(monthlyCompare).build();
-        return new MonthlyCompare(monthlyCompare);
+        return new AccountBookDataDTO.MonthlyCompare(monthlyCompare);
     }
 
     /**
@@ -809,22 +813,22 @@ public class AccountBookService {
      * @return 비교 결과
      */
     @Transactional(readOnly = true)
-    public BudgetCompare getBudgetCompare(Long accountBookId, Long year, Long month) {
+    public BudgetDTO.BudgetCompare getBudgetCompare(Long accountBookId, Long year, Long month) {
 
         Optional<MonthlySumQ> recordSum = recordRepository.getMonthlySumByAccountBookId(accountBookId, year, month);
         Optional<MonthlySumQ> budgetSum = budgetRepository.getMonthlySumByAccountBookId(accountBookId, year, month);
         if (recordSum.isPresent() && budgetSum.isPresent()) {
             MonthlySumQ record = recordSum.get();
             MonthlySumQ budget = budgetSum.get();
-            return new BudgetCompare(record.getValue(), budget.getValue(), budget.getValue() - record.getValue());
+            return new BudgetDTO.BudgetCompare(record.getValue(), budget.getValue(), budget.getValue() - record.getValue());
         } else if (budgetSum.isPresent()) {
             MonthlySumQ budget = budgetSum.get();
-            return new BudgetCompare(0L, budget.getValue(), budget.getValue());
+            return new BudgetDTO.BudgetCompare(0L, budget.getValue(), budget.getValue());
         } else if (recordSum.isPresent()) {
             MonthlySumQ record = recordSum.get();
-            return new BudgetCompare(record.getValue(), 0L, -record.getValue());
+            return new BudgetDTO.BudgetCompare(record.getValue(), 0L, -record.getValue());
         } else {
-            return new BudgetCompare(0L, 0L, 0L);
+            return new BudgetDTO.BudgetCompare(0L, 0L, 0L);
         }
     }
 
@@ -837,9 +841,9 @@ public class AccountBookService {
      * @return 주차별 분석 결과
      */
     @Transactional(readOnly = true)
-    public AccountBookWeeklyRecord getAccountBookWeeklyRecord(Long accountBookId, Long year, Long month, Long startDay) {
+    public AccountBookDataDTO.AccountBookWeeklyRecord getAccountBookWeeklyRecord(Long accountBookId, Long year, Long month, Long startDay) {
         Long totalSum = 0L;
-        List<WeeklySum> result = new ArrayList<>();
+        List<AccountBookDataDTO.WeeklySum> result = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         calendar.set(Math.toIntExact(year), Math.toIntExact(month) - 1, 1);
         int actualMaximum = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -853,17 +857,17 @@ public class AccountBookService {
             }
             if (weeklyRecordSum.isPresent()) {
                 WeeklySumQ weeklySumQ = weeklyRecordSum.get();
-                WeeklySum weeklySum = WeeklySum.builder().startDay(startDay ).endDay(endDay).value(weeklySumQ.getValue()).build();
+                AccountBookDataDTO.WeeklySum weeklySum = AccountBookDataDTO.WeeklySum.builder().startDay(startDay ).endDay(endDay).value(weeklySumQ.getValue()).build();
                 result.add(weeklySum);
                 totalSum += weeklySum.getValue();
             } else {
-                WeeklySum weeklySum = WeeklySum.builder().startDay(startDay).endDay(endDay).value(0L).build();
+                AccountBookDataDTO.WeeklySum weeklySum = AccountBookDataDTO.WeeklySum.builder().startDay(startDay).endDay(endDay).value(0L).build();
                 result.add(weeklySum);
             }
             startDay += 7;
 
         }
-        return new AccountBookWeeklyRecord(result, totalSum);
+        return new AccountBookDataDTO.AccountBookWeeklyRecord(result, totalSum);
     }
 
     /**

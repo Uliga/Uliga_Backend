@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
+import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO;
 import com.uliga.uliga_backend.domain.AccountBookData.model.AccountBookDataType;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
 import com.uliga.uliga_backend.domain.Category.model.Category;
@@ -15,7 +16,6 @@ import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
 import com.uliga.uliga_backend.domain.Income.exception.InvalidIncomeDeleteRequest;
 import com.uliga.uliga_backend.domain.Income.model.Income;
 import com.uliga.uliga_backend.domain.Member.model.Member;
-import com.uliga.uliga_backend.domain.Record.dao.RecordMapper;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import com.uliga.uliga_backend.global.error.exception.IdNotFoundException;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
@@ -31,8 +31,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
 
 @Slf4j
 @Service
@@ -64,7 +62,7 @@ public class IncomeService {
      * @return 생성된 수입
      */
     @Transactional
-    public CreateItemResult addItemToAccountBook(CreateRecordOrIncomeDto dto, AccountBook accountBook, Member member, Date date, Category category) {
+    public AccountBookDataDTO.CreateItemResult addItemToAccountBook(AccountBookDataDTO.CreateRecordOrIncomeDto dto, AccountBook accountBook, Member member, Date date, Category category) {
         Income build = Income.builder()
                 .payment(dto.getPayment())
                 .account(dto.getAccount())
@@ -75,7 +73,7 @@ public class IncomeService {
                 .date(date)
                 .category(category).build();
         incomeRepository.save(build);
-        return CreateItemResult.builder()
+        return AccountBookDataDTO.CreateItemResult.builder()
                 .id(build.getId())
                 .account(dto.getAccount())
                 .isIncome(true)
@@ -100,7 +98,7 @@ public class IncomeService {
      * @return 수입 추가 결과
      */
     @Transactional
-    public AddIncomeResult addSingleIncomeToAccountBook(AddIncomeRequest request, Category category, Date date, AccountBook accountBook, Member member) {
+    public AccountBookDataDTO.AddIncomeResult addSingleIncomeToAccountBook(AccountBookDataDTO.AddIncomeRequest request, Category category, Date date, AccountBook accountBook, Member member) {
         Income income = Income.builder()
                 .category(category)
                 .date(date)
@@ -139,7 +137,7 @@ public class IncomeService {
             toSave.add(temp_income);
         }
         incomeRepository.saveAll(toSave);
-        return AddIncomeResult.builder()
+        return AccountBookDataDTO.AddIncomeResult.builder()
                 .accountBookId(accountBook.getId())
                 .incomeInfo(income.toInfoQ()).build();
     }

@@ -2,8 +2,8 @@ package com.uliga.uliga_backend.domain.Schedule.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.AddScheduleResult;
-import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.GetAccountBookSchedules;
+import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.AddScheduleResult;
+import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.GetAccountBookSchedules;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.JoinTable.dao.ScheduleMemberRepository;
 import com.uliga.uliga_backend.domain.JoinTable.model.ScheduleMember;
@@ -26,7 +26,6 @@ import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 

@@ -1,5 +1,6 @@
 package com.uliga.uliga_backend.domain.Budget.dto;
 
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,5 +44,24 @@ public class BudgetDTO {
     }
 
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GetAccountBookAssets {
 
+        private MonthlySumQ income;
+        private MonthlySumQ record;
+        private MonthlySumQ budget;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class BudgetCompare {
+        private Long budget;
+        private Long spend;
+        private Long diff;
+    }
 }
