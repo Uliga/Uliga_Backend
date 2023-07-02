@@ -2,6 +2,7 @@ package com.uliga.uliga_backend.domain.Income.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ;
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO;
@@ -42,6 +43,18 @@ public class IncomeService {
     private final RecordRepository recordRepository;
     private final CategoryRepository categoryRepository;
     private final ObjectMapper objectMapper;
+
+    /**
+     * 한달 가계부 수입 총합 조회
+     * @param accountBookId 가계부 아이디
+     * @param year 년도
+     * @param month 달
+     * @return 조회 결과
+     */
+    @Transactional(readOnly = true)
+    public MonthlySumQ getMonthlyIncomeSum(Long accountBookId, Long year, Long month) {
+        return incomeRepository.getMonthlySumByAccountBookId(accountBookId, year, month).orElse(new MonthlySumQ(0L));
+    }
 
     /**
      * 다른 가계부에 수입 추가할때 쓰이는 메서드

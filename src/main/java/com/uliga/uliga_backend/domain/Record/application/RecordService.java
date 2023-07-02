@@ -2,6 +2,7 @@ package com.uliga.uliga_backend.domain.Record.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ;
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO;
@@ -46,6 +47,18 @@ public class RecordService {
     private final IncomeRepository incomeRepository;
     private final CategoryRepository categoryRepository;
     private final ObjectMapper objectMapper;
+
+    /**
+     * 한달 가계부 지출 총합 조회
+     * @param accountBookId 가계부 아이디
+     * @param year 년도
+     * @param month 달
+     * @return 조회 결과
+     */
+    @Transactional(readOnly = true)
+    public MonthlySumQ getMonthlyRecordSum(Long accountBookId, Long year, Long month) {
+        return recordRepository.getMonthlySumByAccountBookId(accountBookId, year, month).orElse(new MonthlySumQ(0L));
+    }
 
     /**
      * 지출 리스트 다른 가계부에 추가하는 메서드

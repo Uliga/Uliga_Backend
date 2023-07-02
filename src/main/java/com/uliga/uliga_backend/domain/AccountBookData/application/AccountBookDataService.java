@@ -45,6 +45,7 @@ public class AccountBookDataService {
      * @param day 날짜
      * @return 조회 결과
      */
+    @Transactional(readOnly = true)
     public DailyAccountBookDataDetails getDailyAccountBookDataDetails(Long accountBookId, Long year, Long month, Long day) {
 
         HashMap<String, Object> map = new HashMap<>();

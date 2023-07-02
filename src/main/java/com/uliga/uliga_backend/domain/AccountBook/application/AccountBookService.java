@@ -426,25 +426,7 @@ public class AccountBookService {
         accountBookDataRepository.deleteAllById(deleteItemRequest.getDeleteIds());
     }
 
-    /**
-     * 가계부 예산, 지출, 수입 총합 조회
-     * @param id 가계부 아이디
-     * @param year 년도
-     * @param month 월
-     * @return 월별 예산, 지출, 수입 총합 조회
-     */
-    @Transactional(readOnly = true)
-    public BudgetDTO.GetAccountBookAssets getAccountBookAssets(Long id, Long year, Long month) {
-        MonthlySumQ budget = budgetRepository.getMonthlySumByAccountBookId(id, year, month).orElse(new MonthlySumQ(0L));
-        MonthlySumQ record = recordRepository.getMonthlySumByAccountBookId(id, year, month).orElse(new MonthlySumQ(0L));
-        MonthlySumQ income = incomeRepository.getMonthlySumByAccountBookId(id, year, month).orElse(new MonthlySumQ(0L));
 
-        return BudgetDTO.GetAccountBookAssets.builder()
-                .budget(budget)
-                .income(income)
-                .record(record)
-                .build();
-    }
 
     /**
      * 가계부에 수입 추가

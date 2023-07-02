@@ -2,6 +2,7 @@ package com.uliga.uliga_backend.domain.Budget.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ;
 import com.uliga.uliga_backend.domain.AccountBook.exception.BudgetAlreadyExists;
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
@@ -32,6 +33,18 @@ public class BudgetService {
     private final AccountBookRepository accountBookRepository;
     private final CategoryRepository categoryRepository;
     private final ObjectMapper mapper;
+
+    /**
+     * 한달 가계부 예산 총합 조회
+     * @param accountBookId 가계부 아이디
+     * @param year 년도
+     * @param month 달
+     * @return 조회 결과
+     */
+    @Transactional(readOnly = true)
+    public MonthlySumQ getMonthlyBudgetSum(Long accountBookId, Long year, Long month) {
+        return budgetRepository.getMonthlySumByAccountBookId(accountBookId, year, month).orElse(new MonthlySumQ(0L));
+    }
 
     /**
      * 가계부에 예산 추가

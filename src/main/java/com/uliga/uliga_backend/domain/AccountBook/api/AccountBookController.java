@@ -4,10 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService;
 import com.uliga.uliga_backend.domain.AccountBookData.application.AccountBookDataService;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ;
+import com.uliga.uliga_backend.domain.Budget.application.BudgetService;
 import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO;
 import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO.CreateBudgetDto;
+import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO.GetAccountBookAssets;
 import com.uliga.uliga_backend.domain.Budget.dto.NativeQ.BudgetInfoQ;
 import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO;
+import com.uliga.uliga_backend.domain.Income.application.IncomeService;
+import com.uliga.uliga_backend.domain.Record.application.RecordService;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import com.uliga.uliga_backend.global.util.SecurityUtil;
@@ -41,6 +45,9 @@ public class AccountBookController {
 
     private final AccountBookService accountBookService;
     private final AccountBookDataService accountBookDataService;
+    private final BudgetService budgetService;
+    private final IncomeService incomeService;
+    private final RecordService recordService;
 
 
     @Operation(summary = "멤버 가계부 조회 API", description = "멤버 가계부 조회 API 입니다")
@@ -157,16 +164,21 @@ public class AccountBookController {
 
     @Operation(summary = "한달 가계부 지출/수입/예산 총합 조회 API", description = "한달 동안의 가계부 수입/지출/예산 총합 조회 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = BudgetDTO.GetAccountBookAssets.class))),
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = GetAccountBookAssets.class))),
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "/{id}/asset/{year}/{month}")
-    public ResponseEntity<BudgetDTO.GetAccountBookAssets> getAccountBookAssets(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
-                                                                               @Parameter(name = "year", description = "년도", in = PATH) @PathVariable("year") Long year,
-                                                                               @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month) {
+    public ResponseEntity<GetAccountBookAssets> getAccountBookAssets(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
+                                                                     @Parameter(name = "year", description = "년도", in = PATH) @PathVariable("year") Long year,
+                                                                     @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month) {
 
         // TODO: accountBookDataService, budgetService로 리팩터링해야될듯
-        return ResponseEntity.ok(accountBookService.getAccountBookAssets(id, year, month));
+        GetAccountBookAssets accountBookAssets = GetAccountBookAssets.builder()
+                .budget(budgetService.getMonthlyBudgetSum(id, year, month))
+                .record(recordService.getMonthlyRecordSum(id, year, month))
+                .income(incomeService.getMonthlyIncomeSum(id, year, month))
+                .build();
+        return ResponseEntity.ok(accountBookAssets);
     }
 
     @Operation(summary = "수입/지출 추가 API", description = "수입/지출 한번에 추가 API")
