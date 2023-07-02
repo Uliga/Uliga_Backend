@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookAccessException;
 import com.uliga.uliga_backend.domain.JoinTable.dao.AccountBookMemberRepository;
+import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.AddScheduleResult;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.GetAccountBookSchedules;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
@@ -191,6 +192,20 @@ public class ScheduleService {
     }
 
     /**
+     * 가계부 고정지출 분석 조회
+     * @param accountBookId 가계부 아이디
+     * @param currentMemberId 현재 멤버 아이디
+     * @return 조회 결과
+     */
+    @Transactional(readOnly = true)
+    public AccountBookScheduleAnalyze getScheduleAnalyze(Long accountBookId, Long currentMemberId) {
+
+        return ScheduleDTO.AccountBookScheduleAnalyze.builder()
+                .schedules(scheduleRepository.findScheduleAnalyzeByAccountBookId(accountBookId, currentMemberId))
+                .sum(accountBookRepository.getMonthlyScheduleValue(accountBookId, currentMemberId).getValue()).build();
+    }
+
+    /**
      * 금융 일정 삭제
      * @param id 금융 일정 아이디
      * @param currentMemberId 멤버 아이디
@@ -207,14 +222,4 @@ public class ScheduleService {
 
     }
 
-    /**
-     * 고정 지출 조회
-     * @param id 가계부 아이디
-     * @param memberId 멤버 아이디
-     * @return 가계부 고정 지출 조회 결과
-     */
-    @Transactional(readOnly = true)
-    public List<ScheduleAnalyzeQ> findAnalyze(Long id, Long memberId) {
-        return scheduleRepository.findScheduleAnalyzeByAccountBookId(id, memberId);
-    }
 }

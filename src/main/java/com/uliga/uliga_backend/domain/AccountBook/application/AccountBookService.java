@@ -16,7 +16,6 @@ import com.uliga.uliga_backend.domain.Budget.dao.BudgetRepository;
 import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO;
 import com.uliga.uliga_backend.domain.Category.application.CategoryService;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
-import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.Date;
 import com.uliga.uliga_backend.domain.Income.application.IncomeService;
@@ -440,18 +439,6 @@ public class AccountBookService {
         return request;
     }
 
-
-
-    /**
-     * 가계부 분석 - 고정 지출 조회
-     * @param accountBookId 가계부 아이디
-     * @param memberId 멤버 아이디
-     * @return 고정 지출 분석 결과
-     */
-    @Transactional(readOnly = true)
-    public ScheduleDTO.AccountScheduleAnalyze getAccountBookScheduleAnalyze(Long accountBookId, Long memberId) {
-        return ScheduleDTO.AccountScheduleAnalyze.builder().schedules(scheduleService.findAnalyze(accountBookId, memberId)).sum(accountBookRepository.getMonthlyScheduleValue(accountBookId, memberId).getValue()).build();
-    }
 
     /**
      * 가계부 분석 - 전월 대비 지출 양 분석

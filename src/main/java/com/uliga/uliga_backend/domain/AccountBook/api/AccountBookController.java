@@ -350,13 +350,13 @@ public class AccountBookController {
 
     @Operation(summary = "가계부 분석용 한달 고정지출 조회용 API", description = "가계부 분석용 한달 고정 지출 조회용 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = ScheduleDTO.AccountScheduleAnalyze.class)))
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = ScheduleDTO.AccountBookScheduleAnalyze.class)))
     })
     @GetMapping(value = "/{id}/analyze/schedule")
-    public ResponseEntity<ScheduleDTO.AccountScheduleAnalyze> getAccountBookScheduleAnalyze(@PathVariable("id") Long id) {
+    public ResponseEntity<ScheduleDTO.AccountBookScheduleAnalyze> getAccountBookScheduleAnalyze(@PathVariable("id") Long id) {
         // TODO: 리팩터링 필요
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(accountBookService.getAccountBookScheduleAnalyze(id, currentMemberId));
+        return ResponseEntity.ok(scheduleService.getScheduleAnalyze(id, currentMemberId));
     }
 
     @Operation(summary = "가계부 분석용 지난달과 분석용 API", description = "가계부 분석용 지난달과 분석용 API입니")

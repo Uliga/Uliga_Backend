@@ -145,7 +145,7 @@ public class ScheduleDTO {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class AccountScheduleAnalyze {
+    public static class AccountBookScheduleAnalyze {
         private List<ScheduleAnalyzeQ> schedules;
         private Long sum;
     }
