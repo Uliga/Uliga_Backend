@@ -23,7 +23,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
             "WHERE i.accountBook.id = :id " +
             "AND i.date.year = :year " +
             "AND i.date.month = :month " +
-            "GROUP BY i.date " +
+            "GROUP BY i.date.year, i.date.month, i.date " +
             "ORDER BY i.date.day ASC")
     List<DailyValueQ> getDailyIncomeSumOfMonth(@Param("id") Long id,
                                        @Param("year") Long year,

@@ -74,7 +74,7 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
             "FROM Record r " +
             "WHERE r.accountBook.id = :accountBookId " +
             "AND r.date.year = :year AND r.date.month = :month " +
-            "GROUP BY r.date.month ")
+            "GROUP BY r.date.year, r.date.month ")
     Optional<MonthlyCompareQ> getMonthlyCompare(@Param("accountBookId") Long accountBookId, @Param("year") Long year, @Param("month") Long month);
 
     @Query("SELECT NEW com.uliga.uliga_backend.domain.Record.dto.NativeQ.MonthlyCompareQ(" +
@@ -85,7 +85,7 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
             "WHERE r.accountBook.id = :accountBookId " +
             "AND -2L <  r.date.year * 12L + r.date.month - :year * 12L - :month " +
             "AND r.date.year * 12L + r.date.month - :year * 12L - :month <= 0L  " +
-            "GROUP BY r.date.month " +
+            "GROUP BY r.date.year, r.date.month " +
             "ORDER BY r.date.year * 12L + r.date.month - :year * 12L - :month DESC LIMIT 2")
     List<MonthlyCompareQ> getMonthlyCompareInDailyAnalyze(@Param("accountBookId") Long accountBookId, @Param("year") Long year, @Param("month") Long month);
 
@@ -96,7 +96,7 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
             "AND r.date.month = :month " +
             "AND :startDay <= r.date.day " +
             "AND r.date.day < :endDay " +
-            "GROUP BY r.date.month")
+            "GROUP BY r.date.year, r.date.month")
     Optional<WeeklySumQ> getWeeklyRecordSum(@Param("accountBookId") Long accountBookId, @Param("year") Long year, @Param("month") Long month, @Param("startDay") Long startDay, @Param("endDay") Long endDay);
 
 }
