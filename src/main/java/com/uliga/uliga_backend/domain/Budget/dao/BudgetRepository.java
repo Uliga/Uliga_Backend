@@ -1,6 +1,6 @@
 package com.uliga.uliga_backend.domain.Budget.dao;
 
-import com.uliga.uliga_backend.domain.Record.dto.NativeQ.MonthlySumQ;
+import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.MonthlySumQ;
 import com.uliga.uliga_backend.domain.Budget.model.Budget;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface BudgetRepository extends JpaRepository<Budget, Long> {
-    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ(" +
+    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.MonthlySumQ(" +
             "SUM(b.value)" +
             ") FROM AccountBook ab " +
             "JOIN Budget b ON b.accountBook.id = ab.id " +

@@ -19,7 +19,7 @@ import com.uliga.uliga_backend.domain.Income.model.Income;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
-import com.uliga.uliga_backend.domain.Record.dto.NativeQ.MonthlySumQ;
+import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.MonthlySumQ;
 import com.uliga.uliga_backend.global.error.exception.IdNotFoundException;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import lombok.RequiredArgsConstructor;

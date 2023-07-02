@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
-import com.uliga.uliga_backend.domain.Record.dto.NativeQ.MonthlySumQ;
+import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.MonthlySumQ;
 import com.uliga.uliga_backend.domain.AccountBook.exception.BudgetAlreadyExists;
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;

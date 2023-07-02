@@ -1,16 +1,14 @@
 package com.uliga.uliga_backend.domain.AccountBook.dao;
 
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.*;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookMemberInfoQ;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MembersQ;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
-import com.uliga.uliga_backend.domain.Category.model.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.parameters.P;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface AccountBookRepository extends JpaRepository<AccountBook, Long>{
 

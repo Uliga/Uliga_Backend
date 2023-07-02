@@ -1,7 +1,7 @@
 package com.uliga.uliga_backend.domain.Income.dao;
 
 import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.DailyValueQ;
-import com.uliga.uliga_backend.domain.Record.dto.NativeQ.MonthlySumQ;
+import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.MonthlySumQ;
 import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
 import com.uliga.uliga_backend.domain.Income.model.Income;
 import org.springframework.data.domain.Page;
@@ -16,7 +16,7 @@ import java.util.Optional;
 
 public interface IncomeRepository extends JpaRepository<Income, Long> {
 
-    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.DailyValueQ(" +
+    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.DailyValueQ(" +
             "i.date.day, " +
             "SUM(i.value)) " +
             "FROM Income i " +
@@ -52,7 +52,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
                                           @Param("month") Long month,
                                           @Param("day") Long day);
 
-    @Query("select new com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ(" +
+    @Query("select new com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.MonthlySumQ(" +
             "SUM(i.value)" +
             ") FROM AccountBook ab " +
             "JOIN Income i ON i.accountBook.id = ab.id " +

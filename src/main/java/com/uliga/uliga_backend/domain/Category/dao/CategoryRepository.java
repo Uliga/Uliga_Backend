@@ -14,14 +14,14 @@ import java.util.Optional;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    @Query("select new com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategoryInfoQ(" +
+    @Query("select new com.uliga.uliga_backend.domain.Category.dto.NativeQ.AccountBookCategoryInfoQ(" +
             "c.id," +
             "c.name)" +
             "FROM " +
             "AccountBook ab JOIN Category c on c.accountBook.id = ab.id WHERE ab.id = :id")
     List<AccountBookCategoryInfoQ> findAccountBookCategoryInfoById(@Param("id") Long id);
 
-    @Query("select new com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategoryInfoQ(" +
+    @Query("select new com.uliga.uliga_backend.domain.Category.dto.NativeQ.AccountBookCategoryInfoQ(" +
             "c.id," +
             "c.name)" +
             "FROM " +
@@ -29,7 +29,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<AccountBookCategoryInfoQ> findAccountBookCategoryAnalyze(@Param("id") Long id);
     boolean existsByAccountBookIdAndName(Long id, String name);
 
-    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookCategoryAnalyzeQ(" +
+    @Query("SELECT NEW com.uliga.uliga_backend.domain.Category.dto.NativeQ.AccountBookCategoryAnalyzeQ(" +
             "c.id, " +
             "c.name, " +
             "SUM(r.value)) " +
