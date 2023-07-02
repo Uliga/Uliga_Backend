@@ -29,28 +29,6 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
                                        @Param("year") Long year,
                                        @Param("month") Long month);
 
-    @Query(
-            "select new com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ(" +
-                    "i.id," +
-                    "i.value," +
-                    "i.payment," +
-                    "i.account," +
-                    "i.memo," +
-                    "i.date.year," +
-                    "i.date.month," +
-                    "i.date.day," +
-                    "m.userName," +
-                    "c.name," +
-                    "abm.avatarUrl) from Income i " +
-                    "JOIN Member m on m.id = i.creator.id " +
-                    "JOIN Category c on c.id = i.category.id " +
-                    "JOIN AccountBookMember abm ON abm.accountBook.id = i.accountBook.id AND abm.member.id = i.creator.id " +
-                    "where i.accountBook.id=:id and i.date.month=:month and i.date.year=:year and i.date.day = :day"
-    )
-    List<IncomeInfoQ> findByAccountBookId(@Param("id") Long id,
-                                          @Param("year") Long year,
-                                          @Param("month") Long month,
-                                          @Param("day") Long day);
 
     @Query("select new com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.MonthlySumQ(" +
             "SUM(i.value)" +

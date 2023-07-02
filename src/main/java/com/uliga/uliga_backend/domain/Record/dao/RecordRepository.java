@@ -50,28 +50,7 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
                     "WHERE m.id = :id order by r.date.year*365 + r.date.month*31 + r.date.day DESC"
     )
     Page<RecordInfoQ> getMemberRecords(@Param("id") Long id, Pageable pageable);
-    @Query(
-            "SELECT NEW com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ(" +
-                    "r.id," +
-                    "r.value," +
-                    "r.payment," +
-                    "r.account," +
-                    "r.memo," +
-                    "r.date.year," +
-                    "r.date.month," +
-                    "r.date.day," +
-                    "m.userName," +
-                    "c.name," +
-                    "abm.avatarUrl) from Record r " +
-                    "JOIN Member m on m.id = r.creator.id " +
-                    "JOIN AccountBookMember abm ON abm.accountBook.id = r.accountBook.id AND abm.member.id = r.creator.id " +
-                    "JOIN Category c on c.id=r.category.id " +
-                    "WHERE r.accountBook.id=:id and r.date.month=:month and r.date.year = :year and r.date.day = :day"
-    )
-    List<RecordInfoQ> findByAccountBookId(@Param("id") Long id,
-                                          @Param("year") Long year,
-                                          @Param("month") Long month,
-                                          @Param("day") Long day);
+
     @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.MonthlySumQ(" +
             "SUM(r.value)" +
             ") FROM AccountBook ab " +
