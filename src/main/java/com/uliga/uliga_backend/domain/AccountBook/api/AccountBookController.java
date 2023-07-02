@@ -223,9 +223,7 @@ public class AccountBookController {
     public ResponseEntity<AddRecordResult> addRecord(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "지출 한개 생성 요청") @RequestBody AddRecordRequest request) {
 
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        // TODO: accountBookDataService로 리팩터링해야될듯
-
-        return ResponseEntity.ok(accountBookService.addRecord(currentMemberId, request));
+        return ResponseEntity.ok(recordService.addRecord(currentMemberId, request));
     }
 
     @Operation(summary = "가계부에 수입 추가 API", description = "가계부에 수입 추가하는 API 입니다")
@@ -238,8 +236,7 @@ public class AccountBookController {
 
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         // TODO: accountBookDataService로 리팩터링해야될듯
-
-        return ResponseEntity.ok(accountBookService.addIncome(currentMemberId, request));
+        return ResponseEntity.ok(incomeService.addIncome(currentMemberId, request));
     }
 
     @Operation(summary = "가계부 카테고리 조회 API", description = "가계부 카테고리 조회 API 입니다")

@@ -6,11 +6,14 @@ import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ;
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO;
+import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.AddRecordRequest;
+import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.AddRecordResult;
 import com.uliga.uliga_backend.domain.AccountBookData.model.AccountBookDataType;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.Date;
 import com.uliga.uliga_backend.domain.Income.dao.IncomeRepository;
+import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Record.dao.RecordMapper;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
@@ -46,6 +49,7 @@ public class RecordService {
     private final RecordMapper mapper;
     private final IncomeRepository incomeRepository;
     private final CategoryRepository categoryRepository;
+    private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper;
 
     /**
@@ -58,6 +62,67 @@ public class RecordService {
     @Transactional(readOnly = true)
     public MonthlySumQ getMonthlyRecordSum(Long accountBookId, Long year, Long month) {
         return recordRepository.getMonthlySumByAccountBookId(accountBookId, year, month).orElse(new MonthlySumQ(0L));
+    }
+
+    /**
+     * 가계부에 지출 추가
+     * @param currentMemberId 멤버 아이디
+     * @param addRecordRequest 지출 추가 요청
+     * @return 지출 추가 결과
+     */
+    @Transactional
+    public AddRecordResult addRecord(Long currentMemberId, AddRecordRequest addRecordRequest) {
+        AccountBook accountBook = accountBookRepository.findById(addRecordRequest.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
+        Category category = categoryRepository.findByAccountBookAndName(accountBook, addRecordRequest.getCategory()).orElseThrow(CategoryNotFoundException::new);
+        Member member = memberRepository.findById(currentMemberId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
+        String[] split = addRecordRequest.getDate().split("-");
+        Date date = Date.builder()
+                .year(Long.parseLong(split[0]))
+                .month(Long.parseLong(split[1]))
+                .day(Long.parseLong(split[2])).build();
+
+        Record record = Record.builder()
+                .accountBook(accountBook)
+                .spend(addRecordRequest.getValue())
+                .payment(addRecordRequest.getPayment())
+                .category(category)
+                .creator(member)
+                .memo(addRecordRequest.getMemo())
+                .date(date)
+                .account(addRecordRequest.getAccount())
+                .build();
+        recordRepository.save(record);
+        List<Long> sharedAccountBookIds = addRecordRequest.getSharedAccountBook();
+        List<AccountBook> sharedAccountBooks = accountBookRepository.findAccountBookByAccountBookIds(sharedAccountBookIds);
+        List<Category> categories = categoryRepository.findCategoriesByAccountBookIds(sharedAccountBookIds);
+
+        Map<Long, Category> categoryDict = new HashMap<>();
+        Map<Long, AccountBook> accountBookDict = new HashMap<>();
+        List<Record> toSave = new ArrayList<>();
+        for (Category c : categories) {
+            categoryDict.put(c.getAccountBook().getId(), c);
+        }
+        for (AccountBook ab : sharedAccountBooks) {
+            accountBookDict.put(ab.getId(), ab);
+        }
+        for (Long accountBookId : sharedAccountBookIds) {
+            Record temp_record = Record.builder()
+                    .category(categoryDict.get(accountBookId))
+                    .date(date)
+                    .accountBook(accountBookDict.get(accountBookId))
+                    .memo(addRecordRequest.getMemo())
+                    .payment(addRecordRequest.getPayment())
+                    .creator(member)
+                    .spend(addRecordRequest.getValue())
+                    .account(addRecordRequest.getAccount())
+                    .build();
+            toSave.add(temp_record);
+        }
+        recordRepository.saveAll(toSave);
+        return AddRecordResult.builder()
+                .accountBookId(accountBook.getId())
+                .recordInfo(record.toInfoQ()).build();
+
     }
 
     /**
@@ -104,59 +169,7 @@ public class RecordService {
                 .build();
     }
 
-    /**
-     * 지출 한개 가계부에 추가
-     * @param request 지출 dto
-     * @param category 지출 카테고리
-     * @param date 지출 날짜
-     * @param accountBook 추가할 가계부
-     * @param member 생성한 멤버
-     * @return 지출 추가 결과
-     */
-    @Transactional
-    public AccountBookDataDTO.AddRecordResult addSingleItemToAccountBook(AccountBookDataDTO.AddRecordRequest request, Category category, Date date, AccountBook accountBook, Member member) {
-        Record record = Record.builder()
-                .accountBook(accountBook)
-                .spend(request.getValue())
-                .payment(request.getPayment())
-                .category(category)
-                .creator(member)
-                .memo(request.getMemo())
-                .date(date)
-                .account(request.getAccount())
-                .build();
-        recordRepository.save(record);
-        List<Long> sharedAccountBookIds = request.getSharedAccountBook();
-        List<AccountBook> sharedAccountBooks = accountBookRepository.findAccountBookByAccountBookIds(sharedAccountBookIds);
-        List<Category> categories = categoryRepository.findCategoriesByAccountBookIds(sharedAccountBookIds);
 
-        Map<Long, Category> categoryDict = new HashMap<>();
-        Map<Long, AccountBook> accountBookDict = new HashMap<>();
-        List<Record> toSave = new ArrayList<>();
-        for (Category c : categories) {
-            categoryDict.put(c.getAccountBook().getId(), c);
-        }
-        for (AccountBook ab : sharedAccountBooks) {
-            accountBookDict.put(ab.getId(), ab);
-        }
-        for (Long accountBookId : sharedAccountBookIds) {
-            Record temp_record = Record.builder()
-                    .category(categoryDict.get(accountBookId))
-                    .date(date)
-                    .accountBook(accountBookDict.get(accountBookId))
-                    .memo(request.getMemo())
-                    .payment(request.getPayment())
-                    .creator(member)
-                    .spend(request.getValue())
-                    .account(request.getAccount())
-                    .build();
-            toSave.add(temp_record);
-        }
-        recordRepository.saveAll(toSave);
-        return AccountBookDataDTO.AddRecordResult.builder()
-                .accountBookId(accountBook.getId())
-                .recordInfo(record.toInfoQ()).build();
-    }
 
     /**
      * 지출 정보 업데이트

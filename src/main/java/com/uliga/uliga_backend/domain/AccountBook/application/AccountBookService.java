@@ -386,43 +386,9 @@ public class AccountBookService {
 
 
 
-    /**
-     * 가계부에 수입 추가
-     * @param memberId 멤버 아이디
-     * @param request 수입 추가 요청
-     * @return 추가 결과
-     */
-    @Transactional
-    public AccountBookDataDTO.AddIncomeResult addIncome(Long memberId, AccountBookDataDTO.AddIncomeRequest request) {
-        AccountBook accountBook = accountBookRepository.findById(request.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
-        Category category = categoryRepository.findByAccountBookAndName(accountBook, request.getCategory()).orElseThrow(CategoryNotFoundException::new);
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
-        String[] split = request.getDate().split("-");
-        Date date = Date.builder()
-                .year(Long.parseLong(split[0]))
-                .month(Long.parseLong(split[1]))
-                .day(Long.parseLong(split[2])).build();
-        return incomeService.addSingleIncomeToAccountBook(request, category, date, accountBook, member);
-    }
 
-    /**
-     * 가계부에 지출 추가
-     * @param memberId 멤버 아이디
-     * @param request 지출 추가 요청
-     * @return 지출 추가 결과
-     */
-    @Transactional
-    public AccountBookDataDTO.AddRecordResult addRecord(Long memberId, AccountBookDataDTO.AddRecordRequest request) {
-        AccountBook accountBook = accountBookRepository.findById(request.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
-        Category category = categoryRepository.findByAccountBookAndName(accountBook, request.getCategory()).orElseThrow(CategoryNotFoundException::new);
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
-        String[] split = request.getDate().split("-");
-        Date date = Date.builder()
-                .year(Long.parseLong(split[0]))
-                .month(Long.parseLong(split[1]))
-                .day(Long.parseLong(split[2])).build();
-        return recordService.addSingleItemToAccountBook(request, category, date, accountBook, member);
-    }
+
+
 
     /**
      * 가계부 예산 설정

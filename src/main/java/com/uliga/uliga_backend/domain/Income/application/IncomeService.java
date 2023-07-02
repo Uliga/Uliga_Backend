@@ -6,6 +6,8 @@ import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ;
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO;
+import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.AddIncomeRequest;
+import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.AddIncomeResult;
 import com.uliga.uliga_backend.domain.AccountBookData.model.AccountBookDataType;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
 import com.uliga.uliga_backend.domain.Category.model.Category;
@@ -16,6 +18,7 @@ import com.uliga.uliga_backend.domain.Income.dto.IncomeDTO.IncomeUpdateRequest;
 import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
 import com.uliga.uliga_backend.domain.Income.exception.InvalidIncomeDeleteRequest;
 import com.uliga.uliga_backend.domain.Income.model.Income;
+import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import com.uliga.uliga_backend.global.error.exception.IdNotFoundException;
@@ -42,6 +45,7 @@ public class IncomeService {
     private final IncomeMapper incomeMapper;
     private final RecordRepository recordRepository;
     private final CategoryRepository categoryRepository;
+    private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper;
 
     /**
@@ -54,6 +58,61 @@ public class IncomeService {
     @Transactional(readOnly = true)
     public MonthlySumQ getMonthlyIncomeSum(Long accountBookId, Long year, Long month) {
         return incomeRepository.getMonthlySumByAccountBookId(accountBookId, year, month).orElse(new MonthlySumQ(0L));
+    }
+
+    @Transactional
+    public AddIncomeResult addIncome(Long currentMemberId, AddIncomeRequest addIncomeRequest) {
+        AccountBook accountBook = accountBookRepository.findById(addIncomeRequest.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
+        Category category = categoryRepository.findByAccountBookAndName(accountBook, addIncomeRequest.getCategory()).orElseThrow(CategoryNotFoundException::new);
+        Member member = memberRepository.findById(currentMemberId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
+        String[] split = addIncomeRequest.getDate().split("-");
+        Date date = Date.builder()
+                .year(Long.parseLong(split[0]))
+                .month(Long.parseLong(split[1]))
+                .day(Long.parseLong(split[2])).build();
+
+        Income income = Income.builder()
+                .category(category)
+                .date(date)
+                .accountBook(accountBook)
+                .memo(addIncomeRequest.getMemo())
+                .payment(addIncomeRequest.getPayment())
+                .creator(member)
+                .value(addIncomeRequest.getValue())
+                .account(addIncomeRequest.getAccount())
+                .build();
+        incomeRepository.save(income);
+        List<Long> sharedAccountBookIds = addIncomeRequest.getSharedAccountBook();
+        List<AccountBook> sharedAccountBooks = accountBookRepository.findAccountBookByAccountBookIds(sharedAccountBookIds);
+        List<Category> categories = categoryRepository.findCategoriesByAccountBookIds(sharedAccountBookIds);
+
+        Map<Long, Category> categoryDict = new HashMap<>();
+        Map<Long, AccountBook> accountBookDict = new HashMap<>();
+        List<Income> toSave = new ArrayList<>();
+        for (Category c : categories) {
+            categoryDict.put(c.getAccountBook().getId(), c);
+        }
+        for (AccountBook ab : sharedAccountBooks) {
+            accountBookDict.put(ab.getId(), ab);
+        }
+        for (Long accountBookId : sharedAccountBookIds) {
+            Income temp_income = Income.builder()
+                    .category(categoryDict.get(accountBookId))
+                    .date(date)
+                    .accountBook(accountBookDict.get(accountBookId))
+                    .memo(addIncomeRequest.getMemo())
+                    .payment(addIncomeRequest.getPayment())
+                    .creator(member)
+                    .value(addIncomeRequest.getValue())
+                    .account(addIncomeRequest.getAccount())
+                    .build();
+            toSave.add(temp_income);
+        }
+        incomeRepository.saveAll(toSave);
+        return AddIncomeResult.builder()
+                .accountBookId(accountBook.getId())
+                .incomeInfo(income.toInfoQ()).build();
+
     }
 
     /**
@@ -101,59 +160,7 @@ public class IncomeService {
     }
 
 
-    /**
-     * 가계부에 수입 한개 추가
-     * @param request 수입 생성 요청
-     * @param category 수입 카테고리
-     * @param date 수입의 날짜
-     * @param accountBook 추가할 가계부
-     * @param member 수입 생성하려는 멤버
-     * @return 수입 추가 결과
-     */
-    @Transactional
-    public AccountBookDataDTO.AddIncomeResult addSingleIncomeToAccountBook(AccountBookDataDTO.AddIncomeRequest request, Category category, Date date, AccountBook accountBook, Member member) {
-        Income income = Income.builder()
-                .category(category)
-                .date(date)
-                .accountBook(accountBook)
-                .memo(request.getMemo())
-                .payment(request.getPayment())
-                .creator(member)
-                .value(request.getValue())
-                .account(request.getAccount())
-                .build();
-        incomeRepository.save(income);
-        List<Long> sharedAccountBookIds = request.getSharedAccountBook();
-        List<AccountBook> sharedAccountBooks = accountBookRepository.findAccountBookByAccountBookIds(sharedAccountBookIds);
-        List<Category> categories = categoryRepository.findCategoriesByAccountBookIds(sharedAccountBookIds);
 
-        Map<Long, Category> categoryDict = new HashMap<>();
-        Map<Long, AccountBook> accountBookDict = new HashMap<>();
-        List<Income> toSave = new ArrayList<>();
-        for (Category c : categories) {
-            categoryDict.put(c.getAccountBook().getId(), c);
-        }
-        for (AccountBook ab : sharedAccountBooks) {
-            accountBookDict.put(ab.getId(), ab);
-        }
-        for (Long accountBookId : sharedAccountBookIds) {
-            Income temp_income = Income.builder()
-                    .category(categoryDict.get(accountBookId))
-                    .date(date)
-                    .accountBook(accountBookDict.get(accountBookId))
-                    .memo(request.getMemo())
-                    .payment(request.getPayment())
-                    .creator(member)
-                    .value(request.getValue())
-                    .account(request.getAccount())
-                    .build();
-            toSave.add(temp_income);
-        }
-        incomeRepository.saveAll(toSave);
-        return AccountBookDataDTO.AddIncomeResult.builder()
-                .accountBookId(accountBook.getId())
-                .incomeInfo(income.toInfoQ()).build();
-    }
 
     /**
      * 수입 정보 업데이트
