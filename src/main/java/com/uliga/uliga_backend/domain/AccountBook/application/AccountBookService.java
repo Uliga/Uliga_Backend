@@ -416,14 +416,6 @@ public class AccountBookService {
 
     }
 
-    /**
-     * 가계부 데이터 삭제
-     * @param dataDeleteRequest 삭제 요청
-     */
-    @Transactional
-    public void deleteAccountBookData(AccountBookDataDTO.AccountBookDataDeleteRequest dataDeleteRequest) {
-        accountBookDataRepository.deleteAllById(dataDeleteRequest.getIds());
-    }
 
     /**
      * 가계부 정보 업데이트 요청

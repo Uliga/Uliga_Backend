@@ -312,10 +312,10 @@ public class AccountBookController {
     })
     @DeleteMapping(value = "/data")
     public ResponseEntity<String> deleteAccountBookData(@Valid @RequestBody AccountBookDataDeleteRequest dataDeleteRequest) {
-        // TODO: accountBookDataService로 리팩터링해야될듯
+        // TODO: 프론트랑 확인 후 중복된 API이니 제거 예정
 
-        Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        accountBookService.deleteAccountBookData(dataDeleteRequest);
+
+        accountBookDataService.deleteAccountBookData(DeleteItemRequest.builder().deleteIds(dataDeleteRequest.getIds()).build());
         return ResponseEntity.ok("DELETED");
     }
 
