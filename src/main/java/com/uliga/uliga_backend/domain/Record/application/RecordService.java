@@ -5,6 +5,7 @@ import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO;
+import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.AccountBookWeeklyRecord;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.AddRecordRequest;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.AddRecordResult;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ;
@@ -25,6 +26,7 @@ import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.MonthlyCompareQ;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.MonthlySumQ;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
+import com.uliga.uliga_backend.domain.Record.dto.NativeQ.WeeklySumQ;
 import com.uliga.uliga_backend.domain.Record.dto.RecordDTO.RecordInfoDetail;
 import com.uliga.uliga_backend.domain.Record.dto.RecordDTO.RecordUpdateRequest;
 import com.uliga.uliga_backend.domain.Record.exception.InvalidRecordDelete;
@@ -349,6 +351,46 @@ public class RecordService {
         }
 
     }
+
+    /**
+     * 가계부 분석 - 주차별 조회
+     * @param accountBookId 가계부 아이디
+     * @param year 년도
+     * @param month 달
+     * @param startDay 분석 시작 일
+     * @return 주차별 분석 결과
+     */
+    @Transactional(readOnly = true)
+    public AccountBookWeeklyRecord getWeeklyRecordSum(Long accountBookId, Long year, Long month, Long startDay) {
+        Long totalSum = 0L;
+        List<AccountBookDataDTO.WeeklySum> result = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Math.toIntExact(year), Math.toIntExact(month) - 1, 1);
+        int actualMaximum = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        while (startDay <= actualMaximum) {
+            Optional<WeeklySumQ> weeklyRecordSum = recordRepository.getWeeklyRecordSum(accountBookId, year, month, startDay, startDay + 7);
+            long endDay;
+            if (startDay + 6 <= actualMaximum) {
+                endDay = startDay + 6;
+            } else {
+                endDay = actualMaximum;
+            }
+            if (weeklyRecordSum.isPresent()) {
+                WeeklySumQ weeklySumQ = weeklyRecordSum.get();
+                AccountBookDataDTO.WeeklySum weeklySum = AccountBookDataDTO.WeeklySum.builder().startDay(startDay ).endDay(endDay).value(weeklySumQ.getValue()).build();
+                result.add(weeklySum);
+                totalSum += weeklySum.getValue();
+            } else {
+                AccountBookDataDTO.WeeklySum weeklySum = AccountBookDataDTO.WeeklySum.builder().startDay(startDay).endDay(endDay).value(0L).build();
+                result.add(weeklySum);
+            }
+            startDay += 7;
+
+        }
+        return new AccountBookDataDTO.AccountBookWeeklyRecord(result, totalSum);
+    }
+
+
 
     /**
      * 지출에 댓글 추가

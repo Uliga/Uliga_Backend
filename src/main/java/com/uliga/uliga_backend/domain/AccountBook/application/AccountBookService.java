@@ -444,44 +444,6 @@ public class AccountBookService {
 
 
     /**
-     * 가계부 분석 - 주차별 조회
-     * @param accountBookId 가계부 아이디
-     * @param year 년도
-     * @param month 달
-     * @param startDay 분석 시작 일
-     * @return 주차별 분석 결과
-     */
-    @Transactional(readOnly = true)
-    public AccountBookDataDTO.AccountBookWeeklyRecord getAccountBookWeeklyRecord(Long accountBookId, Long year, Long month, Long startDay) {
-        Long totalSum = 0L;
-        List<AccountBookDataDTO.WeeklySum> result = new ArrayList<>();
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Math.toIntExact(year), Math.toIntExact(month) - 1, 1);
-        int actualMaximum = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-        while (startDay <= actualMaximum) {
-            Optional<WeeklySumQ> weeklyRecordSum = recordRepository.getWeeklyRecordSum(accountBookId, year, month, startDay, startDay + 7);
-            long endDay;
-            if (startDay + 6 <= actualMaximum) {
-                endDay = startDay + 6;
-            } else {
-                endDay = actualMaximum;
-            }
-            if (weeklyRecordSum.isPresent()) {
-                WeeklySumQ weeklySumQ = weeklyRecordSum.get();
-                AccountBookDataDTO.WeeklySum weeklySum = AccountBookDataDTO.WeeklySum.builder().startDay(startDay ).endDay(endDay).value(weeklySumQ.getValue()).build();
-                result.add(weeklySum);
-                totalSum += weeklySum.getValue();
-            } else {
-                AccountBookDataDTO.WeeklySum weeklySum = AccountBookDataDTO.WeeklySum.builder().startDay(startDay).endDay(endDay).value(0L).build();
-                result.add(weeklySum);
-            }
-            startDay += 7;
-
-        }
-        return new AccountBookDataDTO.AccountBookWeeklyRecord(result, totalSum);
-    }
-
-    /**
      * 가계부 분석 - 사용자 지정 날짜 기간동안 가계부 내역 조회
      * @param id 가계부 아이디
      * @param year 년도

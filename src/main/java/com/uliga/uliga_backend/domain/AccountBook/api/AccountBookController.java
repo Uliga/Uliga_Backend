@@ -382,8 +382,7 @@ public class AccountBookController {
     @Operation(summary = "가계부 분석용 - 주차별 지출 금액 조회", description = "가계부 분석용 주차별 지출 금액 조회 API 입니다")
     @GetMapping(value = "/{id}/analyze/weekly/{year}/{month}/{startDay}")
     public ResponseEntity<AccountBookWeeklyRecord> getAccountBookWeeklyCompare(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month, @PathVariable("startDay") Long startDay) {
-        // TODO: 리팩터링 필요
-        return ResponseEntity.ok(accountBookService.getAccountBookWeeklyRecord(id, year, month, startDay));
+        return ResponseEntity.ok(recordService.getWeeklyRecordSum(id, year, month, startDay));
     }
 
     @Operation(summary = "기간 별 내역 조회", description = "기간 별 내역 조회 API 입니다")
