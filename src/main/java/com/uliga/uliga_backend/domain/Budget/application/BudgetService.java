@@ -46,37 +46,36 @@ public class BudgetService {
         return budgetRepository.getMonthlySumByAccountBookId(accountBookId, year, month).orElse(new MonthlySumQ(0L));
     }
 
-    /**
-     * 가계부에 예산 추가
-     * @param dto 예산 정보
-     * @return 생성된 예산 정보
-     */
     @Transactional
-    public BudgetInfoQ addBudgetToAccountBook(CreateBudgetDto dto) {
-        AccountBook accountBook = accountBookRepository.findById(dto.getId()).orElseThrow(()->new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
-        if (budgetRepository.existsBudgetByAccountBookIdAndYearAndMonth(dto.getId(), dto.getYear(), dto.getMonth())) {
+    public BudgetInfoQ addBudget(Map<String, Object> createBudgetMap) {
+        CreateBudgetDto createBudgetDto = mapper.convertValue(createBudgetMap, CreateBudgetDto.class);
+        AccountBook accountBook = accountBookRepository.findById(createBudgetDto.getId()).orElseThrow(()->new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
+        if (budgetRepository.existsBudgetByAccountBookIdAndYearAndMonth(createBudgetDto.getId(), createBudgetDto.getYear(), createBudgetDto.getMonth())) {
             throw new BudgetAlreadyExists();
         }
-        if (dto.getCategory() != null) {
-            Category category = categoryRepository.findByAccountBookAndName(accountBook, dto.getCategory()).orElseThrow(CategoryNotFoundException::new);
+        if (createBudgetDto.getCategory() != null) {
+            Category category = categoryRepository.findByAccountBookAndName(accountBook, createBudgetDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
             Budget build = Budget.builder()
-                    .year(dto.getYear())
-                    .month(dto.getMonth())
+                    .year(createBudgetDto.getYear())
+                    .month(createBudgetDto.getMonth())
                     .accountBook(accountBook)
-                    .value(dto.getValue())
+                    .value(createBudgetDto.getValue())
                     .category(category).build();
             budgetRepository.save(build);
             return build.toInfoQ();
         } else {
             Budget build = Budget.builder()
-                    .year(dto.getYear())
-                    .month(dto.getMonth())
-                    .value(dto.getValue())
+                    .year(createBudgetDto.getYear())
+                    .month(createBudgetDto.getMonth())
+                    .value(createBudgetDto.getValue())
                     .accountBook(accountBook).build();
             budgetRepository.save(build);
             return build.toInfoQ();
         }
+
+
     }
+
 
     /**
      * 예산 정보 업데이트

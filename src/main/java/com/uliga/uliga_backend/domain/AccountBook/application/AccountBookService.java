@@ -377,22 +377,6 @@ public class AccountBookService {
 
 
 
-
-
-
-
-    /**
-     * 가계부 예산 설정
-     * @param dto 생성 요청
-     * @return 예산 정보
-     */
-    @Transactional
-    public BudgetInfoQ addBudget(Map<String, Object> dto) {
-        CreateBudgetDto createBudgetDto = objectMapper.convertValue(dto, CreateBudgetDto.class);
-
-        return budgetService.addBudgetToAccountBook(createBudgetDto);
-    }
-
     /**
      * 가계부 금융 일정 추가
      * @param memberId 멤버 아이디

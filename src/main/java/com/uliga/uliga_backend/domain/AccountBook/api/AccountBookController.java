@@ -266,12 +266,9 @@ public class AccountBookController {
             @ApiResponse(responseCode = "409", description = "해당 년도/달에 예산 이미 존재시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping(value = "/budget")
-    public ResponseEntity<BudgetInfoQ> addBudget(@io.swagger.v3.oas.annotations.parameters.RequestBody(
-            description = "예산 생성 요청",
-            content = @Content(schema = @Schema(implementation = CreateBudgetDto.class)))
+    public ResponseEntity<BudgetInfoQ> addBudget(@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "예산 생성 요청", content = @Content(schema = @Schema(implementation = CreateBudgetDto.class)))
                                                  @RequestBody Map<String, Object> createBudgetDto) {
-        // TODO: budgetService로 리팩터링해야될듯
-        return ResponseEntity.ok(accountBookService.addBudget(createBudgetDto));
+        return ResponseEntity.ok(budgetService.addBudget(createBudgetDto));
     }
 
     @Operation(summary = "가계부에 금융 일정 추가", description = "가계부에 금융 일정 추가 API 입니다")
