@@ -3,6 +3,8 @@ package com.uliga.uliga_backend.domain.Schedule.application;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
+import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookAccessException;
+import com.uliga.uliga_backend.domain.JoinTable.dao.AccountBookMemberRepository;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.AddScheduleResult;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.GetAccountBookSchedules;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
@@ -42,6 +44,7 @@ public class ScheduleService {
     private final ScheduleMemberRepository scheduleMemberRepository;
     private final MemberRepository memberRepository;
     private final AccountBookRepository accountBookRepository;
+    private final AccountBookMemberRepository accountBookMemberRepository;
     private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper mapper;
 
@@ -161,7 +164,10 @@ public class ScheduleService {
      * @return 가계부 금융 일정
      */
     @Transactional(readOnly = true)
-    public GetAccountBookSchedules getAccountBookSchedules(Long accountBookId) {
+    public GetAccountBookSchedules getAccountBookSchedules(Long memberId, Long accountBookId) {
+        if (!accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(memberId, accountBookId)){
+            throw new UnauthorizedAccountBookAccessException();
+        }
         List<ScheduleDetail> result = new ArrayList<>();
         LocalDate date = LocalDate.now();
         List<ScheduleInfoQ> byAccountBookId = scheduleRepository.findScheduleInfoByAccountBookId(accountBookId, date.getDayOfMonth());

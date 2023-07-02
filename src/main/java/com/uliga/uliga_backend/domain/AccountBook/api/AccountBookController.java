@@ -20,6 +20,7 @@ import com.uliga.uliga_backend.domain.Record.application.RecordService;
 import com.uliga.uliga_backend.domain.Schedule.application.ScheduleService;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO;
 import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.AddScheduleResult;
+import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.GetAccountBookSchedules;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import com.uliga.uliga_backend.global.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -270,7 +271,7 @@ public class AccountBookController {
     })
     @PostMapping(value = "/budget")
     public ResponseEntity<BudgetInfoQ> addBudget(@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "예산 생성 요청", content = @Content(schema = @Schema(implementation = CreateBudgetDto.class)))
-                                                 @RequestBody Map<String, Object> createBudgetDto) {링
+                                                 @RequestBody Map<String, Object> createBudgetDto) {
         return ResponseEntity.ok(budgetService.addBudget(createBudgetDto));
     }
 
@@ -280,21 +281,18 @@ public class AccountBookController {
     })
     @PostMapping(value = "/schedule")
     public ResponseEntity<AddScheduleResult> addSchedule(@Valid @RequestBody ScheduleDTO.AddSchedules addSchedules) throws JsonProcessingException {
-        // TODO: scheduleService로 리팩터링해야될듯
-
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(scheduleService.addSchedule(memberId, addSchedules));
     }
 
     @Operation(summary = "가계부 금융 일정 세부 조회", description = "가계부 금융 일정 세부 조회 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = ScheduleDTO.GetAccountBookSchedules.class)))
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = GetAccountBookSchedules.class)))
     })
     @GetMapping(value = "/{id}/schedule")
-    public ResponseEntity<ScheduleDTO.GetAccountBookSchedules> getAccountBookSchedules(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id) {
-        // TODO: scheduleService로 리팩터링해야될듯
+    public ResponseEntity<GetAccountBookSchedules> getAccountBookSchedules(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id) {
         Long memberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(accountBookService.getAccountBookSchedules(memberId, id));
+        return ResponseEntity.ok(scheduleService.getAccountBookSchedules(memberId, id));
     }
 
     @Operation(summary = "가계부 삭제 요청", description = "가계부 삭제 요청 API 입니다")

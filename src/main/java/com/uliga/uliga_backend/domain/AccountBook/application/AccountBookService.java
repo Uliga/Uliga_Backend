@@ -376,22 +376,6 @@ public class AccountBookService {
     }
 
     /**
-     * 가계부 금융 일정 조회
-     * @param memberId 멤버 아이디
-     * @param accountBookId 가계부 아이디
-     * @return 가계부 금융 일정 조회
-     */
-    @Transactional(readOnly = true)
-    public ScheduleDTO.GetAccountBookSchedules getAccountBookSchedules(Long memberId, Long accountBookId) {
-        if (accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(memberId, accountBookId)) {
-
-            return scheduleService.getAccountBookSchedules(accountBookId);
-        } else {
-            throw new UnauthorizedAccountBookAccessException();
-        }
-    }
-
-    /**
      * 가계부 삭제
      * @param id 가계부 아이디
      * @param memberId 멤버 아이디
