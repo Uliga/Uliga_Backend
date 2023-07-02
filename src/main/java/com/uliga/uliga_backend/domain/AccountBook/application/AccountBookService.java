@@ -396,20 +396,7 @@ public class AccountBookService {
         return new CategoryDTO.CategoryCreateResult(id, result);
     }
 
-    /**
-     * 가계부 해당 달 날짜별 수입/지출 총합 조회
-     * @param id 가계부 아이디
-     * @param year 년도
-     * @param month 월
-     * @return 해당 달 날짜별 수입/지출 총합
-     */
-    @Transactional(readOnly = true)
-    public AccountBookDataDTO.AccountBookDataDailySum getAccountBookItems(Long id, Long year, Long month) {
 
-        return AccountBookDataDTO.AccountBookDataDailySum.builder()
-                .incomes(accountBookRepository.getMonthlyIncome(id, year, month))
-                .records(accountBookRepository.getMonthlyRecord(id, year, month)).build();
-    }
 
     /**
      * 가계부 기간 내 수입/지출 정보 조회
@@ -420,13 +407,13 @@ public class AccountBookService {
      * @return 수입&지출 정보 리스트
      */
     @Transactional(readOnly = true)
-    public AccountBookDataDTO.RecordAndIncomeDetails getAccountBookItemDetails(Long id, Long year, Long month, Long day) {
+    public AccountBookDataDTO.DailyAccountBookDataDetails getAccountBookItemDetails(Long id, Long year, Long month, Long day) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("accountBookId", id);
         map.put("year", year);
         map.put("month", month);
         map.put("day", day);
-        return new AccountBookDataDTO.RecordAndIncomeDetails(accountBookDataMapper.findAccountBookDataOrderByValue(map));
+        return new AccountBookDataDTO.DailyAccountBookDataDetails(accountBookDataMapper.findAccountBookDataOrderByValue(map));
     }
 
     /**

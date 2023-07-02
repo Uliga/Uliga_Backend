@@ -3,7 +3,6 @@ package com.uliga.uliga_backend.domain.AccountBook.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService;
 import com.uliga.uliga_backend.domain.AccountBookData.application.AccountBookDataService;
-import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ;
 import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO;
 import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO.CreateBudgetDto;
@@ -135,17 +134,15 @@ public class AccountBookController {
 
     @Operation(summary = "하루 수입/지출 내역 상세 조회", description = "하루 가계부 수입/지출 조회 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = RecordAndIncomeDetails.class))),
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = DailyAccountBookDataDetails.class))),
             @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping(value = "/{id}/item/{year}/{month}/{day}")
-    public ResponseEntity<RecordAndIncomeDetails> getAccountBookItemDetailsByDay(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
-                                                                                 @Parameter(name = "year", description = "년도", in = PATH) @PathVariable("year") Long year,
-                                                                                 @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month,
-                                                                                 @Parameter(name = "day", description = "하루", in = PATH) @PathVariable("day") Long day) {
-        // TODO: accountBookDataService로 리팩터링해야될듯
-
-        return ResponseEntity.ok(accountBookService.getAccountBookItemDetails(id, year, month, day));
+    public ResponseEntity<DailyAccountBookDataDetails> getAccountBookItemDetailsByDay(@Parameter(name = "id", description = "가계부 아이디", in = PATH) @PathVariable("id") Long id,
+                                                                                      @Parameter(name = "year", description = "년도", in = PATH) @PathVariable("year") Long year,
+                                                                                      @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month,
+                                                                                      @Parameter(name = "day", description = "하루", in = PATH) @PathVariable("day") Long day) {
+        return ResponseEntity.ok(accountBookDataService.getDailyAccountBookDataDetails(id, year, month, day));
     }
 
     @Operation(summary = "가계부 내역 삭제", description = "가계부 내역 삭제 API 입니다")
@@ -195,6 +192,7 @@ public class AccountBookController {
     public ResponseEntity<CategoryDTO.CategoryCreateResult> createCategories(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "카테고리 생성 요청") @RequestBody CategoryDTO.CategoryCreateRequest createRequest) {
 
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        // TODO : category service
         return ResponseEntity.ok(accountBookService.createCategory(currentMemberId, createRequest));
     }
 

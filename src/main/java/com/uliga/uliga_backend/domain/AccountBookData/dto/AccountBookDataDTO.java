@@ -144,7 +144,7 @@ public class AccountBookDataDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class RecordAndIncomeDetails {
+    public static class DailyAccountBookDataDetails {
         private List<AccountBookDataQ> items;
     }
 
