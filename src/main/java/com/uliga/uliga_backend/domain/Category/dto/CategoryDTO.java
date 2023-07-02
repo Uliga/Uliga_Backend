@@ -81,7 +81,7 @@ public class CategoryDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema(description = "분석용 한달 지출 조회")
-    public static class AccountBookCategoryAnalyze {
+    public static class MonthlyRecordSumPerCategories {
         @Schema(description = "카테고리별 지출들")
         private List<AccountBookCategoryAnalyzeQ> categories;
         private Long sum;

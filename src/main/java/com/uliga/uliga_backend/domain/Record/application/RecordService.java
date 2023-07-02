@@ -2,9 +2,7 @@ package com.uliga.uliga_backend.domain.Record.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.DailyValueQ;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlyCompareQ;
-import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.*;
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO;
@@ -12,6 +10,8 @@ import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.Add
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.AddRecordResult;
 import com.uliga.uliga_backend.domain.AccountBookData.model.AccountBookDataType;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
+import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO;
+import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.MonthlyRecordSumPerCategories;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.Date;
 import com.uliga.uliga_backend.domain.Income.dao.IncomeRepository;
@@ -306,6 +306,44 @@ public class RecordService {
 
 
     }
+
+    /**
+     * 한달 카테고리 별 지출 총합 조회
+     * @param accountBookId 가계부 아이디
+     * @param year 조회할 년도
+     * @param month 조회할 달
+     * @return 조회 결과
+     */
+    @Transactional(readOnly = true)
+    public MonthlyRecordSumPerCategories getMonthlyRecordSumPerCategories(Long accountBookId, Long year, Long month) {
+        List<AccountBookCategoryAnalyzeQ> categoryAnalyze = accountBookRepository.findAccountBookCategoryAnalyze(accountBookId, year, month);
+        Optional<MonthlySumQ> monthlySum = recordRepository.getMonthlySumByAccountBookId(accountBookId, year, month);
+        if (monthlySum.isPresent()) {
+            MonthlySumQ monthlySumQ = monthlySum.get();
+            Long compare = 0L;
+            for (AccountBookCategoryAnalyzeQ analyzeQ : categoryAnalyze) {
+                compare += analyzeQ.getValue();
+            }
+            if (compare.equals(monthlySumQ.getValue())) {
+                return new CategoryDTO.MonthlyRecordSumPerCategories(categoryAnalyze, monthlySumQ.getValue());
+            } else {
+                AccountBookCategoryAnalyzeQ built = new AccountBookCategoryAnalyzeQ(null, "그 외", monthlySumQ.getValue() - compare);
+                categoryAnalyze.add(built);
+                return new CategoryDTO.MonthlyRecordSumPerCategories(categoryAnalyze, monthlySumQ.getValue());
+            }
+        } else {
+            List<AccountBookCategoryInfoQ> accountBookCategoryInfoById = accountBookRepository.findAccountBookCategoryAnalyze(accountBookId);
+            List<AccountBookCategoryAnalyzeQ> result = new ArrayList<>();
+            for (AccountBookCategoryInfoQ accountBookCategoryInfoQ : accountBookCategoryInfoById) {
+                AccountBookCategoryAnalyzeQ built = new AccountBookCategoryAnalyzeQ(accountBookCategoryInfoQ.getId(), accountBookCategoryInfoQ.getLabel(), 0L);
+                result.add(built);
+
+            }
+            return new CategoryDTO.MonthlyRecordSumPerCategories(result, 0L);
+        }
+
+    }
+
     /**
      * 지출에 댓글 추가
      * @param id 지출 아이디

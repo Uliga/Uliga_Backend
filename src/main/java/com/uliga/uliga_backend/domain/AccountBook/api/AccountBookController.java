@@ -11,8 +11,8 @@ import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO.CreateBudgetDto;
 import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO.GetAccountBookAssets;
 import com.uliga.uliga_backend.domain.Budget.dto.NativeQ.BudgetInfoQ;
 import com.uliga.uliga_backend.domain.Category.application.CategoryService;
-import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO;
 import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.AccountBookCategories;
+import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.MonthlyRecordSumPerCategories;
 import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryCreateRequest;
 import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryCreateResult;
 import com.uliga.uliga_backend.domain.Income.application.IncomeService;
@@ -341,12 +341,11 @@ public class AccountBookController {
 
     @Operation(summary = "가계부 분석용 한달 카테고리 별 지출 조회 API", description = "가계부 분석용 한달 카테고리 별 지출 조회 API 입니다")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = CategoryDTO.AccountBookCategoryAnalyze.class)))
+            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = MonthlyRecordSumPerCategories.class)))
     })
     @GetMapping(value = "/{id}/analyze/category/{year}/{month}")
-    public ResponseEntity<CategoryDTO.AccountBookCategoryAnalyze> getAccountBookCategoryAnalyze(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
-        // TODO: categoryService로 리팩터링해야될듯?
-        return ResponseEntity.ok(accountBookService.getAccountBookCategoryAnalyze(id, year, month));
+    public ResponseEntity<MonthlyRecordSumPerCategories> getAccountBookCategoryAnalyze(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
+        return ResponseEntity.ok(recordService.getMonthlyRecordSumPerCategories(id, year, month));
     }
 
     @Operation(summary = "가계부 분석용 한달 고정지출 조회용 API", description = "가계부 분석용 한달 고정 지출 조회용 API 입니다")

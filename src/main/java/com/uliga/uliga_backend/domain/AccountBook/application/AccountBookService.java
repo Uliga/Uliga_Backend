@@ -441,43 +441,6 @@ public class AccountBookService {
     }
 
 
-    /**
-     * 가계부 분석 - 카테고리별 지출 총합 조회
-     * @param id 가계부 아이디
-     * @param year 년도
-     * @param month 달
-     * @return 분석 정보
-     */
-    @Transactional(readOnly = true)
-    public CategoryDTO.AccountBookCategoryAnalyze getAccountBookCategoryAnalyze(Long id, Long year, Long month) {
-        List<AccountBookCategoryAnalyzeQ> categoryAnalyze = accountBookRepository.findAccountBookCategoryAnalyze(id, year, month);
-        Optional<MonthlySumQ> monthlySum = recordRepository.getMonthlySumByAccountBookId(id, year, month);
-        if (monthlySum.isPresent()) {
-            MonthlySumQ monthlySumQ = monthlySum.get();
-            Long compare = 0L;
-            for (AccountBookCategoryAnalyzeQ analyzeQ : categoryAnalyze) {
-                compare += analyzeQ.getValue();
-            }
-            if (compare.equals(monthlySumQ.getValue())) {
-                return new CategoryDTO.AccountBookCategoryAnalyze(categoryAnalyze, monthlySumQ.getValue());
-            } else {
-                AccountBookCategoryAnalyzeQ built = new AccountBookCategoryAnalyzeQ(null, "그 외", monthlySumQ.getValue() - compare);
-                categoryAnalyze.add(built);
-                return new CategoryDTO.AccountBookCategoryAnalyze(categoryAnalyze, monthlySumQ.getValue());
-            }
-        } else {
-            List<AccountBookCategoryInfoQ> accountBookCategoryInfoById = accountBookRepository.findAccountBookCategoryAnalyze(id);
-            List<AccountBookCategoryAnalyzeQ> result = new ArrayList<>();
-            for (AccountBookCategoryInfoQ accountBookCategoryInfoQ : accountBookCategoryInfoById) {
-                AccountBookCategoryAnalyzeQ built = new AccountBookCategoryAnalyzeQ(accountBookCategoryInfoQ.getId(), accountBookCategoryInfoQ.getLabel(), 0L);
-                result.add(built);
-
-            }
-            return new CategoryDTO.AccountBookCategoryAnalyze(result, 0L);
-        }
-
-
-    }
 
     /**
      * 가계부 분석 - 고정 지출 조회
