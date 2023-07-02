@@ -156,9 +156,7 @@ public class AccountBookController {
     @DeleteMapping(value = "/item")
     public ResponseEntity<String> deleteAccountBookItems(@Valid @RequestBody DeleteItemRequest deleteItemRequest) {
 
-        // TODO: accountBookDataService로 리팩터링해야될듯
-
-        accountBookService.deleteAccountBookItems(deleteItemRequest);
+        accountBookDataService.deleteAccountBookData(deleteItemRequest);
         return ResponseEntity.ok("DELETED");
     }
 
@@ -172,7 +170,6 @@ public class AccountBookController {
                                                                      @Parameter(name = "year", description = "년도", in = PATH) @PathVariable("year") Long year,
                                                                      @Parameter(name = "month", description = "달", in = PATH) @PathVariable("month") Long month) {
 
-        // TODO: accountBookDataService, budgetService로 리팩터링해야될듯
         GetAccountBookAssets accountBookAssets = GetAccountBookAssets.builder()
                 .budget(budgetService.getMonthlyBudgetSum(id, year, month))
                 .record(recordService.getMonthlyRecordSum(id, year, month))

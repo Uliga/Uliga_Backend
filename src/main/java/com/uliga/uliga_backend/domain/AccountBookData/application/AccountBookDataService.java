@@ -1,10 +1,12 @@
 package com.uliga.uliga_backend.domain.AccountBookData.application;
 
 import com.uliga.uliga_backend.domain.AccountBookData.dao.AccountBookDataMapper;
+import com.uliga.uliga_backend.domain.AccountBookData.dao.AccountBookDataRepository;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.AccountBookDataDailySum;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.CreateResult;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.DailyAccountBookDataDetails;
+import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.DeleteItemRequest;
 import com.uliga.uliga_backend.domain.Income.dao.IncomeRepository;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import java.util.HashMap;
 @Service
 @RequiredArgsConstructor
 public class AccountBookDataService {
+    private final AccountBookDataRepository accountBookDataRepository;
     private final IncomeRepository incomeRepository;
     private final RecordRepository recordRepository;
     private final AccountBookDataMapper accountBookDataMapper;
@@ -54,6 +57,15 @@ public class AccountBookDataService {
         map.put("month", month);
         map.put("day", day);
         return new AccountBookDataDTO.DailyAccountBookDataDetails(accountBookDataMapper.findAccountBookDataOrderByValue(map));
+    }
+
+    /**
+     * 가계부 아이템 삭제
+     * @param deleteItemRequest 가계부 아이템 삭제 요청
+     */
+    @Transactional
+    public void deleteAccountBookData(DeleteItemRequest deleteItemRequest) {
+        accountBookDataRepository.deleteAllById(deleteItemRequest.getDeleteIds());
     }
 
     /**
