@@ -1,6 +1,7 @@
 package com.uliga.uliga_backend.domain.AccountBook.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBookData.application.AccountBookDataService;
@@ -58,6 +59,7 @@ public class AccountBookController {
     private final RecordService recordService;
     private final CategoryService categoryService;
     private final ScheduleService scheduleService;
+    private final ObjectMapper objectMapper;
 
     @Operation(summary = "멤버 가계부 조회 API", description = "멤버 가계부 조회 API 입니다")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "멤버 가계부 조회 성공시", content = @Content(schema = @Schema(implementation = GetAccountBookInfos.class))), @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))})
@@ -82,9 +84,12 @@ public class AccountBookController {
     @PatchMapping(value = "/{id}")
     public ResponseEntity<AccountBookUpdateRequest> updateAccountBookInfo(@PathVariable("id") Long id, @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "가계부 업데이트 요청", content = @Content(schema = @Schema(implementation = AccountBookUpdateRequest.class))) @RequestBody Map<String, Object> updateRequest) throws JsonProcessingException {
 
-        log.info("가계부 정보 수정 API 호출");
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(accountBookService.updateAccountBookInfo(currentMemberId, id, updateRequest));
+        AccountBookUpdateRequest updateDto = objectMapper.convertValue(objectMapper, AccountBookUpdateRequest.class);
+        if (updateDto.getCategories() != null) {
+            categoryService.updateAccountBookCategory(id, updateDto.getCategories());
+        }
+        return ResponseEntity.ok(accountBookService.updateAccountBookInfo(currentMemberId, id, updateDto));
     }
 
     @Operation(summary = "가계부 생성 API", description = "가계부 생성하는 API 입니다")

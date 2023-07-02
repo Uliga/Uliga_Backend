@@ -55,6 +55,8 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     void deleteById(Long id);
 
+    void deleteByNameAndAccountBookId(String name, Long accountBookId);
+
     @Query("SELECT c.name FROM Category c WHERE c.accountBook.id = :accountBookId")
     HashSet<String> findCategoryNamesByAccountBookId(@Param("accountBookId") Long accountBookId);
 

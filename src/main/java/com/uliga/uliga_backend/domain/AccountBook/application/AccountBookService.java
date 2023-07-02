@@ -11,7 +11,6 @@ import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountB
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
 import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
-import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.JoinTable.dao.AccountBookMemberRepository;
 import com.uliga.uliga_backend.domain.JoinTable.model.AccountBookMember;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
@@ -27,9 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
 
@@ -269,21 +266,14 @@ public class AccountBookService {
      *
      * @param memberId      멤버 아이디
      * @param accountBookId 가계부 아이디
-     * @param map           업데이트 요청
+     * @param request           업데이트 요청
      * @return 업데이트 결과
      * @throws JsonProcessingException Json 처리 예외
      */
     @Transactional
-    public AccountBookUpdateRequest updateAccountBookInfo(Long memberId, Long accountBookId, Map<String, Object> map) throws JsonProcessingException {
-        AccountBookUpdateRequest request = objectMapper.convertValue(map, AccountBookUpdateRequest.class);
+    public AccountBookUpdateRequest updateAccountBookInfo(Long memberId, Long accountBookId, AccountBookUpdateRequest request) throws JsonProcessingException {
         AccountBook accountBook = accountBookRepository.findById(accountBookId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
         AccountBookMember accountBookMember = accountBookMemberRepository.findAccountBookMemberByMemberIdAndAccountBookId(memberId, accountBookId).orElseThrow(UnauthorizedAccountBookAccessException::new);
-        List<Category> categoriesByAccountBookId = categoryRepository.findCategoriesByAccountBookId(accountBookId);
-        HashMap<String, Category> hashMap = new HashMap<>();
-        for (Category category : categoriesByAccountBookId) {
-            hashMap.put(category.getName(), category);
-        }
-
         if (request.getAvatarUrl() != null) {
             accountBookMember.setAvatarUrl(request.getAvatarUrl());
         }
@@ -294,22 +284,6 @@ public class AccountBookService {
 
         if (request.getName() != null) {
             accountBook.setName(request.getName());
-        }
-
-        if (request.getCategories() != null) {
-            List<String> createCategories = new ArrayList<>();
-            for (String category : request.getCategories()) {
-                if (!hashMap.containsKey(category)) {
-                    createCategories.add(category);
-                }
-            }
-            for (Category category : categoriesByAccountBookId) {
-                if (!request.getCategories().contains(category.getName())) {
-                    categoryRepository.delete(category);
-                }
-            }
-            //TODO 여기 카테고리 추가 어떻게해야링
-//            createCategory(memberId, CategoryCreateRequest.builder().id(accountBookId).categories(createCategories).build());
         }
 
         if (request.getRelationship() != null) {

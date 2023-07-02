@@ -54,7 +54,8 @@ public class CategoryService {
 
     /**
      * 카테고리 생성
-     * @param currentMemberId 현재 멤버 아이디
+     *
+     * @param currentMemberId       현재 멤버 아이디
      * @param categoryCreateRequest 카테고리 생성 요청
      * @return 카테고리 생성 결과
      */
@@ -86,16 +87,47 @@ public class CategoryService {
         return CategoryCreateResult.builder().id(accountBook.getId()).created(result).build();
     }
 
-
+    /**
+     * 가계부 카테고리 조회
+     *
+     * @param accountBookId 가계부 아이디
+     * @return 조회 결과
+     */
     @Transactional(readOnly = true)
     public CategoryDTO.AccountBookCategories getAccountBookCategories(Long accountBookId) {
         return new CategoryDTO.AccountBookCategories(categoryRepository.findAccountBookCategoryInfoById(accountBookId));
     }
 
+    @Transactional
+    public void updateAccountBookCategory(Long accountBookId, List<String> categories) {
+        HashSet<String> categoryNamesByAccountBookId = categoryRepository.findCategoryNamesByAccountBookId(accountBookId);
+        AccountBook accountBook = accountBookRepository.findById(accountBookId).orElseThrow(NotFoundByIdException::new);
+        HashSet<String> finalCategory = new HashSet<>();
+        List<Category> createCategories = new ArrayList<>();
+        for (String category : categories) {
+            finalCategory.add(category);
+            if (!categoryNamesByAccountBookId.contains(category)) {
+                Category newCategory = Category.builder()
+                        .accountBook(accountBook)
+                        .name(category)
+                        .build();
+                createCategories.add(newCategory);
+                categoryNamesByAccountBookId.add(category);
+            }
+        }
+        for (String category : categoryNamesByAccountBookId) {
+            if (!finalCategory.contains(category)) {
+                categoryRepository.deleteByNameAndAccountBookId(category, accountBookId);
+            }
+        }
+        categoryRepository.saveAll(createCategories);
+    }
+
     /**
      * 카테고리 업데이트
+     *
      * @param categoryId 업데이트 할 카테고리 아이디
-     * @param map 업데이트할 정보 map
+     * @param map        업데이트할 정보 map
      * @return 업데이트 결과
      */
     @Transactional
@@ -115,6 +147,7 @@ public class CategoryService {
 
     /**
      * 카테고리 삭제
+     *
      * @param id 삭제할 카테고리 아이디
      */
     @Transactional

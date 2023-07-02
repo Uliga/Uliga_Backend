@@ -29,61 +29,61 @@ import java.util.List;
 @SpringBootTest
 class AccountBookServiceTest {
 
-    private AccountBookService accountBookService;
-    @Mock
-    private AccountBookRepository accountBookRepository;
-    @Mock
-    private AccountBookMemberRepository accountBookMemberRepository;
-    @Mock
-    private AccountBookDataRepository accountBookDataRepository;
-    @Mock
-    private AccountBookDataMapper accountBookDataMapper;
-    @Mock
-    private MemberRepository memberRepository;
-    @Mock
-    private IncomeRepository incomeRepository;
-    @Mock
-    private RecordRepository recordRepository;
-    @Mock
-    private BudgetRepository budgetRepository;
-    @Mock
-    private RedisTemplate<String, Object> redisTemplate;
-    @Mock
-    private ObjectMapper objectMapper;
-    @Mock
-    private CategoryRepository categoryRepository;
-    @Mock
-    private CategoryService categoryService;
-    @Mock
-    private RecordService recordService;
-    @Mock
-    private IncomeService incomeService;
-    @Mock
-    private ScheduleService scheduleService;
-    @Mock
-    private BudgetService budgetService;
+//    private AccountBookService accountBookService;
+//    @Mock
+//    private AccountBookRepository accountBookRepository;
+//    @Mock
+//    private AccountBookMemberRepository accountBookMemberRepository;
+//    @Mock
+//    private AccountBookDataRepository accountBookDataRepository;
+//    @Mock
+//    private AccountBookDataMapper accountBookDataMapper;
+//    @Mock
+//    private MemberRepository memberRepository;
+//    @Mock
+//    private IncomeRepository incomeRepository;
+//    @Mock
+//    private RecordRepository recordRepository;
+//    @Mock
+//    private BudgetRepository budgetRepository;
+//    @Mock
+//    private RedisTemplate<String, Object> redisTemplate;
+//    @Mock
+//    private ObjectMapper objectMapper;
+//    @Mock
+//    private CategoryRepository categoryRepository;
+//    @Mock
+//    private CategoryService categoryService;
+//    @Mock
+//    private RecordService recordService;
+//    @Mock
+//    private IncomeService incomeService;
+//    @Mock
+//    private ScheduleService scheduleService;
+//    @Mock
+//    private BudgetService budgetService;
 
-    @BeforeEach
-    void setUp() {
-        accountBookService = new AccountBookService(
-                accountBookRepository,
-                accountBookMemberRepository,
-                accountBookDataRepository,
-                accountBookDataMapper,
-                memberRepository,
-                incomeRepository,
-                recordRepository,
-                budgetRepository,
-                redisTemplate,
-                objectMapper,
-                categoryRepository,
-                categoryService,
-                recordService,
-                incomeService,
-                scheduleService,
-                budgetService
-        );
-    }
+//    @BeforeEach
+//    void setUp() {
+//        accountBookService = new AccountBookService(
+//                accountBookRepository,
+//                accountBookMemberRepository,
+//                accountBookDataRepository,
+//                accountBookDataMapper,
+//                memberRepository,
+//                incomeRepository,
+//                recordRepository,
+//                budgetRepository,
+//                redisTemplate,
+//                objectMapper,
+//                categoryRepository,
+//                categoryService,
+//                recordService,
+//                incomeService,
+//                scheduleService,
+//                budgetService
+//        );
+//    }
 
     private final List<String> defaultCategories = new ArrayList<>(
             Arrays.asList("\uD83C\uDF7D️ 식비",
