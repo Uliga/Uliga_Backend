@@ -1,7 +1,5 @@
 package com.uliga.uliga_backend.domain.Member.application;
 
-import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService;
-import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.CreateRequestPrivate;
 import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Member.model.UserLoginType;
@@ -13,7 +11,6 @@ import com.uliga.uliga_backend.domain.Token.exception.InvalidRefreshTokenExcepti
 import com.uliga.uliga_backend.global.jwt.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -23,6 +20,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -35,7 +33,6 @@ import static com.uliga.uliga_backend.global.common.constants.JwtConstants.REFRE
 @RequiredArgsConstructor
 public class AuthService {
     private final MemberRepository memberRepository;
-    private final AccountBookService accountBookService;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate<String, String> redisTemplate;
@@ -89,8 +86,6 @@ public class AuthService {
     public LoginResult socialLogin(SocialLoginRequest socialLoginRequest) {
         Member entity = socialLoginRequest.toEntity(passwordEncoder);
         memberRepository.save(entity);
-        CreateRequestPrivate requestPrivate = CreateRequestPrivate.builder().name(socialLoginRequest.getUserName() + " 님의 가계부").relationship("개인").isPrivate(true).build();
-        accountBookService.createAccountBookPrivate(entity, requestPrivate);
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = socialLoginRequest.toAuthentication();
 
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(usernamePasswordAuthenticationToken);
