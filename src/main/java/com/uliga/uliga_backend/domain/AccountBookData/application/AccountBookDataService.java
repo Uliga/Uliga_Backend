@@ -7,14 +7,19 @@ import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.Cre
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.DailyAccountBookDataDetails;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.DeleteItemRequest;
+import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.AccountBookDataQ;
 import com.uliga.uliga_backend.domain.Income.dao.IncomeRepository;
 import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -68,6 +73,7 @@ public class AccountBookDataService {
         accountBookDataRepository.deleteAllById(deleteItemRequest.getDeleteIds());
     }
 
+
     /**
      * 가계부에 다수의 수입, 지출 한번에 추가
      * @param id 생성자의 아이디
@@ -77,5 +83,29 @@ public class AccountBookDataService {
     @Transactional
     public CreateResult createItems(Long id, AccountBookDataDTO.CreateItems items) {
         return null;
+    }
+
+    /**
+     * 가계부 내역 조회
+     * @param accountBookId 가계부 아이디
+     * @param categoryId 카테고리 아이디
+     * @param year 년도
+     * @param month 월
+     * @param pageable 페이징 정보
+     * @return 가계부 내역
+     */
+    @Transactional(readOnly = true)
+    public Page<AccountBookDataQ> getAccountBookHistory(Long accountBookId, Long categoryId, Long year, Long month, Pageable pageable) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("accountBookId", accountBookId);
+        map.put("categoryId", categoryId);
+        map.put("year", year);
+        map.put("month", month);
+        map.put("offset", pageable.getOffset());
+        map.put("pageSize", pageable.getPageSize());
+        List<AccountBookDataQ> accountBookData = accountBookDataMapper.findAccountBookData(map);
+        List<Long> counted = accountBookDataMapper.countQueryForAccountBookHistory(map);
+        return new PageImpl<>(accountBookData, pageable, counted.size());
+
     }
 }

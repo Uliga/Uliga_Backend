@@ -392,30 +392,6 @@ public class AccountBookService {
         return "DELETED";
     }
 
-    /**
-     * 가계부 내역 조회
-     * @param accountBookId 가계부 아이디
-     * @param categoryId 카테고리 아이디
-     * @param year 년도
-     * @param month 월
-     * @param pageable 페이징 정보
-     * @return 가계부 내역
-     */
-    @Transactional(readOnly = true)
-    public Page<AccountBookDataQ> getAccountBookHistory(Long accountBookId, Long categoryId, Long year, Long month, Pageable pageable) {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("accountBookId", accountBookId);
-        map.put("categoryId", categoryId);
-        map.put("year", year);
-        map.put("month", month);
-        map.put("offset", pageable.getOffset());
-        map.put("pageSize", pageable.getPageSize());
-        List<AccountBookDataQ> accountBookData = accountBookDataMapper.findAccountBookData(map);
-        List<Long> counted = accountBookDataMapper.countQueryForAccountBookHistory(map);
-        return new PageImpl<>(accountBookData, pageable, counted.size());
-
-    }
-
 
     /**
      * 가계부 정보 업데이트 요청

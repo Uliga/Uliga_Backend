@@ -329,9 +329,7 @@ public class AccountBookController {
                                                                         @RequestParam(value = "year", required = false) Long year,
                                                                         @RequestParam(value = "month", required = false) Long month,
                                                                         Pageable pageable) {
-        // TODO: accountBookDataService로 리팩터링해야될듯
-
-        return ResponseEntity.ok(accountBookService.getAccountBookHistory(id, categoryId, year, month, pageable));
+        return ResponseEntity.ok(accountBookDataService.getAccountBookHistory(id, categoryId, year, month, pageable));
     }
 
 
