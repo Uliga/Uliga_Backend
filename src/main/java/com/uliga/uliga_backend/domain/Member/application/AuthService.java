@@ -1,6 +1,6 @@
 package com.uliga.uliga_backend.domain.Member.application;
 
-import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
+import com.uliga.uliga_backend.domain.Member.repository.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Member.model.UserLoginType;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.ReissueRequest;

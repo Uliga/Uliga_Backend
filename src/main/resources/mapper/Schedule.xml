@@ -2,7 +2,7 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.uliga.uliga_backend.domain.Schedule.dao.ScheduleMapper">
+<mapper namespace="com.uliga.uliga_backend.domain.Schedule.mapper.ScheduleMapper">
     <select id="getScheduleMonthSum" parameterType="HashMap"
             resultType="com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleMonthSum">
         SELECT SUM(s.value) as value, s.is_income FROM schedule s WHERE s.account_book_id = ${id} GROUP BY s.is_income

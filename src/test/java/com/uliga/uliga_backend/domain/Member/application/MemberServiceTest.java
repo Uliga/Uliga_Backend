@@ -1,14 +1,7 @@
 package com.uliga.uliga_backend.domain.Member.application;
 
-import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
-import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
-import com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ;
-import com.uliga.uliga_backend.domain.Member.model.Member;
-import com.uliga.uliga_backend.global.error.exception.NotAuthorizedException;
-import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
+import com.uliga.uliga_backend.domain.Member.repository.MemberRepository;
 import org.springframework.transaction.annotation.Transactional;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @SpringBootTest

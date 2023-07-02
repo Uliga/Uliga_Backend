@@ -1,11 +1,9 @@
 package com.uliga.uliga_backend.domain.Member.application;
 
-import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
-import com.uliga.uliga_backend.domain.Member.dto.MemberDTO;
+import com.uliga.uliga_backend.domain.Member.repository.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.exception.EmailCertificationExpireException;
 import com.uliga.uliga_backend.domain.Member.exception.UserNotFoundByEmail;
 import com.uliga.uliga_backend.domain.Member.model.Member;
-import jakarta.mail.Message;
 import jakarta.mail.Message.RecipientType;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;

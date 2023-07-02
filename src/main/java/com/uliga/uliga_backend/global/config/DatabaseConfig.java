@@ -24,15 +24,19 @@ import javax.sql.DataSource;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.uliga.uliga_backend.global.config.DatabaseConfig.RDS_DOMAIN;
+import static com.uliga.uliga_backend.global.config.DatabaseConfig.*;
 
 @Configuration
-@EnableJpaRepositories( basePackages =  {RDS_DOMAIN})
-@MapperScan(value = {RDS_DOMAIN})
+@EnableJpaRepositories( basePackages =  {RDS_DOMAIN_REPO})
+@MapperScan(
+        value = {RDS_DOMAIN_MAPPER}
+)
 @RequiredArgsConstructor
 @Slf4j
 public class DatabaseConfig {
-    static final String RDS_DOMAIN = "com.uliga.uliga_backend";
+    static final String RDS_DOMAIN_REPO = "com.uliga.uliga_backend.domain.*.repository";
+    static final String RDS_DOMAIN_MAPPER = "com.uliga.uliga_backend.domain.*.mapper";
+
 
     private final DatabaseProperty databaseProperty;
 
@@ -95,7 +99,6 @@ public class DatabaseConfig {
         sessionFactory.setDataSource(dataSource);
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         sessionFactory.setMapperLocations(resolver.getResources("classpath:/mapper/*.xml"));
-//        sessionFactory.setConfigLocation(resolver.getResource("classpath:db/mybatis-config.xml "));
         return sessionFactory.getObject();
     }
 }

@@ -2,7 +2,7 @@ package com.uliga.uliga_backend.domain.AccountBook.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
+import com.uliga.uliga_backend.domain.AccountBook.repository.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.AccountBookInfoQ;
 import com.uliga.uliga_backend.domain.AccountBook.exception.InvalidAccountBookDeleteRequest;
 import com.uliga.uliga_backend.domain.AccountBook.exception.InvitationSaveError;
@@ -10,10 +10,10 @@ import com.uliga.uliga_backend.domain.AccountBook.exception.InvitationSaveErrorW
 import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookAccessException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority;
-import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
-import com.uliga.uliga_backend.domain.JoinTable.dao.AccountBookMemberRepository;
+import com.uliga.uliga_backend.domain.Category.repository.CategoryRepository;
+import com.uliga.uliga_backend.domain.JoinTable.repository.AccountBookMemberRepository;
 import com.uliga.uliga_backend.domain.JoinTable.model.AccountBookMember;
-import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
+import com.uliga.uliga_backend.domain.Member.repository.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.InvitationInfo;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;

@@ -1,16 +1,12 @@
 package com.uliga.uliga_backend.global.oauth2.application;
 
-import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService;
-import com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO;
-import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
-import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
+import com.uliga.uliga_backend.domain.Member.repository.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.model.Authority;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Member.model.UserLoginType;
 import com.uliga.uliga_backend.domain.Member.model.UserPrincipal;
 import com.uliga.uliga_backend.global.oauth2.OAuth2UserInfo;
 import com.uliga.uliga_backend.global.oauth2.OAuth2UserInfoFactory;
-import com.uliga.uliga_backend.global.oauth2.exception.NotInitializedInception;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,8 +18,6 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Slf4j
 @Service

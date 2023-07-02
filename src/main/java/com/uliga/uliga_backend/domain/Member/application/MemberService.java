@@ -2,9 +2,9 @@ package com.uliga.uliga_backend.domain.Member.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
-import com.uliga.uliga_backend.domain.JoinTable.dao.AccountBookMemberRepository;
-import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
+import com.uliga.uliga_backend.domain.AccountBook.repository.AccountBookRepository;
+import com.uliga.uliga_backend.domain.JoinTable.repository.AccountBookMemberRepository;
+import com.uliga.uliga_backend.domain.Member.repository.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ;
 import com.uliga.uliga_backend.domain.Member.exception.UserExistsInAccountBook;
 import com.uliga.uliga_backend.domain.Member.exception.UserNotFoundByEmail;

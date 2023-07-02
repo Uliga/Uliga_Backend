@@ -1,7 +1,7 @@
 package com.uliga.uliga_backend.domain.Member.application;
 
-import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
-import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
+import com.uliga.uliga_backend.domain.AccountBook.repository.AccountBookRepository;
+import com.uliga.uliga_backend.domain.Member.repository.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.LoginRequest;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SignUpRequest;
 import org.springframework.transaction.annotation.Transactional;

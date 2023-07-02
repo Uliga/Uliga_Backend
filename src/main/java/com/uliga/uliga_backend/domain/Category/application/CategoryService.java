@@ -1,17 +1,17 @@
 package com.uliga.uliga_backend.domain.Category.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
+import com.uliga.uliga_backend.domain.AccountBook.repository.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookCategoryCreateException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
-import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
+import com.uliga.uliga_backend.domain.Category.repository.CategoryRepository;
 import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO;
 import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryCreateRequest;
 import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryCreateResult;
 import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryUpdateRequest;
 import com.uliga.uliga_backend.domain.Category.exception.DuplicateCategoryException;
 import com.uliga.uliga_backend.domain.Category.model.Category;
-import com.uliga.uliga_backend.domain.JoinTable.dao.AccountBookMemberRepository;
+import com.uliga.uliga_backend.domain.JoinTable.repository.AccountBookMemberRepository;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;

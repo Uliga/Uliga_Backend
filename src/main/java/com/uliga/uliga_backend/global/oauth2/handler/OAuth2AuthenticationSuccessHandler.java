@@ -1,7 +1,6 @@
 package com.uliga.uliga_backend.global.oauth2.handler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
+import com.uliga.uliga_backend.domain.Member.repository.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenInfoDTO;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;

@@ -1,7 +1,7 @@
 package com.uliga.uliga_backend.domain.Record.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.AccountBook.dao.AccountBookRepository;
+import com.uliga.uliga_backend.domain.AccountBook.repository.AccountBookRepository;
 import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO;
@@ -10,18 +10,18 @@ import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.Add
 import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.AddRecordResult;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.DailyValueQ;
 import com.uliga.uliga_backend.domain.AccountBookData.model.AccountBookDataType;
-import com.uliga.uliga_backend.domain.Category.dao.CategoryRepository;
+import com.uliga.uliga_backend.domain.Category.repository.CategoryRepository;
 import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO;
 import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.MonthlyRecordSumPerCategories;
 import com.uliga.uliga_backend.domain.Category.dto.NativeQ.AccountBookCategoryAnalyzeQ;
 import com.uliga.uliga_backend.domain.Category.dto.NativeQ.AccountBookCategoryInfoQ;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.Date;
-import com.uliga.uliga_backend.domain.Income.dao.IncomeRepository;
-import com.uliga.uliga_backend.domain.Member.dao.MemberRepository;
+import com.uliga.uliga_backend.domain.Income.repository.IncomeRepository;
+import com.uliga.uliga_backend.domain.Member.repository.MemberRepository;
 import com.uliga.uliga_backend.domain.Member.model.Member;
-import com.uliga.uliga_backend.domain.Record.dao.RecordMapper;
-import com.uliga.uliga_backend.domain.Record.dao.RecordRepository;
+import com.uliga.uliga_backend.domain.Record.mapper.RecordMapper;
+import com.uliga.uliga_backend.domain.Record.repository.RecordRepository;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.MonthlyCompareQ;
 import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.MonthlySumQ;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
