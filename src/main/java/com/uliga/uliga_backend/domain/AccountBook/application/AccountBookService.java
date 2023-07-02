@@ -440,34 +440,7 @@ public class AccountBookService {
     }
 
 
-    /**
-     * 가계부 분석 - 전월 대비 지출 양 분석
-     * @param accountBookId 가계부 아이디
-     * @param year 년도
-     * @param month 달
-     * @return 비교 결과
-     */
-    @Transactional(readOnly = true)
-    public AccountBookDataDTO.MonthlyCompare getAccountBookMonthlyCompare(Long accountBookId, Long year, Long month) {
-        List<MonthlyCompareQ> monthlyCompare = new ArrayList<>();
 
-        Calendar calendar = Calendar.getInstance();
-        for (int i = 2; i > -1; i--) {
-            calendar.set(Math.toIntExact(year), month.intValue() - i, 1);
-            Optional<MonthlyCompareQ> monthly = accountBookRepository.getMonthlyCompare(accountBookId, year, month - i);
-            if (monthly.isPresent()) {
-                monthlyCompare.add(monthly.get());
-            } else {
-                MonthlyCompareQ build = MonthlyCompareQ.builder().year((long) calendar.get(Calendar.YEAR)).month((long) calendar.get(Calendar.MONTH)).value(0L).build();
-                monthlyCompare.add(build);
-            }
-        }
-
-
-
-//        return MonthlyCompare.builder().compare(monthlyCompare).build();
-        return new AccountBookDataDTO.MonthlyCompare(monthlyCompare);
-    }
 
     /**
      * 가계부 분석 - 내역 조회

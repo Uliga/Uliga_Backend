@@ -1,6 +1,7 @@
 package com.uliga.uliga_backend.domain.Record.dao;
 
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.DailyValueQ;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlyCompareQ;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
 import com.uliga.uliga_backend.domain.Record.model.Record;
@@ -86,5 +87,15 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
     @Modifying
     @Query(nativeQuery = true, value = "INSERT INTO record (account_book_data_id) value (:id)")
     void createFromAccountBookDataId(@Param("id") Long id);
+
+    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlyCompareQ(" +
+            "r.date.year, " +
+            "r.date.month, " +
+            "SUM(r.value)) " +
+            "FROM Record r " +
+            "WHERE r.accountBook.id = :accountBookId " +
+            "AND r.date.year = :year AND r.date.month = :month " +
+            "GROUP BY r.date.month ")
+    Optional<MonthlyCompareQ> getMonthlyCompare(@Param("accountBookId") Long accountBookId, @Param("year") Long year, @Param("month") Long month);
 
 }

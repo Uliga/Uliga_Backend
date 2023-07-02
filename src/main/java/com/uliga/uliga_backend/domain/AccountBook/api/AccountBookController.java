@@ -359,14 +359,14 @@ public class AccountBookController {
         return ResponseEntity.ok(scheduleService.getScheduleAnalyze(id, currentMemberId));
     }
 
-    @Operation(summary = "가계부 분석용 지난달과 분석용 API", description = "가계부 분석용 지난달과 분석용 API입니")
+    @Operation(summary = "가계부 분석용 지난달과 분석용 API", description = "가계부 분석용 지난달과 분석용 API입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = MonthlyCompare.class)))
     })
     @GetMapping(value = "/{id}/analyze/compare/{year}/{month}")
     public ResponseEntity<MonthlyCompare> getAccountBookMonthlyCompare(@PathVariable("id") Long id, @PathVariable("year") Long year, @PathVariable("month") Long month) {
         // TODO: 리팩터링 필요
-        return ResponseEntity.ok(accountBookService.getAccountBookMonthlyCompare(id, year, month));
+        return ResponseEntity.ok(accountBookDataService.getAccountBookDataMonthlyCompare(id, year, month));
     }
 
     @Operation(summary = "가계부 분석용 한달 지출 조회 API", description = "가계부 분석용 한달 지출 조회 API 입니다")
