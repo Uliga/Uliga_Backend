@@ -89,7 +89,7 @@ public class CategoryService {
 
     @Transactional(readOnly = true)
     public CategoryDTO.AccountBookCategories getAccountBookCategories(Long accountBookId) {
-        return new CategoryDTO.AccountBookCategories(accountBookRepository.findAccountBookCategoryInfoById(accountBookId));
+        return new CategoryDTO.AccountBookCategories(categoryRepository.findAccountBookCategoryInfoById(accountBookId));
     }
 
     /**

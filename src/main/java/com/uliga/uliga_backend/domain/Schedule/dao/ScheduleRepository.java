@@ -1,5 +1,6 @@
 package com.uliga.uliga_backend.domain.Schedule.dao;
 
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ;
 import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleAnalyzeQ;
 import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleInfoQ;
 import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleMemberInfoQ;
@@ -52,6 +53,15 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
             "sm.member.userName, " +
             "sm.value) FROM ScheduleMember sm WHERE sm.schedule.id = :id")
     List<ScheduleMemberInfoQ> findScheduleMemberInfoById(@Param("id") Long id);
+
+    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ(" +
+            "SUM(sm.value)) " +
+            "FROM Schedule s " +
+            "JOIN ScheduleMember sm ON sm.schedule.id = s.id " +
+            "WHERE s.accountBook.id=:accountBookId " +
+            "AND sm.member.id=:memberId " +
+            "AND sm.value > 0")
+    MonthlySumQ getMonthlyScheduleValue(@Param("accountBookId") Long accountBookId, @Param("memberId") Long memberId);
 
     void deleteById(Long id);
 

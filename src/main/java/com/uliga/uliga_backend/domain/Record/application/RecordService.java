@@ -291,7 +291,7 @@ public class RecordService {
 
             }
         }
-        List<MonthlyCompareQ> monthlyCompareInDailyAnalyze = accountBookRepository.getMonthlyCompareInDailyAnalyze(accountBookId, year, month);
+        List<MonthlyCompareQ> monthlyCompareInDailyAnalyze = recordRepository.getMonthlyCompareInDailyAnalyze(accountBookId, year, month);
         if (monthlyCompareInDailyAnalyze.size() == 2) {
             Long diff = monthlyCompareInDailyAnalyze.get(0).getValue() - monthlyCompareInDailyAnalyze.get(1).getValue();
             return new AccountBookDataDTO.AccountBookDailyRecordSumAndMonthlySum(result, monthlyCompareInDailyAnalyze.get(0).getValue(), diff);
@@ -316,7 +316,7 @@ public class RecordService {
      */
     @Transactional(readOnly = true)
     public MonthlyRecordSumPerCategories getMonthlyRecordSumPerCategories(Long accountBookId, Long year, Long month) {
-        List<AccountBookCategoryAnalyzeQ> categoryAnalyze = accountBookRepository.findAccountBookCategoryAnalyze(accountBookId, year, month);
+        List<AccountBookCategoryAnalyzeQ> categoryAnalyze = categoryRepository.findAccountBookCategoryAnalyze(accountBookId, year, month);
         Optional<MonthlySumQ> monthlySum = recordRepository.getMonthlySumByAccountBookId(accountBookId, year, month);
         if (monthlySum.isPresent()) {
             MonthlySumQ monthlySumQ = monthlySum.get();
@@ -332,7 +332,7 @@ public class RecordService {
                 return new CategoryDTO.MonthlyRecordSumPerCategories(categoryAnalyze, monthlySumQ.getValue());
             }
         } else {
-            List<AccountBookCategoryInfoQ> accountBookCategoryInfoById = accountBookRepository.findAccountBookCategoryAnalyze(accountBookId);
+            List<AccountBookCategoryInfoQ> accountBookCategoryInfoById = categoryRepository.findAccountBookCategoryAnalyze(accountBookId);
             List<AccountBookCategoryAnalyzeQ> result = new ArrayList<>();
             for (AccountBookCategoryInfoQ accountBookCategoryInfoQ : accountBookCategoryInfoById) {
                 AccountBookCategoryAnalyzeQ built = new AccountBookCategoryAnalyzeQ(accountBookCategoryInfoQ.getId(), accountBookCategoryInfoQ.getLabel(), 0L);

@@ -87,7 +87,7 @@ public class AccountBookService {
                 .info(bookInfoById)
                 .numberOfMember(accountBookRepository.getMemberNumberByAccountBookId(id))
                 .members(accountBookRepository.findAccountBookMemberInfoById(id))
-                .categories(accountBookRepository.findAccountBookCategoryInfoById(id)).build();
+                .categories(categoryRepository.findAccountBookCategoryInfoById(id)).build();
     }
 
     /**
@@ -103,7 +103,7 @@ public class AccountBookService {
             AccountBookInfo build = AccountBookInfo.builder().info(accountBookInfoQ)
                     .members(accountBookRepository.findAccountBookMemberInfoById(accountBookInfoQ.getAccountBookId()))
                     .numberOfMember(accountBookRepository.getMemberNumberByAccountBookId(accountBookInfoQ.getAccountBookId()))
-                    .categories(accountBookRepository.findAccountBookCategoryInfoById(accountBookInfoQ.getAccountBookId())).build();
+                    .categories(categoryRepository.findAccountBookCategoryInfoById(accountBookInfoQ.getAccountBookId())).build();
             result.add(build);
         }
 
@@ -461,7 +461,7 @@ public class AccountBookService {
         map.put("pageSize", pageable.getPageSize());
         map.put("type", "RECORD");
         if (Objects.equals(category, "그 외")) {
-            List<String> extraAccountBookCategory = accountBookRepository.findExtraAccountBookCategory(accountBookId, year, month);
+            List<String> extraAccountBookCategory = categoryRepository.findExtraAccountBookCategory(accountBookId, year, month);
             if (extraAccountBookCategory.size() == 0) {
 
                 extraAccountBookCategory.add("기타");
@@ -527,7 +527,7 @@ public class AccountBookService {
         calendar.set(Math.toIntExact(year), Math.toIntExact(month) - 1, 1);
         int actualMaximum = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         while (startDay <= actualMaximum) {
-            Optional<WeeklySumQ> weeklyRecordSum = accountBookRepository.getWeeklyRecordSum(accountBookId, year, month, startDay, startDay + 7);
+            Optional<WeeklySumQ> weeklyRecordSum = recordRepository.getWeeklyRecordSum(accountBookId, year, month, startDay, startDay + 7);
             long endDay;
             if (startDay + 6 <= actualMaximum) {
                 endDay = startDay + 6;

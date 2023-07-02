@@ -202,7 +202,7 @@ public class ScheduleService {
 
         return ScheduleDTO.AccountBookScheduleAnalyze.builder()
                 .schedules(scheduleRepository.findScheduleAnalyzeByAccountBookId(accountBookId, currentMemberId))
-                .sum(accountBookRepository.getMonthlyScheduleValue(accountBookId, currentMemberId).getValue()).build();
+                .sum(scheduleRepository.getMonthlyScheduleValue(accountBookId, currentMemberId).getValue()).build();
     }
 
     /**

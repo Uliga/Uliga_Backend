@@ -3,6 +3,7 @@ package com.uliga.uliga_backend.domain.Record.dao;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.DailyValueQ;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlyCompareQ;
 import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlySumQ;
+import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.WeeklySumQ;
 import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
 import com.uliga.uliga_backend.domain.Record.model.Record;
 import org.springframework.data.domain.Page;
@@ -97,5 +98,27 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
             "AND r.date.year = :year AND r.date.month = :month " +
             "GROUP BY r.date.month ")
     Optional<MonthlyCompareQ> getMonthlyCompare(@Param("accountBookId") Long accountBookId, @Param("year") Long year, @Param("month") Long month);
+
+    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MonthlyCompareQ(" +
+            "r.date.year, " +
+            "r.date.month, " +
+            "SUM(r.value)) " +
+            "FROM Record r " +
+            "WHERE r.accountBook.id = :accountBookId " +
+            "AND -2L <  r.date.year * 12L + r.date.month - :year * 12L - :month " +
+            "AND r.date.year * 12L + r.date.month - :year * 12L - :month <= 0L  " +
+            "GROUP BY r.date.month " +
+            "ORDER BY r.date.year * 12L + r.date.month - :year * 12L - :month DESC LIMIT 2")
+    List<MonthlyCompareQ> getMonthlyCompareInDailyAnalyze(@Param("accountBookId") Long accountBookId, @Param("year") Long year, @Param("month") Long month);
+
+    @Query("SELECT NEW com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.WeeklySumQ(SUM(r.value)) " +
+            "FROM Record r " +
+            "WHERE r.accountBook.id=:accountBookId " +
+            "AND r.date.year = :year " +
+            "AND r.date.month = :month " +
+            "AND :startDay <= r.date.day " +
+            "AND r.date.day < :endDay " +
+            "GROUP BY r.date.month")
+    Optional<WeeklySumQ> getWeeklyRecordSum(@Param("accountBookId") Long accountBookId, @Param("year") Long year, @Param("month") Long month, @Param("startDay") Long startDay, @Param("endDay") Long endDay);
 
 }
