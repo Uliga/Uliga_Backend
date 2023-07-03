@@ -42,45 +42,7 @@ class IncomeControllerTest {
     private final String BASE_URL = "/income";
 
 
-//    @Test
-//    @WithMockCustomUser
-//    @DisplayName("수입 업데이트 성공 테스트")
-//     void updateIncomeTestToSuccess() throws Exception{
-//        // given
-//        Map<String, Object> updates = new HashMap<>();
-//        String value = mapper.writeValueAsString(updates);
-//        IncomeUpdateRequest result = IncomeUpdateRequest.builder().build();
 //
-//        // when
-//        doReturn(result).when(incomeService).updateIncome(any());
-//        // then
-//        mvc.perform(patch(BASE_URL)
-//                        .with(csrf())
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(value))
-//                .andExpect(status().isOk())
-//                .andReturn().getResponse().getContentAsString().equals(mapper.writeValueAsString(result));
-//
-//    }
-//
-//    @Test
-//    @WithMockCustomUser
-//    @DisplayName("멤버 수입 가계부별 조회 성공 테스트")
-//     void getMemberIncomesTestToSuccess() throws Exception{
-//        // given
-//        Page<IncomeInfoQ> result = new PageImpl<>(new ArrayList<>());
-//
-//        // when
-//        doReturn(result).when(incomeService).getMemberIncomesByAccountBook(any(), any(), any(), any(), any());
-//
-//        // then
-//        mvc.perform(get(BASE_URL + "/accountBook/1")
-//                        .with(csrf()))
-//                .andExpect(status().isOk())
-//                .andReturn().getResponse().getContentAsString().equals(mapper.writeValueAsString(result));
-//    }
-
-
 
 
 }

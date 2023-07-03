@@ -29,32 +29,4 @@ class UserDetailServiceTest {
                 .userName("testUser")
                 .build();
     }
-
-//    @Test
-//    @DisplayName("이메일로 UserDetail 조회 성공")
-//     void getUserDetailByEmailToSuccess() throws Exception{
-//        // given
-//        SignUpRequest signUpRequest = createSignUpRequest("email@email.com", "testNickname");
-//
-//        // when
-//        Long aLong = authService.signUp(signUpRequest);
-//
-//        // then
-//        UserDetails userDetails = userDetailService.loadUserByUsername("email@email.com");
-//        assertEquals(Long.parseLong(userDetails.getUsername()), aLong);
-//    }
-//
-//    @Test
-//    @DisplayName("존재하지 않는 이메일로 userDetail 조회 실패")
-//     void getUserDetailByEmailToFail() throws Exception{
-//        // given
-//        SignUpRequest signUpRequest = createSignUpRequest("email@email.com", "testNickname");
-//
-//        // when
-//        Long aLong = authService.signUp(signUpRequest);
-//
-//        // then
-//        assertThrows(UsernameNotFoundException.class, () -> userDetailService.loadUserByUsername("email2@email.com"));
-//    }
-
 }

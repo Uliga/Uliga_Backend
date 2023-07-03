@@ -41,42 +41,4 @@ class RecordControllerTest {
     private final String BASE_URL = "/record";
 
 
-//    @Test
-//    @WithMockCustomUser
-//    @DisplayName("지출 업데이트 성공 테스트")
-//    void updateRecordTestToSuccess() throws Exception {
-//        // given
-//        Map<String, Object> updates = new HashMap<>();
-//        String value = mapper.writeValueAsString(updates);
-//        RecordUpdateRequest result = RecordUpdateRequest.builder().build();
-//
-//
-//        // when
-//        doReturn(result).when(recordService).updateRecord(any());
-//        // then
-//        mvc.perform(patch(BASE_URL)
-//                        .with(csrf())
-//                        .content(value)
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk())
-//                .andReturn().getResponse().getContentAsString().equals(mapper.writeValueAsString(result));
-//    }
-//
-//    @Test
-//    @WithMockCustomUser
-//    @DisplayName("멤버 지출 가계부별 조회 성공 테스트")
-//    void getMemberRecords() throws Exception {
-//        // given
-//        Page<RecordInfoQ> result = new PageImpl<>(new ArrayList<>());
-//
-//        // when
-//        doReturn(result).when(recordService).getMemberRecordsByAccountBook(any(), any(), any(), any(), any());
-//        // then
-//        mvc.perform(get(BASE_URL + "/1")
-//                        .with(csrf()))
-//                .andExpect(status().isOk())
-//                .andReturn().getResponse().getContentAsString().equals(mapper.writeValueAsString(result));
-//    }
-
-
 }
