@@ -4,20 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.AccountBook.application.AccountBookService;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.Category.application.CategoryService;
-import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO;
 import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryCreateResult;
 import com.uliga.uliga_backend.domain.Member.application.AuthService;
 import com.uliga.uliga_backend.domain.Member.application.EmailCertificationService;
-import com.uliga.uliga_backend.domain.Member.dto.MemberDTO;
-import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.CodeConfirmDto;
-import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.ConfirmEmailDto;
-import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.EmailConfirmCodeDto;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SignUpRequest;
-import com.uliga.uliga_backend.domain.Member.exception.CannotLoginException;
 import com.uliga.uliga_backend.domain.Member.model.Member;
-import com.uliga.uliga_backend.domain.Member.model.UserLoginType;
-import com.uliga.uliga_backend.global.common.annotation.WithMockCustomUser;
-import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
-import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -36,13 +26,11 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.LoginRequest;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -101,7 +89,7 @@ class MemberAuthControllerTest {
 
     @Test
     @DisplayName("회원 가입 성공 테스트")
-    public void signupTestToSuccess() throws Exception {
+    public void signUpTestToSuccess() throws Exception {
         // given
         SignUpRequest apiTestUser = createSignUpRequest(EMAIL, NICKNAME);
 
@@ -121,6 +109,7 @@ class MemberAuthControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(mapper.writeValueAsBytes(apiTestUser)))
                 .andDo(print())
+                .andExpect(status().isOk())
                 .andDo(document("auth/signup/success", requestFields(
                         fieldWithPath("email").description("회원가입할 이메일, 회원가입 요청을 보내기 전에 이메일 인증과 중복 검사가 완료되어야합니다."),
                         fieldWithPath("nickName").description("사용할 멤버의 닉네임, 회원가입 요청을 보내기 전에 중복 검사가 완료되어야합니다."),
@@ -129,9 +118,194 @@ class MemberAuthControllerTest {
                         fieldWithPath("applicationPassword").description("애플리케이션 내부에서 사용할 비밀번호로 4자리입니다.")
 
 
-                        ), responseFields(
+                ), responseFields(
                         fieldWithPath("result").description("회원가입 결과, 회원가입 성공시 CREATED를 return 합니다")
                 )));
     }
 
+    @Test
+    @DisplayName("8 자리 미만 비밀번호로 회원가입 실패")
+    public void signUpTestToFailByShortPassword() throws Exception {
+        // given
+        SignUpRequest signUpRequest = SignUpRequest.builder()
+                .password("1234")
+                .nickName(NICKNAME)
+                .userName(USERNAME)
+                .applicationPassword(APPLICATION_PASSWORD)
+                .email(EMAIL)
+                .build();
+
+
+        // then
+
+        mvc.perform(post(BASE_URL + "/signup")
+                        .content(mapper.writeValueAsBytes(signUpRequest))
+                        .contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andDo(document("auth/signup/fail/short_password", requestFields(
+                        fieldWithPath("email").description("회원가입할 이메일, 회원가입 요청을 보내기 전에 이메일 인증과 중복 검사가 완료되어야합니다."),
+                        fieldWithPath("nickName").description("사용할 멤버의 닉네임, 회원가입 요청을 보내기 전에 중복 검사가 완료되어야합니다."),
+                        fieldWithPath("userName").description("회원가입하는 사용자의 본명입니다."),
+                        fieldWithPath("password").description("로그인시 사용할 비밀번호로 8자리 이상이어야합니다, 8자리 미만으로 에러가 발생합니다."),
+                        fieldWithPath("applicationPassword").description("애플리케이션 내부에서 사용할 비밀번호로 4자리입니다.")
+                ), responseFields(
+                        fieldWithPath("errorCode").description("발생한 에러 코드입니다. 이경우에는 409로 리턴됩니다."),
+                        fieldWithPath("message").description("발생한 에러에 대한 설명입니다.")
+                )));
+    }
+
+    @Test
+    @DisplayName("잘못된 이메일 형식으로 회원가입 실패")
+    public void signUpTestToFailByWrongEmail() throws Exception{
+        // given
+        SignUpRequest signUpRequest = SignUpRequest.builder()
+                .password(PASSWORD)
+                .nickName(NICKNAME)
+                .userName(USERNAME)
+                .applicationPassword(APPLICATION_PASSWORD)
+                .email("email.com")
+                .build();
+        // then
+
+        mvc.perform(post(BASE_URL + "/signup")
+                        .content(mapper.writeValueAsBytes(signUpRequest))
+                        .contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andDo(document("auth/signup/fail/wrong_email", requestFields(
+                        fieldWithPath("email").description("이메일 형식을 지키지 않은 이메일입니다."),
+                        fieldWithPath("nickName").description("사용할 멤버의 닉네임, 회원가입 요청을 보내기 전에 중복 검사가 완료되어야합니다."),
+                        fieldWithPath("userName").description("회원가입하는 사용자의 본명입니다."),
+                        fieldWithPath("password").description("로그인시 사용할 비밀번호로 8자리 이상이어야합니다."),
+                        fieldWithPath("applicationPassword").description("애플리케이션 내부에서 사용할 비밀번호로 4자리입니다.")
+                ), responseFields(
+                        fieldWithPath("errorCode").description("발생한 에러 코드입니다. 이경우에는 409로 리턴됩니다."),
+                        fieldWithPath("message").description("발생한 에러에 대한 설명입니다.")
+                )));
+    }
+
+    @Test
+    @DisplayName("null password로 회원가입 실패")
+    public void signUpTestToFailByNullPassword() throws Exception{
+        // given
+        SignUpRequest signUpRequest = SignUpRequest.builder()
+                .nickName(NICKNAME)
+                .userName(USERNAME)
+                .applicationPassword(APPLICATION_PASSWORD)
+                .email(EMAIL)
+                .build();
+
+
+
+        // then
+        mvc.perform(post(BASE_URL + "/signup")
+                        .content(mapper.writeValueAsBytes(signUpRequest))
+                        .contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andDo(document("auth/signup/fail/null_password", requestFields(
+                        fieldWithPath("email").description("이메일 형식을 지키지 않은 이메일입니다."),
+                        fieldWithPath("nickName").description("사용할 멤버의 닉네임, 회원가입 요청을 보내기 전에 중복 검사가 완료되어야합니다."),
+                        fieldWithPath("userName").description("회원가입하는 사용자의 본명입니다."),
+                        fieldWithPath("password").description("비밀번호로 null로 주어졌습니다."),
+                        fieldWithPath("applicationPassword").description("애플리케이션 내부에서 사용할 비밀번호로 4자리입니다.")
+                ), responseFields(
+                        fieldWithPath("errorCode").description("발생한 에러 코드입니다. 이경우에는 409로 리턴됩니다."),
+                        fieldWithPath("message").description("발생한 에러에 대한 설명입니다.")
+                )));
+    }
+
+    @Test
+    @DisplayName("null nickname으로 회원가입 실패")
+    public void signUpTestToFailByNullNickname() throws Exception{
+        // given
+        SignUpRequest signUpRequest = SignUpRequest.builder()
+                .password(PASSWORD)
+                .userName(USERNAME)
+                .applicationPassword(APPLICATION_PASSWORD)
+                .email(EMAIL)
+                .build();
+
+
+
+        // then
+        mvc.perform(post(BASE_URL + "/signup")
+                        .content(mapper.writeValueAsBytes(signUpRequest))
+                        .contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andDo(document("auth/signup/fail/null_nickname", requestFields(
+                        fieldWithPath("email").description("이메일 형식을 지키지 않은 이메일입니다."),
+                        fieldWithPath("nickName").description("null로 주어진 닉네임입니다."),
+                        fieldWithPath("userName").description("회원가입하는 사용자의 본명입니다."),
+                        fieldWithPath("password").description("비밀번호는 8자리 이상이어야합니다."),
+                        fieldWithPath("applicationPassword").description("애플리케이션 내부에서 사용할 비밀번호로 4자리입니다.")
+                ), responseFields(
+                        fieldWithPath("errorCode").description("발생한 에러 코드입니다. 이경우에는 409로 리턴됩니다."),
+                        fieldWithPath("message").description("발생한 에러에 대한 설명입니다.")
+                )));
+    }
+
+    @Test
+    @DisplayName("null username으로 회원가입 실패")
+    public void signUpTestToFailByNullUserName() throws Exception{
+        // given
+        SignUpRequest signUpRequest = SignUpRequest.builder()
+                .password(PASSWORD)
+                .nickName(NICKNAME)
+                .applicationPassword(APPLICATION_PASSWORD)
+                .email(EMAIL)
+                .build();
+
+
+
+        // then
+        mvc.perform(post(BASE_URL + "/signup")
+                        .content(mapper.writeValueAsBytes(signUpRequest))
+                        .contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andDo(document("auth/signup/fail/null_username", requestFields(
+                        fieldWithPath("email").description("이메일 형식을 지키지 않은 이메일입니다."),
+                        fieldWithPath("nickName").description("중복 검사한 닉네임이 주어져야합니다."),
+                        fieldWithPath("userName").description("null로 주어진 사용자 본명입니다."),
+                        fieldWithPath("password").description("비밀번호는 8자리 이상이어야합니다."),
+                        fieldWithPath("applicationPassword").description("애플리케이션 내부에서 사용할 비밀번호로 4자리입니다.")
+                ), responseFields(
+                        fieldWithPath("errorCode").description("발생한 에러 코드입니다. 이경우에는 409로 리턴됩니다."),
+                        fieldWithPath("message").description("발생한 에러에 대한 설명입니다.")
+                )));
+    }
+
+    @Test
+    @DisplayName("null applicationPassword로 회원가입 실패")
+    public void signUpTestToFailByNullApplicationPassword() throws Exception{
+        // given
+        SignUpRequest signUpRequest = SignUpRequest.builder()
+                .password(PASSWORD)
+                .nickName(NICKNAME)
+                .userName(USERNAME)
+                .email(EMAIL)
+                .build();
+
+
+
+        // then
+        mvc.perform(post(BASE_URL + "/signup")
+                        .content(mapper.writeValueAsBytes(signUpRequest))
+                        .contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andDo(document("auth/signup/fail/null_applicationPassword", requestFields(
+                        fieldWithPath("email").description("이메일 형식을 지키지 않은 이메일입니다."),
+                        fieldWithPath("nickName").description("중복 검사한 닉네임이 주어져야합니다."),
+                        fieldWithPath("userName").description("사용자 본명입니다."),
+                        fieldWithPath("password").description("비밀번호는 8자리 이상이어야합니다."),
+                        fieldWithPath("applicationPassword").description("null로 주어진 사용자 본명입니다.")
+                ), responseFields(
+                        fieldWithPath("errorCode").description("발생한 에러 코드입니다. 이경우에는 409로 리턴됩니다."),
+                        fieldWithPath("message").description("발생한 에러에 대한 설명입니다.")
+                )));
+    }
 }

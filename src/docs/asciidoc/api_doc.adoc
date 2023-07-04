@@ -13,6 +13,7 @@ endif::[]
 
 [[overview_http_verbs]]
 == HTTP Methods
+
 |===
 | Verb | Usage
 
@@ -64,20 +65,135 @@ The response body will include an error providing further information
 This code is used in situations where the user might be able to resolve the conflict and resubmit the request.
 |===
 
-
 == Auth API
 
 === 1. Signup
 
 `*_1. Sign Up Success_*`
 
-**요청 필드 **
+**요청 필드**
 
 include::{snippets}/auth/signup/success/request-fields.adoc[]
 
+**응답 필드**
+
+include::{snippets}/auth/signup/success/response-fields.adoc[]
+
 **Example request**
+
 include::{snippets}/auth/signup/success/http-request.adoc[]
 
 **Example response**
+
 include::{snippets}/auth/signup/success/http-response.adoc[]
+
+`*_2. Sign Up Fail - Short password_*`
+
+**요청 필드**
+
+include::{snippets}/auth/signup/fail/short_password/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/auth/signup/fail/short_password/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/auth/signup/fail/short_password/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/auth/signup/fail/short_password/http-response.adoc[]
+
+`*_3. Sign Up Fail - Wrong email_*`
+
+
+**요청 필드**
+
+include::{snippets}/auth/signup/fail/wrong_email/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/auth/signup/fail/wrong_email/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/auth/signup/fail/wrong_email/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/auth/signup/fail/wrong_email/http-response.adoc[]
+
+`*_4. Sign Up Fail - Null password_*`
+
+**요청 필드**
+
+include::{snippets}/auth/signup/fail/null_password/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/auth/signup/fail/null_password/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/auth/signup/fail/null_password/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/auth/signup/fail/null_password/http-response.adoc[]
+
+
+`*_5. Sign Up Fail - Null nickname_*`
+
+**요청 필드**
+
+include::{snippets}/auth/signup/fail/null_nickname/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/auth/signup/fail/null_nickname/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/auth/signup/fail/null_nickname/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/auth/signup/fail/null_nickname/http-response.adoc[]
+
+`*_6. Sign Up Fail - Null username_*`
+
+**요청 필드**
+
+include::{snippets}/auth/signup/fail/null_username/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/auth/signup/fail/null_username/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/auth/signup/fail/null_username/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/auth/signup/fail/null_username/httpie-request.adoc[]
+
+`*_7. Sign Up Fail - Null applicationPassword_*`
+
+**요청 필드**
+
+include::{snippets}/auth/signup/fail/null_applicationPassword/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/auth/signup/fail/null_applicationPassword/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/auth/signup/fail/null_applicationPassword/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/auth/signup/fail/null_applicationPassword/http-response.adoc[]
 
