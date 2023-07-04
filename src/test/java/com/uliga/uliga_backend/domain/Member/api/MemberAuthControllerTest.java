@@ -12,6 +12,7 @@ import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.EmailConfirmCodeDto;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SignUpRequest;
 import com.uliga.uliga_backend.domain.Member.exception.EmailCertificationExpireException;
 import com.uliga.uliga_backend.domain.Member.model.Member;
+import com.uliga.uliga_backend.domain.Member.model.UserLoginType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -182,6 +184,36 @@ class MemberAuthControllerTest {
                         fieldWithPath("message").description("발생한 에러에 대한 설명입니다.")
                 )));
     }
+
+
+    @Test
+    @DisplayName("이메일 중복 확인 성공 테스트")
+    public void emailDuplicateCheckTestToSuccess() throws Exception{
+        // when
+        when(authService.emailExists(any())).thenReturn(MemberDTO.ExistsCheckDto.builder().exists(false).loginType(UserLoginType.EMAIL).build());
+        // then
+        mvc.perform(get(BASE_URL + "/mail/exists/testuser@email.com"))
+                .andExpect(status().isOk())
+                .andDo(document("auth/email_check/success", responseFields(
+                        fieldWithPath("exists").description("이메일 존재 여부, false면 존재하지 않는 것"),
+                        fieldWithPath("loginType").description("유저가 회원가입한 경로, 이메일, 구글, 카카오 타입이 존재")
+                )));
+    }
+
+    @Test
+    @DisplayName("이메일 중복 확인 실패 테스트")
+    public void emailDuplicateCheckTestToFail() throws Exception{
+        // when
+        when(authService.emailExists(any())).thenReturn(MemberDTO.ExistsCheckDto.builder().exists(true).loginType(UserLoginType.EMAIL).build());
+        // then
+        mvc.perform(get(BASE_URL + "/mail/exists/testuser@email.com"))
+                .andExpect(status().isOk())
+                .andDo(document("auth/email_check/fail", responseFields(
+                        fieldWithPath("exists").description("이메일 존재 여부, false면 존재하지 않는 것"),
+                        fieldWithPath("loginType").description("유저가 회원가입한 경로, 이메일, 구글, 카카오 타입이 존재")
+                )));
+    }
+
 
     @Test
     @DisplayName("회원 가입 성공 테스트")

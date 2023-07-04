@@ -67,7 +67,7 @@ This code is used in situations where the user might be able to resolve the conf
 
 == Auth API
 
-=== 0. Email Certification
+=== Email Certification
 
 ==== Success
 
@@ -148,9 +148,41 @@ include::{snippets}/auth/email_certificate/fail/null_code/http-response.adoc[]
 
 '''
 
-=== 1. Signup
+=== Duplicate Email Check
 
-==== Sign Up Success
+==== Success
+
+**응답 필드**
+
+include::{snippets}/auth/email_check/success/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/auth/email_check/success/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/auth/email_check/success/http-response.adoc[]
+
+==== Fail
+
+**응답 필드**
+
+include::{snippets}/auth/email_check/fail/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/auth/email_check/fail/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/auth/email_check/fail/http-response.adoc[]
+
+'''
+
+=== Signup
+
+==== Success
 
 **요청 필드**
 
@@ -171,7 +203,7 @@ include::{snippets}/auth/signup/success/http-response.adoc[]
 '''
 
 
-==== Sign Up Fail
+==== Fail
 
 `*_1. Short password_*`
 
