@@ -17,63 +17,63 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-    - uses: actions/checkout@v3
-    - name: make application.yml
-      run: |
-        # create application.yml
-        cd ./src/main/resources
-        
-        # application.yml 파일 생성
-        touch ./application.yml
-      
-        # GitHub-Actions 에서 설정한 값을 application.yml 파일에 쓰기
-        echo "${{ secrets.APPLICATION }}" >> ./application.yml
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - uses: actions/checkout@v3
+      - name: make application.yml
+        run: |
+          # create application.yml
+          cd ./src/main/resources
+          
+          # application.yml 파일 생성
+          touch ./application.yml
+          
+          # GitHub-Actions 에서 설정한 값을 application.yml 파일에 쓰기
+          echo "${{ secrets.APPLICATION }}" >> ./application.yml
 
-      shell: bash
+        shell: bash
 
-    - name: Build with Gradle
-      run: |
-        ./gradlew build
+      - name: Build with Gradle
+        run: |
+          ./gradlew build
 
-    - name: Save test result
-      uses: EnricoMi/publish-unit-test-result-action@v1
-      if: always()
-      with:
-        files: '**/build/test-results/test/TEST-*.xml'
-        token: ${{ secrets.TOKEN_GITHUB }}
+      - name: Save test result
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: '**/build/test-results/test/TEST-*.xml'
+          token: ${{ secrets.TOKEN_GITHUB }}
 
-    - name: Saves check comment when test fails
-      uses: mikepenz/action-junit-report@v3
-      if: always()
-      with:
-        report_paths: '**/build/test-results/test/TEST-*.xml'
-        token: ${{ github.token }}
+      - name: Saves check comment when test fails
+        uses: mikepenz/action-junit-report@v3
+        if: always()
+        with:
+          report_paths: '**/build/test-results/test/TEST-*.xml'
+          token: ${{ github.token }}
 
-    - name: web docker build and push
-      run: |
-        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-        docker build -t ${{ secrets.DOCKER_REPO }}/uliga_backend .
-        docker push ${{ secrets.DOCKER_REPO }}/uliga_backend
+      - name: web docker build and push
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t ${{ secrets.DOCKER_REPO }}/uliga_backend .
+          docker push ${{ secrets.DOCKER_REPO }}/uliga_backend
   deploy_was1:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - name: was1 무중단 배포
-      uses: appleboy/ssh-action@v0.1.7
-      with:
-        host: ${{ secrets.WAS1_HOST }}
-        username: ubuntu
-        key: ${{ secrets.WAS1_PEM_KEY }}
-        port: 22
-        script: |
-          sudo docker pull ${{ secrets.DOCKER_REPO }}/uliga_backend 
-          bash deploy.sh
+      - name: was1 무중단 배포
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.WAS1_HOST }}
+          username: ubuntu
+          key: ${{ secrets.WAS1_PEM_KEY }}
+          port: 22
+          script: |
+            sudo docker pull ${{ secrets.DOCKER_REPO }}/uliga_backend 
+            bash deploy.sh
   deploy_was2:
     needs: deploy_was1
     runs-on: ubuntu-latest

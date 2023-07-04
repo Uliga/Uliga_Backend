@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.0.2'
     id 'io.spring.dependency-management' version '1.1.0'
+    id "org.asciidoctor.jvm.convert" version "3.3.2"
 
 }
 
@@ -10,10 +11,17 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 configurations {
+    asciidoctorExtensions
+
     compileOnly {
         extendsFrom annotationProcessor
     }
 }
+
+ext {
+    set('snippetsDir', file("build/generated-snippets"))
+}
+
 
 repositories {
     mavenCentral()
@@ -45,6 +53,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     // Swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.3'
+    // RestDocs
+    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
     // actuator`
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     // cookie
@@ -84,7 +96,34 @@ dependencies {
     testImplementation 'org.hamcrest:hamcrest-library'
 }
 
-tasks.named('test') {
+test {
+    outputs.dir snippetsDir
     useJUnitPlatform()
+}
+
+asciidoctor.doFirst {
+    delete file('src/main/resources/templates/api_doc.html')
+}
+
+asciidoctor {
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor
+    from file("build/docs/asciidoc")
+    into file("src/main/resources/templates")
+}
+
+build {
+    dependsOn copyDocument
+}
+
+bootJar {
+    dependsOn asciidoctor
+    from ("build/docs/asciidoc") {
+        into 'src/main/resources/templates'
+    }
 }
 

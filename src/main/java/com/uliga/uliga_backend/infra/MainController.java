@@ -9,4 +9,10 @@ public class MainController {
     public String main() {
         return "index";
     }
+
+    @GetMapping("/rest-docs")
+    public String restDocs() {
+        return "api_doc";
+    }
+
 }
