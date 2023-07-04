@@ -12,10 +12,11 @@
 <br/>
 
 ## 배포 링크
-
-> **우리가** : https://www.ouruliga.com/
+> **애플리케이션 메인 페이지** : https://www.ouruliga.com/
 > <br/>
-> **API 문서 배포 링크** : [https://uliga.site/swagger-ui/index.html](https://uliga.site/swagger-ui/index.html)
+> **Swagger API 문서 배포 링크** : [https://uliga.site/swagger-ui/index.html](https://uliga.site/swagger-ui/index.html)
+> <br/>
+> **Rest Docs API 문서 배포 링크** : [https://uliga.site/rest-docs](https://uliga.site/rest-docs)
 
 <br/>
 
