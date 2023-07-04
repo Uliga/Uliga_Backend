@@ -7,7 +7,10 @@ import com.uliga.uliga_backend.domain.Category.application.CategoryService;
 import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryCreateResult;
 import com.uliga.uliga_backend.domain.Member.application.AuthService;
 import com.uliga.uliga_backend.domain.Member.application.EmailCertificationService;
+import com.uliga.uliga_backend.domain.Member.dto.MemberDTO;
+import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.EmailConfirmCodeDto;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SignUpRequest;
+import com.uliga.uliga_backend.domain.Member.exception.EmailCertificationExpireException;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -85,6 +88,99 @@ class MemberAuthControllerTest {
         return LoginRequest.builder()
                 .email(email)
                 .password("12345678").build();
+    }
+
+    @Test
+    @DisplayName("이메일 인증 성공")
+    public void emailCertificationTestToSuccess() throws Exception{
+        // given
+        EmailConfirmCodeDto confirmCodeDto = EmailConfirmCodeDto.builder().email("email_certificate@email.com").code("123456").build();
+
+        // when
+        when(emailCertificationService.confirmCode(any())).thenReturn(MemberDTO.CodeConfirmDto.builder().matches(true).build());
+        // then
+        mvc.perform(post(BASE_URL + "/mail/code")
+                        .contentType(APPLICATION_JSON)
+                        .content(mapper.writeValueAsBytes(confirmCodeDto)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("auth/email_certificate/success", requestFields(
+                        fieldWithPath("email").description("인증을 요구한 이메일"),
+                        fieldWithPath("code").description("이메일로 전송된 인증 코드")
+                ), responseFields(
+                        fieldWithPath("matches").description("코드 일치 여부")
+                )));
+    }
+
+
+    @Test
+    @DisplayName("wrong code로 인한 이메일 인증 실패")
+    public void emailCertificationTestToFailByWrongCode() throws Exception{
+        // given
+        EmailConfirmCodeDto confirmCodeDto = EmailConfirmCodeDto.builder().email("email_certificate@email.com").code("123456").build();
+
+        // when
+        when(emailCertificationService.confirmCode(any())).thenReturn(MemberDTO.CodeConfirmDto.builder().matches(false).build());
+        // then
+        mvc.perform(post(BASE_URL + "/mail/code")
+                        .contentType(APPLICATION_JSON)
+                        .content(mapper.writeValueAsBytes(confirmCodeDto)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("auth/email_certificate/fail/wrong_code", requestFields(
+                        fieldWithPath("email").description("인증을 요구한 이메일"),
+                        fieldWithPath("code").description("틀린 인증 코드")
+                ), responseFields(
+                        fieldWithPath("matches").description("코드 일치 여부")
+                )));
+    }
+
+    @Test
+    @DisplayName("expired code로 인한 이메일 인증 실패")
+    public void emailCertificationTestToFailByExpiredCode() throws Exception{
+        // given
+        EmailConfirmCodeDto confirmCodeDto = EmailConfirmCodeDto.builder().email("email_certificate@email.com").code("123456").build();
+
+        // when
+        when(emailCertificationService.confirmCode(any())).thenThrow(EmailCertificationExpireException.class);
+
+        // then
+        mvc.perform(post(BASE_URL + "/mail/code")
+                        .contentType(APPLICATION_JSON)
+                        .content(mapper.writeValueAsBytes(confirmCodeDto)))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andDo(document("auth/email_certificate/fail/expired_code", requestFields(
+                        fieldWithPath("email").description("인증을 요구한 이메일"),
+                        fieldWithPath("code").description("만료된 코드")
+                ), responseFields(
+                        fieldWithPath("errorCode").description("발생한 에러 코드입니다. 이경우에는 409로 리턴됩니다."),
+                        fieldWithPath("message").description("발생한 에러에 대한 설명입니다.")
+                )));
+    }
+
+    @Test
+    @DisplayName("null code로 인한 이메일 인증 실패")
+    public void emailCertificationTestToFailByNullCode() throws Exception{
+        // given
+        EmailConfirmCodeDto confirmCodeDto = EmailConfirmCodeDto.builder().email("email_certificate@email.com").code("123456").build();
+
+        // when
+        when(emailCertificationService.confirmCode(any())).thenThrow(EmailCertificationExpireException.class);
+
+        // then
+        mvc.perform(post(BASE_URL + "/mail/code")
+                        .contentType(APPLICATION_JSON)
+                        .content(mapper.writeValueAsBytes(confirmCodeDto)))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andDo(document("auth/email_certificate/fail/null_code", requestFields(
+                        fieldWithPath("email").description("인증을 요구한 이메일"),
+                        fieldWithPath("code").description("만료된 코드")
+                ), responseFields(
+                        fieldWithPath("errorCode").description("발생한 에러 코드입니다. 이경우에는 409로 리턴됩니다."),
+                        fieldWithPath("message").description("발생한 에러에 대한 설명입니다.")
+                )));
     }
 
     @Test

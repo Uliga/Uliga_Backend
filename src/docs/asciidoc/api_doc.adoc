@@ -8,7 +8,7 @@ endif::[]
 :operation-curl-request-title: Example request
 :operation-http-response-title: Example response
 :toc: left
-:toclevels: 2
+:toclevels: 4
 :sectlinks:
 
 [[overview_http_verbs]]
@@ -67,9 +67,90 @@ This code is used in situations where the user might be able to resolve the conf
 
 == Auth API
 
+=== 0. Email Certification
+
+==== Success
+
+**요청 필드**
+
+include::{snippets}/auth/email_certificate/success/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/auth/email_certificate/success/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/auth/email_certificate/success/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/auth/email_certificate/success/http-response.adoc[]
+
+
+==== Fail
+
+`*_Expired code_*`
+
+**요청 필드**
+
+include::{snippets}/auth/email_certificate/fail/expired_code/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/auth/email_certificate/fail/expired_code/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/auth/email_certificate/fail/expired_code/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/auth/email_certificate/fail/expired_code/http-response.adoc[]
+
+`*_Wrong code_*`
+
+**요청 필드**
+
+include::{snippets}/auth/email_certificate/fail/wrong_code/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/auth/email_certificate/fail/wrong_code/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/auth/email_certificate/fail/wrong_code/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/auth/email_certificate/fail/wrong_code/http-response.adoc[]
+
+`*_Null code_*`
+
+**요청 필드**
+
+include::{snippets}/auth/email_certificate/fail/null_code/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/auth/email_certificate/fail/null_code/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/auth/email_certificate/fail/null_code/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/auth/email_certificate/fail/null_code/http-response.adoc[]
+
+
+
+'''
+
 === 1. Signup
 
-`*_1. Sign Up Success_*`
+==== Sign Up Success
 
 **요청 필드**
 
@@ -87,7 +168,12 @@ include::{snippets}/auth/signup/success/http-request.adoc[]
 
 include::{snippets}/auth/signup/success/http-response.adoc[]
 
-`*_2. Sign Up Fail - Short password_*`
+'''
+
+
+==== Sign Up Fail
+
+`*_1. Short password_*`
 
 **요청 필드**
 
@@ -105,7 +191,7 @@ include::{snippets}/auth/signup/fail/short_password/http-request.adoc[]
 
 include::{snippets}/auth/signup/fail/short_password/http-response.adoc[]
 
-`*_3. Sign Up Fail - Wrong email_*`
+`*_2. Wrong email_*`
 
 
 **요청 필드**
@@ -124,7 +210,7 @@ include::{snippets}/auth/signup/fail/wrong_email/http-request.adoc[]
 
 include::{snippets}/auth/signup/fail/wrong_email/http-response.adoc[]
 
-`*_4. Sign Up Fail - Null password_*`
+`*_3. Null password_*`
 
 **요청 필드**
 
@@ -143,7 +229,7 @@ include::{snippets}/auth/signup/fail/null_password/http-request.adoc[]
 include::{snippets}/auth/signup/fail/null_password/http-response.adoc[]
 
 
-`*_5. Sign Up Fail - Null nickname_*`
+`*_4. Null nickname_*`
 
 **요청 필드**
 
@@ -161,7 +247,7 @@ include::{snippets}/auth/signup/fail/null_nickname/http-request.adoc[]
 
 include::{snippets}/auth/signup/fail/null_nickname/http-response.adoc[]
 
-`*_6. Sign Up Fail - Null username_*`
+`*_5.  Null username_*`
 
 **요청 필드**
 
@@ -197,3 +283,4 @@ include::{snippets}/auth/signup/fail/null_applicationPassword/http-request.adoc[
 
 include::{snippets}/auth/signup/fail/null_applicationPassword/http-response.adoc[]
 
+'''
