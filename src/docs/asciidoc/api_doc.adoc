@@ -65,13 +65,13 @@ The response body will include an error providing further information
 This code is used in situations where the user might be able to resolve the conflict and resubmit the request.
 |===
 
-'''
-
 == Auth API
 
 === Email Certification
 
-==== Success
+
+==== `*_Success_*`
+
 
 **요청 필드**
 
@@ -89,8 +89,9 @@ include::{snippets}/auth/email_certificate/success/http-request.adoc[]
 
 include::{snippets}/auth/email_certificate/success/http-response.adoc[]
 
+'''
 
-==== Fail
+==== `*_Fail_*`
 
 `*_Expired code_*`
 
@@ -110,6 +111,8 @@ include::{snippets}/auth/email_certificate/fail/expired_code/http-request.adoc[]
 
 include::{snippets}/auth/email_certificate/fail/expired_code/http-response.adoc[]
 
+'''
+
 `*_Wrong code_*`
 
 **요청 필드**
@@ -127,6 +130,8 @@ include::{snippets}/auth/email_certificate/fail/wrong_code/http-request.adoc[]
 **Example response**
 
 include::{snippets}/auth/email_certificate/fail/wrong_code/http-response.adoc[]
+
+'''
 
 `*_Null code_*`
 
@@ -150,7 +155,10 @@ include::{snippets}/auth/email_certificate/fail/null_code/http-response.adoc[]
 
 === Duplicate Email Check
 
-==== Success
+
+==== `*_Success_*`
+
+
 
 **응답 필드**
 
@@ -164,7 +172,10 @@ include::{snippets}/auth/email_check/success/http-request.adoc[]
 
 include::{snippets}/auth/email_check/success/http-response.adoc[]
 
-==== Fail
+'''
+
+==== `*_Fail_*`
+
 
 **응답 필드**
 
@@ -182,7 +193,7 @@ include::{snippets}/auth/email_check/fail/http-response.adoc[]
 
 === Duplicate Nickname Check
 
-==== Success
+==== `*_Success_*`
 
 **응답 필드**
 
@@ -196,7 +207,7 @@ include::{snippets}/auth/nickname_check/success/http-request.adoc[]
 
 include::{snippets}/auth/nickname_check/success/http-response.adoc[]
 
-==== Fail
+==== `*_Fail_*`
 
 **응답 필드**
 
@@ -214,7 +225,7 @@ include::{snippets}/auth/nickname_check/fail/http-response.adoc[]
 
 === Signup
 
-==== Success
+==== `*_Success_*`
 
 **요청 필드**
 
@@ -234,8 +245,7 @@ include::{snippets}/auth/signup/success/http-response.adoc[]
 
 '''
 
-
-==== Fail
+==== `*_Fail_*`
 
 `*_1. Short password_*`
 
@@ -255,8 +265,9 @@ include::{snippets}/auth/signup/fail/short_password/http-request.adoc[]
 
 include::{snippets}/auth/signup/fail/short_password/http-response.adoc[]
 
-`*_2. Wrong email_*`
+'''
 
+`*_2. Wrong email_*`
 
 **요청 필드**
 
@@ -273,6 +284,8 @@ include::{snippets}/auth/signup/fail/wrong_email/http-request.adoc[]
 **Example response**
 
 include::{snippets}/auth/signup/fail/wrong_email/http-response.adoc[]
+
+'''
 
 `*_3. Null password_*`
 
@@ -292,6 +305,7 @@ include::{snippets}/auth/signup/fail/null_password/http-request.adoc[]
 
 include::{snippets}/auth/signup/fail/null_password/http-response.adoc[]
 
+'''
 
 `*_4. Null nickname_*`
 
@@ -311,6 +325,8 @@ include::{snippets}/auth/signup/fail/null_nickname/http-request.adoc[]
 
 include::{snippets}/auth/signup/fail/null_nickname/http-response.adoc[]
 
+'''
+
 `*_5.  Null username_*`
 
 **요청 필드**
@@ -328,8 +344,9 @@ include::{snippets}/auth/signup/fail/null_username/http-request.adoc[]
 **Example response**
 
 include::{snippets}/auth/signup/fail/null_username/httpie-request.adoc[]
+'''
 
-`*_7. Sign Up Fail - Null applicationPassword_*`
+`*_6. Sign Up Fail - Null applicationPassword_*`
 
 **요청 필드**
 
@@ -351,7 +368,7 @@ include::{snippets}/auth/signup/fail/null_applicationPassword/http-response.adoc
 
 === Login
 
-==== Success
+==== `*_Success_*`
 
 **요청 필드**
 
@@ -371,9 +388,29 @@ include::{snippets}/auth/login/success/http-response.adoc[]
 
 '''
 
+==== `*_Fail_*`
+
+**요청 필드**
+
+include::{snippets}/auth/login/fail/wrong_email_password/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/auth/login/fail/wrong_email_password/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/auth/login/fail/wrong_email_password/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/auth/login/fail/wrong_email_password/http-response.adoc[]
+
+'''
+
 === Oauth Signup
 
-==== Success
+==== `*_Success_*`
 
 **요청 필드**
 
@@ -390,6 +427,48 @@ include::{snippets}/auth/social_login/success/http-request.adoc[]
 **Example response**
 
 include::{snippets}/auth/social_login/success/http-response.adoc[]
+
+'''
+
+=== Token Reissue
+
+==== `*_Success_*`
+
+**요청 필드**
+
+include::{snippets}/auth/token_reissue/success/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/auth/token_reissue/success/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/auth/token_reissue/success/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/auth/token_reissue/success/http-response.adoc[]
+
+'''
+
+==== `*_Fail_*`
+
+**요청 필드**
+
+include::{snippets}/auth/token_reissue/fail/expired_refresh/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/auth/token_reissue/fail/expired_refresh/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/auth/token_reissue/fail/expired_refresh/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/auth/token_reissue/fail/expired_refresh/http-response.adoc[]
 
 '''
 

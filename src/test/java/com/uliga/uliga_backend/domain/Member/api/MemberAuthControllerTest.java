@@ -8,15 +8,16 @@ import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryCreateRes
 import com.uliga.uliga_backend.domain.Member.application.AuthService;
 import com.uliga.uliga_backend.domain.Member.application.EmailCertificationService;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO;
-import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.EmailConfirmCodeDto;
-import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.LoginResult;
-import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SignUpRequest;
-import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SocialLoginRequest;
+import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
 import com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ;
+import com.uliga.uliga_backend.domain.Member.exception.CannotLoginException;
 import com.uliga.uliga_backend.domain.Member.exception.EmailCertificationExpireException;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Member.model.UserLoginType;
 import com.uliga.uliga_backend.domain.Token.dto.TokenDTO;
+import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.ReissueRequest;
+import com.uliga.uliga_backend.domain.Token.exception.ExpireRefreshTokenException;
+import com.uliga.uliga_backend.global.error.response.ErrorResponse;
 import com.uliga.uliga_backend.global.jwt.UserDetailService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,6 +27,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -516,6 +519,29 @@ class MemberAuthControllerTest {
     }
 
     @Test
+    @DisplayName("로그인 실패 테스트")
+    public void loginTestToFail() throws Exception{
+        // given
+        LoginRequest loginRequest = createLoginRequest(EMAIL);
+
+        // when
+        when(authService.login(any(), any(), any())).thenThrow(CannotLoginException.class);
+        // then
+        mvc.perform(post(BASE_URL + "/login")
+                        .content(mapper.writeValueAsBytes(loginRequest))
+                        .contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andDo(document("auth/login/fail/wrong_email_password", requestFields(
+                        fieldWithPath("email").description("로그인할 멤버 이메일"),
+                        fieldWithPath("password").description("로그인할 멤버 비밀번호")
+                ), responseFields(
+                        fieldWithPath("errorCode").description("발생한 에러 코드입니다. 이경우에는 409로 리턴됩니다."),
+                        fieldWithPath("message").description("발생한 에러에 대한 설명입니다.")
+                )));
+    }
+
+    @Test
     @DisplayName("oauth 회원가입 성공 테스트")
     public void oauthSignUpTestToSuccess() throws Exception{
         // given
@@ -564,4 +590,51 @@ class MemberAuthControllerTest {
                         fieldWithPath("tokenInfo.accessTokenExpiresIn").description("토큰 만료 시간")
                 )));
     }
+
+    @Test
+    @DisplayName("토큰 재발급 성공 테스트")
+    public void tokenReissueSuccessTest() throws Exception{
+        // given
+        ReissueRequest accessToken = ReissueRequest.builder().token("ACCESS_TOKEN").build();
+
+        // when
+        when(authService.reissue(any())).thenReturn(TokenDTO.TokenIssueDTO.builder().accessToken("ACCESS_TOKEN").grantType("Bearer").accessTokenExpiresIn(1000000L).build());
+        // then
+        mvc.perform(post(BASE_URL + "/reissue")
+                        .contentType(APPLICATION_JSON)
+                        .content(mapper.writeValueAsBytes(accessToken)))
+                .andExpect(status().isOk())
+                .andDo(document("auth/token_reissue/success", requestFields(
+                        fieldWithPath("token").description("발급 받았었던 엑세스 토큰")
+                ), responseFields(
+                        fieldWithPath("accessToken").description("사용자에게 발급되는 엑세스 토큰"),
+                        fieldWithPath("grantType").description("토큰 종류"),
+                        fieldWithPath("accessTokenExpiresIn").description("토큰 만료 시간")
+                )));
+    }
+
+    @Test
+    @DisplayName("리프레쉬 만료로 토큰 재발급 실패")
+    public void tokenReissueFailTest() throws Exception{
+        // given
+        ReissueRequest accessToken = ReissueRequest.builder().token("ACCESS_TOKEN").build();
+
+
+        // when
+        when(authService.reissue(any())).thenThrow(ExpireRefreshTokenException.class);
+
+        // then
+        mvc.perform(post(BASE_URL + "/reissue")
+                        .contentType(APPLICATION_JSON)
+                        .content(mapper.writeValueAsBytes(accessToken)))
+                .andExpect(status().isUnauthorized())
+                .andDo(document("auth/token_reissue/fail/expired_refresh", requestFields(
+                        fieldWithPath("token").description("발급 받았었던 엑세스 토큰")
+                ), responseFields(
+                        fieldWithPath("errorCode").description("발생한 에러 코드입니다. 이경우에는 401로 리턴됩니다."),
+                        fieldWithPath("message").description("발생한 에러에 대한 설명입니다.")
+                )));
+
+    }
+
 }
