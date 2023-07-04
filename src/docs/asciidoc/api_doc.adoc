@@ -371,3 +371,25 @@ include::{snippets}/auth/login/success/http-response.adoc[]
 
 '''
 
+=== Oauth Signup
+
+==== Success
+
+**요청 필드**
+
+include::{snippets}/auth/social_login/success/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/auth/social_login/success/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/auth/social_login/success/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/auth/social_login/success/http-response.adoc[]
+
+'''
+

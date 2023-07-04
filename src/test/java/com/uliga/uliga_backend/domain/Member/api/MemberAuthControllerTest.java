@@ -9,7 +9,9 @@ import com.uliga.uliga_backend.domain.Member.application.AuthService;
 import com.uliga.uliga_backend.domain.Member.application.EmailCertificationService;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.EmailConfirmCodeDto;
+import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.LoginResult;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SignUpRequest;
+import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SocialLoginRequest;
 import com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ;
 import com.uliga.uliga_backend.domain.Member.exception.EmailCertificationExpireException;
 import com.uliga.uliga_backend.domain.Member.model.Member;
@@ -480,7 +482,7 @@ class MemberAuthControllerTest {
        LoginRequest loginRequest = createLoginRequest(EMAIL);
 
         // when
-        when(authService.login(any(), any(), any())).thenReturn(MemberDTO.LoginResult.builder()
+        when(authService.login(any(), any(), any())).thenReturn(LoginResult.builder()
                 .memberInfo(MemberInfoNativeQ.builder()
                         .id(1L)
                         .userName(USERNAME)
@@ -513,5 +515,53 @@ class MemberAuthControllerTest {
                 )));
     }
 
+    @Test
+    @DisplayName("oauth 회원가입 성공 테스트")
+    public void oauthSignUpTestToSuccess() throws Exception{
+        // given
+        SocialLoginRequest socialLoginRequest = SocialLoginRequest.builder().loginType(UserLoginType.KAKAO)
+                .applicationPassword(APPLICATION_PASSWORD)
+                .email(EMAIL)
+                .nickName(NICKNAME)
+                .userName(USERNAME).build();
 
+        // when
+        when(authService.socialLogin(any())).thenReturn(LoginResult.builder()
+                .memberInfo(MemberInfoNativeQ.builder()
+                        .id(1L)
+                        .userName(USERNAME)
+                        .privateAccountBookId(1L)
+                        .nickName(NICKNAME)
+                        .email(EMAIL)
+                        .build())
+                .tokenInfo(TokenDTO.TokenIssueDTO.builder()
+                        .accessToken("ACCESS_TOKEN")
+                        .grantType("Bearer")
+                        .accessTokenExpiresIn(10000000L).build()).build());
+        when(accountBookService.createAccountBookPrivate(any(), any())).thenReturn(AccountBook.builder()
+                .build());
+        when(categoryService.createCategories(any(), any())).thenReturn(CategoryCreateResult.builder().build());
+        // then
+        mvc.perform(post(BASE_URL + "/social-login")
+                        .content(mapper.writeValueAsBytes(socialLoginRequest))
+                        .contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("auth/social_login/success", requestFields(
+                        fieldWithPath("email").description("소셜 로그인 회원가입할 이메일"),
+                        fieldWithPath("userName").description("소셜 로그인 회원가입할 멤버 본명"),
+                        fieldWithPath("nickName").description("소셜 로그인 회원가입할 멤버 닉네임"),
+                        fieldWithPath("loginType").description("소셜 로그인 타입"),
+                        fieldWithPath("applicationPassword").description("소셜 로그인할 멤버 애플리케이션 비밀번호")
+                ), responseFields(
+                        fieldWithPath("memberInfo.id").description("로그인한 멤버 아이디"),
+                        fieldWithPath("memberInfo.userName").description("로그인한 멤버 본명"),
+                        fieldWithPath("memberInfo.privateAccountBookId").description("로그인한 멤버 개인 가계부 아이디"),
+                        fieldWithPath("memberInfo.nickName").description("로그인한 멤버 닉네임"),
+                        fieldWithPath("memberInfo.email").description("로그인한 멤버 이메일"),
+                        fieldWithPath("tokenInfo.accessToken").description("사용자에게 발급되는 엑세스 토큰"),
+                        fieldWithPath("tokenInfo.grantType").description("토큰 종류"),
+                        fieldWithPath("tokenInfo.accessTokenExpiresIn").description("토큰 만료 시간")
+                )));
+    }
 }

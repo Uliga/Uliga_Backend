@@ -75,7 +75,7 @@ public class MemberAuthController {
         return ResponseEntity.ok(authService.login(loginRequest, response, request));
     }
 
-    @Operation(summary = "소셜 로그인 API", description = "소셜 로그인 API입니다")
+    @Operation(summary = "OAuth 회원가입 API", description = "OAuth 회원가트 API입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "소셜 로그인 성공시", content = @Content(schema = @Schema(implementation = LoginResult.class)))
     })
