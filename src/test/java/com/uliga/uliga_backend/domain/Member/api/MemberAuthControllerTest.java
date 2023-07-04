@@ -10,9 +10,12 @@ import com.uliga.uliga_backend.domain.Member.application.EmailCertificationServi
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.EmailConfirmCodeDto;
 import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.SignUpRequest;
+import com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ;
 import com.uliga.uliga_backend.domain.Member.exception.EmailCertificationExpireException;
 import com.uliga.uliga_backend.domain.Member.model.Member;
 import com.uliga.uliga_backend.domain.Member.model.UserLoginType;
+import com.uliga.uliga_backend.domain.Token.dto.TokenDTO;
+import com.uliga.uliga_backend.global.jwt.UserDetailService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +26,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -51,6 +56,8 @@ class MemberAuthControllerTest {
     MockMvc mvc;
     @MockBean
     private AuthService authService;
+    @MockBean
+    private UserDetailService userDetailService;
     @MockBean
     private EmailCertificationService emailCertificationService;
     @MockBean
@@ -464,4 +471,47 @@ class MemberAuthControllerTest {
                         fieldWithPath("message").description("발생한 에러에 대한 설명입니다.")
                 )));
     }
+
+
+    @Test
+    @DisplayName("로그인 성공 테스트")
+    public void loginTestToSuccess() throws Exception{
+        // given
+       LoginRequest loginRequest = createLoginRequest(EMAIL);
+
+        // when
+        when(authService.login(any(), any(), any())).thenReturn(MemberDTO.LoginResult.builder()
+                .memberInfo(MemberInfoNativeQ.builder()
+                        .id(1L)
+                        .userName(USERNAME)
+                        .privateAccountBookId(1L)
+                        .nickName(NICKNAME)
+                        .email(EMAIL)
+                        .build())
+                .tokenInfo(TokenDTO.TokenIssueDTO.builder()
+                        .accessToken("ACCESS_TOKEN")
+                        .grantType("Bearer")
+                        .accessTokenExpiresIn(10000000L).build()).build());
+        // then
+        mvc.perform(post(BASE_URL + "/login")
+                        .content(mapper.writeValueAsBytes(loginRequest))
+                        .contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("auth/login/success", requestFields(
+                        fieldWithPath("email").description("로그인할 멤버 이메일"),
+                        fieldWithPath("password").description("로그인할 멤버 비밀번호")
+                ), responseFields(
+                        fieldWithPath("memberInfo.id").description("로그인한 멤버 아이디"),
+                        fieldWithPath("memberInfo.userName").description("로그인한 멤버 본명"),
+                        fieldWithPath("memberInfo.privateAccountBookId").description("로그인한 멤버 개인 가계부 아이디"),
+                        fieldWithPath("memberInfo.nickName").description("로그인한 멤버 닉네임"),
+                        fieldWithPath("memberInfo.email").description("로그인한 멤버 이메일"),
+                        fieldWithPath("tokenInfo.accessToken").description("사용자에게 발급되는 엑세스 토큰"),
+                        fieldWithPath("tokenInfo.grantType").description("토큰 종류"),
+                        fieldWithPath("tokenInfo.accessTokenExpiresIn").description("토큰 만료 시간")
+                )));
+    }
+
+
 }

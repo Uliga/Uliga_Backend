@@ -212,9 +212,6 @@ include::{snippets}/auth/nickname_check/fail/http-response.adoc[]
 
 '''
 
-
-
-
 === Signup
 
 ==== Success
@@ -351,3 +348,26 @@ include::{snippets}/auth/signup/fail/null_applicationPassword/http-request.adoc[
 include::{snippets}/auth/signup/fail/null_applicationPassword/http-response.adoc[]
 
 '''
+
+=== Login
+
+==== Success
+
+**요청 필드**
+
+include::{snippets}/auth/login/success/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/auth/login/success/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/auth/login/success/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/auth/login/success/http-response.adoc[]
+
+'''
+
