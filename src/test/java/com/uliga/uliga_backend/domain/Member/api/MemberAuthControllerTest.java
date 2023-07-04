@@ -214,6 +214,34 @@ class MemberAuthControllerTest {
                 )));
     }
 
+    @Test
+    @DisplayName("닉네임 중복 확인 성공 테스트")
+    public void nicknameDuplicateCheckTestToSuccess() throws Exception{
+        // when
+        when(authService.nicknameExists(any())).thenReturn(MemberDTO.ExistsCheckDto.builder().exists(false).build());
+        // then
+        mvc.perform(get(BASE_URL + "/nickname/exists/testuser"))
+                .andExpect(status().isOk())
+                .andDo(document("auth/nickname_check/success", responseFields(
+                        fieldWithPath("exists").description("닉네임 존재 여부, false면 존재하지 않는 것"),
+                        fieldWithPath("loginType").description("유저가 회원가입한 경로, 이메일, 구글, 카카오 타입이 존재")
+                )));
+    }
+
+    @Test
+    @DisplayName("닉네임 중복 확인 실패 테스트")
+    public void nicknameDuplicateCheckTestToFail() throws Exception{
+        // when
+        when(authService.nicknameExists(any())).thenReturn(MemberDTO.ExistsCheckDto.builder().exists(true).build());
+        // then
+        mvc.perform(get(BASE_URL + "/nickname/exists/testuser"))
+                .andExpect(status().isOk())
+                .andDo(document("auth/nickname_check/fail", responseFields(
+                        fieldWithPath("exists").description("닉네임 존재 여부, false면 존재하지 않는 것"),
+                        fieldWithPath("loginType").description("유저가 회원가입한 경로, 이메일, 구글, 카카오 타입이 존재")
+                )));
+    }
+
 
     @Test
     @DisplayName("회원 가입 성공 테스트")

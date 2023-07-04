@@ -65,6 +65,8 @@ The response body will include an error providing further information
 This code is used in situations where the user might be able to resolve the conflict and resubmit the request.
 |===
 
+'''
+
 == Auth API
 
 === Email Certification
@@ -144,8 +146,6 @@ include::{snippets}/auth/email_certificate/fail/null_code/http-request.adoc[]
 
 include::{snippets}/auth/email_certificate/fail/null_code/http-response.adoc[]
 
-
-
 '''
 
 === Duplicate Email Check
@@ -179,6 +179,41 @@ include::{snippets}/auth/email_check/fail/http-request.adoc[]
 include::{snippets}/auth/email_check/fail/http-response.adoc[]
 
 '''
+
+=== Duplicate Nickname Check
+
+==== Success
+
+**응답 필드**
+
+include::{snippets}/auth/nickname_check/success/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/auth/nickname_check/success/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/auth/nickname_check/success/http-response.adoc[]
+
+==== Fail
+
+**응답 필드**
+
+include::{snippets}/auth/nickname_check/fail/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/auth/nickname_check/fail/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/auth/nickname_check/fail/http-response.adoc[]
+
+'''
+
+
+
 
 === Signup
 
