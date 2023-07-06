@@ -11,67 +11,11 @@ endif::[]
 :toclevels: 4
 :sectlinks:
 
-[[overview_http_verbs]]
-== HTTP Methods
-
-|===
-| Verb | Usage
-
-| `GET`
-| Used to retrieve a resource
-
-| `POST`
-| Used to create a new resource
-
-| `PATCH`
-| Used to update an existing resource, including partial updates
-
-| `DELETE`
-| Used to delete an existing resource
-|===
-
-[[overview_http_status_codes]]
-== HTTP status codes
-
-|===
-| Status code | Usage
-
-| `200 OK`
-| The request completed successfully
-
-| `201 Created`
-| A new resource has been created successfully.
-The resource's URI is available from the response's
-`Location` header
-
-| `204 No Content`
-| An update to an existing resource has been applied successfully
-
-| `400 Bad Request`
-| The request was malformed.
-The response body will include an error providing further information
-
-| `401 Unauthorized`
-| The request has not been applied because it lacks valid authentication credentials for the target resource.
-
-| `403 Forbidden`
-| The server understood the request but refuses to authorize it.
-
-| `404 Not Found`
-| The requested resource did not exist
-
-| `409 Conflict`
-| The request could not be completed due to a conflict with the current state of the target resource.
-This code is used in situations where the user might be able to resolve the conflict and resubmit the request.
-|===
-
 == Auth API
 
-=== Email Certification
+=== 이메일 인증
 
-
-==== `*_Success_*`
-
+==== `*_성공_*`
 
 **요청 필드**
 
@@ -91,9 +35,9 @@ include::{snippets}/auth/email_certificate/success/http-response.adoc[]
 
 '''
 
-==== `*_Fail_*`
+==== `*_실패_*`
 
-`*_Expired code_*`
+`*_만료된 인증 코드_*`
 
 **요청 필드**
 
@@ -113,7 +57,7 @@ include::{snippets}/auth/email_certificate/fail/expired_code/http-response.adoc[
 
 '''
 
-`*_Wrong code_*`
+`*_틀린 인증 코드_*`
 
 **요청 필드**
 
@@ -133,7 +77,7 @@ include::{snippets}/auth/email_certificate/fail/wrong_code/http-response.adoc[]
 
 '''
 
-`*_Null code_*`
+`*_Null로 넘어온 코드_*`
 
 **요청 필드**
 
@@ -153,12 +97,9 @@ include::{snippets}/auth/email_certificate/fail/null_code/http-response.adoc[]
 
 '''
 
-=== Duplicate Email Check
+=== 이메일 중복 확인
 
-
-==== `*_Success_*`
-
-
+==== `*_중복되지 않은 이메일 일때_*`
 
 **응답 필드**
 
@@ -174,8 +115,7 @@ include::{snippets}/auth/email_check/success/http-response.adoc[]
 
 '''
 
-==== `*_Fail_*`
-
+==== `*_중복된 이메일 일때_*`
 
 **응답 필드**
 
@@ -191,9 +131,9 @@ include::{snippets}/auth/email_check/fail/http-response.adoc[]
 
 '''
 
-=== Duplicate Nickname Check
+=== 닉네임 중복 확인
 
-==== `*_Success_*`
+==== `*_중복되지 않은 닉네임 일때_*`
 
 **응답 필드**
 
@@ -207,7 +147,7 @@ include::{snippets}/auth/nickname_check/success/http-request.adoc[]
 
 include::{snippets}/auth/nickname_check/success/http-response.adoc[]
 
-==== `*_Fail_*`
+==== `*_중복된 닉네임 일때_*`
 
 **응답 필드**
 
@@ -223,9 +163,9 @@ include::{snippets}/auth/nickname_check/fail/http-response.adoc[]
 
 '''
 
-=== Signup
+=== 회원가입
 
-==== `*_Success_*`
+==== `*_성공_*`
 
 **요청 필드**
 
@@ -245,9 +185,9 @@ include::{snippets}/auth/signup/success/http-response.adoc[]
 
 '''
 
-==== `*_Fail_*`
+==== `*_실패_*`
 
-`*_1. Short password_*`
+`*_1. 짧은 비밀번호_*`
 
 **요청 필드**
 
@@ -267,7 +207,7 @@ include::{snippets}/auth/signup/fail/short_password/http-response.adoc[]
 
 '''
 
-`*_2. Wrong email_*`
+`*_2. 잘못된 이메일_*`
 
 **요청 필드**
 
@@ -287,7 +227,7 @@ include::{snippets}/auth/signup/fail/wrong_email/http-response.adoc[]
 
 '''
 
-`*_3. Null password_*`
+`*_3. Null로 넘어온 비밀번호_*`
 
 **요청 필드**
 
@@ -307,7 +247,7 @@ include::{snippets}/auth/signup/fail/null_password/http-response.adoc[]
 
 '''
 
-`*_4. Null nickname_*`
+`*_4. Null로 넘어온 닉네임_*`
 
 **요청 필드**
 
@@ -327,7 +267,7 @@ include::{snippets}/auth/signup/fail/null_nickname/http-response.adoc[]
 
 '''
 
-`*_5.  Null username_*`
+`*_5.  Null로 넘어온 사용자 본명_*`
 
 **요청 필드**
 
@@ -346,7 +286,7 @@ include::{snippets}/auth/signup/fail/null_username/http-request.adoc[]
 include::{snippets}/auth/signup/fail/null_username/httpie-request.adoc[]
 '''
 
-`*_6. Sign Up Fail - Null applicationPassword_*`
+`*_6. Null로 넘어온 애플리케이션 비밀번호_*`
 
 **요청 필드**
 
@@ -366,9 +306,9 @@ include::{snippets}/auth/signup/fail/null_applicationPassword/http-response.adoc
 
 '''
 
-=== Login
+=== 로그인
 
-==== `*_Success_*`
+==== `*_성공_*`
 
 **요청 필드**
 
@@ -388,7 +328,7 @@ include::{snippets}/auth/login/success/http-response.adoc[]
 
 '''
 
-==== `*_Fail_*`
+==== `*_실패_*`
 
 **요청 필드**
 
@@ -408,9 +348,9 @@ include::{snippets}/auth/login/fail/wrong_email_password/http-response.adoc[]
 
 '''
 
-=== Oauth Signup
+=== Oauth 회원가입
 
-==== `*_Success_*`
+==== `*_성공_*`
 
 **요청 필드**
 
@@ -430,9 +370,9 @@ include::{snippets}/auth/social_login/success/http-response.adoc[]
 
 '''
 
-=== Token Reissue
+=== 엑세스 토큰 재발급
 
-==== `*_Success_*`
+==== `*_성공_*`
 
 **요청 필드**
 
@@ -452,7 +392,7 @@ include::{snippets}/auth/token_reissue/success/http-response.adoc[]
 
 '''
 
-==== `*_Fail_*`
+==== `*_실패_*`
 
 **요청 필드**
 
@@ -472,3 +412,149 @@ include::{snippets}/auth/token_reissue/fail/expired_refresh/http-response.adoc[]
 
 '''
 
+== Member API
+
+=== 로그인한 멤버 정보 조회
+
+==== `*_성공_*`
+
+**응답 필드**
+
+include::{snippets}/member/get_current_member/success/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/member/get_current_member/success/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/member/get_current_member/success/http-response.adoc[]
+
+==== `*_실패_*`
+
+**응답 필드**
+
+include::{snippets}/member/get_current_member/fail/no_token/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/member/get_current_member/fail/no_token/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/member/get_current_member/fail/no_token/http-response.adoc[]
+
+=== 멤버 정보 업데이트
+
+==== `*_성공_*`
+
+**요청 필드**
+
+include::{snippets}/member/update/success/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/member/update/success/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/member/update/success/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/member/update/success/http-response.adoc[]
+
+==== `*_실패_*`
+
+**요청 필드**
+
+include::{snippets}/member/update/fail/no_token/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/member/update/fail/no_token/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/member/update/fail/no_token/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/member/update/fail/no_token/http-response.adoc[]
+
+=== 이메일로 초대할 멤버 검색
+
+==== `*_성공_*`
+
+**요청 필드**
+
+include::{snippets}/member/find_by_email/success/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/member/find_by_email/success/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/member/find_by_email/success/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/member/find_by_email/success/http-response.adoc[]
+
+==== `*_이메일로 존재하는 멤버 없을 때_*`
+
+**요청 필드**
+
+include::{snippets}/member/find_by_email/fail/no_user/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/member/find_by_email/fail/no_user/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/member/find_by_email/fail/no_user/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/member/find_by_email/fail/no_user/http-response.adoc[]
+
+==== `*_이미 가계부에 속한 멤버 이메일인 경우_*`
+
+**요청 필드**
+
+include::{snippets}/member/find_by_email/fail/already_joined/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/member/find_by_email/fail/already_joined/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/member/find_by_email/fail/already_joined/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/member/find_by_email/fail/already_joined/http-response.adoc[]
+
+
+=== 금융 일정 알림 삭제
+
+**Example request**
+
+include::{snippets}/member/notification_remove/http-request.adoc[]
+
+**Example respone**
+
+include::{snippets}/member/notification_remove/http-response.adoc[]
+
+=== 멤버 탈퇴
+
+**Example request**
+
+include::{snippets}/member/exit/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/member/exit/http-response.adoc[]

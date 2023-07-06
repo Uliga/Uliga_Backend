@@ -129,9 +129,10 @@ public class MemberService {
     /**
      * 멤버 탈퇴 메서드
      * @param id 멤버 아이디
+     * @return 삭제 결과
      */
     @Transactional
-    public void deleteMember(Long id) {
+    public String deleteMember(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
 
         accountBookRepository.deleteById(member.getPrivateAccountBook().getId());
@@ -141,6 +142,8 @@ public class MemberService {
 
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         valueOperations.getAndDelete(Long.toString(id));
+
+        return "DELETED";
 
     }
 
@@ -192,9 +195,10 @@ public class MemberService {
     /**
      * 멤버 알림 삭제 메서드
      * @param id 멤버 아이디
+     * @return 삭제 결과
      */
     @Transactional
-    public void deleteMemberNotification(Long id) {
+    public String deleteMemberNotification(Long id) {
         SetOperations<String, Object> setOperations = objectRedisTemplate.opsForSet();
         Member member = memberRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
         Long size = setOperations.size(member.getNickName());
@@ -202,15 +206,18 @@ public class MemberService {
 
             setOperations.pop(member.getNickName(), size);
         }
+        return "DELETED";
     }
 
     /**
      * 가계부 멤버 삭제 메서드
      * @param accountBookId 가계부 아이디
      * @param memberId 삭제하려는 멤버 아이디
+     * @return 삭제 결과
      */
     @Transactional
-    public void deleteAccountBookMember(Long accountBookId, Long memberId) {
+    public String deleteAccountBookMember(Long accountBookId, Long memberId) {
         accountBookMemberRepository.deleteAccountBookMemberByAccountBookIdAndMemberId(accountBookId, memberId);
+        return "DELETED";
     }
 }

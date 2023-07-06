@@ -115,8 +115,8 @@ public class MemberController {
     @DeleteMapping(value = "")
     public ResponseEntity<String> deleteMember() {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        memberService.deleteMember(currentMemberId);
-        return ResponseEntity.ok("DELETED");
+
+        return ResponseEntity.ok(memberService.deleteMember(currentMemberId));
     }
 
     @Operation(summary = "이메일로 존재하는 멤버 찾기", description = "이메일로 존재하는 멤버 찾는 API", security = @SecurityRequirement(name = "bearerAuth"))
@@ -140,8 +140,8 @@ public class MemberController {
     @DeleteMapping(value = "/notification")
     public ResponseEntity<String> deleteMemberNotification() {
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        memberService.deleteMemberNotification(currentMemberId);
-        return ResponseEntity.ok("DELETED");
+
+        return ResponseEntity.ok(memberService.deleteMemberNotification(currentMemberId));
     }
 
 
@@ -150,7 +150,7 @@ public class MemberController {
     public ResponseEntity<String> deleteAccountBookMember(@PathVariable("id") Long id) {
 
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        memberService.deleteAccountBookMember(id, currentMemberId);
-        return ResponseEntity.ok("DELETED");
+
+        return ResponseEntity.ok(memberService.deleteAccountBookMember(id, currentMemberId));
     }
 }
