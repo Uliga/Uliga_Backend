@@ -41,19 +41,19 @@ jobs:
         run: |
           ./gradlew build
 
-      - name: Save test result
-        uses: EnricoMi/publish-unit-test-result-action@v1
-        if: always()
-        with:
-          files: '**/build/test-results/test/TEST-*.xml'
-          token: ${{ secrets.TOKEN_GITHUB }}
-
-      - name: Saves check comment when test fails
-        uses: mikepenz/action-junit-report@v3
-        if: always()
-        with:
-          report_paths: '**/build/test-results/test/TEST-*.xml'
-          token: ${{ github.token }}
+#      - name: Save test result
+#        uses: EnricoMi/publish-unit-test-result-action@v1
+#        if: always()
+#        with:
+#          files: '**/build/test-results/test/TEST-*.xml'
+#          token: ${{ secrets.TOKEN_GITHUB }}
+#
+#      - name: Saves check comment when test fails
+#        uses: mikepenz/action-junit-report@v3
+#        if: always()
+#        with:
+#          report_paths: '**/build/test-results/test/TEST-*.xml'
+#          token: ${{ github.token }}
 
       - name: web docker build and push
         run: |
