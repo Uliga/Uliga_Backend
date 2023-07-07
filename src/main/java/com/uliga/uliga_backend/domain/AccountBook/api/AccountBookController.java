@@ -85,11 +85,12 @@ public class AccountBookController {
     public ResponseEntity<AccountBookUpdateRequest> updateAccountBookInfo(@PathVariable("id") Long id, @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "가계부 업데이트 요청", content = @Content(schema = @Schema(implementation = AccountBookUpdateRequest.class))) @RequestBody Map<String, Object> updateRequest) throws JsonProcessingException {
 
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        AccountBookUpdateRequest updateDto = objectMapper.convertValue(objectMapper, AccountBookUpdateRequest.class);
+        AccountBookUpdateRequest updateDto = objectMapper.convertValue(updateRequest, AccountBookUpdateRequest.class);
+        AccountBookUpdateRequest accountBookUpdateRequest = accountBookService.updateAccountBookInfo(currentMemberId, id, updateDto);
         if (updateDto.getCategories() != null) {
             categoryService.updateAccountBookCategory(id, updateDto.getCategories());
         }
-        return ResponseEntity.ok(accountBookService.updateAccountBookInfo(currentMemberId, id, updateDto));
+        return ResponseEntity.ok(accountBookUpdateRequest);
     }
 
     @Operation(summary = "가계부 생성 API", description = "가계부 생성하는 API 입니다")
@@ -99,7 +100,7 @@ public class AccountBookController {
 
         Long id = SecurityUtil.getCurrentMemberId();
         AccountBook accountBook = accountBookService.createAccountBook(id, accountBookCreateRequest);
-        categoryService.createDefaultCategories(accountBook);
+        categoryService.createCategoriesForNewAccountBook(accountBook, accountBookCreateRequest.getCategories());
         return ResponseEntity.ok(accountBook.toInfoDto());
     }
 

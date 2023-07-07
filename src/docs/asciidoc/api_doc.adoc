@@ -430,6 +430,8 @@ include::{snippets}/member/get_current_member/success/http-request.adoc[]
 
 include::{snippets}/member/get_current_member/success/http-response.adoc[]
 
+'''
+
 ==== `*_실패_*`
 
 **응답 필드**
@@ -443,6 +445,8 @@ include::{snippets}/member/get_current_member/fail/no_token/http-request.adoc[]
 **Example response**
 
 include::{snippets}/member/get_current_member/fail/no_token/http-response.adoc[]
+
+'''
 
 === 멤버 정보 업데이트
 
@@ -464,6 +468,8 @@ include::{snippets}/member/update/success/http-request.adoc[]
 
 include::{snippets}/member/update/success/http-response.adoc[]
 
+'''
+
 ==== `*_실패_*`
 
 **요청 필드**
@@ -481,6 +487,8 @@ include::{snippets}/member/update/fail/no_token/http-request.adoc[]
 **Example response**
 
 include::{snippets}/member/update/fail/no_token/http-response.adoc[]
+
+'''
 
 === 이메일로 초대할 멤버 검색
 
@@ -502,6 +510,8 @@ include::{snippets}/member/find_by_email/success/http-request.adoc[]
 
 include::{snippets}/member/find_by_email/success/http-response.adoc[]
 
+'''
+
 ==== `*_이메일로 존재하는 멤버 없을 때_*`
 
 **요청 필드**
@@ -519,6 +529,8 @@ include::{snippets}/member/find_by_email/fail/no_user/http-request.adoc[]
 **Example response**
 
 include::{snippets}/member/find_by_email/fail/no_user/http-response.adoc[]
+
+'''
 
 ==== `*_이미 가계부에 속한 멤버 이메일인 경우_*`
 
@@ -538,6 +550,8 @@ include::{snippets}/member/find_by_email/fail/already_joined/http-request.adoc[]
 
 include::{snippets}/member/find_by_email/fail/already_joined/http-response.adoc[]
 
+'''
+
 
 === 금융 일정 알림 삭제
 
@@ -549,6 +563,8 @@ include::{snippets}/member/notification_remove/http-request.adoc[]
 
 include::{snippets}/member/notification_remove/http-response.adoc[]
 
+'''
+
 === 멤버 탈퇴
 
 **Example request**
@@ -558,3 +574,104 @@ include::{snippets}/member/exit/http-request.adoc[]
 **Example response**
 
 include::{snippets}/member/exit/http-response.adoc[]
+
+'''
+
+== AccountBookAPI
+
+=== 멤버 가계부 조회
+
+**Example request**
+
+include::{snippets}/accountBook/get_member_accountBookInfo/success/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/accountBook/get_member_accountBookInfo/success/http-response.adoc[]
+
+'''
+
+=== 단일 가계부 정보 조회
+
+==== `*_성공_*`
+
+**Example request**
+
+include::{snippets}/accountBook/get_single_accountBookInfo/success/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/accountBook/get_single_accountBookInfo/success/http-response.adoc[]
+
+'''
+
+==== `*_속하지 않은 가계부 정보 조회 요청 실패_*`
+
+**Example request**
+
+include::{snippets}/accountBook/get_single_accountBookInfo/fail/invalid_access/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/accountBook/get_single_accountBookInfo/fail/invalid_access/http-response.adoc[]
+
+'''
+
+=== 가계부 업데이트
+
+==== `*_성공_*`
+
+**요청 필드**
+
+include::{snippets}/accountBook/update/success/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/accountBook/update/success/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/accountBook/update/success/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/accountBook/update/success/http-response.adoc[]
+
+==== `*_속하지 않은 가계부 업데이트 요청 실패_*`
+
+**요청 필드**
+
+include::{snippets}/accountBook/update/fail/invalid_access/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/accountBook/update/fail/invalid_access/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/accountBook/update/fail/invalid_access/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/accountBook/update/fail/invalid_access/http-response.adoc[]
+
+'''
+
+=== 가계부 생성
+
+**요청 필드**
+
+include::{snippets}/accountBook/create/success/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/accountBook/create/success/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/accountBook/create/success/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/accountBook/create/success/http-response.adoc[]
+

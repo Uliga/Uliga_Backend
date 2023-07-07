@@ -38,8 +38,14 @@ public class CategoryService {
                     "기타")
     );
 
+    /**
+     * 가계부 기본 카테고리 생성
+     *
+     * @param accountBook 카테고리 생성할 가계부
+     * @return 카테고리 생성 결과
+     */
     @Transactional
-    public void createDefaultCategories(AccountBook accountBook) {
+    public String createDefaultCategories(AccountBook accountBook) {
         List<Category> categories = new ArrayList<>();
         for (String defaultCategory : defaultCategories) {
             Category newCategory = Category.builder()
@@ -49,6 +55,29 @@ public class CategoryService {
             categories.add(newCategory);
         }
         categoryRepository.saveAll(categories);
+
+        return "CREATED";
+    }
+
+    /**
+     * 가계부 추가 생성시 카테고리 생성하는 함수
+     * @param accountBook 카테고리 추가할 가계부
+     * @param toCreate 생성할 카테고리들
+     * @return 생성 결과
+     */
+    @Transactional
+    public String createCategoriesForNewAccountBook(AccountBook accountBook, List<String> toCreate) {
+        List<Category> categories = new ArrayList<>();
+        for (String defaultCategory : toCreate) {
+            Category newCategory = Category.builder()
+                    .accountBook(accountBook)
+                    .name(defaultCategory)
+                    .build();
+            categories.add(newCategory);
+        }
+        categoryRepository.saveAll(categories);
+
+        return "CREATED";
     }
 
 
@@ -98,8 +127,15 @@ public class CategoryService {
         return new CategoryDTO.AccountBookCategories(categoryRepository.findAccountBookCategoryInfoById(accountBookId));
     }
 
+    /**
+     * 가계부 카테고리 업데이트
+     *
+     * @param accountBookId 가계부 아이디
+     * @param categories    업데이트할 카테고리 리스트
+     * @return 업데이트 결과
+     */
     @Transactional
-    public void updateAccountBookCategory(Long accountBookId, List<String> categories) {
+    public String updateAccountBookCategory(Long accountBookId, List<String> categories) {
         HashSet<String> categoryNamesByAccountBookId = categoryRepository.findCategoryNamesByAccountBookId(accountBookId);
         AccountBook accountBook = accountBookRepository.findById(accountBookId).orElseThrow(NotFoundByIdException::new);
         HashSet<String> finalCategory = new HashSet<>();
@@ -121,6 +157,8 @@ public class CategoryService {
             }
         }
         categoryRepository.saveAll(createCategories);
+
+        return "UPDATED";
     }
 
     /**

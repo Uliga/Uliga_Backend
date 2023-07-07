@@ -516,6 +516,24 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_멤버_탈퇴">멤버 탈퇴</a></li>
 </ul>
 </li>
+<li><a href="#_accountbookapi">AccountBookAPI</a>
+<ul class="sectlevel2">
+<li><a href="#_멤버_가계부_조회">멤버 가계부 조회</a></li>
+<li><a href="#_단일_가계부_정보_조회">단일 가계부 정보 조회</a>
+<ul class="sectlevel3">
+<li><a href="#_성공_9"><code><strong><em>성공</em></strong></code></a></li>
+<li><a href="#_속하지_않은_가계부_정보_조회_요청_실패"><code><strong><em>속하지 않은 가계부 정보 조회 요청 실패</em></strong></code></a></li>
+</ul>
+</li>
+<li><a href="#_가계부_업데이트">가계부 업데이트</a>
+<ul class="sectlevel3">
+<li><a href="#_성공_10"><code><strong><em>성공</em></strong></code></a></li>
+<li><a href="#_속하지_않은_가계부_업데이트_요청_실패"><code><strong><em>속하지 않은 가계부 업데이트 요청 실패</em></strong></code></a></li>
+</ul>
+</li>
+<li><a href="#_가계부_생성">가계부 생성</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -2460,6 +2478,7 @@ Content-Length: 158
 {"memberInfo":{"id":1,"privateAccountBookId":1,"userName":"userName","nickName":"nickName","email":"test_user@email.com"},"invitations":[],"notifications":[]}</code></pre>
 </div>
 </div>
+<hr>
 </div>
 <div class="sect3">
 <h4 id="_실패_5"><a class="link" href="#_실패_5"><code><strong><em>실패</em></strong></code></a></h4>
@@ -2516,6 +2535,7 @@ Content-Length: 70
 {"errorCode":401,"message":"접근 권한이 없는 요청입니다."}</code></pre>
 </div>
 </div>
+<hr>
 </div>
 </div>
 <div class="sect2">
@@ -2628,6 +2648,7 @@ Content-Length: 119
 {"nickName":"nickName","avatarUrl":"avatarUrl","applicationPassword":"newApplicationPassword","password":"newPassword"}</code></pre>
 </div>
 </div>
+<hr>
 </div>
 <div class="sect3">
 <h4 id="_실패_6"><a class="link" href="#_실패_6"><code><strong><em>실패</em></strong></code></a></h4>
@@ -2727,6 +2748,7 @@ Content-Length: 70
 {"errorCode":401,"message":"접근 권한이 없는 요청입니다."}</code></pre>
 </div>
 </div>
+<hr>
 </div>
 </div>
 <div class="sect2">
@@ -2819,6 +2841,7 @@ Content-Length: 52
 {"id":1,"userName":"username","nickName":"nickname"}</code></pre>
 </div>
 </div>
+<hr>
 </div>
 <div class="sect3">
 <h4 id="_이메일로_존재하는_멤버_없을_때"><a class="link" href="#_이메일로_존재하는_멤버_없을_때"><code><strong><em>이메일로 존재하는 멤버 없을 때</em></strong></code></a></h4>
@@ -2908,6 +2931,7 @@ Content-Length: 43
 {"id":null,"userName":null,"nickName":null}</code></pre>
 </div>
 </div>
+<hr>
 </div>
 <div class="sect3">
 <h4 id="_이미_가계부에_속한_멤버_이메일인_경우"><a class="link" href="#_이미_가계부에_속한_멤버_이메일인_경우"><code><strong><em>이미 가계부에 속한 멤버 이메일인 경우</em></strong></code></a></h4>
@@ -2997,6 +3021,7 @@ Content-Length: 109
 {"id":null,"userName":"이미 존재하는 유저입니다","nickName":"이미 존재하는 유저입니다"}</code></pre>
 </div>
 </div>
+<hr>
 </div>
 </div>
 <div class="sect2">
@@ -3025,6 +3050,7 @@ Content-Length: 7
 DELETED</code></pre>
 </div>
 </div>
+<hr>
 </div>
 <div class="sect2">
 <h3 id="_멤버_탈퇴"><a class="link" href="#_멤버_탈퇴">멤버 탈퇴</a></h3>
@@ -3052,6 +3078,435 @@ Content-Length: 7
 DELETED</code></pre>
 </div>
 </div>
+<hr>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_accountbookapi"><a class="link" href="#_accountbookapi">AccountBookAPI</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_멤버_가계부_조회"><a class="link" href="#_멤버_가계부_조회">멤버 가계부 조회</a></h3>
+<div class="paragraph">
+<p><strong>Example request</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /accountBook HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example response</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Content-Length: 902
+
+{"accountBooks":[{"info":{"accountBookId":1,"isPrivate":false,"accountBookName":"테스트용","accountBookAuthority":"ADMIN","relationShip":"테스트용","getNotification":true,"avatarUrl":"default"},"numberOfMember":{"count":2},"members":[{"id":1,"username":"user2","accountBookAuthority":"ADMIN","avatarUrl":"default","email":"test1@user.com"},{"id":2,"username":"user1","accountBookAuthority":"ADMIN","avatarUrl":"default","email":"test2@user.com"}],"categories":[{"id":1,"value":"\uD83C\uDF7D️ 식비","label":"\uD83C\uDF7D️ 식비"},{"id":2,"value":"☕ 카페 · 간식","label":"☕ 카페 · 간식"},{"id":3,"value":"\uD83C\uDFE0 생활","label":"\uD83C\uDFE0 생활"},{"id":4,"value":"\uD83C\uDF59 편의점,마트,잡화","label":"\uD83C\uDF59 편의점,마트,잡화"},{"id":5,"value":"\uD83D\uDC55 쇼핑","label":"\uD83D\uDC55 쇼핑"},{"id":6,"value":"기타","label":"기타"}]}]}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+<div class="sect2">
+<h3 id="_단일_가계부_정보_조회"><a class="link" href="#_단일_가계부_정보_조회">단일 가계부 정보 조회</a></h3>
+<div class="sect3">
+<h4 id="_성공_9"><a class="link" href="#_성공_9"><code><strong><em>성공</em></strong></code></a></h4>
+<div class="paragraph">
+<p><strong>Example request</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /accountBook/1 HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example response</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Content-Length: 883
+
+{"info":{"accountBookId":1,"isPrivate":false,"accountBookName":"테스트용","accountBookAuthority":"ADMIN","relationShip":"테스트용","getNotification":true,"avatarUrl":"default"},"numberOfMember":{"count":2},"members":[{"id":1,"username":"user2","accountBookAuthority":"ADMIN","avatarUrl":"default","email":"test1@user.com"},{"id":2,"username":"user1","accountBookAuthority":"ADMIN","avatarUrl":"default","email":"test2@user.com"}],"categories":[{"id":1,"value":"\uD83C\uDF7D️ 식비","label":"\uD83C\uDF7D️ 식비"},{"id":2,"value":"☕ 카페 · 간식","label":"☕ 카페 · 간식"},{"id":3,"value":"\uD83C\uDFE0 생활","label":"\uD83C\uDFE0 생활"},{"id":4,"value":"\uD83C\uDF59 편의점,마트,잡화","label":"\uD83C\uDF59 편의점,마트,잡화"},{"id":5,"value":"\uD83D\uDC55 쇼핑","label":"\uD83D\uDC55 쇼핑"},{"id":6,"value":"기타","label":"기타"}]}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+<div class="sect3">
+<h4 id="_속하지_않은_가계부_정보_조회_요청_실패"><a class="link" href="#_속하지_않은_가계부_정보_조회_요청_실패"><code><strong><em>속하지 않은 가계부 정보 조회 요청 실패</em></strong></code></a></h4>
+<div class="paragraph">
+<p><strong>Example request</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /accountBook/1 HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example response</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Content-Length: 32
+
+{"errorCode":400,"message":null}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_가계부_업데이트"><a class="link" href="#_가계부_업데이트">가계부 업데이트</a></h3>
+<div class="sect3">
+<h4 id="_성공_10"><a class="link" href="#_성공_10"><code><strong><em>성공</em></strong></code></a></h4>
+<div class="paragraph">
+<p><strong>요청 필드</strong></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>avatarUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">변경할 아바타</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>relationship</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">변경할 별칭</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">변경할 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>members</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">변경할 멤버 리스트</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>categories</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">변경할 카테고리 리스트</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>응답 필드</strong></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>avatarUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">변경할 아바타</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>relationship</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">변경할 별칭</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">변경할 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>members</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">변경할 멤버 리스트</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>categories</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">변경할 카테고리 리스트</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>Example request</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PATCH /accountBook/1 HTTP/1.1
+Content-Type: application/json
+Content-Length: 202
+Host: localhost:8080
+
+{"avatarUrl":"변경할 아바타","members":["남을 멤버1","남을 멤버2"],"name":"변경할 이름","categories":["남을 카테고리1","남을 카테고리2"],"relationship":"변경할 별칭"}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example response</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Content-Length: 202
+
+{"name":"변경된 이름","relationship":"변경된 별칭","categories":["남을 카테고리1","남을 카테고리2"],"members":["남을 멤버1","남을 멤버2"],"avatarUrl":"변경된 아바타"}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_속하지_않은_가계부_업데이트_요청_실패"><a class="link" href="#_속하지_않은_가계부_업데이트_요청_실패"><code><strong><em>속하지 않은 가계부 업데이트 요청 실패</em></strong></code></a></h4>
+<div class="paragraph">
+<p><strong>요청 필드</strong></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>avatarUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">변경할 아바타</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>relationship</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">변경할 별칭</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">변경할 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>members</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">변경할 멤버 리스트</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>categories</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">변경할 카테고리 리스트</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>응답 필드</strong></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>errorCode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">발생한 에러 코드입니다. 이경우에는 400로 리턴됩니다.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">발생한 에러에 대한 설명입니다.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>Example request</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PATCH /accountBook/1 HTTP/1.1
+Content-Type: application/json
+Content-Length: 202
+Host: localhost:8080
+
+{"avatarUrl":"변경할 아바타","members":["남을 멤버1","남을 멤버2"],"name":"변경할 이름","categories":["남을 카테고리1","남을 카테고리2"],"relationship":"변경할 별칭"}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example response</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 400 Bad Request
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Content-Length: 32
+
+{"errorCode":400,"message":null}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_가계부_생성"><a class="link" href="#_가계부_생성">가계부 생성</a></h3>
+<div class="paragraph">
+<p><strong>요청 필드</strong></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">생성할 가계부 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>relationship</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">생성할 가계부 별칭</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>categories</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">생성할 가계부 카테고리들</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>emails</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">초대할 멤버 이메일들</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>응답 필드</strong></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">생성된 가계부 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>isPrivate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">개인 / 공유 가계부 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>relationShip</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">가계부 별칭</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">생성한 가계부 이름</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>Example request</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /accountBook HTTP/1.1
+Content-Type: application/json
+Content-Length: 179
+Host: localhost:8080
+
+{"name":"가계부 이름","categories":["카테고리1","카테고리2"],"emails":["초대할 사람1 이메일","초대할 사람2 이메일"],"relationship":"가계부 별칭"}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Example response</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Content-Length: 89
+
+{"id":null,"name":"가계부 이름","isPrivate":false,"relationShip":"가계부 별칭"}</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -3059,7 +3514,7 @@ DELETED</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-07-06 15:43:13 +0900
+Last updated 2023-07-07 15:49:57 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
