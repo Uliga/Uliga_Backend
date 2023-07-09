@@ -92,15 +92,15 @@ public class BudgetService {
         if (recordSum.isPresent() && budgetSum.isPresent()) {
             MonthlySumQ record = recordSum.get();
             MonthlySumQ budget = budgetSum.get();
-            return new BudgetDTO.BudgetCompare(record.getValue(), budget.getValue(), budget.getValue() - record.getValue());
+            return new BudgetCompare(budget.getValue(), record.getValue(),  budget.getValue() - record.getValue());
         } else if (budgetSum.isPresent()) {
             MonthlySumQ budget = budgetSum.get();
-            return new BudgetDTO.BudgetCompare(0L, budget.getValue(), budget.getValue());
+            return new BudgetCompare( budget.getValue(), 0L,budget.getValue());
         } else if (recordSum.isPresent()) {
             MonthlySumQ record = recordSum.get();
-            return new BudgetDTO.BudgetCompare(record.getValue(), 0L, -record.getValue());
+            return new BudgetCompare(0L, record.getValue(),  -record.getValue());
         } else {
-            return new BudgetDTO.BudgetCompare(0L, 0L, 0L);
+            return new BudgetCompare(0L, 0L, 0L);
         }
     }
     /**
