@@ -17,7 +17,8 @@ import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.global.error.exception.IdNotFoundException;
 import com.uliga.uliga_backend.global.error.exception.InvalidDataValueException;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
-import org.springframework.transaction.annotation.Transactional;import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -39,9 +40,10 @@ public class BudgetService {
 
     /**
      * 한달 가계부 예산 총합 조회
+     *
      * @param accountBookId 가계부 아이디
-     * @param year 년도
-     * @param month 달
+     * @param year          년도
+     * @param month         달
      * @return 조회 결과
      */
     @Transactional(readOnly = true)
@@ -49,40 +51,60 @@ public class BudgetService {
         return budgetRepository.getMonthlySumByAccountBookId(accountBookId, year, month).orElse(new MonthlySumQ(0L));
     }
 
+    /**
+     * 가계부 예산 등록
+     *
+     * @param createBudgetMap 파라미터로 값이 넘어오는 map
+     * @return 예산 등록 결과
+     */
     @Transactional
     public BudgetInfoQ addBudget(Map<String, Object> createBudgetMap) {
         CreateBudgetDto createBudgetDto = mapper.convertValue(createBudgetMap, CreateBudgetDto.class);
-        AccountBook accountBook = accountBookRepository.findById(createBudgetDto.getId()).orElseThrow(()->new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
-        if (budgetRepository.existsBudgetByAccountBookIdAndYearAndMonth(createBudgetDto.getId(), createBudgetDto.getYear(), createBudgetDto.getMonth())) {
-            throw new BudgetAlreadyExists();
-        }
-        if (createBudgetDto.getCategory() != null) {
-            Category category = categoryRepository.findByAccountBookAndName(accountBook, createBudgetDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
-            Budget build = Budget.builder()
-                    .year(createBudgetDto.getYear())
-                    .month(createBudgetDto.getMonth())
-                    .accountBook(accountBook)
-                    .value(createBudgetDto.getValue())
-                    .category(category).build();
-            budgetRepository.save(build);
-            return build.toInfoQ();
+        AccountBook accountBook = accountBookRepository.findById(createBudgetDto.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
+        Optional<Budget> budgetByAccountBookIdAndYearAndMonth = budgetRepository.findByAccountBookIdAndYearAndMonth(createBudgetDto.getId(), createBudgetDto.getYear(), createBudgetDto.getMonth());
+        if (budgetByAccountBookIdAndYearAndMonth.isPresent()) {
+            Budget budget = budgetByAccountBookIdAndYearAndMonth.get();
+            if (createBudgetDto.getCategory() != null) {
+                Category category = categoryRepository.findByAccountBookAndName(accountBook, createBudgetDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
+                budget.updateValue(createBudgetDto.getValue());
+                budget.updateCategory(category);
+                return budget.toInfoQ();
+            } else {
+                budget.updateValue(createBudgetDto.getValue());
+                return budget.toInfoQ();
+            }
         } else {
-            Budget build = Budget.builder()
-                    .year(createBudgetDto.getYear())
-                    .month(createBudgetDto.getMonth())
-                    .value(createBudgetDto.getValue())
-                    .accountBook(accountBook).build();
-            budgetRepository.save(build);
-            return build.toInfoQ();
+            if (createBudgetDto.getCategory() != null) {
+                Category category = categoryRepository.findByAccountBookAndName(accountBook, createBudgetDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
+                Budget build = Budget.builder()
+                        .year(createBudgetDto.getYear())
+                        .month(createBudgetDto.getMonth())
+                        .accountBook(accountBook)
+                        .value(createBudgetDto.getValue())
+                        .category(category).build();
+                budgetRepository.save(build);
+                return build.toInfoQ();
+            } else {
+                Budget build = Budget.builder()
+                        .year(createBudgetDto.getYear())
+                        .month(createBudgetDto.getMonth())
+                        .value(createBudgetDto.getValue())
+                        .accountBook(accountBook).build();
+                budgetRepository.save(build);
+                return build.toInfoQ();
+            }
         }
+
 
 
     }
+
     /**
      * 가계부 분석 - 예산과 비교
+     *
      * @param accountBookId 가계부 아이디
-     * @param year 년도
-     * @param month 달
+     * @param year          년도
+     * @param month         달
      * @return 비교 결과
      */
     @Transactional(readOnly = true)
@@ -92,19 +114,21 @@ public class BudgetService {
         if (recordSum.isPresent() && budgetSum.isPresent()) {
             MonthlySumQ record = recordSum.get();
             MonthlySumQ budget = budgetSum.get();
-            return new BudgetCompare(budget.getValue(), record.getValue(),  budget.getValue() - record.getValue());
+            return new BudgetCompare(budget.getValue(), record.getValue(), budget.getValue() - record.getValue());
         } else if (budgetSum.isPresent()) {
             MonthlySumQ budget = budgetSum.get();
-            return new BudgetCompare( budget.getValue(), 0L,budget.getValue());
+            return new BudgetCompare(budget.getValue(), 0L, budget.getValue());
         } else if (recordSum.isPresent()) {
             MonthlySumQ record = recordSum.get();
-            return new BudgetCompare(0L, record.getValue(),  -record.getValue());
+            return new BudgetCompare(0L, record.getValue(), -record.getValue());
         } else {
             return new BudgetCompare(0L, 0L, 0L);
         }
     }
+
     /**
      * 예산 정보 업데이트
+     *
      * @param updates 업데이트할 항목들 map
      * @return 업데이트 결과
      */
