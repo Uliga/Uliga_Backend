@@ -675,3 +675,52 @@ include::{snippets}/accountBook/create/success/http-request.adoc[]
 
 include::{snippets}/accountBook/create/success/http-response.adoc[]
 
+=== 가계부 멤버 초대
+
+**요청 필드**
+
+include::{snippets}/accountBook/invitation/success/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/accountBook/invitation/success/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/accountBook/invitation/success/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/accountBook/invitation/success/http-response.adoc[]
+
+=== 가계부 초대 응답
+
+**요청 필드**
+
+include::{snippets}/accountBook/invitation/reply/success/request-fields.adoc[]
+
+**응답 필드**
+
+include::{snippets}/accountBook/invitation/reply/success/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/accountBook/invitation/reply/success/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/accountBook/invitation/reply/success/http-response.adoc[]
+
+=== 가계부 한달 날짜별 수입 / 지출 총합 조회
+
+**응답 필드**
+
+include::{snippets}/accountBook/daily_item_sum/success/response-fields.adoc[]
+
+**Example request**
+
+include::{snippets}/accountBook/daily_item_sum/success/http-request.adoc[]
+
+**Example response**
+
+include::{snippets}/accountBook/daily_item_sum/success/http-response.adoc[]
