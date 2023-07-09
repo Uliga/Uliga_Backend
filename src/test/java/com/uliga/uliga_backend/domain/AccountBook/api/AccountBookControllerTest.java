@@ -37,10 +37,12 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.*;
 
+import static com.uliga.uliga_backend.domain.AccountBook.dto.AccountBookDTO.*;
 import static com.uliga.uliga_backend.domain.AccountBook.model.AccountBookAuthority.ADMIN;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -181,7 +183,7 @@ class AccountBookControllerTest {
         when(categoryService.updateAccountBookCategory(any(), any())).thenReturn("UPDATED");
 
         // then
-        mvc.perform(patch(BASE_URL + "/1").content(mapper.writeValueAsBytes(updateRequest)).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(patch(BASE_URL + "/1").content(mapper.writeValueAsBytes(updateRequest)).contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("accountBook/update/success", requestFields(
@@ -220,7 +222,7 @@ class AccountBookControllerTest {
         when(accountBookService.updateAccountBookInfo(any(), any(), any())).thenThrow(UnauthorizedAccountBookAccessException.class);
 
         // then
-        mvc.perform(patch(BASE_URL + "/1").content(mapper.writeValueAsBytes(updateRequest)).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(patch(BASE_URL + "/1").content(mapper.writeValueAsBytes(updateRequest)).contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andDo(document("accountBook/update/fail/invalid_access", requestFields(
@@ -240,7 +242,7 @@ class AccountBookControllerTest {
     @DisplayName("가계부 생성 성공 테스트")
     public void createAccountBookTest() throws Exception{
         // given
-        AccountBookDTO.AccountBookCreateRequest createRequest = AccountBookDTO.AccountBookCreateRequest.builder()
+        AccountBookCreateRequest createRequest = AccountBookCreateRequest.builder()
                 .name("가계부 이름")
                 .relationship("가계부 별칭")
                 .categories(new ArrayList<>(Arrays.asList("카테고리1", "카테고리2")))
@@ -254,7 +256,7 @@ class AccountBookControllerTest {
         // then
         mvc.perform(post(BASE_URL)
                         .content(mapper.writeValueAsBytes(createRequest))
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("accountBook/create/success", requestFields(
@@ -269,5 +271,59 @@ class AccountBookControllerTest {
                         fieldWithPath("name").description("생성한 가계부 이름")
                 )));
 
+    }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("가계부 멤버 초대 성공 테스트")
+    public void inviteMemberSuccessTest() throws Exception{
+        // given
+        List<String> emails = new ArrayList<>(
+                Arrays.asList("user1@email.com", "user2@email.com")
+        );
+        GetInvitations invitations = GetInvitations.builder().id(1L).emails(emails).build();
+
+        // when
+        when(accountBookService.createInvitation(any(), any())).thenReturn(Invited.builder().invited(2L).build());
+        // then
+        mvc.perform(post(BASE_URL + "/invitation")
+                        .contentType(APPLICATION_JSON)
+                        .content(mapper.writeValueAsBytes(invitations)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("accountBook/invitation/success", requestFields(
+                        fieldWithPath("id").description("초대할 공유 가계부 아이디"),
+                        fieldWithPath("emails").description("초대할 사람들 이메일")
+                ), responseFields(
+                        fieldWithPath("invited").description("초대된 사람들 수")
+                )));
+    }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("가계부 초대 응답 테스트")
+    public void invitationReplySuccessTest() throws Exception{
+        // given
+        InvitationReply invitationReply = InvitationReply.builder().accountBookName("가계부 이름").id(1L).memberName("멤버 이름").join(true).build();
+
+
+        // when
+        when(accountBookService.invitationReply(any(), any())).thenReturn(InvitationReplyResult.builder().id(1L).join(true).build());
+
+        // then
+        mvc.perform(post(BASE_URL + "/invitation/reply")
+                        .content(mapper.writeValueAsBytes(invitationReply))
+                        .contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("accountBook/invitation/reply/success", requestFields(
+                        fieldWithPath("accountBookName").description("초대에 응답하는 가계부 이름"),
+                        fieldWithPath("id").description("초대에 응답하는 가계부 아이디"),
+                        fieldWithPath("memberName").description("초대에 응답하는 멤버 이름"),
+                        fieldWithPath("join").description("가계부에 들어갈지 여부")
+                ), responseFields(
+                        fieldWithPath("id").description("초대에 응답한 가계부 아이디"),
+                        fieldWithPath("join").description("가계부에 들어갔는지 여부")
+                )));
     }
 }
