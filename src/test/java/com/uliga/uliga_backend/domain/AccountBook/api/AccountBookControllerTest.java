@@ -12,6 +12,8 @@ import com.uliga.uliga_backend.domain.AccountBook.dto.NativeQ.MembersQ;
 import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookAccessException;
 import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.AccountBookData.application.AccountBookDataService;
+import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO;
+import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.AccountBookDataDailySum;
 import com.uliga.uliga_backend.domain.Budget.application.BudgetService;
 import com.uliga.uliga_backend.domain.Category.application.CategoryService;
 import com.uliga.uliga_backend.domain.Category.dto.NativeQ.AccountBookCategoryInfoQ;
@@ -324,6 +326,26 @@ class AccountBookControllerTest {
                 ), responseFields(
                         fieldWithPath("id").description("초대에 응답한 가계부 아이디"),
                         fieldWithPath("join").description("가계부에 들어갔는지 여부")
+                )));
+    }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("한달 가계부 날짜별 수입 / 지출 합 조회 성공 테스트")
+    public void accountBookDailySumTest() throws Exception{
+        // given
+        AccountBookDataDailySum accountBookDataDailySum = AccountBookDataDailySum.builder().records(new ArrayList<>()).incomes(new ArrayList<>()).build();
+
+        // when
+        when(accountBookDataService.getAccountBookItems(any(), any(), any())).thenReturn(accountBookDataDailySum);
+
+        // then
+        mvc.perform(get(BASE_URL + "/1/item/2023/4"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("accountBook/daily_item_sum/success", responseFields(
+                        fieldWithPath("records").description("날짜별 지출 합 리스트"),
+                        fieldWithPath("incomes").description("날짜별 수입 합 리스트")
                 )));
     }
 }
