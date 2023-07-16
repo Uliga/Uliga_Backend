@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.Optional;
 
-import static com.uliga.uliga_backend.domain.Member.model.UserLoginType.EMAIL;
 
 @Slf4j
 @Service
@@ -25,7 +24,7 @@ public class UserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Member> byEmail = memberRepository.findByEmailAndDeletedAndUserLoginType(username, false, EMAIL);
+        Optional<Member> byEmail = memberRepository.findByEmailAndDeleted(username, false);
         if (byEmail.isPresent()) {
             return createUserDetails(byEmail.get());
         } else {
