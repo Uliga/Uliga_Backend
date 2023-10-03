@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -75,7 +75,9 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_REPO }}/uliga_backend 
             bash deploy.sh
   deploy_was2:
-    needs: deploy_was1
+    needs: 
+      - deploy_was1
+      - deploy_web1
     runs-on: ubuntu-latest
     steps:
       - name: was2 무중단 배포
@@ -102,7 +104,9 @@ jobs:
           script: |
             bash deploy_was1.sh
   deploy_web2:
-    needs: deploy_web1
+    needs: 
+       - deploy_was1
+       - deploy_web1
     runs-on: ubuntu-latest
     steps:
       - name: was2 nginx 무중단 배포
