@@ -37,7 +37,7 @@ jobs:
 
       - name: Build with Gradle
         run: |
-          ./gradlew bootJar
+          ./gradlew build
 
       - name: web docker build and push
         run: |
