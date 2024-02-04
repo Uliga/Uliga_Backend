@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -51,74 +52,75 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // CSRF 설정 Disable
         http
-                .httpBasic().disable()
-                .csrf().disable()
-                .cors().configurationSource(corsConfigurationSource());
+            .httpBasic().disable()
+            .csrf().disable()
+            .cors().configurationSource(corsConfigurationSource());
 
         // exception handling 할때 우리가 만든 클래스 추가
         http
-                .exceptionHandling()
-                .accessDeniedHandler(jwtAccessDeniedHandler)
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+            .exceptionHandling()
+            .accessDeniedHandler(jwtAccessDeniedHandler)
+            .authenticationEntryPoint(jwtAuthenticationEntryPoint)
 
 
-                .and()
-                .headers()
-                .frameOptions()
-                .sameOrigin()
+            .and()
+            .headers()
+            .frameOptions()
+            .sameOrigin()
 
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(STATELESS)
+            .and()
+            .sessionManagement()
+            .sessionCreationPolicy(STATELESS)
 
-                .and()
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(HttpMethod.OPTIONS, "**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/env_profile").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/actuator/health").permitAll()
-                        .requestMatchers("/actuator/**").authenticated()
-                        .requestMatchers("/oauth2/**").permitAll()
-                        .requestMatchers("/login/**").permitAll()
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/logout-redirect").permitAll()
-                        .requestMatchers("/member/**").hasRole("USER")
-                        .requestMatchers("/post/**").authenticated()
-                        .requestMatchers("/accountBook/**").authenticated()
-                        .requestMatchers("/budget/**").authenticated()
-                        .requestMatchers("/record/**").authenticated()
-                        .requestMatchers("/income/**").authenticated()
-                        .requestMatchers("/schedule/**").authenticated()
-                        .requestMatchers("/swagger-ui/**").permitAll()
-                        .requestMatchers("/v1/api-docs/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/rest-docs").permitAll()
-                );
-
-
-        http
-                .oauth2Login()
-                .authorizationEndpoint()
-                .baseUri("/oauth2/authorization") //default
-                .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository)
-                .and()
-                .redirectionEndpoint()
-                .baseUri("/oauth2/callback/*")
-                .and()
-                .userInfoEndpoint()
-                .userService(customOAuth2UserService)
-                .and()
-                .successHandler(oAuth2AuthenticationSuccessHandler)
-                .failureHandler(oAuth2AuthenticationFailureHandler);
+            .and()
+            .authorizeHttpRequests((requests) -> requests
+                .requestMatchers(HttpMethod.OPTIONS, "**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/").permitAll()
+                .requestMatchers(HttpMethod.GET, "/env_profile").permitAll()
+                .requestMatchers(HttpMethod.GET, "/actuator/health").permitAll()
+                .requestMatchers("/actuator/**").authenticated()
+                .requestMatchers("/oauth2/**").permitAll()
+                .requestMatchers("/login/**").permitAll()
+                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/logout-redirect").permitAll()
+                .requestMatchers("/member/**").hasRole("USER")
+                .requestMatchers("/post/**").authenticated()
+                .requestMatchers("/accountBook/**").authenticated()
+                .requestMatchers("/budget/**").authenticated()
+                .requestMatchers("/record/**").authenticated()
+                .requestMatchers("/income/**").authenticated()
+                .requestMatchers("/schedule/**").authenticated()
+                .requestMatchers("/swagger-ui/**").permitAll()
+                .requestMatchers(" /v3/api-docs/**").permitAll()
+                .requestMatchers("/v1/api-docs/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/rest-docs").permitAll()
+            );
 
 
         http
-                .apply(new JwtSecurityConfig(jwtTokenProvider, mapper, redisTemplate))
-                .and()
-                .logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/auth/logout-redirect")
-                .clearAuthentication(true)
-                .logoutSuccessHandler(customLogoutSuccessHandler);
+            .oauth2Login()
+            .authorizationEndpoint()
+            .baseUri("/oauth2/authorization") //default
+            .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository)
+            .and()
+            .redirectionEndpoint()
+            .baseUri("/oauth2/callback/*")
+            .and()
+            .userInfoEndpoint()
+            .userService(customOAuth2UserService)
+            .and()
+            .successHandler(oAuth2AuthenticationSuccessHandler)
+            .failureHandler(oAuth2AuthenticationFailureHandler);
+
+
+        http
+            .apply(new JwtSecurityConfig(jwtTokenProvider, mapper, redisTemplate))
+            .and()
+            .logout()
+            .logoutUrl("/logout")
+            .logoutSuccessUrl("/auth/logout-redirect")
+            .clearAuthentication(true)
+            .logoutSuccessHandler(customLogoutSuccessHandler);
 
 
         return http.build();
@@ -128,7 +130,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000","https://main.d211p9c5e1szy2.amplifyapp.com/", "https://www.ouruliga.com/"));
+        configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000", "https://main.d211p9c5e1szy2.amplifyapp.com/", "https://www.ouruliga.com/"));
         configuration.setAllowedMethods(Arrays.asList("HEAD", "POST", "GET", "DELETE", "PUT", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
