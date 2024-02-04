@@ -1,0 +1,20 @@
+### 회원가입
+POST https://uliga.site/auth/signup
+Content-Type: application/json
+
+{
+  "email": "dongjunkim@test.com",
+  "password": "12341234",
+  "nickName": "테스트 사용자입니다",
+  "userName": "본명입니다",
+  "applicationPassword": "1234"
+}
+
+### 로그인
+POST https://uliga.site/auth/login
+Content-Type: application/json
+
+{
+  "email": "dongjunkim@test.com",
+  "password": "123412341"
+}
