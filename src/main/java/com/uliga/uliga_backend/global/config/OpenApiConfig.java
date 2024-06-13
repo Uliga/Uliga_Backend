@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
                 version = "1.0"
         ),
     servers = {
-            @Server(url = "https://uliga.site", description = "server")
+            @Server(url = "http://ec2-3-39-25-152.ap-northeast-2.compute.amazonaws.com", description = "server")
     }
 )
 @RequiredArgsConstructor

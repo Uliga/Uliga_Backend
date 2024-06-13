@@ -91,7 +91,6 @@ public class SecurityConfig {
                 .requestMatchers("/income/**").authenticated()
                 .requestMatchers("/schedule/**").authenticated()
                 .requestMatchers("/swagger-ui/**").permitAll()
-                .requestMatchers(" /v3/api-docs/**").permitAll()
                 .requestMatchers("/v1/api-docs/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/rest-docs").permitAll()
             );
