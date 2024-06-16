@@ -51,7 +51,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setCharacterEncoding("utf-8");
 
         if (request.getHeader("Origin") == null) {
-            response.setHeader("Access-Control-Allow-Origin", "https://www.recordyslow.com");
+            response.setHeader("Access-Control-Allow-Origin", "https://www.ouruliga.com");
         } else {
             response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
         }
