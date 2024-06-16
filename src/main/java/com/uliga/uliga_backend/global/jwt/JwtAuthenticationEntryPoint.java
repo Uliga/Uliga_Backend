@@ -27,10 +27,10 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         log.info(String.valueOf(authException.getClass()));
         log.info(authException.getMessage());
-        sendResponse(response, authException);
+        sendResponse(request, response, authException);
     }
 
-    private void sendResponse(HttpServletResponse response, AuthenticationException authException) throws IOException {
+    private void sendResponse(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         String result = "서버 에러가 발생했습니다";
         if (authException instanceof BadCredentialsException) {
             result = objectMapper.writeValueAsString(new ErrorResponse(409L, "잘못된 이메일, 비밀번호 입니다."));
@@ -49,7 +49,13 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
-        response.setHeader("Access-Control-Allow-Origin","http://localhost:3000");
+
+        if (request.getHeader("Origin") == null) {
+            response.setHeader("Access-Control-Allow-Origin", "https://www.recordyslow.com");
+        } else {
+            response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+        }
+
         response.getWriter().write(result);
 
     }

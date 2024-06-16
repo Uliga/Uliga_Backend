@@ -31,7 +31,7 @@ public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler im
     @Transactional
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         log.info("로그아웃 호출됐음");
-        setDefaultTargetUrl("https://uliga.site/auth/logout-redirect");
+        setDefaultTargetUrl("https://api.ouruliga.com/auth/logout-redirect");
         String token = request.getHeader("Authorization").split(" ")[1];
         log.info("token = " + token);
         Authentication auth = jwtTokenProvider.getAuthentication(token);
