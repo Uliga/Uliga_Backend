@@ -56,8 +56,8 @@ public class AuthService {
         Member member = signUpRequest.toEntity();
         memberRepository.save(member);
 
-        CreateRequestPrivate requestPrivate = CreateRequestPrivate.builder().name(member.getMemberInfo().getUserName() + " 님의 가계부").relationship("개인").isPrivate(true).build();
-        AccountBook accountBookPrivateSocialLogin = accountBookService.createAccountBookPrivateSocialLogin(member.getMemberInfo().getId(), requestPrivate);
+        CreateRequestPrivate requestPrivate = CreateRequestPrivate.builder().name(member.getUserName() + " 님의 가계부").relationship("개인").isPrivate(true).build();
+        AccountBook accountBookPrivateSocialLogin = accountBookService.createAccountBookPrivateSocialLogin(member.getId(), requestPrivate);
         categoryService.createDefaultCategories(accountBookPrivateSocialLogin);
 
         return member;
@@ -107,8 +107,8 @@ public class AuthService {
         valueOperations.set(authenticate.getName(), tokenInfoDTO.getRefreshToken());
         redisTemplate.expire(authenticate.getName(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
 
-        CreateRequestPrivate requestPrivate = CreateRequestPrivate.builder().name(entity.getMemberInfo().getUserName() + " 님의 가계부").relationship("개인").isPrivate(true).build();
-        AccountBook accountBookPrivateSocialLogin = accountBookService.createAccountBookPrivateSocialLogin(entity.getMemberInfo().getId(), requestPrivate);
+        CreateRequestPrivate requestPrivate = CreateRequestPrivate.builder().name(entity.getUserName() + " 님의 가계부").relationship("개인").isPrivate(true).build();
+        AccountBook accountBookPrivateSocialLogin = accountBookService.createAccountBookPrivateSocialLogin(entity.getId(), requestPrivate);
         categoryService.createDefaultCategories(accountBookPrivateSocialLogin);
         
         return LoginResult.builder()
