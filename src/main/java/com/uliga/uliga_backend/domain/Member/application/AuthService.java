@@ -37,7 +37,8 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate<String, String> redisTemplate;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-
+    private final CategoryService categoryService;
+    private final AccountBookService accountBookService;
     /**
      * 회원가입 메서드
      * @param signUpRequest 회원가입 요청 dto
@@ -96,6 +97,10 @@ public class AuthService {
         valueOperations.set(authenticate.getName(), tokenInfoDTO.getRefreshToken());
         redisTemplate.expire(authenticate.getName(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
 
+        CreateRequestPrivate requestPrivate = CreateRequestPrivate.builder().name(body.getMemberInfo().getUserName() + " 님의 가계부").relationship("개인").isPrivate(true).build();
+        AccountBook accountBookPrivateSocialLogin = accountBookService.createAccountBookPrivateSocialLogin(body.getMemberInfo().getId(), requestPrivate);
+        categoryService.createDefaultCategories(accountBookPrivateSocialLogin);
+        
         return LoginResult.builder()
                 .memberInfo(memberRepository.findMemberInfoById(Long.parseLong(authenticate.getName())))
                 .tokenInfo(tokenInfoDTO.toTokenIssueDTO())
