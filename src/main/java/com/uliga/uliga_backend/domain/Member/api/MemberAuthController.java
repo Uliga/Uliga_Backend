@@ -57,9 +57,9 @@ public class MemberAuthController {
 
         Member member = authService.signUp(signUpRequest);
 
-        CreateRequestPrivate requestPrivate = CreateRequestPrivate.builder().name(member.getUserName() + " 님의 가계부").relationship("개인").isPrivate(true).build();
-        AccountBook accountBookPrivate = accountBookService.createAccountBookPrivate(member, requestPrivate);
-        categoryService.createDefaultCategories(accountBookPrivate);
+        // CreateRequestPrivate requestPrivate = CreateRequestPrivate.builder().name(member.getUserName() + " 님의 가계부").relationship("개인").isPrivate(true).build();
+        // AccountBook accountBookPrivate = accountBookService.createAccountBookPrivate(member, requestPrivate);
+        // categoryService.createDefaultCategories(accountBookPrivate);
 
         return ResponseEntity.ok(SignUpResult.builder().result("CREATED").build());
     }
@@ -75,7 +75,7 @@ public class MemberAuthController {
         return ResponseEntity.ok(authService.login(loginRequest, response, request));
     }
 
-    @Operation(summary = "OAuth 회원가입 API", description = "OAuth 회원가트 API입니다")
+    @Operation(summary = "OAuth 회원가입 API", description = "OAuth 회원가입 API입니다")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "소셜 로그인 성공시", content = @Content(schema = @Schema(implementation = LoginResult.class)))
     })
@@ -83,9 +83,9 @@ public class MemberAuthController {
     public ResponseEntity<LoginResult> socialLogin(@RequestBody SocialLoginRequest socialLoginRequest) {
 
         LoginResult body = authService.socialLogin(socialLoginRequest);
-        CreateRequestPrivate requestPrivate = CreateRequestPrivate.builder().name(body.getMemberInfo().getUserName() + " 님의 가계부").relationship("개인").isPrivate(true).build();
-        AccountBook accountBookPrivateSocialLogin = accountBookService.createAccountBookPrivateSocialLogin(body.getMemberInfo().getId(), requestPrivate);
-        categoryService.createDefaultCategories(accountBookPrivateSocialLogin);
+        // CreateRequestPrivate requestPrivate = CreateRequestPrivate.builder().name(body.getMemberInfo().getUserName() + " 님의 가계부").relationship("개인").isPrivate(true).build();
+        // AccountBook accountBookPrivateSocialLogin = accountBookService.createAccountBookPrivateSocialLogin(body.getMemberInfo().getId(), requestPrivate);
+        // categoryService.createDefaultCategories(accountBookPrivateSocialLogin);
 
         return ResponseEntity.ok(body);
     }
