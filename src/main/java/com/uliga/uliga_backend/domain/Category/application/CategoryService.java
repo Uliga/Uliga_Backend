@@ -1,7 +1,6 @@
 package com.uliga.uliga_backend.domain.category.application;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.Category.repository.CategoryRepository;
 import com.uliga.uliga_backend.domain.account_book.exception.UnauthorizedAccountBookCategoryCreateException;
 import com.uliga.uliga_backend.domain.account_book.model.AccountBook;
 import com.uliga.uliga_backend.domain.account_book.repository.AccountBookRepository;
@@ -20,6 +18,7 @@ import com.uliga.uliga_backend.domain.category.dto.CategoryDTO.CategoryCreateRes
 import com.uliga.uliga_backend.domain.category.dto.CategoryDTO.CategoryUpdateRequest;
 import com.uliga.uliga_backend.domain.category.exception.DuplicateCategoryException;
 import com.uliga.uliga_backend.domain.category.model.Category;
+import com.uliga.uliga_backend.domain.category.repository.CategoryRepository;
 import com.uliga.uliga_backend.domain.join_table.repository.AccountBookMemberRepository;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 
@@ -35,13 +34,7 @@ public class CategoryService {
     private final ObjectMapper mapper;
     private final AccountBookMemberRepository accountBookMemberRepository;
 
-    private final List<St        Arrays.asList("\uD83C\uDF7D️ 식비",
-                    "☕ 카페 · 간식",
-                    "\uD83C\uDFE0 생활",
-                    "\uD83C\uDF59 편의점,마트,잡화",
-                    "\uD83D\uDC55 쇼핑",
-                    "기타")
-    );
+    private final List<St        Arrays.asList("\uD83C\uDF7D️ 식비","☕ 카페 · 간식","\uD83C\uDFE0 생활","\uD83C\uDF59 편의점,마트,잡화","\uD83D\uDC55 쇼핑","기타"));
 
     /**
      * 가계부 기본 카테고리 생성
@@ -85,26 +78,28 @@ public class CategoryService {
         return "CREATED";
     }
 
-
     /**
      * 카테고리 생성
      *
      * @param currentMemberId       현재 멤버 아이디
      * @param categoryCreateRequest 카테고리 생성 요청
-                
+     * 
      * @return 카테고리 생성 결과
-                
+     * 
      */
     @Transactional
     public CategoryCreateResult createCategories(Long currentMemberId, CategoryCreateRequest categoryCreateRequest) {
         Long accountBookId = categoryCreateRequest.getId();
-                
-        AccountBook accountBook = accountBookRepository.findById(accountBookId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
-        if (!accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(currentMemberId, accountBookId)) {
+
+        AccountBook accountBook = accountBookRepository.findById(accountBookId)
+                .orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
+        if (!accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(currentMemberId,
+                accountBookId)) {
             throw new UnauthorizedAccountBookCategoryCreateException();
         }
 
-        HashSet<String> categoryNamesByAccountBookId = categoryRepository.findCategoryNamesByAccountBookId(accountBook.getId());
+        HashSet<String> categoryNamesByAccountBookId = categoryRepository
+                .findCategoryNamesByAccountBookId(accountBook.getId());
 
         List<Category> categories = new ArrayList<>();
         List<String> result = new ArrayList<>();
@@ -139,13 +134,14 @@ public class CategoryService {
      * 가계부 카테고리 업데이트
      *
      * @param accountBookId 가계부 아이디
-                
+     * 
      * @param categories    업데이트할 카테고리 리스트
      * @return 업데이트 결과
      */
     @Transactional
     public String updateAccountBookCategory(Long accountBookId, List<String> categories) {
-        HashSet<String> categoryNamesByAccountBookId = categoryRepository.findCategoryNamesByAccountBookId(accountBookId);
+        HashSet<String> categoryNamesByAccountBookId = categoryRepository
+                .findCategoryNamesByAccountBookId(accountBookId);
         AccountBook accountBook = accountBookRepository.findById(accountBookId).orElseThrow(NotFoundByIdException::new);
         HashSet<String> finalCategory = new HashSet<>();
         List<Category> createCategories = new ArrayList<>();
@@ -174,13 +170,14 @@ public class CategoryService {
      * 카테고리 업데이트
      *
      * @param categoryId 업데이트 할 카테고리 아이디
-                
+     * 
      * @param map        업데이트할 정보 map
      * @return 업데이트 결과
      */
     @Transactional
     public CategoryUpdateRequest updateCategory(Long categoryId, Map<String, Object> map) {
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 카테고리가 없습니다"));
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 카테고리가 없습니다"));
         AccountBook accountBook = category.getAccountBook();
         CategoryUpdateRequest categoryUpdateRequest = mapper.convertValue(map, CategoryUpdateRequest.class);
         if (categoryUpdateRequest.getName() != null) {
@@ -200,10 +197,10 @@ public class CategoryService {
      */
     @Transactional
     public void deleteCategory(Long id) {
- 
-        } else {
-            throw new NotFoundByIdException("해당 아이디로 존재하는 카테고리가 없습니다");
-        }
-    }
-}
 
+    }else
+
+    {
+        throw new NotFoundByIdException("해당 아이디로 존재하는 카테고리가 없습니다");
+    }
+}}

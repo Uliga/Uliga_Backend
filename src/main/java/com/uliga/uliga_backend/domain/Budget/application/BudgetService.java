@@ -1,7 +1,5 @@
 package com.uliga.uliga_backend.domain.budget.application;
 
-import static com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO.*;
-
 import java.util.Map;
 import java.util.Optional;
 
@@ -9,8 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.Category.repository.CategoryRepository;
-import com.uliga.uliga_backend.domain.Record.repository.RecordRepository;
 import com.uliga.uliga_backend.domain.account_book.exception.CategoryNotFoundException;
 import com.uliga.uliga_backend.domain.account_book.model.AccountBook;
 import com.uliga.uliga_backend.domain.account_book.repository.AccountBookRepository;
@@ -23,9 +19,10 @@ import com.uliga.uliga_backend.domain.budget.exception.BudgetNotExistsException;
 import com.uliga.uliga_backend.domain.budget.model.Budget;
 import com.uliga.uliga_backend.domain.budget.repository.BudgetRepository;
 import com.uliga.uliga_backend.domain.category.model.Category;
+import com.uliga.uliga_backend.domain.category.repository.CategoryRepository;
+import com.uliga.uliga_backend.domain.record.repository.RecordRepository;
 import com.uliga.uliga_backend.global.error.exception.IdNotFoundException;
 import com.uliga.uliga_backend.global.error.exception.InvalidDataValueException;
-import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,26 +32,26 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class BudgetService {
 
-    private final BudgetRepository budgetRepository;
-    private final AccountBookRepository accountBookRepository;
-    private final CategoryRepository categoryRepository;
-    private final RecordRepository recordRepository;
-    private final ObjectMapper mapper;
+  private final BudgetRepository budgetRepository;
+  private final AccountBookRepository accountBookRepository;
+  private final CategoryRepository categoryRepository;
+  private final RecordRepository recordRepository;
+  private final ObjectMapper mapper;
 
-    /**
-     * 한달 가계부 예산 총합 조회
-     *
-     * @param accountBookId 가계부 아이디
-     * @param year          년도
-     * @param month         달
-     * @return 조회 결과
-     */
-    @Transactional(readOnly = true)
-    public MonthlySumQ getMonthlyBudgetSum(Long accountBookId, Long year, Long month) {
-        return budgetRepository.getMonthlySumByAccountBookId(accountBookId, year, month).orElse(new MonthlySumQ(0L));
-    }
+  /**
+   * 한달 가계부 예산 총합 조회
+   *
+   * @param accountBookId 가계부 아이디
+   * @param year          년도
+   * @param month         달
+   * @return 조회 결과
+   */
+  @Transactional(readOnly = true)
+  public MonthlySumQ getMonthlyBudgetSum(Long accountBookId, Long year, Long month) {
+    return budgetRepository.getMonthlySumByAccountBookId(accountBookId, year, month).orElse(new MonthlySumQ(0L));
+  }
 
-    /**
+  /**
      * 가계부 예산 등록
      *
      * @param createBudgetMap 파라미터로 값이 넘어오는 map
@@ -67,8 +64,7 @@ public class BudgetService {
         CreateBudgetDto createBudgetDto = mapper.convertValue(createBudgetMap, CreateBudgetDto.class);
         AccountBook accountBook = accountBookRepository.findById(createBudgetDto.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
         Optional<Budget> budgetByAccountBookIdAndYearAndMonth = budgetRepository.findByAccountBookIdAndYearAndMonth(createBudgetDto.getId(), createBudgetDto.getYear(), createBudgetDto.getMonth());
-        if (budgetByAccountBookIdAndYearAndMonth.isPre
-                        sent()) {
+        if (budgetByAccountBookIdAndYearAndMonth.isPresent()) {
                         
             Budget budget = budgetByAccountBookIdAndYearAndMonth.get();
             if (createBudgetDto.getCategory() != null) {
@@ -106,34 +102,34 @@ public class BudgetService {
 
     }
 
-    /**
-     * 가계부 분석 - 예산과 비교
-     *
-     * @param accountBookId 가계부 아이디
-     * @param year          년도
-     * @param month         달
-     * @return 비교 결과
-     */
-    @Transactional(readOnly = true)
-    public BudgetCompare compareWithBudget(Long accountBookId, Long year, Long month) {
-        Optional<MonthlySumQ> recordSum = recordRepository.getMonthlySumByAccountBookId(accountBookId, year, month);
-        Optional<MonthlySumQ> budgetSum = budgetRepository.getMonthlySumByAccountBookId(accountBookId, year, month);
-        if (recordSum.isPresent() && budgetSum.isPresent()) {
-            MonthlySumQ record = recordSum.get();
-            MonthlySumQ budget = budgetSum.get();
-            return new BudgetCompare(budget.getValue(), record.getValue(), budget.getValue() - record.getValue());
-        } else if (budgetSum.isPresent()) {
-            MonthlySumQ budget = budgetSum.get();
-            return new BudgetCompare(budget.getValue(), 0L, budget.getValue());
-        } else if (recordSum.isPresent()) {
-            MonthlySumQ record = recordSum.get();
-            return new BudgetCompare(0L, record.getValue(), -record.getValue());
-        } else {
-            return new BudgetCompare(0L, 0L, 0L);
-        }
+  /**
+   * 가계부 분석 - 예산과 비교
+   *
+   * @param accountBookId 가계부 아이디
+   * @param year          년도
+   * @param month         달
+   * @return 비교 결과
+   */
+  @Transactional(readOnly = true)
+  public BudgetCompare compareWithBudget(Long accountBookId, Long year, Long month) {
+    Optional<MonthlySumQ> recordSum = recordRepository.getMonthlySumByAccountBookId(accountBookId, year, month);
+    Optional<MonthlySumQ> budgetSum = budgetRepository.getMonthlySumByAccountBookId(accountBookId, year, month);
+    if (recordSum.isPresent() && budgetSum.isPresent()) {
+      MonthlySumQ record = recordSum.get();
+      MonthlySumQ budget = budgetSum.get();
+      return new BudgetCompare(budget.getValue(), record.getValue(), budget.getValue() - record.getValue());
+    } else if (budgetSum.isPresent()) {
+      MonthlySumQ budget = budgetSum.get();
+      return new BudgetCompare(budget.getValue(), 0L, budget.getValue());
+    } else if (recordSum.isPresent()) {
+      MonthlySumQ record = recordSum.get();
+      return new BudgetCompare(0L, record.getValue(), -record.getValue());
+    } else {
+      return new BudgetCompare(0L, 0L, 0L);
     }
+  }
 
-    /**
+  /**
      * 예산 정보 업데이트
      *
      * @param updates 업데이트할 항목들 map
