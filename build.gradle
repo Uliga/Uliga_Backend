@@ -58,9 +58,6 @@ dependencies {
     // 스프링 시큐리티
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.security:spring-security-test'
-    // MyBatis
-    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.2.5'
     // OAuth
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     // Swagger
