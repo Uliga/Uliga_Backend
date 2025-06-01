@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Category.mapper;
+package com.uliga.uliga_backend.domain.category.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 

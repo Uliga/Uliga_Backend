@@ -1,10 +1,16 @@
 package com.uliga.uliga_backend.global.jwt;
 
-import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenInfoDTO;
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
-import lombok.extern.slf4j.Slf4j;
+import static com.uliga.uliga_backend.global.common.constants.JwtConstants.ACCESS_TOKEN_EXPIRE_TIME;
+import static com.uliga.uliga_backend.global.common.constants.JwtConstants.AUTHORITIES_KEY;
+import static com.uliga.uliga_backend.global.common.constants.JwtConstants.BEARER_TYPE;
+import static com.uliga.uliga_backend.global.common.constants.JwtConstants.REFRESH_TOKEN_EXPIRE_TIME;
+
+import java.security.Key;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,19 +20,22 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.stream.Collectors;
+import com.uliga.uliga_backend.domain.token.dto.TokenDTO.TokenInfoDTO;
 
-import static com.uliga.uliga_backend.global.common.constants.JwtConstants.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
 public class JwtTokenProvider {
     private final Key key;
-
 
     public JwtTokenProvider(@Value("${jwt.secret}") String jwtSecret) {
 
@@ -75,11 +84,9 @@ public class JwtTokenProvider {
         }
 
         // 클레임에서 권한 정보 가져오기
-        Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(
-                                claims.get(AUTHORITIES_KEY).toString().split(",")
-                        ).map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
+        Collection<? extends GrantedAuthority> authorities = Arrays.stream(
+                claims.get(AUTHORITIES_KEY).toString().split(",")).map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
 
         // UserDetails 객체를 만들어서 Authentication 리턴
         UserDetails principal = new User(claims.getSubject(), "", authorities);

@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Income.exception;
+package com.uliga.uliga_backend.domain.income.exception;
 
 public class InvalidIncomeDeleteRequest extends IllegalArgumentException {
     public InvalidIncomeDeleteRequest() {

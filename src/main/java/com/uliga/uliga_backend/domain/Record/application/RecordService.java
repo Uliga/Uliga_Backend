@@ -1,48 +1,55 @@
-package com.uliga.uliga_backend.domain.Record.application;
+package com.uliga.uliga_backend.domain.record.application;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.AccountBook.repository.AccountBookRepository;
-import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
-import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
-import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO;
-import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.AccountBookWeeklyRecord;
-import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.AddRecordRequest;
-import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.AddRecordResult;
-import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.DailyValueQ;
-import com.uliga.uliga_backend.domain.AccountBookData.model.AccountBookDataType;
-import com.uliga.uliga_backend.domain.Category.repository.CategoryRepository;
-import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO;
-import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.MonthlyRecordSumPerCategories;
-import com.uliga.uliga_backend.domain.Category.dto.NativeQ.AccountBookCategoryAnalyzeQ;
-import com.uliga.uliga_backend.domain.Category.dto.NativeQ.AccountBookCategoryInfoQ;
-import com.uliga.uliga_backend.domain.Category.model.Category;
-import com.uliga.uliga_backend.domain.Common.Date;
-import com.uliga.uliga_backend.domain.Income.repository.IncomeRepository;
-import com.uliga.uliga_backend.domain.Member.repository.MemberRepository;
-import com.uliga.uliga_backend.domain.Member.model.Member;
-import com.uliga.uliga_backend.domain.Record.mapper.RecordMapper;
-import com.uliga.uliga_backend.domain.Record.repository.RecordRepository;
-import com.uliga.uliga_backend.domain.Record.dto.NativeQ.MonthlyCompareQ;
-import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.MonthlySumQ;
-import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
-import com.uliga.uliga_backend.domain.Record.dto.NativeQ.WeeklySumQ;
-import com.uliga.uliga_backend.domain.Record.dto.RecordDTO.RecordInfoDetail;
-import com.uliga.uliga_backend.domain.Record.dto.RecordDTO.RecordUpdateRequest;
-import com.uliga.uliga_backend.domain.Record.exception.InvalidRecordDelete;
-import com.uliga.uliga_backend.domain.Record.model.Record;
-import com.uliga.uliga_backend.domain.RecordComment.dto.NativeQ.RecordCommentInfoQ;
-import com.uliga.uliga_backend.domain.RecordComment.dto.RecordCommentDto.RecordCommentCreateDto;
-import com.uliga.uliga_backend.global.error.exception.IdNotFoundException;
-import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.uliga.uliga_backend.domain.account_book.exception.CategoryNotFoundException;
+import com.uliga.uliga_backend.domain.account_book.model.AccountBook;
+import com.uliga.uliga_backend.domain.account_book.repository.AccountBookRepository;
+import com.uliga.uliga_backend.domain.account_book_data.dto.AccountBookDataDTO;
+import com.uliga.uliga_backend.domain.account_book_data.dto.AccountBookDataDTO.AccountBookWeeklyRecord;
+import com.uliga.uliga_backend.domain.account_book_data.dto.AccountBookDataDTO.AddRecordRequest;
+import com.uliga.uliga_backend.domain.account_book_data.dto.AccountBookDataDTO.AddRecordResult;
+import com.uliga.uliga_backend.domain.account_book_data.dto.NativeQ.DailyValueQ;
+import com.uliga.uliga_backend.domain.account_book_data.dto.NativeQ.MonthlySumQ;
+import com.uliga.uliga_backend.domain.account_book_data.model.AccountBookDataType;
+import com.uliga.uliga_backend.domain.category.dto.CategoryDTO;
+import com.uliga.uliga_backend.domain.category.dto.CategoryDTO.MonthlyRecordSumPerCategories;
+import com.uliga.uliga_backend.domain.category.dto.NativeQ.AccountBookCategoryAnalyzeQ;
+import com.uliga.uliga_backend.domain.category.dto.NativeQ.AccountBookCategoryInfoQ;
+import com.uliga.uliga_backend.domain.category.model.Category;
+import com.uliga.uliga_backend.domain.category.repository.CategoryRepository;
+import com.uliga.uliga_backend.domain.common.Date;
+import com.uliga.uliga_backend.domain.income.repository.IncomeRepository;
+import com.uliga.uliga_backend.domain.member.model.Member;
+import com.uliga.uliga_backend.domain.member.repository.MemberRepository;
+import com.uliga.uliga_backend.domain.record.dto.RecordDTO.RecordInfoDetail;
+import com.uliga.uliga_backend.domain.record.dto.RecordDTO.RecordUpdateRequest;
+import com.uliga.uliga_backend.domain.record.dto.NativeQ.MonthlyCompareQ;
+import com.uliga.uliga_backend.domain.record.dto.NativeQ.RecordInfoQ;
+import com.uliga.uliga_backend.domain.record.dto.NativeQ.WeeklySumQ;
+import com.uliga.uliga_backend.domain.record.exception.InvalidRecordDelete;
+import com.uliga.uliga_backend.domain.record.mapper.RecordMapper;
+import com.uliga.uliga_backend.domain.record.model.Record;
+import com.uliga.uliga_backend.domain.record.repository.RecordRepository;
+import com.uliga.uliga_backend.domain.record_comment.dto.RecordCommentDto.RecordCommentCreateDto;
+import com.uliga.uliga_backend.domain.record_comment.dto.NativeQ.RecordCommentInfoQ;
+import com.uliga.uliga_backend.global.error.exception.IdNotFoundException;
+import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -79,9 +86,12 @@ public class RecordService {
      */
     @Transactional
     public AddRecordResult addRecord(Long currentMemberId, AddRecordRequest addRecordRequest) {
-        AccountBook accountBook = accountBookRepository.findById(addRecordRequest.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
-        Category category = categoryRepository.findByAccountBookAndName(accountBook, addRecordRequest.getCategory()).orElseThrow(CategoryNotFoundException::new);
-        Member member = memberRepository.findById(currentMemberId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
+        AccountBook accountBook = accountBookRepository.findById(addRecordRequest.getId())
+                .orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
+        Category category = categoryRepository.findByAccountBookAndName(accountBook, addRecordRequest.getCategory())
+                .orElseThrow(CategoryNotFoundException::new);
+        Member member = memberRepository.findById(currentMemberId)
+                .orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
         String[] split = addRecordRequest.getDate().split("-");
         Date date = Date.builder()
                 .year(Long.parseLong(split[0]))
@@ -100,7 +110,8 @@ public class RecordService {
                 .build();
         recordRepository.save(record);
         List<Long> sharedAccountBookIds = addRecordRequest.getSharedAccountBook();
-        List<AccountBook> sharedAccountBooks = accountBookRepository.findAccountBookByAccountBookIds(sharedAccountBookIds);
+        List<AccountBook> sharedAccountBooks = accountBookRepository
+                .findAccountBookByAccountBookIds(sharedAccountBookIds);
         List<Category> categories = categoryRepository.findCategoriesByAccountBookIds(sharedAccountBookIds);
 
         Map<Long, Category> categoryDict = new HashMap<>();
@@ -132,7 +143,6 @@ public class RecordService {
 
     }
 
-
     /**
      * 지출 정보 업데이트
      *
@@ -145,13 +155,16 @@ public class RecordService {
         if (patchRecord.getId() == null) {
             throw new IdNotFoundException("지출 아이디가 null 입니다.");
         }
-        Record record = recordRepository.findById(patchRecord.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 지출이 없습니다"));
+        Record record = recordRepository.findById(patchRecord.getId())
+                .orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 지출이 없습니다"));
 
         if (patchRecord.getAccount() != null) {
             record.updateAccount(patchRecord.getAccount());
         }
         if (patchRecord.getCategory() != null) {
-            Category category = categoryRepository.findByAccountBookAndName(record.getAccountBook(), patchRecord.getCategory()).orElseThrow(CategoryNotFoundException::new);
+            Category category = categoryRepository
+                    .findByAccountBookAndName(record.getAccountBook(), patchRecord.getCategory())
+                    .orElseThrow(CategoryNotFoundException::new);
             record.updateCategory(category);
         }
         if (patchRecord.getMemo() != null) {
@@ -186,7 +199,8 @@ public class RecordService {
      * @return 조회 결과
      */
     @Transactional(readOnly = true)
-    public Page<RecordInfoQ> getMemberRecordsByAccountBook(Long accountBookId, Long categoryId, Long year, Long month, Pageable pageable) {
+    public Page<RecordInfoQ> getMemberRecordsByAccountBook(Long accountBookId, Long categoryId, Long year, Long month,
+            Pageable pageable) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("accountBookId", accountBookId);
         map.put("categoryId", categoryId);
@@ -221,7 +235,8 @@ public class RecordService {
      */
     @Transactional
     public void deleteRecord(Long id, Long recordId) {
-        Record record = recordRepository.findById(recordId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 지출이 없습니다"));
+        Record record = recordRepository.findById(recordId)
+                .orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 지출이 없습니다"));
         if (record.getCreator().getId().equals(id)) {
             recordRepository.delete(record);
         } else {
@@ -239,7 +254,8 @@ public class RecordService {
      * @return 조회 결과
      */
     @Transactional(readOnly = true)
-    public AccountBookDataDTO.AccountBookDailyRecordSumAndMonthlySum getDailyRecordSumAndMonthlySum(Long accountBookId, Long year, Long month) {
+    public AccountBookDataDTO.AccountBookDailyRecordSumAndMonthlySum getDailyRecordSumAndMonthlySum(Long accountBookId,
+            Long year, Long month) {
         List<DailyValueQ> monthlyRecord = recordRepository.getDailyRecordSumOfMonth(accountBookId, year, month);
 
         Calendar calendar = Calendar.getInstance();
@@ -260,19 +276,21 @@ public class RecordService {
 
             }
         }
-        List<MonthlyCompareQ> monthlyCompareInDailyAnalyze = recordRepository.getMonthlyCompareInDailyAnalyze(accountBookId, year, month);
+        List<MonthlyCompareQ> monthlyCompareInDailyAnalyze = recordRepository
+                .getMonthlyCompareInDailyAnalyze(accountBookId, year, month);
         if (monthlyCompareInDailyAnalyze.size() == 2) {
             Long diff = monthlyCompareInDailyAnalyze.get(0).getValue() - monthlyCompareInDailyAnalyze.get(1).getValue();
-            return new AccountBookDataDTO.AccountBookDailyRecordSumAndMonthlySum(result, monthlyCompareInDailyAnalyze.get(0).getValue(), diff);
+            return new AccountBookDataDTO.AccountBookDailyRecordSumAndMonthlySum(result,
+                    monthlyCompareInDailyAnalyze.get(0).getValue(), diff);
         } else {
             if (monthlyCompareInDailyAnalyze.size() == 0) {
                 return new AccountBookDataDTO.AccountBookDailyRecordSumAndMonthlySum(result, 0L, null);
             } else {
-                return new AccountBookDataDTO.AccountBookDailyRecordSumAndMonthlySum(result, monthlyCompareInDailyAnalyze.get(0).getValue(), null);
+                return new AccountBookDataDTO.AccountBookDailyRecordSumAndMonthlySum(result,
+                        monthlyCompareInDailyAnalyze.get(0).getValue(), null);
             }
 
         }
-
 
     }
 
@@ -286,7 +304,8 @@ public class RecordService {
      */
     @Transactional(readOnly = true)
     public MonthlyRecordSumPerCategories getMonthlyRecordSumPerCategories(Long accountBookId, Long year, Long month) {
-        List<AccountBookCategoryAnalyzeQ> categoryAnalyze = categoryRepository.findAccountBookCategoryAnalyze(accountBookId, year, month);
+        List<AccountBookCategoryAnalyzeQ> categoryAnalyze = categoryRepository
+                .findAccountBookCategoryAnalyze(accountBookId, year, month);
         Optional<MonthlySumQ> monthlySum = recordRepository.getMonthlySumByAccountBookId(accountBookId, year, month);
         if (monthlySum.isPresent()) {
             MonthlySumQ monthlySumQ = monthlySum.get();
@@ -297,15 +316,18 @@ public class RecordService {
             if (compare.equals(monthlySumQ.getValue())) {
                 return new CategoryDTO.MonthlyRecordSumPerCategories(categoryAnalyze, monthlySumQ.getValue());
             } else {
-                AccountBookCategoryAnalyzeQ built = new AccountBookCategoryAnalyzeQ(null, "그 외", monthlySumQ.getValue() - compare);
+                AccountBookCategoryAnalyzeQ built = new AccountBookCategoryAnalyzeQ(null, "그 외",
+                        monthlySumQ.getValue() - compare);
                 categoryAnalyze.add(built);
                 return new CategoryDTO.MonthlyRecordSumPerCategories(categoryAnalyze, monthlySumQ.getValue());
             }
         } else {
-            List<AccountBookCategoryInfoQ> accountBookCategoryInfoById = categoryRepository.findAccountBookCategoryAnalyze(accountBookId);
+            List<AccountBookCategoryInfoQ> accountBookCategoryInfoById = categoryRepository
+                    .findAccountBookCategoryAnalyze(accountBookId);
             List<AccountBookCategoryAnalyzeQ> result = new ArrayList<>();
             for (AccountBookCategoryInfoQ accountBookCategoryInfoQ : accountBookCategoryInfoById) {
-                AccountBookCategoryAnalyzeQ built = new AccountBookCategoryAnalyzeQ(accountBookCategoryInfoQ.getId(), accountBookCategoryInfoQ.getLabel(), 0L);
+                AccountBookCategoryAnalyzeQ built = new AccountBookCategoryAnalyzeQ(accountBookCategoryInfoQ.getId(),
+                        accountBookCategoryInfoQ.getLabel(), 0L);
                 result.add(built);
 
             }
@@ -331,7 +353,8 @@ public class RecordService {
         calendar.set(Math.toIntExact(year), Math.toIntExact(month) - 1, 1);
         int actualMaximum = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         while (startDay <= actualMaximum) {
-            Optional<WeeklySumQ> weeklyRecordSum = recordRepository.getWeeklyRecordSum(accountBookId, year, month, startDay, startDay + 7);
+            Optional<WeeklySumQ> weeklyRecordSum = recordRepository.getWeeklyRecordSum(accountBookId, year, month,
+                    startDay, startDay + 7);
             long endDay;
             if (startDay + 6 <= actualMaximum) {
                 endDay = startDay + 6;
@@ -340,11 +363,13 @@ public class RecordService {
             }
             if (weeklyRecordSum.isPresent()) {
                 WeeklySumQ weeklySumQ = weeklyRecordSum.get();
-                AccountBookDataDTO.WeeklySum weeklySum = AccountBookDataDTO.WeeklySum.builder().startDay(startDay).endDay(endDay).value(weeklySumQ.getValue()).build();
+                AccountBookDataDTO.WeeklySum weeklySum = AccountBookDataDTO.WeeklySum.builder().startDay(startDay)
+                        .endDay(endDay).value(weeklySumQ.getValue()).build();
                 result.add(weeklySum);
                 totalSum += weeklySum.getValue();
             } else {
-                AccountBookDataDTO.WeeklySum weeklySum = AccountBookDataDTO.WeeklySum.builder().startDay(startDay).endDay(endDay).value(0L).build();
+                AccountBookDataDTO.WeeklySum weeklySum = AccountBookDataDTO.WeeklySum.builder().startDay(startDay)
+                        .endDay(endDay).value(0L).build();
                 result.add(weeklySum);
             }
             startDay += 7;
@@ -352,7 +377,6 @@ public class RecordService {
         }
         return new AccountBookDataDTO.AccountBookWeeklyRecord(result, totalSum);
     }
-
 
     /**
      * 지출에 댓글 추가

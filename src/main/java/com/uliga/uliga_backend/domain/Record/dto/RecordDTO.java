@@ -1,7 +1,8 @@
-package com.uliga.uliga_backend.domain.Record.dto;
+package com.uliga.uliga_backend.domain.record.dto;
 
-import com.uliga.uliga_backend.domain.Common.Date;
-import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
+import com.uliga.uliga_backend.domain.common.Date;
+import com.uliga.uliga_backend.domain.record.dto.NativeQ.RecordInfoQ;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Embedded;
 import lombok.AllArgsConstructor;
@@ -26,7 +27,6 @@ public class RecordDTO {
         private String creator;
         private String category;
     }
-
 
     @Builder
     @Getter
@@ -68,6 +68,5 @@ public class RecordDTO {
         @Schema(description = "지출 아이디")
         private Long id;
     }
-
 
 }

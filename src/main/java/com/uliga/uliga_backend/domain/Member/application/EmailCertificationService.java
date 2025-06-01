@@ -1,16 +1,11 @@
-package com.uliga.uliga_backend.domain.Member.application;
+package com.uliga.uliga_backend.domain.member.application;
 
-import com.uliga.uliga_backend.domain.Member.repository.MemberRepository;
-import com.uliga.uliga_backend.domain.Member.exception.EmailCertificationExpireException;
-import com.uliga.uliga_backend.domain.Member.exception.UserNotFoundByEmail;
-import com.uliga.uliga_backend.domain.Member.model.Member;
-import jakarta.mail.Message.RecipientType;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeMessage;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import static com.uliga.uliga_backend.global.common.constants.EmailConstants.EMAIL_CERTIFICATION_TIME;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.mail.MailException;
@@ -18,12 +13,21 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
+import com.uliga.uliga_backend.domain.member.dto.MemberDTO.CodeConfirmDto;
+import com.uliga.uliga_backend.domain.member.dto.MemberDTO.EmailConfirmCodeDto;
+import com.uliga.uliga_backend.domain.member.dto.MemberDTO.ResetPasswordRequest;
+import com.uliga.uliga_backend.domain.member.exception.EmailCertificationExpireException;
+import com.uliga.uliga_backend.domain.member.exception.UserNotFoundByEmail;
+import com.uliga.uliga_backend.domain.member.model.Member;
+import com.uliga.uliga_backend.domain.member.repository.MemberRepository;
 
-import static com.uliga.uliga_backend.domain.Member.dto.MemberDTO.*;
-import static com.uliga.uliga_backend.global.common.constants.EmailConstants.EMAIL_CERTIFICATION_TIME;
+import jakarta.mail.Message.RecipientType;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -38,16 +42,16 @@ public class EmailCertificationService {
 
     /**
      * 이메일 인증 메시지 생성 메서드
+     * 
      * @param to 수신자 이메일
      * @return 이메일 메시지
-     * @throws MessagingException 이메일 전송 예외
+     * @throws MessagingException           이메일 전송 예외
      * @throws UnsupportedEncodingException 인코딩 처리 예외
      */
     public MimeMessage createMessage(String to) throws MessagingException, UnsupportedEncodingException {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         mimeMessage.addRecipients(RecipientType.TO, to);
         mimeMessage.setSubject("공유 가계부 우리가 이메일 인증");
-
 
         String msg = "";
         msg += """
@@ -116,6 +120,7 @@ public class EmailCertificationService {
 
     /**
      * 이메일 인증 번호 생성
+     * 
      * @return 인증번호
      */
     public String createKey() {
@@ -130,6 +135,7 @@ public class EmailCertificationService {
 
     /**
      * 이메일 발송 메서드
+     * 
      * @param to 수신자 이메일
      * @throws Exception 발송 실패 예외
      */
@@ -149,11 +155,14 @@ public class EmailCertificationService {
 
     /**
      * 비밀번호 초기화 메서드
+     * 
      * @param resetPasswordRequest 비밀번호 초기화할 이메일
      */
     @Transactional
-    public void resetPassword(ResetPasswordRequest resetPasswordRequest) throws MessagingException, UnsupportedEncodingException {
-        Member member = memberRepository.findByEmailAndDeleted(resetPasswordRequest.getEmail(), false).orElseThrow(UserNotFoundByEmail::new);
+    public void resetPassword(ResetPasswordRequest resetPasswordRequest)
+            throws MessagingException, UnsupportedEncodingException {
+        Member member = memberRepository.findByEmailAndDeleted(resetPasswordRequest.getEmail(), false)
+                .orElseThrow(UserNotFoundByEmail::new);
         String newPassword = createRandomPassword();
         String encode = passwordEncoder.encode(newPassword);
         member.updatePassword(encode);
@@ -165,22 +174,22 @@ public class EmailCertificationService {
             throw new IllegalArgumentException(es.getLocalizedMessage());
         }
 
-
     }
 
     /**
      * 비밀번호 분실 메시지 생성현
-     * @param to 보낼 사람
+     * 
+     * @param to       보낼 사람
      * @param password 새로운 비밀번호
      * @return 전송할 이메일 메시지
-     * @throws MessagingException 이메일 전송중 예외
+     * @throws MessagingException           이메일 전송중 예외
      * @throws UnsupportedEncodingException 인코딩 오류
      */
-    public MimeMessage createPasswordMessage(String to, String password) throws MessagingException, UnsupportedEncodingException {
+    public MimeMessage createPasswordMessage(String to, String password)
+            throws MessagingException, UnsupportedEncodingException {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         mimeMessage.addRecipients(RecipientType.TO, to);
         mimeMessage.setSubject("공유 가계부 우리가 비밀번호 분실");
-
 
         String msg = "";
         msg += """
@@ -249,6 +258,7 @@ public class EmailCertificationService {
 
     /**
      * 랜덤한 비밀번호 생성하는 메서드
+     * 
      * @return 새로운 비밀번호
      */
     public String createRandomPassword() {
@@ -264,7 +274,6 @@ public class EmailCertificationService {
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
 
-
         String lower = random.ints(65, 91)
                 .limit(3)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
@@ -276,8 +285,10 @@ public class EmailCertificationService {
                 .toString();
         return upper + spc + lower + numeral;
     }
+
     /**
      * 코드 검증 메서드
+     * 
      * @param emailConfirmCodeDto 코드 검증 요청 dto
      * @return 코드 일치 여부
      */
@@ -292,7 +303,9 @@ public class EmailCertificationService {
         }
 
         CodeConfirmDto confirmDto = CodeConfirmDto.builder().build();
-        confirmDto.setMatches(code.equals(emailConfirmCodeDto.getCode()) || (emailConfirmCodeDto.getCode().equals("000000") && emailConfirmCodeDto.getEmail().equals("testuser@example.com")));
+        confirmDto.setMatches(
+                code.equals(emailConfirmCodeDto.getCode()) || (emailConfirmCodeDto.getCode().equals("000000")
+                        && emailConfirmCodeDto.getEmail().equals("testuser@example.com")));
         valueOperations.getAndDelete(emailConfirmCodeDto.getEmail());
         return confirmDto;
 

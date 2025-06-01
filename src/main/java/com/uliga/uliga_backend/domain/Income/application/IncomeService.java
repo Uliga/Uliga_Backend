@@ -1,39 +1,41 @@
-package com.uliga.uliga_backend.domain.Income.application;
+package com.uliga.uliga_backend.domain.income.application;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.AccountBook.repository.AccountBookRepository;
-import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
-import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
-import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.AddIncomeRequest;
-import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.AddIncomeResult;
-import com.uliga.uliga_backend.domain.AccountBookData.model.AccountBookDataType;
-import com.uliga.uliga_backend.domain.Category.repository.CategoryRepository;
-import com.uliga.uliga_backend.domain.Category.model.Category;
-import com.uliga.uliga_backend.domain.Common.Date;
-import com.uliga.uliga_backend.domain.Income.mapper.IncomeMapper;
-import com.uliga.uliga_backend.domain.Income.repository.IncomeRepository;
-import com.uliga.uliga_backend.domain.Income.dto.IncomeDTO.IncomeUpdateRequest;
-import com.uliga.uliga_backend.domain.Income.dto.NativeQ.IncomeInfoQ;
-import com.uliga.uliga_backend.domain.Income.exception.InvalidIncomeDeleteRequest;
-import com.uliga.uliga_backend.domain.Income.model.Income;
-import com.uliga.uliga_backend.domain.Member.repository.MemberRepository;
-import com.uliga.uliga_backend.domain.Member.model.Member;
-import com.uliga.uliga_backend.domain.Record.repository.RecordRepository;
-import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.MonthlySumQ;
-import com.uliga.uliga_backend.global.error.exception.IdNotFoundException;
-import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.uliga.uliga_backend.domain.Income.repository.IncomeRepository;
+import com.uliga.uliga_backend.domain.Record.repository.RecordRepository;
+import com.uliga.uliga_backend.domain.account_book.exception.CategoryNotFoundException;
+import com.uliga.uliga_backend.domain.account_book.model.AccountBook;
+import com.uliga.uliga_backend.domain.account_book.repository.AccountBookRepository;
+import com.uliga.uliga_backend.domain.account_book_data.dto.AccountBookDataDTO.AddIncomeRequest;
+import com.uliga.uliga_backend.domain.account_book_data.dto.AccountBookDataDTO.AddIncomeResult;
+import com.uliga.uliga_backend.domain.account_book_data.dto.NativeQ.MonthlySumQ;
+import com.uliga.uliga_backend.domain.account_book_data.model.AccountBookDataType;
+import com.uliga.uliga_backend.domain.category.model.Category;
+import com.uliga.uliga_backend.domain.category.repository.CategoryRepository;
+import com.uliga.uliga_backend.domain.income.dto.IncomeDTO.IncomeUpdateRequest;
+import com.uliga.uliga_backend.domain.income.dto.NativeQ.IncomeInfoQ;
+import com.uliga.uliga_backend.domain.income.exception.InvalidIncomeDeleteRequest;
+import com.uliga.uliga_backend.domain.income.mapper.IncomeMapper;
+import com.uliga.uliga_backend.domain.income.model.Income;
+import com.uliga.uliga_backend.domain.member.model.Member;
+import com.uliga.uliga_backend.domain.member.repository.MemberRepository;
+import com.uliga.uliga_backend.global.error.exception.IdNotFoundException;
+import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -61,8 +63,11 @@ public class IncomeService {
     }
 
     @Transactional
+                
     public AddIncomeResult addIncome(Long currentMemberId, AddIncomeRequest addIncomeRequest) {
-        AccountBook accountBook = accountBookRepository.findById(addIncomeRequest.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
+                
+        AccountBook accountBook = accountBookRepository.findById(a
+                ddIncomeRequest.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
         Category category = categoryRepository.findByAccountBookAndName(accountBook, addIncomeRequest.getCategory()).orElseThrow(CategoryNotFoundException::new);
         Member member = memberRepository.findById(currentMemberId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
         String[] split = addIncomeRequest.getDate().split("-");
@@ -82,6 +87,7 @@ public class IncomeService {
                 .account(addIncomeRequest.getAccount())
                 .build();
         incomeRepository.save(income);
+                
         List<Long> sharedAccountBookIds = addIncomeRequest.getSharedAccountBook();
         List<AccountBook> sharedAccountBooks = accountBookRepository.findAccountBookByAccountBookIds(sharedAccountBookIds);
         List<Category> categories = categoryRepository.findCategoriesByAccountBookIds(sharedAccountBookIds);
@@ -111,10 +117,9 @@ public class IncomeService {
         incomeRepository.saveAll(toSave);
         return AddIncomeResult.builder()
                 .accountBookId(accountBook.getId())
-                .incomeInfo(income.toInfoQ()).build();
+     
 
-    }
-
+    
 
     /**
      * 수입 정보 업데이트
@@ -127,11 +132,14 @@ public class IncomeService {
         IncomeUpdateRequest patchIncome = objectMapper.convertValue(updates, IncomeUpdateRequest.class);
         if (patchIncome.getId() == null) {
             throw new IdNotFoundException("수입 아이디가 null 입니다.");
+                
         }
         Income income = incomeRepository.findById(patchIncome.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 수입이 없습니다"));
         if (patchIncome.getAccount() != null) {
             income.updateAccount(patchIncome.getAccount());
         }
+                    
+                    
         if (patchIncome.getCategory() != null) {
             Category category = categoryRepository.findByAccountBookAndName(income.getAccountBook(), patchIncome.getCategory()).orElseThrow(CategoryNotFoundException::new);
             income.updateCategory(category);
@@ -166,6 +174,7 @@ public class IncomeService {
      * @param pageable      페이징 정보
      * @return 조회 결과
      */
+            
     @Transactional(readOnly = true)
     public Page<IncomeInfoQ> getMemberIncomesByAccountBook(Long accountBookId, Long categoryId, Long year, Long month, Pageable pageable) {
         HashMap<String, Object> map = new HashMap<>();
@@ -201,6 +210,7 @@ public class IncomeService {
      * @param incomeId 삭제할 수입 아이디
      */
     @Transactional
+                
     public void deleteIncome(Long id, Long incomeId) {
         Income income = incomeRepository.findById(incomeId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 수입이 없습니다"));
         if (income.getCreator().getId().equals(id)) {

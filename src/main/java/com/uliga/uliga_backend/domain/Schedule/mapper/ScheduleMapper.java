@@ -1,10 +1,11 @@
-package com.uliga.uliga_backend.domain.Schedule.mapper;
-
-import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleMonthSum;
-import org.apache.ibatis.annotations.Mapper;
+package com.uliga.uliga_backend.domain.schedule.mapper;
 
 import java.util.HashMap;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.uliga.uliga_backend.domain.schedule.dto.NativeQ.ScheduleMonthSum;
 
 @Mapper
 public interface ScheduleMapper {

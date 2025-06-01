@@ -1,8 +1,6 @@
-package com.uliga.uliga_backend.domain.Schedule.dto.NativeQ;
+package com.uliga.uliga_backend.domain.schedule.dto.NativeQ;
 
-import com.uliga.uliga_backend.domain.Common.Date;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Embedded;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -24,10 +22,12 @@ public class ScheduleInfoQ {
     private Long creatorId;
     @Schema(description = "작성자", defaultValue = "creatorUsername")
     private String creator;
-    @Schema(description = "가계부 이름",defaultValue = "accountBookName")
+    @Schema(description = "가계부 이름", defaultValue = "accountBookName")
     private String accountBookName;
+
     @Builder
-    public ScheduleInfoQ(Long id, Boolean isIncome, String name, Long nDay, Long value, Long creatorId, String creator, String accountBookName) {
+    public ScheduleInfoQ(Long id, Boolean isIncome, String name, Long nDay, Long value, Long creatorId, String creator,
+            String accountBookName) {
         this.id = id;
         this.isIncome = isIncome;
         this.name = name;

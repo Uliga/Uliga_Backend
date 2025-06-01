@@ -1,7 +1,8 @@
-package com.uliga.uliga_backend.domain.Budget.repository;
+package com.uliga.uliga_backend.domain.budget.repository;
 
-import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.MonthlySumQ;
-import com.uliga.uliga_backend.domain.Budget.model.Budget;
+import com.uliga.uliga_backend.domain.account_book_data.dto.NativeQ.MonthlySumQ;
+import com.uliga.uliga_backend.domain.budget.model.Budget;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,6 +18,7 @@ public interface BudgetRepository extends JpaRepository<Budget, Long> {
             "AND b.month=:month " +
             "AND b.year = :year " +
             "GROUP BY ab.id")
+            
     Optional<MonthlySumQ> getMonthlySumByAccountBookId(@Param("id") Long id, @Param("year") Long year, @Param("month") Long month);
 
     boolean existsBudgetByAccountBookIdAndYearAndMonth(Long accountBookId, Long year, Long month);

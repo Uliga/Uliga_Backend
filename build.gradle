@@ -1,6 +1,8 @@
+import java.text.SimpleDateFormat
+
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.0.2'
+    id 'org.springframework.boot' version '3.2.5'
     id 'io.spring.dependency-management' version '1.1.0'
     id "org.asciidoctor.jvm.convert" version "3.3.2"
 
@@ -8,7 +10,7 @@ plugins {
 
 group = 'com.uliga'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+sourceCompatibility = '21'
 
 configurations {
     asciidoctorExtensions
@@ -28,6 +30,16 @@ repositories {
 }
 
 dependencies {
+    //reactive stack
+
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
+
+    runtimeOnly("io.r2dbc:r2dbc-postgresql") // or r2dbc-postgresql
+
+    implementation("org.flywaydb:flyway-core")
+
+
     // thymeleaf
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     // 스프링 부트 3
@@ -48,7 +60,7 @@ dependencies {
     implementation 'org.springframework.security:spring-security-test'
     // MyBatis
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.1'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.2.5'
     // OAuth
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     // Swagger
@@ -95,4 +107,34 @@ dependencies {
 test {
     outputs.dir snippetsDir
     useJUnitPlatform()
+}
+
+
+
+task dbCreateMigration {
+    group = "Flyway"
+    description = "Generate a new Flyway migration SQL file with a timestamp and name."
+
+    doFirst {
+        if (!project.hasProperty('migrationName')) {
+            throw new GradleException("Usage: ./gradlew dbCreateMigration -PmigrationName=your_migration_name")
+        }
+
+        def name = project.property('migrationName')
+        def timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
+        def filename = "V${timestamp}__${name.replaceAll('\\s+', '_')}.sql"
+        def migrationDir = file("src/main/resources/db/migration")
+
+        if (!migrationDir.exists()) {
+            migrationDir.mkdirs()
+        }
+
+        def newFile = new File(migrationDir, filename)
+        if (newFile.exists()) {
+            throw new GradleException("Migration file already exists: $filename")
+        }
+
+        newFile.text = "-- Migration: ${name}\n"
+        println "✅ Created migration file: ${newFile.absolutePath}"
+    }
 }

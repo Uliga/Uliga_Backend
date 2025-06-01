@@ -1,9 +1,9 @@
 package com.uliga.uliga_backend.global.oauth2.provider;
 
-import com.uliga.uliga_backend.domain.Member.model.UserLoginType;
-import com.uliga.uliga_backend.global.oauth2.OAuth2UserInfo;
-
 import java.util.Map;
+
+import com.uliga.uliga_backend.domain.member.model.UserLoginType;
+import com.uliga.uliga_backend.global.oauth2.OAuth2UserInfo;
 
 public class GoogleOAuth2UserInfo extends OAuth2UserInfo {
     public GoogleOAuth2UserInfo(Map<String, Object> attributes) {
@@ -26,7 +26,7 @@ public class GoogleOAuth2UserInfo extends OAuth2UserInfo {
     }
 
     @Override
-    public String getProvider(){
+    public String getProvider() {
         return UserLoginType.GOOGLE.toString();
     }
 

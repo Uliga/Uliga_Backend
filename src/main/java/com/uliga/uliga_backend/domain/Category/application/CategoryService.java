@@ -1,24 +1,30 @@
-package com.uliga.uliga_backend.domain.Category.application;
+package com.uliga.uliga_backend.domain.category.application;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.AccountBook.repository.AccountBookRepository;
-import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookCategoryCreateException;
-import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
 import com.uliga.uliga_backend.domain.Category.repository.CategoryRepository;
-import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO;
-import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryCreateRequest;
-import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryCreateResult;
-import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryUpdateRequest;
-import com.uliga.uliga_backend.domain.Category.exception.DuplicateCategoryException;
-import com.uliga.uliga_backend.domain.Category.model.Category;
-import com.uliga.uliga_backend.domain.JoinTable.repository.AccountBookMemberRepository;
+import com.uliga.uliga_backend.domain.account_book.exception.UnauthorizedAccountBookCategoryCreateException;
+import com.uliga.uliga_backend.domain.account_book.model.AccountBook;
+import com.uliga.uliga_backend.domain.account_book.repository.AccountBookRepository;
+import com.uliga.uliga_backend.domain.category.dto.CategoryDTO;
+import com.uliga.uliga_backend.domain.category.dto.CategoryDTO.CategoryCreateRequest;
+import com.uliga.uliga_backend.domain.category.dto.CategoryDTO.CategoryCreateResult;
+import com.uliga.uliga_backend.domain.category.dto.CategoryDTO.CategoryUpdateRequest;
+import com.uliga.uliga_backend.domain.category.exception.DuplicateCategoryException;
+import com.uliga.uliga_backend.domain.category.model.Category;
+import com.uliga.uliga_backend.domain.join_table.repository.AccountBookMemberRepository;
 import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
-import org.springframework.transaction.annotation.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.util.*;
 
 @Slf4j
 @Service
@@ -29,8 +35,7 @@ public class CategoryService {
     private final ObjectMapper mapper;
     private final AccountBookMemberRepository accountBookMemberRepository;
 
-    private final List<String> defaultCategories = new ArrayList<>(
-            Arrays.asList("\uD83C\uDF7D️ 식비",
+    private final List<St        Arrays.asList("\uD83C\uDF7D️ 식비",
                     "☕ 카페 · 간식",
                     "\uD83C\uDFE0 생활",
                     "\uD83C\uDF59 편의점,마트,잡화",
@@ -55,8 +60,9 @@ public class CategoryService {
             categories.add(newCategory);
         }
         categoryRepository.saveAll(categories);
-
-        return "CREATED";
+ 
+     * 
+        return "CREATE    ";
     }
 
     /**
@@ -72,9 +78,8 @@ public class CategoryService {
             Category newCategory = Category.builder()
                     .accountBook(accountBook)
                     .name(defaultCategory)
-                    .build();
-            categories.add(newCategory);
-        }
+     
+
         categoryRepository.saveAll(categories);
 
         return "CREATED";
@@ -86,11 +91,14 @@ public class CategoryService {
      *
      * @param currentMemberId       현재 멤버 아이디
      * @param categoryCreateRequest 카테고리 생성 요청
+                
      * @return 카테고리 생성 결과
+                
      */
     @Transactional
     public CategoryCreateResult createCategories(Long currentMemberId, CategoryCreateRequest categoryCreateRequest) {
         Long accountBookId = categoryCreateRequest.getId();
+                
         AccountBook accountBook = accountBookRepository.findById(accountBookId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
         if (!accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(currentMemberId, accountBookId)) {
             throw new UnauthorizedAccountBookCategoryCreateException();
@@ -131,6 +139,7 @@ public class CategoryService {
      * 가계부 카테고리 업데이트
      *
      * @param accountBookId 가계부 아이디
+                
      * @param categories    업데이트할 카테고리 리스트
      * @return 업데이트 결과
      */
@@ -165,6 +174,7 @@ public class CategoryService {
      * 카테고리 업데이트
      *
      * @param categoryId 업데이트 할 카테고리 아이디
+                
      * @param map        업데이트할 정보 map
      * @return 업데이트 결과
      */
@@ -190,8 +200,7 @@ public class CategoryService {
      */
     @Transactional
     public void deleteCategory(Long id) {
-        if (categoryRepository.existsById(id)) {
-            categoryRepository.deleteById(id);
+ 
         } else {
             throw new NotFoundByIdException("해당 아이디로 존재하는 카테고리가 없습니다");
         }

@@ -1,8 +1,8 @@
-package com.uliga.uliga_backend.domain.Post.repository;
+package com.uliga.uliga_backend.domain.post.repository;
 
-import com.uliga.uliga_backend.domain.Post.model.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+
+import com.uliga.uliga_backend.domain.post.model.Post;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 }

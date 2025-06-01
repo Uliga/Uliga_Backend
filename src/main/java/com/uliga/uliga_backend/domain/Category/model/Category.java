@@ -1,17 +1,25 @@
-package com.uliga.uliga_backend.domain.Category.model;
-
-import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
-import com.uliga.uliga_backend.domain.AccountBookData.model.AccountBookData;
-import com.uliga.uliga_backend.domain.Budget.model.Budget;
-import com.uliga.uliga_backend.domain.Income.model.Income;
-import com.uliga.uliga_backend.domain.Record.model.Record;
-import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+package com.uliga.uliga_backend.domain.category.model;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.uliga.uliga_backend.domain.account_book.model.AccountBook;
+import com.uliga.uliga_backend.domain.account_book_data.mo
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter

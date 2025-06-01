@@ -1,0 +1,31 @@
+package com.uliga.uliga_backend.domain.account_book.dto.NativeQ;
+
+import com.uliga.uliga_backend.domain.account_book.model.AccountBookAuthority;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.Getter;
+
+@Data
+@Getter
+public class AccountBookMemberInfoQ {
+
+    private Long id;
+    @Schema(description = "멤버 닉네임", defaultValue = "memberNickname")
+    private String username;
+    @Schema(description = "멤버 권한", defaultValue = "memberAuthority")
+    private AccountBookAuthority accountBookAuthority;
+    @Schema(description = "아타바 색상")
+    private String avatarUrl;
+    @Schema(description = "멤버 이메일")
+    private String email;
+
+    public AccountBookMemberInfoQ(Long id, String username, AccountBookAuthority accountBookAuthority, String avatarUrl,
+            String email) {
+        this.id = id;
+        this.username = username;
+        this.accountBookAuthority = accountBookAuthority;
+        this.avatarUrl = avatarUrl;
+        this.email = email;
+    }
+}

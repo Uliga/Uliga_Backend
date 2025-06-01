@@ -1,22 +1,26 @@
-package com.uliga.uliga_backend.domain.Record.model;
-
-import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
-import com.uliga.uliga_backend.domain.AccountBookData.dto.AccountBookDataDTO.CreateItemResult;
-import com.uliga.uliga_backend.domain.AccountBookData.model.AccountBookData;
-import com.uliga.uliga_backend.domain.AccountBookData.model.AccountBookDataType;
-import com.uliga.uliga_backend.domain.Category.model.Category;
-import com.uliga.uliga_backend.domain.Common.Date;
-import com.uliga.uliga_backend.domain.Member.model.Member;
-import com.uliga.uliga_backend.domain.Record.dto.NativeQ.RecordInfoQ;
-import com.uliga.uliga_backend.domain.RecordComment.model.RecordComment;
-import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+package com.uliga.uliga_backend.domain.record.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.uliga.uliga_backend.domain.account_book.model.AccountBook;
+import com.uliga.uliga_backend.domain.account_book_data.dto.AccountBookDataDTO.CreateItemResult;
+import com.uliga.uliga_backend.domain.account_book_data.model.AccountBookData;
+import com.uliga.uliga_backend.domain.account_book_data.model.AccountBookDataType;
+import com.uliga.uliga_backend.domain.category.model.Category;
+import com.uliga.uliga_backend.domain.common.Date;
+import com.uliga.uliga_backend.domain.member.model.Member;
+import com.uliga.uliga_backend.domain.record.dto.NativeQ.RecordInfoQ;
+import com.uliga.uliga_backend.domain.record_comment.model.RecordComment;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -26,8 +30,10 @@ public class Record extends AccountBookData {
 
     @OneToMany(mappedBy = "record", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<RecordComment> recordComments = new ArrayList<>();
+
     @Builder
-    public Record(Long id, String memo, Long spend, String payment, String account, Date date, Member creator, AccountBook accountBook, Category category) {
+    public Record(Long id, String memo, Long spend, String payment, String account, Date date, Member creator,
+            AccountBook accountBook, Category category) {
         super(id, spend, payment, account, memo, date, AccountBookDataType.RECORD, creator, category, accountBook);
     }
 
@@ -76,7 +82,6 @@ public class Record extends AccountBookData {
     public void updatePayment(String payment) {
         super.setPayment(payment);
     }
-
 
     public void updateMemo(String memo) {
         super.setMemo(memo);

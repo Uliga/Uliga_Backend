@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Token.dto;
+package com.uliga.uliga_backend.domain.token.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -27,7 +27,6 @@ public class TokenDTO {
                     .grantType(grantType).build();
         }
 
-
     }
 
     @Builder
@@ -44,7 +43,6 @@ public class TokenDTO {
 
     }
 
-
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
@@ -52,6 +50,5 @@ public class TokenDTO {
     public static class ReissueRequest {
         private String token;
     }
-
 
 }

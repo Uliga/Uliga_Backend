@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Common;
+package com.uliga.uliga_backend.domain.common;
 
 import jakarta.persistence.Embeddable;
 import lombok.Builder;
@@ -12,6 +12,7 @@ public class Date {
     private Long month;
 
     private Long day;
+
     @Builder
     public Date(Long year, Long month, Long day) {
         this.year = year;

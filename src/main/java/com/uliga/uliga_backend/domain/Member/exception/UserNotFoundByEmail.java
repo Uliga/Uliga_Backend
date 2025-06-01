@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Member.exception;
+package com.uliga.uliga_backend.domain.member.exception;
 
 public class UserNotFoundByEmail extends IllegalArgumentException {
     public UserNotFoundByEmail() {
@@ -9,4 +9,3 @@ public class UserNotFoundByEmail extends IllegalArgumentException {
         super(s);
     }
 }
-

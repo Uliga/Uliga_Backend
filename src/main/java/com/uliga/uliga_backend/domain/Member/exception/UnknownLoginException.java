@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Member.exception;
+package com.uliga.uliga_backend.domain.member.exception;
 
 public class UnknownLoginException extends IllegalArgumentException {
     public UnknownLoginException() {

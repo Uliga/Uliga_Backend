@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Category.dto.NativeQ;
+package com.uliga.uliga_backend.domain.category.dto.NativeQ;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -15,6 +15,7 @@ public class AccountBookCategoryInfoQ {
 
     @Schema(description = "가계부 레이블", defaultValue = "categoryLabel")
     private String label;
+
     @Builder
     public AccountBookCategoryInfoQ(Long id, String name) {
         this.id = id;

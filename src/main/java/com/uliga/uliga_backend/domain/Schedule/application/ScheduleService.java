@@ -1,39 +1,50 @@
-package com.uliga.uliga_backend.domain.Schedule.application;
+package com.uliga.uliga_backend.domain.schedule.application;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.AccountBook.repository.AccountBookRepository;
-import com.uliga.uliga_backend.domain.AccountBook.exception.UnauthorizedAccountBookAccessException;
-import com.uliga.uliga_backend.domain.JoinTable.repository.AccountBookMemberRepository;
-import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO;
-import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.AddScheduleResult;
-import com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.GetAccountBookSchedules;
-import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
-import com.uliga.uliga_backend.domain.JoinTable.repository.ScheduleMemberRepository;
-import com.uliga.uliga_backend.domain.JoinTable.model.ScheduleMember;
-import com.uliga.uliga_backend.domain.Member.repository.MemberRepository;
-import com.uliga.uliga_backend.domain.Member.dto.MemberDTO.NotificationInfo;
-import com.uliga.uliga_backend.domain.Member.model.Member;
-import com.uliga.uliga_backend.domain.Schedule.mapper.ScheduleMapper;
-import com.uliga.uliga_backend.domain.Schedule.repository.ScheduleRepository;
-import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleInfoQ;
-import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleMonthSum;
-import com.uliga.uliga_backend.domain.Schedule.exception.InvalidScheduleDelete;
-import com.uliga.uliga_backend.domain.Schedule.model.Schedule;
-import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
-import org.springframework.transaction.annotation.Transactional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import static com.uliga.uliga_backend.global.common.constants.UserConstants.NOTIFICATION_EXPIRE_TIME;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.uliga.uliga_backend.domain.account_book.exception.UnauthorizedAccountBookAccessException;
+import com.uliga.uliga_backend.domain.account_book.model.AccountBook;
+import com.uliga.uliga_backend.domain.account_book.repository.AccountBookRepository;
+import com.uliga.uliga_backend.domain.join_table.model.ScheduleMember;
+import com.uliga.uliga_backend.domain.join_table.repository.AccountBookMemberRepository;
+import com.uliga.uliga_backend.domain.join_table.repository.ScheduleMemberRepository;
+import com.uliga.uliga_backend.domain.member.dto.MemberDTO.NotificationInfo;
+import com.uliga.uliga_backend.domain.member.model.Member;
+import com.uliga.uliga_backend.domain.member.repository.MemberRepository;
+import com.uliga.uliga_backend.domain.schedule.dto.ScheduleDTO;
+import com.uliga.uliga_backend.domain.schedule.dto.ScheduleDTO.AccountBookScheduleAnalyze;
+import com.uliga.uliga_backend.domain.schedule.dto.ScheduleDTO.AddScheduleResult;
+import com.uliga.uliga_backend.domain.schedule.dto.ScheduleDTO.AddSchedules;
+import com.uliga.uliga_backend.domain.schedule.dto.ScheduleDTO.Assignment;
+import com.uliga.uliga_backend.domain.schedule.dto.ScheduleDTO.CreateScheduleRequest;
+import com.uliga.uliga_backend.domain.schedule.dto.ScheduleDTO.GetAccountBookSchedules;
+import com.uliga.uliga_backend.domain.schedule.dto.ScheduleDTO.GetMemberSchedules;
+import com.uliga.uliga_backend.domain.schedule.dto.ScheduleDTO.ScheduleDetail;
+import com.uliga.uliga_backend.domain.schedule.dto.ScheduleDTO.UpdateScheduleRequest;
+import com.uliga.uliga_backend.domain.schedule.dto.NativeQ.ScheduleInfoQ;
+import com.uliga.uliga_backend.domain.schedule.dto.NativeQ.ScheduleMonthSum;
+import com.uliga.uliga_backend.domain.schedule.exception.InvalidScheduleDelete;
+import com.uliga.uliga_backend.domain.schedule.mapper.ScheduleMapper;
+import com.uliga.uliga_backend.domain.schedule.model.Schedule;
+import com.uliga.uliga_backend.domain.schedule.repository.ScheduleRepository;
+import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
 
-import static com.uliga.uliga_backend.domain.Schedule.dto.ScheduleDTO.*;
-import static com.uliga.uliga_backend.global.common.constants.UserConstants.NOTIFICATION_EXPIRE_TIME;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -50,6 +61,7 @@ public class ScheduleService {
 
     /**
      * 멤버 금융 일정 조회
+     * 
      * @param id 멤버 아이디
      * @return 금융 일정 조회 결과
      */
@@ -57,21 +69,25 @@ public class ScheduleService {
     public GetMemberSchedules getMemberSchedule(Long id) {
         LocalDate now = LocalDate.now();
         return GetMemberSchedules.builder()
-                .schedules(scheduleRepository.findByMemberId(id,  now.getDayOfMonth())).build();
+                .schedules(scheduleRepository.findByMemberId(id, now.getDayOfMonth())).build();
     }
 
     /**
      * 금융 일정 추가
+     * 
      * @param currentMemberId 현재 멤버 아이디
-     * @param addSchedules 금융 일정 추가 요청
+     * @param addSchedules    금융 일정 추가 요청
      * @return 금융일정 추가 결과
      * @throws JsonProcessingException 레디스 저장 과정에서 발생할 수 있는 오류
      */
     @Transactional
-    public AddScheduleResult addSchedule(Long currentMemberId, AddSchedules addSchedules) throws JsonProcessingException {
+    public AddScheduleResult addSchedule(Long currentMemberId, AddSchedules addSchedules)
+            throws JsonProcessingException {
 
-        Member member = memberRepository.findById(currentMemberId).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
-        AccountBook accountBook = accountBookRepository.findById(addSchedules.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
+        Member member = memberRepository.findById(currentMemberId)
+                .orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 멤버가 없습니다"));
+        AccountBook accountBook = accountBookRepository.findById(addSchedules.getId())
+                .orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
 
         SetOperations<String, String> setOperations = redisTemplate.opsForSet();
         List<CreateScheduleRequest> result = new ArrayList<>();
@@ -103,8 +119,10 @@ public class ScheduleService {
                         .day(scheduleRequest.getNotificationDate())
                         .creatorName(member.getUserName())
                         .value(assignment.getValue()).build();
-                setOperations.add(memberMap.get(assignment.getId()).getNickName(), mapper.writeValueAsString(notificationInfo));
-                redisTemplate.expire(memberMap.get(assignment.getId()).getNickName(), NOTIFICATION_EXPIRE_TIME, TimeUnit.MILLISECONDS);
+                setOperations.add(memberMap.get(assignment.getId()).getNickName(),
+                        mapper.writeValueAsString(notificationInfo));
+                redisTemplate.expire(memberMap.get(assignment.getId()).getNickName(), NOTIFICATION_EXPIRE_TIME,
+                        TimeUnit.MILLISECONDS);
             }
             result.add(scheduleRequest);
         }
@@ -116,13 +134,15 @@ public class ScheduleService {
 
     /**
      * 금융 일정 정보 업데이트
+     * 
      * @param updates 업데이트 요청
      * @return 업데이트 결과
      */
     @Transactional
     public UpdateScheduleRequest updateSchedule(Map<String, Object> updates) {
         UpdateScheduleRequest scheduleRequest = mapper.convertValue(updates, UpdateScheduleRequest.class);
-        Schedule schedule = scheduleRepository.findById(scheduleRequest.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 금융일정이 없습니다"));
+        Schedule schedule = scheduleRepository.findById(scheduleRequest.getId())
+                .orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 금융일정이 없습니다"));
         if (scheduleRequest.getIsIncome() != null) {
             schedule.updateIsIncome(scheduleRequest.getIsIncome());
         }
@@ -147,6 +167,7 @@ public class ScheduleService {
 
     /**
      * 금융 일정 상세 정보 조회
+     * 
      * @param id 금융 일정 아이디
      * @return 금융 일정 정보
      */
@@ -160,19 +181,22 @@ public class ScheduleService {
 
     /**
      * 가계부 금융 일정 조회
+     * 
      * @param accountBookId 가계부 아이디
      * @return 가계부 금융 일정
      */
     @Transactional(readOnly = true)
     public GetAccountBookSchedules getAccountBookSchedules(Long memberId, Long accountBookId) {
-        if (!accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(memberId, accountBookId)){
+        if (!accountBookMemberRepository.existsAccountBookMemberByMemberIdAndAccountBookId(memberId, accountBookId)) {
             throw new UnauthorizedAccountBookAccessException();
         }
         List<ScheduleDetail> result = new ArrayList<>();
         LocalDate date = LocalDate.now();
-        List<ScheduleInfoQ> byAccountBookId = scheduleRepository.findScheduleInfoByAccountBookId(accountBookId, date.getDayOfMonth());
+        List<ScheduleInfoQ> byAccountBookId = scheduleRepository.findScheduleInfoByAccountBookId(accountBookId,
+                date.getDayOfMonth());
         for (ScheduleInfoQ s : byAccountBookId) {
-            ScheduleDetail scheduleDetail = ScheduleDetail.builder().info(s).assignments(scheduleRepository.findScheduleMemberInfoById(s.getId())).build();
+            ScheduleDetail scheduleDetail = ScheduleDetail.builder().info(s)
+                    .assignments(scheduleRepository.findScheduleMemberInfoById(s.getId())).build();
             result.add(scheduleDetail);
         }
         HashMap<String, Object> map = new HashMap<>();
@@ -192,7 +216,8 @@ public class ScheduleService {
 
     /**
      * 가계부 고정지출 분석 조회
-     * @param accountBookId 가계부 아이디
+     * 
+     * @param accountBookId   가계부 아이디
      * @param currentMemberId 현재 멤버 아이디
      * @return 조회 결과
      */
@@ -206,12 +231,14 @@ public class ScheduleService {
 
     /**
      * 금융 일정 삭제
-     * @param id 금융 일정 아이디
+     * 
+     * @param id              금융 일정 아이디
      * @param currentMemberId 멤버 아이디
      */
     @Transactional
     public void deleteSchedule(Long id, Long currentMemberId) {
-        Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 금융일정이 없습니다"));
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 금융일정이 없습니다"));
         if (schedule.getCreator().getId().equals(currentMemberId)) {
 
             scheduleRepository.deleteById(id);

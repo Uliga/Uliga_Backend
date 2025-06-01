@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Budget.mapper;
+package com.uliga.uliga_backend.domain.budget.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 

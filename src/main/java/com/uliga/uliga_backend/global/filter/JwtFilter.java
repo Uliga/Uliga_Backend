@@ -1,15 +1,10 @@
 package com.uliga.uliga_backend.global.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.Token.exception.ExpireAccessTokenException;
-import com.uliga.uliga_backend.global.error.response.ErrorResponse;
-import com.uliga.uliga_backend.global.jwt.JwtTokenProvider;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import static com.uliga.uliga_backend.global.common.constants.JwtConstants.AUTHORIZATION_HEADER;
+import static com.uliga.uliga_backend.global.common.constants.JwtConstants.BEARER_PREFIX;
+
+import java.io.IOException;
+
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,24 +12,32 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.uliga.uliga_backend.domain.token.exception.ExpireAccessTokenException;
+import com.uliga.uliga_backend.global.error.response.ErrorResponse;
+import com.uliga.uliga_backend.global.jwt.JwtTokenProvider;
 
-import static com.uliga.uliga_backend.global.common.constants.JwtConstants.AUTHORIZATION_HEADER;
-import static com.uliga.uliga_backend.global.common.constants.JwtConstants.BEARER_PREFIX;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
-
 
     private final RedisTemplate<String, String> redisTemplate;
 
     private final ObjectMapper mapper;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
-        log.info(request.getMethod()+" "+ request.getRequestURI());
+        log.info(request.getMethod() + " " + request.getRequestURI());
 
         try {
             // 1. request Header에서 토큰 꺼냄, 여기서 HTTP ONLY 쿠키에서 읽어오게 변경 가능
@@ -70,7 +73,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 e.printStackTrace();
             }
 
-        }  catch (Exception e) {
+        } catch (Exception e) {
             log.info(e.getMessage());
             log.info(e.getClass().getName());
             e.printStackTrace();
@@ -95,6 +98,5 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         return null;
     }
-
 
 }

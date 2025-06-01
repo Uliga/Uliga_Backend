@@ -1,31 +1,34 @@
-package com.uliga.uliga_backend.domain.Budget.application;
+package com.uliga.uliga_backend.domain.budget.application;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.AccountBook.repository.AccountBookRepository;
-import com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO;
-import com.uliga.uliga_backend.domain.Record.repository.RecordRepository;
-import com.uliga.uliga_backend.domain.AccountBookData.dto.NativeQ.MonthlySumQ;
-import com.uliga.uliga_backend.domain.AccountBook.exception.BudgetAlreadyExists;
-import com.uliga.uliga_backend.domain.AccountBook.exception.CategoryNotFoundException;
-import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
-import com.uliga.uliga_backend.domain.Budget.repository.BudgetRepository;
-import com.uliga.uliga_backend.domain.Budget.dto.NativeQ.BudgetInfoQ;
-import com.uliga.uliga_backend.domain.Budget.exception.BudgetNotExistsException;
-import com.uliga.uliga_backend.domain.Budget.model.Budget;
-import com.uliga.uliga_backend.domain.Category.repository.CategoryRepository;
-import com.uliga.uliga_backend.domain.Category.model.Category;
-import com.uliga.uliga_backend.global.error.exception.IdNotFoundException;
-import com.uliga.uliga_backend.global.error.exception.InvalidDataValueException;
-import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
-import org.springframework.transaction.annotation.Transactional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import static com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO.*;
 
 import java.util.Map;
 import java.util.Optional;
 
-import static com.uliga.uliga_backend.domain.Budget.dto.BudgetDTO.*;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.uliga.uliga_backend.domain.Category.repository.CategoryRepository;
+import com.uliga.uliga_backend.domain.Record.repository.RecordRepository;
+import com.uliga.uliga_backend.domain.account_book.exception.CategoryNotFoundException;
+import com.uliga.uliga_backend.domain.account_book.model.AccountBook;
+import com.uliga.uliga_backend.domain.account_book.repository.AccountBookRepository;
+import com.uliga.uliga_backend.domain.account_book_data.dto.NativeQ.MonthlySumQ;
+import com.uliga.uliga_backend.domain.budget.dto.BudgetDTO.BudgetUpdateRequest;
+import com.uliga.uliga_backend.domain.budget.dto.BudgetDTO.BudgetUpdateRequest.BudgetCompare;
+import com.uliga.uliga_backend.domain.budget.dto.BudgetDTO.CreateBudgetDto;
+import com.uliga.uliga_backend.domain.budget.dto.NativeQ.BudgetInfoQ;
+import com.uliga.uliga_backend.domain.budget.exception.BudgetNotExistsException;
+import com.uliga.uliga_backend.domain.budget.model.Budget;
+import com.uliga.uliga_backend.domain.budget.repository.BudgetRepository;
+import com.uliga.uliga_backend.domain.category.model.Category;
+import com.uliga.uliga_backend.global.error.exception.IdNotFoundException;
+import com.uliga.uliga_backend.global.error.exception.InvalidDataValueException;
+import com.uliga.uliga_backend.global.error.exception.NotFoundByIdException;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -58,11 +61,15 @@ public class BudgetService {
      * @return 예산 등록 결과
      */
     @Transactional
+                
     public BudgetInfoQ addBudget(Map<String, Object> createBudgetMap) {
+                
         CreateBudgetDto createBudgetDto = mapper.convertValue(createBudgetMap, CreateBudgetDto.class);
         AccountBook accountBook = accountBookRepository.findById(createBudgetDto.getId()).orElseThrow(() -> new NotFoundByIdException("해당 아이디로 존재하는 가계부가 없습니다"));
         Optional<Budget> budgetByAccountBookIdAndYearAndMonth = budgetRepository.findByAccountBookIdAndYearAndMonth(createBudgetDto.getId(), createBudgetDto.getYear(), createBudgetDto.getMonth());
-        if (budgetByAccountBookIdAndYearAndMonth.isPresent()) {
+        if (budgetByAccountBookIdAndYearAndMonth.isPre
+                        sent()) {
+                        
             Budget budget = budgetByAccountBookIdAndYearAndMonth.get();
             if (createBudgetDto.getCategory() != null) {
                 Category category = categoryRepository.findByAccountBookAndName(accountBook, createBudgetDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
@@ -73,6 +80,8 @@ public class BudgetService {
                 budget.updateValue(createBudgetDto.getValue());
                 return budget.toInfoQ();
             }
+                        
+                        
         } else {
             if (createBudgetDto.getCategory() != null) {
                 Category category = categoryRepository.findByAccountBookAndName(accountBook, createBudgetDto.getCategory()).orElseThrow(CategoryNotFoundException::new);
@@ -90,11 +99,9 @@ public class BudgetService {
                         .month(createBudgetDto.getMonth())
                         .value(createBudgetDto.getValue())
                         .accountBook(accountBook).build();
-                budgetRepository.save(build);
-                return build.toInfoQ();
-            }
-        }
+         
 
+    
 
 
     }
@@ -139,11 +146,14 @@ public class BudgetService {
             throw new IdNotFoundException("가계부 아이디 값이 넘어오지 않았습니다");
         }
         if (updateRequest.getYear() == null || updateRequest.getMonth() == null) {
+                
             throw new InvalidDataValueException("업데이트 하려는 예산의 년도 혹은 달 값이 들어오지 않았습니다");
         }
         Budget budget = budgetRepository.findByAccountBookIdAndYearAndMonth(updateRequest.getId(), updateRequest.getYear(), updateRequest.getMonth()).orElseThrow(BudgetNotExistsException::new);
         if (updateRequest.getValue() != null) {
-            budget.updateValue(updateRequest.getValue());
+            budget.updateValue(updateRequest.getVa
+                    lue());
+                    
         }
         if (updateRequest.getCategory() != null) {
             Category category = categoryRepository.findByAccountBookIdAndName(updateRequest.getId(), updateRequest.getCategory()).orElseThrow(CategoryNotFoundException::new);

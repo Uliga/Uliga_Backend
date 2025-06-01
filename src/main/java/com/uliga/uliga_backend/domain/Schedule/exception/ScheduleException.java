@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Schedule.exception;
+package com.uliga.uliga_backend.domain.schedule.exception;
 
 public class ScheduleException {
 }

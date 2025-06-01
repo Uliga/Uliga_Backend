@@ -1,9 +1,12 @@
-package com.uliga.uliga_backend.domain.Budget.model;
+package com.uliga.uliga_backend.domain.budget.model;
 
-import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
-import com.uliga.uliga_backend.domain.Budget.dto.NativeQ.BudgetInfoQ;
 import com.uliga.uliga_backend.domain.Category.model.Category;
 import com.uliga.uliga_backend.domain.Common.BaseTimeEntity;
+import com.uliga.uliga_backend.domain.Common.BaseTimeEntity;
+import com.uliga.uliga_backend.domain.common.BaseTimeEntity;
+
+
+
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,6 +28,7 @@ public class Budget extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
 
     @ManyToOne
     @JoinColumn(name = "account_book_id")

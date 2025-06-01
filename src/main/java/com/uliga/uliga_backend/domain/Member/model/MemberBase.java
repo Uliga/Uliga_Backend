@@ -1,6 +1,7 @@
-package com.uliga.uliga_backend.domain.Member.model;
+package com.uliga.uliga_backend.domain.member.model;
 
-import com.uliga.uliga_backend.domain.Common.BaseTimeEntity;
+import com.uliga.uliga_backend.domain.common.BaseTimeEntity;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

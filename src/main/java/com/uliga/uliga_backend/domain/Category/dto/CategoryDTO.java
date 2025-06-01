@@ -1,9 +1,10 @@
-package com.uliga.uliga_backend.domain.Category.dto;
+package com.uliga.uliga_backend.domain.category.dto;
 
-import com.uliga.uliga_backend.domain.Category.dto.NativeQ.AccountBookCategoryAnalyzeQ;
-import com.uliga.uliga_backend.domain.Category.dto.NativeQ.AccountBookCategoryInfoQ;
-import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
-import com.uliga.uliga_backend.domain.Category.model.Category;
+import com.uliga.uliga_backend.domain.account_book.model.AccountBook;
+import com.uliga.uliga_backend.domain.category.dto.NativeQ.AccountBookCategoryAnalyzeQ;
+import com.uliga.uliga_backend.domain.category.dto.NativeQ.AccountBookCategoryInfoQ;
+import com.uliga.uliga_backend.domain.category.model.Category;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ public class CategoryDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    @Schema(description = "카테고리 생성 요청")
+    @Schema(description = "카테고리 생성 요청") 
     public static class CategorySaveRequest{
         @Schema(description = "생성할 카테고리 이름")
         private String name;

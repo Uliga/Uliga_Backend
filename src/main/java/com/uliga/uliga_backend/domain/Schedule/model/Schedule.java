@@ -1,18 +1,28 @@
-package com.uliga.uliga_backend.domain.Schedule.model;
-
-import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
-import com.uliga.uliga_backend.domain.Common.BaseTimeEntity;
-import com.uliga.uliga_backend.domain.Common.Date;
-import com.uliga.uliga_backend.domain.JoinTable.model.ScheduleMember;
-import com.uliga.uliga_backend.domain.Member.model.Member;
-import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleInfoQ;
-import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+package com.uliga.uliga_backend.domain.schedule.model;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.uliga.uliga_backend.domain.account_book.model.AccountBook;
+import com.uliga.uliga_backend.domain.common.BaseTimeEntity;
+import com.uliga.uliga_backend.domain.join_table.model.ScheduleMember;
+import com.uliga.uliga_backend.domain.member.model.Member;
+import com.uliga.uliga_backend.domain.schedule.dto.NativeQ.ScheduleInfoQ;.ScheduleInfoQ;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -40,8 +50,10 @@ public class Schedule extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "account_book_id")
     private AccountBook accountBook;
+
     @Builder
-    public Schedule(Long id, String name, Boolean isIncome, Long notificationDate, Long value, Member creator, AccountBook accountBook) {
+    public Schedule(Long id, String name, Boolean isIncome, Long notificationDate, Long value, Member creator,
+            AccountBook accountBook) {
         this.id = id;
         this.name = name;
         this.isIncome = isIncome;

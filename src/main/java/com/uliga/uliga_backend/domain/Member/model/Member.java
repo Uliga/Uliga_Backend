@@ -1,17 +1,19 @@
-package com.uliga.uliga_backend.domain.Member.model;
+package com.uliga.uliga_backend.domain.member.model;
 
-import com.uliga.uliga_backend.domain.AccountBook.model.AccountBook;
-import com.uliga.uliga_backend.domain.AccountBookData.model.AccountBookData;
-import com.uliga.uliga_backend.domain.Income.model.Income;
-import com.uliga.uliga_backend.domain.JoinTable.model.AccountBookMember;
-import com.uliga.uliga_backend.domain.JoinTable.model.ScheduleMember;
-import com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ;
 import com.uliga.uliga_backend.domain.PostComment.model.PostComment;
 import com.uliga.uliga_backend.domain.RecordComment.model.RecordComment;
-import com.uliga.uliga_backend.domain.Like.model.Liked;
 import com.uliga.uliga_backend.domain.Post.model.Post;
 import com.uliga.uliga_backend.domain.Record.model.Record;
 import com.uliga.uliga_backend.domain.Schedule.model.Schedule;
+import com.uliga.uliga_backend.domain.account_book.model.AccountBook;
+import com.uliga.uliga_backend.domain.account_book_data.model.AccountBookData;
+import com.uliga.uliga_backend.domain.income.model.Income;
+import com.uliga.uliga_backend.domain.join_table.model.
+import com.uliga.uliga_backend.domain.Record.model.Record;
+import com.uliga.uliga_backend.domain.Schedule.model.Schedule;
+import com.uliga.uliga_backend.domain.post.model.Post;
+
+
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -59,6 +61,7 @@ public class Member extends MemberBase {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private final List<Liked> likedPosts = new ArrayList<>();
 
+            
     @Builder
     public Member(Long id, String email, String password, Authority authority, UserLoginType userLoginType, String userName, String applicationPassword, String nickName, Boolean deleted) {
         super(id, email, password, applicationPassword, authority, userLoginType);
@@ -86,10 +89,9 @@ public class Member extends MemberBase {
         super.updatePassword(newPassword);
     }
 
-    public void updateApplicationPassword(String newPassword) {
-        super.updateApplicationPassword(newPassword);
-    }
+    p
 
+    
 
     public void updateNickname(String nickName) {
         this.nickName = nickName;

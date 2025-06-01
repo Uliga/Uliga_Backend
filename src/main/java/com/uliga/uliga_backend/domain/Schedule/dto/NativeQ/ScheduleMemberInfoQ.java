@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Schedule.dto.NativeQ;
+package com.uliga.uliga_backend.domain.schedule.dto.NativeQ;
 
 import lombok.Data;
 import lombok.Getter;
@@ -10,7 +10,7 @@ public class ScheduleMemberInfoQ {
     private String username;
     private Long value;
 
-    public ScheduleMemberInfoQ(Long id,String username, Long value) {
+    public ScheduleMemberInfoQ(Long id, String username, Long value) {
         this.id = id;
         this.username = username;
         this.value = value;

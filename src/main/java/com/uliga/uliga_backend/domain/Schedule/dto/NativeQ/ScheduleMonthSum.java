@@ -1,7 +1,9 @@
-package com.uliga.uliga_backend.domain.Schedule.dto.NativeQ;
+package com.uliga.uliga_backend.domain.schedule.dto.NativeQ;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
 
 @Data
 @Getter

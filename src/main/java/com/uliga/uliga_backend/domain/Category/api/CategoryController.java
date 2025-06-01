@@ -1,8 +1,5 @@
-package com.uliga.uliga_backend.domain.Category.api;
+package com.uliga.uliga_backend.domain.category.api;
 
-import com.uliga.uliga_backend.domain.Category.application.CategoryService;
-import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO;
-import com.uliga.uliga_backend.domain.Category.dto.CategoryDTO.CategoryUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -11,6 +8,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.uliga.uliga_backend.domain.category.application.CategoryService;
+import com.uliga.uliga_backend.domain.category.dto.CategoryDTO;
+import com.uliga.uliga_backend.domain.category.dto.CategoryDTO.CategoryUpdateRequest;
 
 import java.util.Map;
 
@@ -24,6 +25,7 @@ public class CategoryController {
 
     @Operation(summary = "카테고리 삭제 API", description = "카테고리 삭제 API 입니다")
     @DeleteMapping("/{id}")
+            
     public ResponseEntity<String> deleteCategory(@Parameter(name = "id", description = "카테고리 아이디", in = ParameterIn.PATH) @PathVariable("id") Long id) {
 
         categoryService.deleteCategory(id);
@@ -32,6 +34,7 @@ public class CategoryController {
 
     @Operation(summary = "카테고리 업데이트 요청 API", description = "카테고리 업데이트 요청 API입니다")
     @PatchMapping("/{id}")
+            
     public ResponseEntity<CategoryUpdateRequest> updateCategory(@PathVariable("id") Long id, @RequestBody Map<String, Object> map) {
 
         return ResponseEntity.ok(categoryService.updateCategory(id, map));

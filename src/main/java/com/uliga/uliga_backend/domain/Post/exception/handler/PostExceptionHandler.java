@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Post.exception.handler;
+package com.uliga.uliga_backend.domain.post.exception.handler;
 
 public class PostExceptionHandler {
 }

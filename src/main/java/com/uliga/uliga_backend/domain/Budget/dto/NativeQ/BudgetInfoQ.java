@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Budget.dto.NativeQ;
+package com.uliga.uliga_backend.domain.budget.dto.NativeQ;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -16,6 +16,7 @@ public class BudgetInfoQ {
     private Long month;
     @Schema(description = "해당 예산 값")
     private Long value;
+
     @Builder
     public BudgetInfoQ(Long id, Long year, Long month, Long value) {
         this.id = id;

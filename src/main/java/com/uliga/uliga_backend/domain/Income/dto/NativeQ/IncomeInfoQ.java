@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Income.dto.NativeQ;
+package com.uliga.uliga_backend.domain.income.dto.NativeQ;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -25,8 +25,10 @@ public class IncomeInfoQ {
     private String avatarUrl;
     @Schema(description = "카테고리", defaultValue = "category")
     private String category;
+
     @Builder
-    public IncomeInfoQ(Long id, Long value, String payment, String account, String memo, Long year, Long month, Long day, String creator, String category, String avatarUrl) {
+    public IncomeInfoQ(Long id, Long value, String payment, String account, String memo, Long year, Long month,
+            Long day, String creator, String category, String avatarUrl) {
         this.id = id;
         this.value = value;
         this.payment = payment;

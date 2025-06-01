@@ -1,15 +1,26 @@
-package com.uliga.uliga_backend.domain.Post.model;
-
-import com.uliga.uliga_backend.domain.Common.BaseTimeEntity;
-import com.uliga.uliga_backend.domain.PostComment.model.PostComment;
-import com.uliga.uliga_backend.domain.Like.model.Liked;
-import com.uliga.uliga_backend.domain.Member.model.Member;
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+package com.uliga.uliga_backend.domain.post.model;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.uliga.uliga_backend.domain.common.BaseTimeEntity;
+import com.uliga.uliga_backend.domain.like.model.Liked;
+import com.uliga.uliga_backend.domain.member.model.Member;
+import com.uliga.uliga_backend.domain.post_comment.model.PostComment;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
@@ -23,9 +34,6 @@ public class Post extends BaseTimeEntity {
     private Long id;
 
     private String title;
-
-    private String content;
-
 
     @ManyToOne
     @JoinColumn(name = "member_id")
