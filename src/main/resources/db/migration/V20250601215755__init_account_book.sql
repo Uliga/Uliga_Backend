@@ -1,9 +1,9 @@
 -- Migration: init_account_book
-CREATE TABLE AccountBook (
+CREATE TABLE account_book (
     id BIGSERIAL PRIMARY KEY,
-    isPrivate BOOLEAN,
+    is_private BOOLEAN,
     name TEXT,
-    relationShip TEXT,
-    createdAt TIMESTAMP DEFAULT now(),
-    updatedAt TIMESTAMP DEFAULT now()
+    relation_ship TEXT,
+    created_at TIMESTAMP DEFAULT now(),
+    updated_at TIMESTAMP DEFAULT now()
 );
