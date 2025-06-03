@@ -1,143 +1,116 @@
 package com.uliga.uliga_backend.global.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.global.jwt.CustomLogoutSuccessHandler;
-import com.uliga.uliga_backend.global.jwt.JwtAccessDeniedHandler;
-import com.uliga.uliga_backend.global.jwt.JwtAuthenticationEntryPoint;
-import com.uliga.uliga_backend.global.jwt.JwtTokenProvider;
-import com.uliga.uliga_backend.global.oauth2.application.CustomOAuth2UserService;
-import com.uliga.uliga_backend.global.oauth2.handler.OAuth2AuthenticationFailureHandler;
-import com.uliga.uliga_backend.global.oauth2.handler.OAuth2AuthenticationSuccessHandler;
-import com.uliga.uliga_backend.global.oauth2.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.ReactiveAuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.cors.reactive.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-import java.util.List;
+import com.uliga.uliga_backend.global.oauth2.application.ReactiveCustomOAuth2UserService;
+import com.uliga.uliga_backend.global.oauth2.handler.ReactiveOAuth2AuthenticationFailureHandler;
+import com.uliga.uliga_backend.global.oauth2.handler.ReactiveOAuth2AuthenticationSuccessHandler;
+import com.uliga.uliga_backend.global.oauth2.repository.ReactiveAuthorizationRequestRepository;
+import com.uliga.uliga_backend.global.security.JwtAuthenticationFilter;
+import com.uliga.uliga_backend.global.security.LogoutSucessHandler;
+import com.uliga.uliga_backend.global.security.jwt.JwtAccessDeniedHandler;
+import com.uliga.uliga_backend.global.security.jwt.JwtAuthenticationEntryPoint;
+import com.uliga.uliga_backend.global.security.jwt.JwtTokenProvider;
 
-import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+import io.jsonwebtoken.Claims;
+import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Mono;
 
 @Configuration
-@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final JwtTokenProvider jwtTokenProvider;
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    private final RedisTemplate<String, String> redisTemplate;
-    private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
-    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
-    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
-    private final CustomOAuth2UserService customOAuth2UserService;
-    private final OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository;
-    private final ObjectMapper mapper;
+  private final JwtTokenProvider jwtTokenProvider;
+  private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+  private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+  private final RedisTemplate<String, String> redisTemplate;
+  private final LogoutSucessHandler reactiveLogoutSuccessHandler;
+  private final ReactiveOAuth2AuthenticationFailureHandler reactiveOAuth2AuthenticationFailureHandler;
+  private final ReactiveOAuth2AuthenticationSuccessHandler reactiveOAuth2AuthenticationSuccessHandler;
+  private final ReactiveCustomOAuth2UserService customOAuth2UserService;
+  private final ReactiveAuthorizationRequestRepository reactiveAuthorizationRequestRepository;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // CSRF 설정 Disable
-        http
-            .httpBasic().disable()
-            .csrf().disable()
-            .cors().configurationSource(corsConfigurationSource());
+  @Bean
+  public ReactiveAuthenticationManager jwtReactiveAuthenticationManager(JwtTokenProvider jwtTokenProvider) {
+    return authentication -> {
+      String token = authentication.getCredentials().toString();
+      if (jwtTokenProvider.validateToken(token)) {
+        Claims claims = jwtTokenProvider.getClaims(token);
+        String userId = claims.getSubject();
+        return Mono.just(new UsernamePasswordAuthenticationToken(
+            userId,
+            token,
+            jwtTokenProvider.getAuthorities(token)));
+      }
+      return Mono.error(new BadCredentialsException("Invalid JWT token"));
+    };
+  }
 
-        // exception handling 할때 우리가 만든 클래스 추가
-        http
-            .exceptionHandling()
-            .accessDeniedHandler(jwtAccessDeniedHandler)
+  @Bean
+  public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+    return http
+        .csrf(ServerHttpSecurity.CsrfSpec::disable)
+        .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
+        .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
+        .logout(logout -> logout.logoutSuccessHandler(reactiveLogoutSuccessHandler))
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        .exceptionHandling(exceptionHandling -> exceptionHandling
             .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+            .accessDeniedHandler(jwtAccessDeniedHandler))
+        .authorizeExchange(exchange -> exchange
+            .pathMatchers(HttpMethod.OPTIONS).permitAll()
+            .pathMatchers("/", "/env_profile", "/actuator/health").permitAll()
+            .pathMatchers("/actuator/**").authenticated()
+            .pathMatchers("/oauth2/**", "/login/**", "/auth/**", "/logout-redirect").permitAll()
+            .pathMatchers("/swagger-ui/**", "/v1/api-docs/**", "/rest-docs").permitAll()
+            .pathMatchers("/member/**").hasRole("USER")
+            .pathMatchers("/post/**", "/accountBook/**", "/budget/**", "/record/**", "/income/**", "/schedule/**")
+            .authenticated()
+            .anyExchange().denyAll())
+        .addFilterAt(new JwtAuthenticationFilter(jwtReactiveAuthenticationManager(jwtTokenProvider),
+            jwtTokenProvider,
+            redisTemplate),
+            SecurityWebFiltersOrder.AUTHENTICATION)
+        .build();
+  }
 
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOriginPatterns(Arrays.asList(
+        "http://localhost:3000",
+        "https://main.d211p9c5e1szy2.amplifyapp.com/",
+        "https://ouruliga.com",
+        "https://www.ouruliga.com",
+        "https://api.ouruliga.com"));
+    configuration.setAllowedMethods(Arrays.asList("HEAD", "POST", "GET", "DELETE", "PUT", "OPTIONS", "PATCH"));
+    configuration.setAllowedHeaders(List.of("*"));
+    configuration.setAllowCredentials(true);
 
-            .and()
-            .headers()
-            .frameOptions()
-            .sameOrigin()
-
-            .and()
-            .sessionManagement()
-            .sessionCreationPolicy(STATELESS)
-
-            .and()
-            .authorizeHttpRequests((requests) -> requests
-                .requestMatchers(HttpMethod.OPTIONS, "**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/").permitAll()
-                .requestMatchers(HttpMethod.GET, "/env_profile").permitAll()
-                .requestMatchers(HttpMethod.GET, "/actuator/health").permitAll()
-                .requestMatchers("/actuator/**").authenticated()
-                .requestMatchers("/oauth2/**").permitAll()
-                .requestMatchers("/login/**").permitAll()
-                .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/logout-redirect").permitAll()
-                .requestMatchers("/member/**").hasRole("USER")
-                .requestMatchers("/post/**").authenticated()
-                .requestMatchers("/accountBook/**").authenticated()
-                .requestMatchers("/budget/**").authenticated()
-                .requestMatchers("/record/**").authenticated()
-                .requestMatchers("/income/**").authenticated()
-                .requestMatchers("/schedule/**").authenticated()
-                .requestMatchers("/swagger-ui/**").permitAll()
-                .requestMatchers("/v1/api-docs/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/rest-docs").permitAll()
-            );
-
-
-        http
-            .oauth2Login()
-            .authorizationEndpoint()
-            .baseUri("/oauth2/authorization") //default
-            .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository)
-            .and()
-            .redirectionEndpoint()
-            .baseUri("/oauth2/callback/*")
-            .and()
-            .userInfoEndpoint()
-            .userService(customOAuth2UserService)
-            .and()
-            .successHandler(oAuth2AuthenticationSuccessHandler)
-            .failureHandler(oAuth2AuthenticationFailureHandler);
-
-
-        http
-            .apply(new JwtSecurityConfig(jwtTokenProvider, mapper, redisTemplate))
-            .and()
-            .logout()
-            .logoutUrl("/logout")
-            .logoutSuccessUrl("/auth/logout-redirect")
-            .clearAuthentication(true)
-            .logoutSuccessHandler(customLogoutSuccessHandler);
-
-
-        return http.build();
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-
-        configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000", "https://main.d211p9c5e1szy2.amplifyapp.com/", "https://ouruliga.com", "https://www.ouruliga.com", "https://api.ouruliga.com"));
-        configuration.setAllowedMethods(Arrays.asList("HEAD", "POST", "GET", "DELETE", "PUT", "OPTIONS", "PATCH"));
-        configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true);
-
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
+  }
 
 }

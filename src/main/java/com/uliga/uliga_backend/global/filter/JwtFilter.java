@@ -15,7 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.domain.token.exception.ExpireAccessTokenException;
 import com.uliga.uliga_backend.global.error.response.ErrorResponse;
-import com.uliga.uliga_backend.global.jwt.JwtTokenProvider;
+import com.uliga.uliga_backend.global.security.jwt.JwtTokenProvider;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
