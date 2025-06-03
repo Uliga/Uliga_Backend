@@ -6,6 +6,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.data.redis.core.ReactiveRedisTemplate;
+import org.springframework.data.redis.core.ReactiveValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.mail.MailException;
@@ -14,7 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.uliga.uliga_backend.domain.member.dto.MemberDTO.CodeConfirmDto;
+import com.uliga.uliga_backend.domain.member.dto.MemberDTO.ConfirmEmailDto;
 import com.uliga.uliga_backend.domain.member.dto.MemberDTO.EmailConfirmCodeDto;
+import com.uliga.uliga_backend.domain.member.dto.MemberDTO.EmailSentDto;
 import com.uliga.uliga_backend.domain.member.dto.MemberDTO.ResetPasswordRequest;
 import com.uliga.uliga_backend.domain.member.exception.EmailCertificationExpireException;
 import com.uliga.uliga_backend.domain.member.exception.UserNotFoundByEmail;
@@ -28,6 +32,7 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -35,6 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 public class EmailCertificationService {
     private final JavaMailSender emailSender;
     private final RedisTemplate<String, String> redisTemplate;
+    private final ReactiveRedisTemplate<String, String> reactiveRedisTemplate;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     // 인증 번호
@@ -292,26 +298,29 @@ public class EmailCertificationService {
      * @param emailConfirmCodeDto 코드 검증 요청 dto
      * @return 코드 일치 여부
      */
-    public CodeConfirmDto confirmCode(EmailConfirmCodeDto emailConfirmCodeDto) {
-        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-        String code = valueOperations.get(emailConfirmCodeDto.getEmail());
-        if (code == null) {
-            throw new EmailCertificationExpireException();
-        }
-        if (emailConfirmCodeDto.getCode() == null) {
-            throw new EmailCertificationExpireException("인증 코드가 비어서 왔습니다");
-        }
+    public Mono<CodeConfirmDto> confirmCode(EmailConfirmCodeDto emailConfirmCodeDto) {
+        ReactiveValueOperations<String, String> valueOperations = reactiveRedisTemplate.opsForValue();
 
-        CodeConfirmDto confirmDto = CodeConfirmDto.builder().build();
-        confirmDto.setMatches(
-                code.equals(emailConfirmCodeDto.getCode()) || (emailConfirmCodeDto.getCode().equals("000000")
-                        && emailConfirmCodeDto.getEmail().equals("testuser@example.com")));
-        valueOperations.getAndDelete(emailConfirmCodeDto.getEmail());
-        return confirmDto;
+        return valueOperations.get(emailConfirmCodeDto.getEmail())
+                .switchIfEmpty(Mono.error(new EmailCertificationExpireException()))
+                .map(code -> {
+                    boolean matches = code.equals(emailConfirmCodeDto.getCode())
+                            || ("000000".equals(emailConfirmCodeDto.getCode())
+                                    && "testuser@example.com".equals(emailConfirmCodeDto.getEmail()));
 
+                    return CodeConfirmDto.builder()
+                            .matches(matches)
+                            .build();
+                })
+                .doOnSuccess(dto -> valueOperations.delete(emailConfirmCodeDto.getEmail()).subscribe());
     }
 
     public String getePw() {
         return ePw;
+    }
+
+    public Mono<EmailSentDto> sendEmail(ConfirmEmailDto dto) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'sendEmail'");
     }
 }
