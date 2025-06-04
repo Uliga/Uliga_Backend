@@ -145,9 +145,9 @@ task dbCreateMigration {
 
 jooq {
     // 환경변수에서 값을 읽어오도록 설정
-    def dbUrl      = System.getenv('DB_JDBC_URL')
-    def dbUser     = System.getenv('DB_USER')
-    def dbPassword = System.getenv('DB_PASSWORD')
+    def dbUrl      = env.DB_JDBC_URL.value
+    def dbUser     = env.DB_USER.value
+    def dbPassword = env.DB_PASSWORD.value
 
     version = '3.17.4'
 
@@ -188,4 +188,8 @@ sourceSets {
             srcDir "${buildDir}/generated-sources/jooq"
         }
     }
+}
+
+tasks.named("flywayMigrate") {
+    finalizedBy("generateJooq")
 }
