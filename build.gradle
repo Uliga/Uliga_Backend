@@ -37,7 +37,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
 
     implementation 'org.postgresql:r2dbc-postgresql:1.0.7.RELEASE'
-    implementation 'org.postgresql:postgresql'
+    implementation 'org.postgresql:postgresql:42.6.2'
 
     implementation 'org.jooq:jooq:3.17.4'
     implementation 'org.jooq:jooq-meta:3.17.4'
@@ -168,7 +168,7 @@ jooq {
                         includes    = '.*'
                     }
                     generate {
-                        daos           = false
+                        daos           = true
                         pojos          = true
                         fluentSetters  = true
                     }
