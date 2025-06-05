@@ -7,6 +7,7 @@ package com.uliga.uliga_backend.jooq.tables;
 import com.uliga.uliga_backend.jooq.Indexes;
 import com.uliga.uliga_backend.jooq.Keys;
 import com.uliga.uliga_backend.jooq.Public;
+import com.uliga.uliga_backend.jooq.enums.Frequency;
 import com.uliga.uliga_backend.jooq.tables.records.FixedRevenueRecord;
 
 import java.time.LocalDate;
@@ -72,16 +73,6 @@ public class FixedRevenue extends TableImpl<FixedRevenueRecord> {
     public final TableField<FixedRevenueRecord, Long> VALUE = createField(DSL.name("value"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
-     * The column <code>public.fixed_revenue.notification_date</code>.
-     */
-    public final TableField<FixedRevenueRecord, LocalDate> NOTIFICATION_DATE = createField(DSL.name("notification_date"), SQLDataType.LOCALDATE.nullable(false), this, "");
-
-    /**
-     * The column <code>public.fixed_revenue.date</code>.
-     */
-    public final TableField<FixedRevenueRecord, LocalDate> DATE = createField(DSL.name("date"), SQLDataType.LOCALDATE.nullable(false), this, "");
-
-    /**
      * The column <code>public.fixed_revenue.user_id</code>.
      */
     public final TableField<FixedRevenueRecord, Long> USER_ID = createField(DSL.name("user_id"), SQLDataType.BIGINT.nullable(false), this, "");
@@ -100,6 +91,16 @@ public class FixedRevenue extends TableImpl<FixedRevenueRecord> {
      * The column <code>public.fixed_revenue.updated_at</code>.
      */
     public final TableField<FixedRevenueRecord, LocalDateTime> UPDATED_AT = createField(DSL.name("updated_at"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), this, "");
+
+    /**
+     * The column <code>public.fixed_revenue.start_date</code>.
+     */
+    public final TableField<FixedRevenueRecord, LocalDate> START_DATE = createField(DSL.name("start_date"), SQLDataType.LOCALDATE.nullable(false), this, "");
+
+    /**
+     * The column <code>public.fixed_revenue.frequency</code>.
+     */
+    public final TableField<FixedRevenueRecord, Frequency> FREQUENCY = createField(DSL.name("frequency"), SQLDataType.VARCHAR.nullable(false).defaultValue(DSL.field("'MONTHLY'::frequency", SQLDataType.VARCHAR)).asEnumDataType(com.uliga.uliga_backend.jooq.enums.Frequency.class), this, "");
 
     private FixedRevenue(Name alias, Table<FixedRevenueRecord> aliased) {
         this(alias, aliased, null);
@@ -198,14 +199,14 @@ public class FixedRevenue extends TableImpl<FixedRevenueRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<Long, String, Long, LocalDate, LocalDate, Long, Long, LocalDateTime, LocalDateTime> fieldsRow() {
+    public Row9<Long, String, Long, Long, Long, LocalDateTime, LocalDateTime, LocalDate, Frequency> fieldsRow() {
         return (Row9) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function9<? super Long, ? super String, ? super Long, ? super LocalDate, ? super LocalDate, ? super Long, ? super Long, ? super LocalDateTime, ? super LocalDateTime, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function9<? super Long, ? super String, ? super Long, ? super Long, ? super Long, ? super LocalDateTime, ? super LocalDateTime, ? super LocalDate, ? super Frequency, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -213,7 +214,7 @@ public class FixedRevenue extends TableImpl<FixedRevenueRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function9<? super Long, ? super String, ? super Long, ? super LocalDate, ? super LocalDate, ? super Long, ? super Long, ? super LocalDateTime, ? super LocalDateTime, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function9<? super Long, ? super String, ? super Long, ? super Long, ? super Long, ? super LocalDateTime, ? super LocalDateTime, ? super LocalDate, ? super Frequency, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

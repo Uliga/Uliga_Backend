@@ -4,6 +4,7 @@
 package com.uliga.uliga_backend.jooq;
 
 
+import com.uliga.uliga_backend.jooq.tables.AccountBookInvitation;
 import com.uliga.uliga_backend.jooq.tables.AccountBookUser;
 import com.uliga.uliga_backend.jooq.tables.Budget;
 import com.uliga.uliga_backend.jooq.tables.Expense;
@@ -30,10 +31,13 @@ public class Indexes {
     // INDEX definitions
     // -------------------------------------------------------------------------
 
+    public static final Index IDX_ACCOUNT_BOOK_INVITATION_ACCOUNT_BOOK_ID = Internal.createIndex(DSL.name("idx_account_book_invitation_account_book_id"), AccountBookInvitation.ACCOUNT_BOOK_INVITATION, new OrderField[] { AccountBookInvitation.ACCOUNT_BOOK_INVITATION.ACCOUNT_BOOK_ID }, false);
+    public static final Index IDX_ACCOUNT_BOOK_INVITATION_INVITEE_USER_ID = Internal.createIndex(DSL.name("idx_account_book_invitation_invitee_user_id"), AccountBookInvitation.ACCOUNT_BOOK_INVITATION, new OrderField[] { AccountBookInvitation.ACCOUNT_BOOK_INVITATION.INVITEE_USER_ID }, false);
+    public static final Index IDX_ACCOUNT_BOOK_INVITATION_INVITER_USER_ID = Internal.createIndex(DSL.name("idx_account_book_invitation_inviter_user_id"), AccountBookInvitation.ACCOUNT_BOOK_INVITATION, new OrderField[] { AccountBookInvitation.ACCOUNT_BOOK_INVITATION.INVITER_USER_ID }, false);
     public static final Index IDX_ACCOUNT_BOOK_USER_ACCOUNT_BOOK_ID = Internal.createIndex(DSL.name("idx_account_book_user_account_book_id"), AccountBookUser.ACCOUNT_BOOK_USER, new OrderField[] { AccountBookUser.ACCOUNT_BOOK_USER.ACCOUNT_BOOK_ID }, false);
     public static final Index IDX_ACCOUNT_BOOK_USER_USER_ID = Internal.createIndex(DSL.name("idx_account_book_user_user_id"), AccountBookUser.ACCOUNT_BOOK_USER, new OrderField[] { AccountBookUser.ACCOUNT_BOOK_USER.USER_ID }, false);
     public static final Index IDX_BUDGET_ACCOUNT_BOOK_ID = Internal.createIndex(DSL.name("idx_budget_account_book_id"), Budget.BUDGET, new OrderField[] { Budget.BUDGET.ACCOUNT_BOOK_ID }, false);
-    public static final Index IDX_BUDGET_CATEGORY_ID = Internal.createIndex(DSL.name("idx_budget_category_id"), Budget.BUDGET, new OrderField[] { Budget.BUDGET.CATEGORY_ID }, false);
+    public static final Index IDX_BUDGET_EXPENSE_CATEGORY_ID = Internal.createIndex(DSL.name("idx_budget_expense_category_id"), Budget.BUDGET, new OrderField[] { Budget.BUDGET.EXPENSE_CATEGORY_ID }, false);
     public static final Index IDX_EXPENSE_ACCOUNT_BOOK_ID = Internal.createIndex(DSL.name("idx_expense_account_book_id"), Expense.EXPENSE, new OrderField[] { Expense.EXPENSE.ACCOUNT_BOOK_ID }, false);
     public static final Index IDX_EXPENSE_CATEGORY_ACCOUNT_BOOK_ID = Internal.createIndex(DSL.name("idx_expense_category_account_book_id"), ExpenseCategory.EXPENSE_CATEGORY, new OrderField[] { ExpenseCategory.EXPENSE_CATEGORY.ACCOUNT_BOOK_ID }, false);
     public static final Index IDX_EXPENSE_CATEGORY_ID = Internal.createIndex(DSL.name("idx_expense_category_id"), Expense.EXPENSE, new OrderField[] { Expense.EXPENSE.EXPENSE_CATEGORY_ID }, false);

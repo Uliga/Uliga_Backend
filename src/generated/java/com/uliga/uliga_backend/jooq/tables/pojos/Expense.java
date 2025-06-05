@@ -27,6 +27,9 @@ public class Expense implements Serializable {
     private Long accountBookId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String year;
+    private String month;
+    private String week;
 
     public Expense() {}
 
@@ -41,6 +44,9 @@ public class Expense implements Serializable {
         this.accountBookId = value.accountBookId;
         this.createdAt = value.createdAt;
         this.updatedAt = value.updatedAt;
+        this.year = value.year;
+        this.month = value.month;
+        this.week = value.week;
     }
 
     public Expense(
@@ -53,7 +59,10 @@ public class Expense implements Serializable {
         Long expenseCategoryId,
         Long accountBookId,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        String year,
+        String month,
+        String week
     ) {
         this.id = id;
         this.value = value;
@@ -65,6 +74,9 @@ public class Expense implements Serializable {
         this.accountBookId = accountBookId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.year = year;
+        this.month = month;
+        this.week = week;
     }
 
     /**
@@ -217,6 +229,51 @@ public class Expense implements Serializable {
         return this;
     }
 
+    /**
+     * Getter for <code>public.expense.year</code>.
+     */
+    public String getYear() {
+        return this.year;
+    }
+
+    /**
+     * Setter for <code>public.expense.year</code>.
+     */
+    public Expense setYear(String year) {
+        this.year = year;
+        return this;
+    }
+
+    /**
+     * Getter for <code>public.expense.month</code>.
+     */
+    public String getMonth() {
+        return this.month;
+    }
+
+    /**
+     * Setter for <code>public.expense.month</code>.
+     */
+    public Expense setMonth(String month) {
+        this.month = month;
+        return this;
+    }
+
+    /**
+     * Getter for <code>public.expense.week</code>.
+     */
+    public String getWeek() {
+        return this.week;
+    }
+
+    /**
+     * Setter for <code>public.expense.week</code>.
+     */
+    public Expense setWeek(String week) {
+        this.week = week;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -286,6 +343,24 @@ public class Expense implements Serializable {
         }
         else if (!this.updatedAt.equals(other.updatedAt))
             return false;
+        if (this.year == null) {
+            if (other.year != null)
+                return false;
+        }
+        else if (!this.year.equals(other.year))
+            return false;
+        if (this.month == null) {
+            if (other.month != null)
+                return false;
+        }
+        else if (!this.month.equals(other.month))
+            return false;
+        if (this.week == null) {
+            if (other.week != null)
+                return false;
+        }
+        else if (!this.week.equals(other.week))
+            return false;
         return true;
     }
 
@@ -303,6 +378,9 @@ public class Expense implements Serializable {
         result = prime * result + ((this.accountBookId == null) ? 0 : this.accountBookId.hashCode());
         result = prime * result + ((this.createdAt == null) ? 0 : this.createdAt.hashCode());
         result = prime * result + ((this.updatedAt == null) ? 0 : this.updatedAt.hashCode());
+        result = prime * result + ((this.year == null) ? 0 : this.year.hashCode());
+        result = prime * result + ((this.month == null) ? 0 : this.month.hashCode());
+        result = prime * result + ((this.week == null) ? 0 : this.week.hashCode());
         return result;
     }
 
@@ -320,6 +398,9 @@ public class Expense implements Serializable {
         sb.append(", ").append(accountBookId);
         sb.append(", ").append(createdAt);
         sb.append(", ").append(updatedAt);
+        sb.append(", ").append(year);
+        sb.append(", ").append(month);
+        sb.append(", ").append(week);
 
         sb.append(")");
         return sb.toString();

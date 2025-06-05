@@ -204,4 +204,49 @@ public class ExpenseDao extends DAOImpl<ExpenseRecord, com.uliga.uliga_backend.j
     public List<com.uliga.uliga_backend.jooq.tables.pojos.Expense> fetchByUpdatedAt(LocalDateTime... values) {
         return fetch(Expense.EXPENSE.UPDATED_AT, values);
     }
+
+    /**
+     * Fetch records that have <code>year BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<com.uliga.uliga_backend.jooq.tables.pojos.Expense> fetchRangeOfYear(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Expense.EXPENSE.YEAR, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>year IN (values)</code>
+     */
+    public List<com.uliga.uliga_backend.jooq.tables.pojos.Expense> fetchByYear(String... values) {
+        return fetch(Expense.EXPENSE.YEAR, values);
+    }
+
+    /**
+     * Fetch records that have <code>month BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<com.uliga.uliga_backend.jooq.tables.pojos.Expense> fetchRangeOfMonth(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Expense.EXPENSE.MONTH, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>month IN (values)</code>
+     */
+    public List<com.uliga.uliga_backend.jooq.tables.pojos.Expense> fetchByMonth(String... values) {
+        return fetch(Expense.EXPENSE.MONTH, values);
+    }
+
+    /**
+     * Fetch records that have <code>week BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<com.uliga.uliga_backend.jooq.tables.pojos.Expense> fetchRangeOfWeek(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Expense.EXPENSE.WEEK, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>week IN (values)</code>
+     */
+    public List<com.uliga.uliga_backend.jooq.tables.pojos.Expense> fetchByWeek(String... values) {
+        return fetch(Expense.EXPENSE.WEEK, values);
+    }
 }

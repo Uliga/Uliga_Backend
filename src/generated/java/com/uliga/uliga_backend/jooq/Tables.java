@@ -5,6 +5,7 @@ package com.uliga.uliga_backend.jooq;
 
 
 import com.uliga.uliga_backend.jooq.tables.AccountBook;
+import com.uliga.uliga_backend.jooq.tables.AccountBookInvitation;
 import com.uliga.uliga_backend.jooq.tables.AccountBookUser;
 import com.uliga.uliga_backend.jooq.tables.Budget;
 import com.uliga.uliga_backend.jooq.tables.Expense;
@@ -27,6 +28,11 @@ public class Tables {
      * The table <code>public.account_book</code>.
      */
     public static final AccountBook ACCOUNT_BOOK = AccountBook.ACCOUNT_BOOK;
+
+    /**
+     * The table <code>public.account_book_invitation</code>.
+     */
+    public static final AccountBookInvitation ACCOUNT_BOOK_INVITATION = AccountBookInvitation.ACCOUNT_BOOK_INVITATION;
 
     /**
      * The table <code>public.account_book_user</code>.

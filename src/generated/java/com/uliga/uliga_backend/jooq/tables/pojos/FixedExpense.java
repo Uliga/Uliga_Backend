@@ -4,6 +4,8 @@
 package com.uliga.uliga_backend.jooq.tables.pojos;
 
 
+import com.uliga.uliga_backend.jooq.enums.Frequency;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,12 +22,12 @@ public class FixedExpense implements Serializable {
     private Long id;
     private String name;
     private Long value;
-    private LocalDate notificationDate;
-    private LocalDate date;
     private Long userId;
     private Long accountBookId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private LocalDate startDate;
+    private Frequency frequency;
 
     public FixedExpense() {}
 
@@ -33,34 +35,34 @@ public class FixedExpense implements Serializable {
         this.id = value.id;
         this.name = value.name;
         this.value = value.value;
-        this.notificationDate = value.notificationDate;
-        this.date = value.date;
         this.userId = value.userId;
         this.accountBookId = value.accountBookId;
         this.createdAt = value.createdAt;
         this.updatedAt = value.updatedAt;
+        this.startDate = value.startDate;
+        this.frequency = value.frequency;
     }
 
     public FixedExpense(
         Long id,
         String name,
         Long value,
-        LocalDate notificationDate,
-        LocalDate date,
         Long userId,
         Long accountBookId,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        LocalDate startDate,
+        Frequency frequency
     ) {
         this.id = id;
         this.name = name;
         this.value = value;
-        this.notificationDate = notificationDate;
-        this.date = date;
         this.userId = userId;
         this.accountBookId = accountBookId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.startDate = startDate;
+        this.frequency = frequency;
     }
 
     /**
@@ -105,36 +107,6 @@ public class FixedExpense implements Serializable {
      */
     public FixedExpense setValue(Long value) {
         this.value = value;
-        return this;
-    }
-
-    /**
-     * Getter for <code>public.fixed_expense.notification_date</code>.
-     */
-    public LocalDate getNotificationDate() {
-        return this.notificationDate;
-    }
-
-    /**
-     * Setter for <code>public.fixed_expense.notification_date</code>.
-     */
-    public FixedExpense setNotificationDate(LocalDate notificationDate) {
-        this.notificationDate = notificationDate;
-        return this;
-    }
-
-    /**
-     * Getter for <code>public.fixed_expense.date</code>.
-     */
-    public LocalDate getDate() {
-        return this.date;
-    }
-
-    /**
-     * Setter for <code>public.fixed_expense.date</code>.
-     */
-    public FixedExpense setDate(LocalDate date) {
-        this.date = date;
         return this;
     }
 
@@ -198,6 +170,36 @@ public class FixedExpense implements Serializable {
         return this;
     }
 
+    /**
+     * Getter for <code>public.fixed_expense.start_date</code>.
+     */
+    public LocalDate getStartDate() {
+        return this.startDate;
+    }
+
+    /**
+     * Setter for <code>public.fixed_expense.start_date</code>.
+     */
+    public FixedExpense setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+        return this;
+    }
+
+    /**
+     * Getter for <code>public.fixed_expense.frequency</code>.
+     */
+    public Frequency getFrequency() {
+        return this.frequency;
+    }
+
+    /**
+     * Setter for <code>public.fixed_expense.frequency</code>.
+     */
+    public FixedExpense setFrequency(Frequency frequency) {
+        this.frequency = frequency;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -225,18 +227,6 @@ public class FixedExpense implements Serializable {
         }
         else if (!this.value.equals(other.value))
             return false;
-        if (this.notificationDate == null) {
-            if (other.notificationDate != null)
-                return false;
-        }
-        else if (!this.notificationDate.equals(other.notificationDate))
-            return false;
-        if (this.date == null) {
-            if (other.date != null)
-                return false;
-        }
-        else if (!this.date.equals(other.date))
-            return false;
         if (this.userId == null) {
             if (other.userId != null)
                 return false;
@@ -261,6 +251,18 @@ public class FixedExpense implements Serializable {
         }
         else if (!this.updatedAt.equals(other.updatedAt))
             return false;
+        if (this.startDate == null) {
+            if (other.startDate != null)
+                return false;
+        }
+        else if (!this.startDate.equals(other.startDate))
+            return false;
+        if (this.frequency == null) {
+            if (other.frequency != null)
+                return false;
+        }
+        else if (!this.frequency.equals(other.frequency))
+            return false;
         return true;
     }
 
@@ -271,12 +273,12 @@ public class FixedExpense implements Serializable {
         result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
         result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
         result = prime * result + ((this.value == null) ? 0 : this.value.hashCode());
-        result = prime * result + ((this.notificationDate == null) ? 0 : this.notificationDate.hashCode());
-        result = prime * result + ((this.date == null) ? 0 : this.date.hashCode());
         result = prime * result + ((this.userId == null) ? 0 : this.userId.hashCode());
         result = prime * result + ((this.accountBookId == null) ? 0 : this.accountBookId.hashCode());
         result = prime * result + ((this.createdAt == null) ? 0 : this.createdAt.hashCode());
         result = prime * result + ((this.updatedAt == null) ? 0 : this.updatedAt.hashCode());
+        result = prime * result + ((this.startDate == null) ? 0 : this.startDate.hashCode());
+        result = prime * result + ((this.frequency == null) ? 0 : this.frequency.hashCode());
         return result;
     }
 
@@ -287,12 +289,12 @@ public class FixedExpense implements Serializable {
         sb.append(id);
         sb.append(", ").append(name);
         sb.append(", ").append(value);
-        sb.append(", ").append(notificationDate);
-        sb.append(", ").append(date);
         sb.append(", ").append(userId);
         sb.append(", ").append(accountBookId);
         sb.append(", ").append(createdAt);
         sb.append(", ").append(updatedAt);
+        sb.append(", ").append(startDate);
+        sb.append(", ").append(frequency);
 
         sb.append(")");
         return sb.toString();
