@@ -1,13 +1,13 @@
 package com.uliga.uliga_backend.domain.user.application;
 
 import org.springframework.stereotype.Service;
+
 import com.uliga.uliga_backend.domain.user.dto.req.CreateUserDto;
-import com.uliga.uliga_backend.domain.user.dto.req.UserQueryDto;
 import com.uliga.uliga_backend.domain.user.dto.req.UpdateUserDto;
 import com.uliga.uliga_backend.domain.user.repository.UserRepository;
 import com.uliga.uliga_backend.jooq.tables.pojos.User;
+
 import lombok.RequiredArgsConstructor;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 public class UserService {
   private final UserRepository userRepository;
 
-  public Flux<User> getUsers(UserQueryDto query) {
+  public Mono<User> getCurrentUser() {
     throw new UnsupportedOperationException("Unimplemented method 'getUsers'");
   }
 
