@@ -213,16 +213,6 @@ public class AccountBookControllerV1 {
     return ResponseEntity.ok(accountBookService.getAccountBookMembers(id));
   }
 
-  @Operation(summary = "가계부 예산 추가", description = "가계부 예산 추가 API 입니다")
-  @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = BudgetInfoQ.class))),
-      @ApiResponse(responseCode = "409", description = "해당 년도/달에 예산 이미 존재시", content = @Content(schema = @Schema(implementation = ErrorResponse.class))) })
-  @PostMapping(value = "/budget")
-  public ResponseEntity<BudgetInfoQ> addBudget(
-      @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "예산 생성 요청", content = @Content(schema = @Schema(implementation = CreateBudgetDto.class))) @RequestBody Map<String, Object> createBudgetDto) {
-    return ResponseEntity.ok(budgetService.addBudget(createBudgetDto));
-  }
-
   @Operation(summary = "가계부에 금융 일정 추가", description = "가계부에 금융 일정 추가 API 입니다")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "추가 성공시", content = @Content(schema = @Schema(implementation = AddScheduleResult.class))) })
