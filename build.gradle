@@ -115,7 +115,7 @@ flyway {
   locations = ['classpath:db/migration']  
 }
 
-task dbCreateMigration {
+task createMigration {
     group = "Flyway"
     description = "Generate a new Flyway migration SQL file with a timestamp and name."
 
@@ -166,6 +166,7 @@ jooq {
                         name        = 'org.jooq.meta.postgres.PostgresDatabase'
                         inputSchema = 'public'
                         includes    = '.*'
+                        excludes = 'flyway_schema_history'
                     }
                     generate {
                         daos           = true
@@ -174,7 +175,7 @@ jooq {
                     }
                     target {
                         packageName = 'com.uliga.uliga_backend.jooq'
-                        directory   = "${buildDir}/generated-sources/jooq"
+                        directory   = "${projectDir}/src/generated/java"
                     }
                 }
             }
@@ -185,7 +186,7 @@ jooq {
 sourceSets {
     main {
         java {
-            srcDir "${buildDir}/generated-sources/jooq"
+            srcDirs += "src/generated/java"
         }
     }
 }
