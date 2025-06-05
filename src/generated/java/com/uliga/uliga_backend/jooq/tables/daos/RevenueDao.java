@@ -204,4 +204,49 @@ public class RevenueDao extends DAOImpl<RevenueRecord, com.uliga.uliga_backend.j
     public List<com.uliga.uliga_backend.jooq.tables.pojos.Revenue> fetchByUpdatedAt(LocalDateTime... values) {
         return fetch(Revenue.REVENUE.UPDATED_AT, values);
     }
+
+    /**
+     * Fetch records that have <code>year BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<com.uliga.uliga_backend.jooq.tables.pojos.Revenue> fetchRangeOfYear(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Revenue.REVENUE.YEAR, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>year IN (values)</code>
+     */
+    public List<com.uliga.uliga_backend.jooq.tables.pojos.Revenue> fetchByYear(String... values) {
+        return fetch(Revenue.REVENUE.YEAR, values);
+    }
+
+    /**
+     * Fetch records that have <code>month BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<com.uliga.uliga_backend.jooq.tables.pojos.Revenue> fetchRangeOfMonth(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Revenue.REVENUE.MONTH, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>month IN (values)</code>
+     */
+    public List<com.uliga.uliga_backend.jooq.tables.pojos.Revenue> fetchByMonth(String... values) {
+        return fetch(Revenue.REVENUE.MONTH, values);
+    }
+
+    /**
+     * Fetch records that have <code>week BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<com.uliga.uliga_backend.jooq.tables.pojos.Revenue> fetchRangeOfWeek(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Revenue.REVENUE.WEEK, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>week IN (values)</code>
+     */
+    public List<com.uliga.uliga_backend.jooq.tables.pojos.Revenue> fetchByWeek(String... values) {
+        return fetch(Revenue.REVENUE.WEEK, values);
+    }
 }

@@ -20,10 +20,10 @@ public class Budget implements Serializable {
     private Long value;
     private Long year;
     private Long month;
-    private Long categoryId;
     private Long accountBookId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Long expenseCategoryId;
 
     public Budget() {}
 
@@ -32,10 +32,10 @@ public class Budget implements Serializable {
         this.value = value.value;
         this.year = value.year;
         this.month = value.month;
-        this.categoryId = value.categoryId;
         this.accountBookId = value.accountBookId;
         this.createdAt = value.createdAt;
         this.updatedAt = value.updatedAt;
+        this.expenseCategoryId = value.expenseCategoryId;
     }
 
     public Budget(
@@ -43,19 +43,19 @@ public class Budget implements Serializable {
         Long value,
         Long year,
         Long month,
-        Long categoryId,
         Long accountBookId,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        Long expenseCategoryId
     ) {
         this.id = id;
         this.value = value;
         this.year = year;
         this.month = month;
-        this.categoryId = categoryId;
         this.accountBookId = accountBookId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.expenseCategoryId = expenseCategoryId;
     }
 
     /**
@@ -119,21 +119,6 @@ public class Budget implements Serializable {
     }
 
     /**
-     * Getter for <code>public.budget.category_id</code>.
-     */
-    public Long getCategoryId() {
-        return this.categoryId;
-    }
-
-    /**
-     * Setter for <code>public.budget.category_id</code>.
-     */
-    public Budget setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-        return this;
-    }
-
-    /**
      * Getter for <code>public.budget.account_book_id</code>.
      */
     public Long getAccountBookId() {
@@ -178,6 +163,21 @@ public class Budget implements Serializable {
         return this;
     }
 
+    /**
+     * Getter for <code>public.budget.expense_category_id</code>.
+     */
+    public Long getExpenseCategoryId() {
+        return this.expenseCategoryId;
+    }
+
+    /**
+     * Setter for <code>public.budget.expense_category_id</code>.
+     */
+    public Budget setExpenseCategoryId(Long expenseCategoryId) {
+        this.expenseCategoryId = expenseCategoryId;
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -211,12 +211,6 @@ public class Budget implements Serializable {
         }
         else if (!this.month.equals(other.month))
             return false;
-        if (this.categoryId == null) {
-            if (other.categoryId != null)
-                return false;
-        }
-        else if (!this.categoryId.equals(other.categoryId))
-            return false;
         if (this.accountBookId == null) {
             if (other.accountBookId != null)
                 return false;
@@ -235,6 +229,12 @@ public class Budget implements Serializable {
         }
         else if (!this.updatedAt.equals(other.updatedAt))
             return false;
+        if (this.expenseCategoryId == null) {
+            if (other.expenseCategoryId != null)
+                return false;
+        }
+        else if (!this.expenseCategoryId.equals(other.expenseCategoryId))
+            return false;
         return true;
     }
 
@@ -246,10 +246,10 @@ public class Budget implements Serializable {
         result = prime * result + ((this.value == null) ? 0 : this.value.hashCode());
         result = prime * result + ((this.year == null) ? 0 : this.year.hashCode());
         result = prime * result + ((this.month == null) ? 0 : this.month.hashCode());
-        result = prime * result + ((this.categoryId == null) ? 0 : this.categoryId.hashCode());
         result = prime * result + ((this.accountBookId == null) ? 0 : this.accountBookId.hashCode());
         result = prime * result + ((this.createdAt == null) ? 0 : this.createdAt.hashCode());
         result = prime * result + ((this.updatedAt == null) ? 0 : this.updatedAt.hashCode());
+        result = prime * result + ((this.expenseCategoryId == null) ? 0 : this.expenseCategoryId.hashCode());
         return result;
     }
 
@@ -261,10 +261,10 @@ public class Budget implements Serializable {
         sb.append(", ").append(value);
         sb.append(", ").append(year);
         sb.append(", ").append(month);
-        sb.append(", ").append(categoryId);
         sb.append(", ").append(accountBookId);
         sb.append(", ").append(createdAt);
         sb.append(", ").append(updatedAt);
+        sb.append(", ").append(expenseCategoryId);
 
         sb.append(")");
         return sb.toString();

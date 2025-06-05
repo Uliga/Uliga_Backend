@@ -115,21 +115,6 @@ public class BudgetDao extends DAOImpl<BudgetRecord, com.uliga.uliga_backend.joo
     }
 
     /**
-     * Fetch records that have <code>category_id BETWEEN lowerInclusive AND
-     * upperInclusive</code>
-     */
-    public List<com.uliga.uliga_backend.jooq.tables.pojos.Budget> fetchRangeOfCategoryId(Long lowerInclusive, Long upperInclusive) {
-        return fetchRange(Budget.BUDGET.CATEGORY_ID, lowerInclusive, upperInclusive);
-    }
-
-    /**
-     * Fetch records that have <code>category_id IN (values)</code>
-     */
-    public List<com.uliga.uliga_backend.jooq.tables.pojos.Budget> fetchByCategoryId(Long... values) {
-        return fetch(Budget.BUDGET.CATEGORY_ID, values);
-    }
-
-    /**
      * Fetch records that have <code>account_book_id BETWEEN lowerInclusive AND
      * upperInclusive</code>
      */
@@ -172,5 +157,20 @@ public class BudgetDao extends DAOImpl<BudgetRecord, com.uliga.uliga_backend.joo
      */
     public List<com.uliga.uliga_backend.jooq.tables.pojos.Budget> fetchByUpdatedAt(LocalDateTime... values) {
         return fetch(Budget.BUDGET.UPDATED_AT, values);
+    }
+
+    /**
+     * Fetch records that have <code>expense_category_id BETWEEN lowerInclusive
+     * AND upperInclusive</code>
+     */
+    public List<com.uliga.uliga_backend.jooq.tables.pojos.Budget> fetchRangeOfExpenseCategoryId(Long lowerInclusive, Long upperInclusive) {
+        return fetchRange(Budget.BUDGET.EXPENSE_CATEGORY_ID, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>expense_category_id IN (values)</code>
+     */
+    public List<com.uliga.uliga_backend.jooq.tables.pojos.Budget> fetchByExpenseCategoryId(Long... values) {
+        return fetch(Budget.BUDGET.EXPENSE_CATEGORY_ID, values);
     }
 }

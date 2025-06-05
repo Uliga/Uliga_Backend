@@ -4,6 +4,7 @@
 package com.uliga.uliga_backend.jooq.tables.daos;
 
 
+import com.uliga.uliga_backend.jooq.enums.Frequency;
 import com.uliga.uliga_backend.jooq.tables.FixedRevenue;
 import com.uliga.uliga_backend.jooq.tables.records.FixedRevenueRecord;
 
@@ -101,36 +102,6 @@ public class FixedRevenueDao extends DAOImpl<FixedRevenueRecord, com.uliga.uliga
     }
 
     /**
-     * Fetch records that have <code>notification_date BETWEEN lowerInclusive
-     * AND upperInclusive</code>
-     */
-    public List<com.uliga.uliga_backend.jooq.tables.pojos.FixedRevenue> fetchRangeOfNotificationDate(LocalDate lowerInclusive, LocalDate upperInclusive) {
-        return fetchRange(FixedRevenue.FIXED_REVENUE.NOTIFICATION_DATE, lowerInclusive, upperInclusive);
-    }
-
-    /**
-     * Fetch records that have <code>notification_date IN (values)</code>
-     */
-    public List<com.uliga.uliga_backend.jooq.tables.pojos.FixedRevenue> fetchByNotificationDate(LocalDate... values) {
-        return fetch(FixedRevenue.FIXED_REVENUE.NOTIFICATION_DATE, values);
-    }
-
-    /**
-     * Fetch records that have <code>date BETWEEN lowerInclusive AND
-     * upperInclusive</code>
-     */
-    public List<com.uliga.uliga_backend.jooq.tables.pojos.FixedRevenue> fetchRangeOfDate(LocalDate lowerInclusive, LocalDate upperInclusive) {
-        return fetchRange(FixedRevenue.FIXED_REVENUE.DATE, lowerInclusive, upperInclusive);
-    }
-
-    /**
-     * Fetch records that have <code>date IN (values)</code>
-     */
-    public List<com.uliga.uliga_backend.jooq.tables.pojos.FixedRevenue> fetchByDate(LocalDate... values) {
-        return fetch(FixedRevenue.FIXED_REVENUE.DATE, values);
-    }
-
-    /**
      * Fetch records that have <code>user_id BETWEEN lowerInclusive AND
      * upperInclusive</code>
      */
@@ -188,5 +159,35 @@ public class FixedRevenueDao extends DAOImpl<FixedRevenueRecord, com.uliga.uliga
      */
     public List<com.uliga.uliga_backend.jooq.tables.pojos.FixedRevenue> fetchByUpdatedAt(LocalDateTime... values) {
         return fetch(FixedRevenue.FIXED_REVENUE.UPDATED_AT, values);
+    }
+
+    /**
+     * Fetch records that have <code>start_date BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<com.uliga.uliga_backend.jooq.tables.pojos.FixedRevenue> fetchRangeOfStartDate(LocalDate lowerInclusive, LocalDate upperInclusive) {
+        return fetchRange(FixedRevenue.FIXED_REVENUE.START_DATE, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>start_date IN (values)</code>
+     */
+    public List<com.uliga.uliga_backend.jooq.tables.pojos.FixedRevenue> fetchByStartDate(LocalDate... values) {
+        return fetch(FixedRevenue.FIXED_REVENUE.START_DATE, values);
+    }
+
+    /**
+     * Fetch records that have <code>frequency BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<com.uliga.uliga_backend.jooq.tables.pojos.FixedRevenue> fetchRangeOfFrequency(Frequency lowerInclusive, Frequency upperInclusive) {
+        return fetchRange(FixedRevenue.FIXED_REVENUE.FREQUENCY, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>frequency IN (values)</code>
+     */
+    public List<com.uliga.uliga_backend.jooq.tables.pojos.FixedRevenue> fetchByFrequency(Frequency... values) {
+        return fetch(FixedRevenue.FIXED_REVENUE.FREQUENCY, values);
     }
 }

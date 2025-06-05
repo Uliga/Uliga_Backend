@@ -5,6 +5,7 @@ package com.uliga.uliga_backend.jooq;
 
 
 import com.uliga.uliga_backend.jooq.tables.AccountBook;
+import com.uliga.uliga_backend.jooq.tables.AccountBookInvitation;
 import com.uliga.uliga_backend.jooq.tables.AccountBookUser;
 import com.uliga.uliga_backend.jooq.tables.Budget;
 import com.uliga.uliga_backend.jooq.tables.Expense;
@@ -15,6 +16,7 @@ import com.uliga.uliga_backend.jooq.tables.FixedRevenue;
 import com.uliga.uliga_backend.jooq.tables.Revenue;
 import com.uliga.uliga_backend.jooq.tables.RevenueCategory;
 import com.uliga.uliga_backend.jooq.tables.User;
+import com.uliga.uliga_backend.jooq.tables.records.AccountBookInvitationRecord;
 import com.uliga.uliga_backend.jooq.tables.records.AccountBookRecord;
 import com.uliga.uliga_backend.jooq.tables.records.AccountBookUserRecord;
 import com.uliga.uliga_backend.jooq.tables.records.BudgetRecord;
@@ -45,6 +47,7 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final UniqueKey<AccountBookRecord> ACCOUNT_BOOK_PKEY = Internal.createUniqueKey(AccountBook.ACCOUNT_BOOK, DSL.name("account_book_pkey"), new TableField[] { AccountBook.ACCOUNT_BOOK.ID }, true);
+    public static final UniqueKey<AccountBookInvitationRecord> ACCOUNT_BOOK_INVITATION_PKEY = Internal.createUniqueKey(AccountBookInvitation.ACCOUNT_BOOK_INVITATION, DSL.name("account_book_invitation_pkey"), new TableField[] { AccountBookInvitation.ACCOUNT_BOOK_INVITATION.ID }, true);
     public static final UniqueKey<AccountBookUserRecord> ACCOUNT_BOOK_USER_PKEY = Internal.createUniqueKey(AccountBookUser.ACCOUNT_BOOK_USER, DSL.name("account_book_user_pkey"), new TableField[] { AccountBookUser.ACCOUNT_BOOK_USER.ID }, true);
     public static final UniqueKey<BudgetRecord> BUDGET_PKEY = Internal.createUniqueKey(Budget.BUDGET, DSL.name("budget_pkey"), new TableField[] { Budget.BUDGET.ID }, true);
     public static final UniqueKey<ExpenseRecord> EXPENSE_PKEY = Internal.createUniqueKey(Expense.EXPENSE, DSL.name("expense_pkey"), new TableField[] { Expense.EXPENSE.ID }, true);

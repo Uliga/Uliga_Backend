@@ -17,13 +17,13 @@ import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function10;
+import org.jooq.Function13;
 import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Row10;
+import org.jooq.Row13;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -105,6 +105,21 @@ public class Expense extends TableImpl<ExpenseRecord> {
      * The column <code>public.expense.updated_at</code>.
      */
     public final TableField<ExpenseRecord, LocalDateTime> UPDATED_AT = createField(DSL.name("updated_at"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), this, "");
+
+    /**
+     * The column <code>public.expense.year</code>.
+     */
+    public final TableField<ExpenseRecord, String> YEAR = createField(DSL.name("year"), SQLDataType.CLOB.nullable(false), this, "");
+
+    /**
+     * The column <code>public.expense.month</code>.
+     */
+    public final TableField<ExpenseRecord, String> MONTH = createField(DSL.name("month"), SQLDataType.CLOB.nullable(false), this, "");
+
+    /**
+     * The column <code>public.expense.week</code>.
+     */
+    public final TableField<ExpenseRecord, String> WEEK = createField(DSL.name("week"), SQLDataType.CLOB.nullable(false), this, "");
 
     private Expense(Name alias, Table<ExpenseRecord> aliased) {
         this(alias, aliased, null);
@@ -199,18 +214,18 @@ public class Expense extends TableImpl<ExpenseRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row10 type methods
+    // Row13 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row10<Long, Long, String, String, LocalDate, Long, Long, Long, LocalDateTime, LocalDateTime> fieldsRow() {
-        return (Row10) super.fieldsRow();
+    public Row13<Long, Long, String, String, LocalDate, Long, Long, Long, LocalDateTime, LocalDateTime, String, String, String> fieldsRow() {
+        return (Row13) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function10<? super Long, ? super Long, ? super String, ? super String, ? super LocalDate, ? super Long, ? super Long, ? super Long, ? super LocalDateTime, ? super LocalDateTime, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function13<? super Long, ? super Long, ? super String, ? super String, ? super LocalDate, ? super Long, ? super Long, ? super Long, ? super LocalDateTime, ? super LocalDateTime, ? super String, ? super String, ? super String, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -218,7 +233,7 @@ public class Expense extends TableImpl<ExpenseRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function10<? super Long, ? super Long, ? super String, ? super String, ? super LocalDate, ? super Long, ? super Long, ? super Long, ? super LocalDateTime, ? super LocalDateTime, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function13<? super Long, ? super Long, ? super String, ? super String, ? super LocalDate, ? super Long, ? super Long, ? super Long, ? super LocalDateTime, ? super LocalDateTime, ? super String, ? super String, ? super String, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

@@ -76,11 +76,6 @@ public class Budget extends TableImpl<BudgetRecord> {
     public final TableField<BudgetRecord, Long> MONTH = createField(DSL.name("month"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
-     * The column <code>public.budget.category_id</code>.
-     */
-    public final TableField<BudgetRecord, Long> CATEGORY_ID = createField(DSL.name("category_id"), SQLDataType.BIGINT, this, "");
-
-    /**
      * The column <code>public.budget.account_book_id</code>.
      */
     public final TableField<BudgetRecord, Long> ACCOUNT_BOOK_ID = createField(DSL.name("account_book_id"), SQLDataType.BIGINT.nullable(false), this, "");
@@ -94,6 +89,11 @@ public class Budget extends TableImpl<BudgetRecord> {
      * The column <code>public.budget.updated_at</code>.
      */
     public final TableField<BudgetRecord, LocalDateTime> UPDATED_AT = createField(DSL.name("updated_at"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), this, "");
+
+    /**
+     * The column <code>public.budget.expense_category_id</code>.
+     */
+    public final TableField<BudgetRecord, Long> EXPENSE_CATEGORY_ID = createField(DSL.name("expense_category_id"), SQLDataType.BIGINT, this, "");
 
     private Budget(Name alias, Table<BudgetRecord> aliased) {
         this(alias, aliased, null);
@@ -135,7 +135,7 @@ public class Budget extends TableImpl<BudgetRecord> {
 
     @Override
     public List<Index> getIndexes() {
-        return Arrays.asList(Indexes.IDX_BUDGET_ACCOUNT_BOOK_ID, Indexes.IDX_BUDGET_CATEGORY_ID);
+        return Arrays.asList(Indexes.IDX_BUDGET_ACCOUNT_BOOK_ID, Indexes.IDX_BUDGET_EXPENSE_CATEGORY_ID);
     }
 
     @Override
@@ -192,14 +192,14 @@ public class Budget extends TableImpl<BudgetRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<Long, Long, Long, Long, Long, Long, LocalDateTime, LocalDateTime> fieldsRow() {
+    public Row8<Long, Long, Long, Long, Long, LocalDateTime, LocalDateTime, Long> fieldsRow() {
         return (Row8) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function8<? super Long, ? super Long, ? super Long, ? super Long, ? super Long, ? super Long, ? super LocalDateTime, ? super LocalDateTime, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function8<? super Long, ? super Long, ? super Long, ? super Long, ? super Long, ? super LocalDateTime, ? super LocalDateTime, ? super Long, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -207,7 +207,7 @@ public class Budget extends TableImpl<BudgetRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function8<? super Long, ? super Long, ? super Long, ? super Long, ? super Long, ? super Long, ? super LocalDateTime, ? super LocalDateTime, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function8<? super Long, ? super Long, ? super Long, ? super Long, ? super Long, ? super LocalDateTime, ? super LocalDateTime, ? super Long, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }
