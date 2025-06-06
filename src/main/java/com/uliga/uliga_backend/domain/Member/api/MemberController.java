@@ -47,125 +47,156 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @RequestMapping(value = "/member")
 public class MemberController {
-        private final MemberService memberService;
+  private final MemberService memberService;
 
-        @Operation(summary = "로그인한 멤버 정보 조회 API", description = "로그인한 멤버 정보 조회 API 입니다", security = @SecurityRequirement(name = "bearerAuth"))
-        @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "정보 조회 성공시", content = @Content(schema = @Schema(implementation = GetMemberInfo.class))),
-                        @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-        })
-        @GetMapping(value = "")
-        public ResponseEntity<GetMemberInfo> getMemberInfo(
-                        @Parameter(in = ParameterIn.PATH, name = "pageable", description = "페이징할때 필요한 정보") Pageable pageable)
-                        throws JsonProcessingException {
+  // @Operation(summary = "로그인한 멤버 정보 조회 API", description = "로그인한 멤버 정보 조회 API
+  // 입니다", security = @SecurityRequirement(name = "bearerAuth"))
+  // @ApiResponses(value = {
+  // @ApiResponse(responseCode = "200", description = "정보 조회 성공시", content =
+  // @Content(schema = @Schema(implementation = GetMemberInfo.class))),
+  // @ApiResponse(responseCode = "401", description = "엑세스 만료시", content =
+  // @Content(schema = @Schema(implementation = ErrorResponse.class)))
+  // })
+  // @GetMapping(value = "")
+  // public ResponseEntity<GetMemberInfo> getMemberInfo(
+  // @Parameter(in = ParameterIn.PATH, name = "pageable", description = "페이징할때 필요한
+  // 정보") Pageable pageable)
+  // throws JsonProcessingException {
 
-                Long currentMemberId = SecurityUtil.getCurrentMemberId();
-                return ResponseEntity.ok(memberService.getCurrentMemberInfo(currentMemberId, pageable));
-        }
+  // Long currentMemberId = SecurityUtil.getCurrentMemberId();
+  // return ResponseEntity.ok(memberService.getCurrentMemberInfo(currentMemberId,
+  // pageable));
+  // }
 
-        @Operation(summary = "소셜 로그인용 멤버 개인 가계부 아이디 조회 API", description = "멤버 개인 가계부 아아디 조회 API 입니다")
-        @GetMapping(value = "/privateAccountBook")
-        public ResponseEntity<Long> getPrivateAccountBookId() {
+  // @Operation(summary = "소셜 로그인용 멤버 개인 가계부 아이디 조회 API", description = "멤버 개인 가계부
+  // 아아디 조회 API 입니다")
+  // @GetMapping(value = "/privateAccountBook")
+  // public ResponseEntity<Long> getPrivateAccountBookId() {
 
-                Long currentMemberId = SecurityUtil.getCurrentMemberId();
-                return ResponseEntity.ok(memberService.getMemberPrivateAccountBookId(currentMemberId));
+  // Long currentMemberId = SecurityUtil.getCurrentMemberId();
+  // return
+  // ResponseEntity.ok(memberService.getMemberPrivateAccountBookId(currentMemberId));
 
-        }
+  // }
 
-        @Operation(summary = "멤버 정보 업데이트 API", description = "멤버 정보 업데이트 API 입니다", security = @SecurityRequirement(name = "bearerAuth"))
-        @PatchMapping(value = "")
-        public ResponseEntity<MemberInfoUpdateRequest> updateMemberInfo(
-                        @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "멤버 정보 업데이트 요청", content = @Content(schema = @Schema(implementation = MemberInfoUpdateRequest.class))) @RequestBody Map<String, Object> updates) {
+  // @Operation(summary = "멤버 정보 업데이트 API", description = "멤버 정보 업데이트 API 입니다",
+  // security = @SecurityRequirement(name = "bearerAuth"))
+  // @PatchMapping(value = "")
+  // public ResponseEntity<MemberInfoUpdateRequest> updateMemberInfo(
+  // @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "멤버 정보
+  // 업데이트 요청", content = @Content(schema = @Schema(implementation =
+  // MemberInfoUpdateRequest.class))) @RequestBody Map<String, Object> updates) {
 
-                Long currentMemberId = SecurityUtil.getCurrentMemberId();
-                return ResponseEntity.ok(memberService.updateMemberInfo(currentMemberId, updates));
-        }
+  // Long currentMemberId = SecurityUtil.getCurrentMemberId();
+  // return ResponseEntity.ok(memberService.updateMemberInfo(currentMemberId,
+  // updates));
+  // }
 
-        @Operation(summary = "멤버 애플리케이션 비밀번호 확인", description = "로그인한 멤버 애플리케이션 비밀번호 확인 API", security = @SecurityRequirement(name = "bearerAuth"))
-        @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "비밀번호 확인 성공시", content = @Content(schema = @Schema(implementation = MatchResult.class))),
-                        @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-        })
-        @PostMapping(value = "/applicationPassword")
-        public ResponseEntity<MatchResult> checkApplicationPassword(
-                        @Valid @RequestBody ApplicationPasswordCheck passwordCheck) {
+  // @Operation(summary = "멤버 애플리케이션 비밀번호 확인", description = "로그인한 멤버 애플리케이션 비밀번호
+  // 확인 API", security = @SecurityRequirement(name = "bearerAuth"))
+  // @ApiResponses(value = {
+  // @ApiResponse(responseCode = "200", description = "비밀번호 확인 성공시", content =
+  // @Content(schema = @Schema(implementation = MatchResult.class))),
+  // @ApiResponse(responseCode = "401", description = "엑세스 만료시", content =
+  // @Content(schema = @Schema(implementation = ErrorResponse.class)))
+  // })
+  // @PostMapping(value = "/applicationPassword")
+  // public ResponseEntity<MatchResult> checkApplicationPassword(
+  // @Valid @RequestBody ApplicationPasswordCheck passwordCheck) {
 
-                return ResponseEntity.ok(MatchResult.builder()
-                                .matches(
-                                                memberService.checkApplicationPassword(
-                                                                SecurityUtil.getCurrentMemberId(), passwordCheck))
-                                .build());
-        }
+  // return ResponseEntity.ok(MatchResult.builder()
+  // .matches(
+  // memberService.checkApplicationPassword(
+  // SecurityUtil.getCurrentMemberId(), passwordCheck))
+  // .build());
+  // }
 
-        @Operation(summary = "멤버 비밀번호 확인", description = "로그인한 멤버 비밀번호 확인 API", security = @SecurityRequirement(name = "bearerAuth"))
-        @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "비밀번호 확인 성공시", content = @Content(schema = @Schema(implementation = MatchResult.class))),
-                        @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-        })
-        @PostMapping(value = "/password")
-        public ResponseEntity<MatchResult> checkPassword(@Valid @RequestBody PasswordCheck passwordCheck) {
+  // @Operation(summary = "멤버 비밀번호 확인", description = "로그인한 멤버 비밀번호 확인 API",
+  // security = @SecurityRequirement(name = "bearerAuth"))
+  // @ApiResponses(value = {
+  // @ApiResponse(responseCode = "200", description = "비밀번호 확인 성공시", content =
+  // @Content(schema = @Schema(implementation = MatchResult.class))),
+  // @ApiResponse(responseCode = "401", description = "엑세스 만료시", content =
+  // @Content(schema = @Schema(implementation = ErrorResponse.class)))
+  // })
+  // @PostMapping(value = "/password")
+  // public ResponseEntity<MatchResult> checkPassword(@Valid @RequestBody
+  // PasswordCheck passwordCheck) {
 
-                return ResponseEntity.ok(MatchResult.builder()
-                                .matches(
-                                                memberService.checkPassword(SecurityUtil.getCurrentMemberId(),
-                                                                passwordCheck))
-                                .build());
-        }
+  // return ResponseEntity.ok(MatchResult.builder()
+  // .matches(
+  // memberService.checkPassword(SecurityUtil.getCurrentMemberId(),
+  // passwordCheck))
+  // .build());
+  // }
 
-        @Operation(summary = "닉네임 존재 여부 확인", description = "닉네임 존재 확인 API")
-        @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "닉네임 존재 여부 확인", content = @Content(schema = @Schema(implementation = ExistsCheckDto.class))),
-                        @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-        })
-        @PostMapping(value = "/nickname")
-        public ResponseEntity<ExistsCheckDto> nicknameExistsCheck(
-                        @Valid @RequestBody NicknameCheckDto nicknameCheckDto) {
+  // @Operation(summary = "닉네임 존재 여부 확인", description = "닉네임 존재 확인 API")
+  // @ApiResponses(value = {
+  // @ApiResponse(responseCode = "200", description = "닉네임 존재 여부 확인", content =
+  // @Content(schema = @Schema(implementation = ExistsCheckDto.class))),
+  // @ApiResponse(responseCode = "401", description = "엑세스 만료시", content =
+  // @Content(schema = @Schema(implementation = ErrorResponse.class)))
+  // })
+  // @PostMapping(value = "/nickname")
+  // public ResponseEntity<ExistsCheckDto> nicknameExistsCheck(
+  // @Valid @RequestBody NicknameCheckDto nicknameCheckDto) {
 
-                return ResponseEntity.ok(
-                                ExistsCheckDto.builder().exists(memberService
-                                                .nicknameExists(SecurityUtil.getCurrentMemberId(), nicknameCheckDto))
-                                                .build());
-        }
+  // return ResponseEntity.ok(
+  // ExistsCheckDto.builder().exists(memberService
+  // .nicknameExists(SecurityUtil.getCurrentMemberId(), nicknameCheckDto))
+  // .build());
+  // }
 
-        @Operation(summary = "멤버 탈퇴", description = "멤버 탈퇴 API")
-        @DeleteMapping(value = "")
-        public ResponseEntity<String> deleteMember() {
-                Long currentMemberId = SecurityUtil.getCurrentMemberId();
+  // @Operation(summary = "멤버 탈퇴", description = "멤버 탈퇴 API")
+  // @DeleteMapping(value = "")
+  // public ResponseEntity<String> deleteMember() {
+  // Long currentMemberId = SecurityUtil.getCurrentMemberId();
 
-                return ResponseEntity.ok(memberService.deleteMember(currentMemberId));
-        }
+  // return ResponseEntity.ok(memberService.deleteMember(currentMemberId));
+  // }
 
-        @Operation(summary = "이메일로 존재하는 멤버 찾기", description = "이메일로 존재하는 멤버 찾는 API", security = @SecurityRequirement(name = "bearerAuth"))
-        @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "이메일로 존재하는 멤버 존재시", content = @Content(schema = @Schema(implementation = SearchEmailResult.class))),
-                        @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-        })
-        @PostMapping(value = "/search/email")
-        public ResponseEntity<SearchEmailResult> getMemberByEmail(
-                        @RequestParam(name = "accountBook", required = false, defaultValue = "") Long accountBookId,
-                        @Valid @RequestBody SearchMemberByEmail searchMemberByEmail) {
+  // @Operation(summary = "이메일로 존재하는 멤버 찾기", description = "이메일로 존재하는 멤버 찾는 API",
+  // security = @SecurityRequirement(name = "bearerAuth"))
+  // @ApiResponses(value = {
+  // @ApiResponse(responseCode = "200", description = "이메일로 존재하는 멤버 존재시", content
+  // = @Content(schema = @Schema(implementation = SearchEmailResult.class))),
+  // @ApiResponse(responseCode = "401", description = "엑세스 만료시", content =
+  // @Content(schema = @Schema(implementation = ErrorResponse.class)))
+  // })
+  // @PostMapping(value = "/search/email")
+  // public ResponseEntity<SearchEmailResult> getMemberByEmail(
+  // @RequestParam(name = "accountBook", required = false, defaultValue = "") Long
+  // accountBookId,
+  // @Valid @RequestBody SearchMemberByEmail searchMemberByEmail) {
 
-                return ResponseEntity.ok(memberService.findMemberByEmail(accountBookId, searchMemberByEmail));
-        }
+  // return ResponseEntity.ok(memberService.findMemberByEmail(accountBookId,
+  // searchMemberByEmail));
+  // }
 
-        @Operation(summary = "금융 일정 알림 전체 제거", description = "멤버한테 온 금융 일정 알림 전체 제거 API 입니다")
-        @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "삭제 성공시"),
-                        @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-        })
-        @DeleteMapping(value = "/notification")
-        public ResponseEntity<String> deleteMemberNotification() {
-                Long currentMemberId = SecurityUtil.getCurrentMemberId();
+  // @Operation(summary = "금융 일정 알림 전체 제거", description = "멤버한테 온 금융 일정 알림 전체 제거
+  // API 입니다")
+  // @ApiResponses(value = {
+  // @ApiResponse(responseCode = "200", description = "삭제 성공시"),
+  // @ApiResponse(responseCode = "401", description = "엑세스 만료시", content =
+  // @Content(schema = @Schema(implementation = ErrorResponse.class)))
+  // })
+  // @DeleteMapping(value = "/notification")
+  // public ResponseEntity<String> deleteMemberNotification() {
+  // Long currentMemberId = SecurityUtil.getCurrentMemberId();
 
-                return ResponseEntity.ok(memberService.deleteMemberNotification(currentMemberId));
-        }
+  // return
+  // ResponseEntity.ok(memberService.deleteMemberNotification(currentMemberId));
+  // }
 
-        @Operation(summary = "공유 가계부 탈퇴 API", description = "공유 가계부에 탈퇴 할때 쓰는 API 입니다")
-        @DeleteMapping(value = "/accountBook/{id}")
-        public ResponseEntity<String> deleteAccountBookMember(@PathVariable("id") Long id) {
+  // @Operation(summary = "공유 가계부 탈퇴 API", description = "공유 가계부에 탈퇴 할때 쓰는 API
+  // 입니다")
+  // @DeleteMapping(value = "/accountBook/{id}")
+  // public ResponseEntity<String> deleteAccountBookMember(@PathVariable("id")
+  // Long id) {
 
-                Long currentMemberId = SecurityUtil.getCurrentMemberId();
+  // Long currentMemberId = SecurityUtil.getCurrentMemberId();
 
-                return ResponseEntity.ok(memberService.deleteAccountBookMember(id, currentMemberId));
-        }
+  // return ResponseEntity.ok(memberService.deleteAccountBookMember(id,
+  // currentMemberId));
+  // }
 }
