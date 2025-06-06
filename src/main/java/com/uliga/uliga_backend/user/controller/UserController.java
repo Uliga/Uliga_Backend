@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uliga.uliga_backend.common.annotation.Serialize;
-import com.uliga.uliga_backend.domain.user.application.UserService;
-import com.uliga.uliga_backend.domain.user.dto.req.UpdateUserDto;
-import com.uliga.uliga_backend.domain.user.dto.res.UserDto;
 import com.uliga.uliga_backend.jooq.tables.pojos.User;
+import com.uliga.uliga_backend.user.dto.req.UpdateUserDto;
+import com.uliga.uliga_backend.user.dto.res.UserDto;
+import com.uliga.uliga_backend.user.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

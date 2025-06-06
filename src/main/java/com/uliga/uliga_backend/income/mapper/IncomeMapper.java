@@ -1,9 +1,9 @@
-package com.uliga.uliga_backend.domain.income.mapper;
+package com.uliga.uliga_backend.income.mapper;
 
 import java.util.HashMap;
 import java.util.List;
 
-import com.uliga.uliga_backend.domain.income.dto.NativeQ.IncomeInfoQ;
+import com.uliga.uliga_backend.income.dto.NativeQ.IncomeInfoQ;
 
 public interface IncomeMapper {
   List<IncomeInfoQ> findAccountBookMemberIncomes(HashMap<String, Object> map);

@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.uliga.uliga_backend.domain.budget.application.BudgetService;
-import com.uliga.uliga_backend.domain.budget.dto.BudgetDTO.BudgetUpdateRequest;
+import com.uliga.uliga_backend.budget.dto.BudgetDTO.BudgetUpdateRequest;
+import com.uliga.uliga_backend.budget.service.BudgetService;
 import com.uliga.uliga_backend.error.response.ErrorResponse;
 
 import io.swagger.v3.oas.annotations.Operation;

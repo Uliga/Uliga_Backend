@@ -5,9 +5,9 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.uliga.uliga_backend.domain.account_book.application.AccountBookService;
-import com.uliga.uliga_backend.domain.category.application.CategoryService;
-import com.uliga.uliga_backend.domain.member.repository.MemberRepository;
+import com.uliga.uliga_backend.account_book.service.AccountBookService;
+import com.uliga.uliga_backend.category.service.CategoryService;
+import com.uliga.uliga_backend.member.repository.MemberRepository;
 import com.uliga.uliga_backend.security.jwt.JwtTokenProvider;
 
 import lombok.RequiredArgsConstructor;

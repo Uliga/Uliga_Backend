@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.income.repository;
+package com.uliga.uliga_backend.income.repository;
 
 public interface IncomeRepository {
 

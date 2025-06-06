@@ -1,8 +1,8 @@
-package com.uliga.uliga_backend.domain.join_table.repository;
+package com.uliga.uliga_backend.join_table.repository;
 
 import java.util.Optional;
 
-import com.uliga.uliga_backend.domain.join_table.model.AccountBookMember;
+import com.uliga.uliga_backend.join_table.model.AccountBookMember;
 
 public interface AccountBookMemberRepository {
   boolean existsAccountBookMemberByMemberIdAndAccountBookId(Long memberId, Long accountBookId);

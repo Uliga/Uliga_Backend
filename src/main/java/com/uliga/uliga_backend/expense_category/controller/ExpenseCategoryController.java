@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uliga.uliga_backend.common.annotation.Serialize;
-import com.uliga.uliga_backend.domain.expense_category.application.ExpenseCategoryService;
-import com.uliga.uliga_backend.domain.expense_category.dto.req.CreateExpenseCategoryDto;
-import com.uliga.uliga_backend.domain.expense_category.dto.req.ExpenseCategoryQueryDto;
-import com.uliga.uliga_backend.domain.expense_category.dto.req.UpdateExpenseCategoryDto;
-import com.uliga.uliga_backend.domain.expense_category.dto.res.ExpenseCategoryDto;
+import com.uliga.uliga_backend.expense_category.dto.req.CreateExpenseCategoryDto;
+import com.uliga.uliga_backend.expense_category.dto.req.ExpenseCategoryQueryDto;
+import com.uliga.uliga_backend.expense_category.dto.req.UpdateExpenseCategoryDto;
+import com.uliga.uliga_backend.expense_category.dto.res.ExpenseCategoryDto;
+import com.uliga.uliga_backend.expense_category.service.ExpenseCategoryService;
 import com.uliga.uliga_backend.jooq.tables.pojos.ExpenseCategory;
 
 import io.swagger.v3.oas.annotations.Operation;

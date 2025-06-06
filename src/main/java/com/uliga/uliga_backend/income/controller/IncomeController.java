@@ -3,7 +3,7 @@ package com.uliga.uliga_backend.income.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.uliga.uliga_backend.domain.income.application.IncomeService;
+import com.uliga.uliga_backend.income.service.IncomeService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

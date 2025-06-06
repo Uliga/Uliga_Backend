@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uliga.uliga_backend.common.annotation.Serialize;
-import com.uliga.uliga_backend.domain.fixed_revenue.application.FixedRevenueService;
-import com.uliga.uliga_backend.domain.fixed_revenue.dto.req.CreateFixedRevenueDto;
-import com.uliga.uliga_backend.domain.fixed_revenue.dto.req.FixedRevenueQueryDto;
-import com.uliga.uliga_backend.domain.fixed_revenue.dto.req.UpdateFixedRevenueDto;
-import com.uliga.uliga_backend.domain.fixed_revenue.dto.res.FixedRevenueDto;
+import com.uliga.uliga_backend.fixed_revenue.dto.req.CreateFixedRevenueDto;
+import com.uliga.uliga_backend.fixed_revenue.dto.req.FixedRevenueQueryDto;
+import com.uliga.uliga_backend.fixed_revenue.dto.req.UpdateFixedRevenueDto;
+import com.uliga.uliga_backend.fixed_revenue.dto.res.FixedRevenueDto;
+import com.uliga.uliga_backend.fixed_revenue.service.FixedRevenueService;
 import com.uliga.uliga_backend.jooq.tables.pojos.FixedRevenue;
 
 import io.swagger.v3.oas.annotations.Operation;

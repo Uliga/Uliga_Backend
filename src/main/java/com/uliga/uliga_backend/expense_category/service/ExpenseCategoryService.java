@@ -2,10 +2,10 @@ package com.uliga.uliga_backend.expense_category.service;
 
 import org.springframework.stereotype.Service;
 
-import com.uliga.uliga_backend.domain.expense_category.dto.req.CreateExpenseCategoryDto;
-import com.uliga.uliga_backend.domain.expense_category.dto.req.ExpenseCategoryQueryDto;
-import com.uliga.uliga_backend.domain.expense_category.dto.req.UpdateExpenseCategoryDto;
-import com.uliga.uliga_backend.domain.expense_category.repository.ExpenseCategoryRepository;
+import com.uliga.uliga_backend.expense_category.dto.req.CreateExpenseCategoryDto;
+import com.uliga.uliga_backend.expense_category.dto.req.ExpenseCategoryQueryDto;
+import com.uliga.uliga_backend.expense_category.dto.req.UpdateExpenseCategoryDto;
+import com.uliga.uliga_backend.expense_category.repository.ExpenseCategoryRepository;
 import com.uliga.uliga_backend.jooq.tables.pojos.ExpenseCategory;
 
 import lombok.RequiredArgsConstructor;

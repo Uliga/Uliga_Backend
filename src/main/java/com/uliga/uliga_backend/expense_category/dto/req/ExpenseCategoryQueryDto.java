@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.expense_category.dto.req;
+package com.uliga.uliga_backend.expense_category.dto.req;
 
 public class ExpenseCategoryQueryDto {
 

@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.income.dto;
+package com.uliga.uliga_backend.income.dto;
 
 public class IncomeDTO {
   // @Builder

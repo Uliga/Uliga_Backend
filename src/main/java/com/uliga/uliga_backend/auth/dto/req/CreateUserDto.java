@@ -1,9 +1,7 @@
-package com.uliga.uliga_backend.domain.auth.dto.req;
+package com.uliga.uliga_backend.auth.dto.req;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.uliga.uliga_backend.jooq.enums.Authority;
-import com.uliga.uliga_backend.jooq.enums.UserLoginType;
 import com.uliga.uliga_backend.jooq.tables.pojos.User;
 
 import io.swagger.v3.oas.annotations.media.Schema;

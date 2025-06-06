@@ -2,10 +2,10 @@ package com.uliga.uliga_backend.budget.service;
 
 import org.springframework.stereotype.Service;
 
-import com.uliga.uliga_backend.domain.budget.dto.BudgetDTO.CreateBudgetDto;
-import com.uliga.uliga_backend.domain.budget.dto.req.BudgetQueryDto;
-import com.uliga.uliga_backend.domain.budget.dto.req.UpdateBudgetDto;
-import com.uliga.uliga_backend.domain.budget.repository.BudgetRepository;
+import com.uliga.uliga_backend.budget.dto.req.BudgetQueryDto;
+import com.uliga.uliga_backend.budget.dto.req.CreateBudgetDto;
+import com.uliga.uliga_backend.budget.dto.req.UpdateBudgetDto;
+import com.uliga.uliga_backend.budget.repository.BudgetRepository;
 import com.uliga.uliga_backend.jooq.tables.pojos.Budget;
 
 import lombok.RequiredArgsConstructor;

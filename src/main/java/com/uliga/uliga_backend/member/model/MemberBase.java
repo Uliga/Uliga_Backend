@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.member.model;
+package com.uliga.uliga_backend.member.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

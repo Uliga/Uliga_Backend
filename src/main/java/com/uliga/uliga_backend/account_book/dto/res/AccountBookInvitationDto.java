@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.account_book.dto.res;
+package com.uliga.uliga_backend.account_book.dto.res;
 
 public class AccountBookInvitationDto {
 

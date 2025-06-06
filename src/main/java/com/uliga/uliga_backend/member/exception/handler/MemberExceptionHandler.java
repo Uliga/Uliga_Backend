@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.member.exception.handler;
+package com.uliga.uliga_backend.member.exception.handler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -6,14 +6,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
-import com.uliga.uliga_backend.domain.member.dto.MemberDTO.SearchEmailResult;
-import com.uliga.uliga_backend.domain.member.exception.CannotLoginException;
-import com.uliga.uliga_backend.domain.member.exception.EmailCertificationExpireException;
-import com.uliga.uliga_backend.domain.member.exception.InvalidApplicationPasswordException;
-import com.uliga.uliga_backend.domain.member.exception.UnknownLoginException;
-import com.uliga.uliga_backend.domain.member.exception.UserExistsInAccountBook;
-import com.uliga.uliga_backend.domain.member.exception.UserNotFoundByEmail;
 import com.uliga.uliga_backend.error.response.ErrorResponse;
+import com.uliga.uliga_backend.member.dto.MemberDTO.SearchEmailResult;
+import com.uliga.uliga_backend.member.exception.CannotLoginException;
+import com.uliga.uliga_backend.member.exception.EmailCertificationExpireException;
+import com.uliga.uliga_backend.member.exception.InvalidApplicationPasswordException;
+import com.uliga.uliga_backend.member.exception.UnknownLoginException;
+import com.uliga.uliga_backend.member.exception.UserExistsInAccountBook;
+import com.uliga.uliga_backend.member.exception.UserNotFoundByEmail;
 
 import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;

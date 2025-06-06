@@ -2,7 +2,7 @@ package com.uliga.uliga_backend.security.oauth2.provider;
 
 import java.util.Map;
 
-import com.uliga.uliga_backend.domain.member.model.UserLoginType;
+import com.uliga.uliga_backend.member.model.UserLoginType;
 import com.uliga.uliga_backend.security.oauth2.OAuth2UserInfo;
 
 public class KakaoOAuth2UserInfo extends OAuth2UserInfo {

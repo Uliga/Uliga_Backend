@@ -2,10 +2,10 @@ package com.uliga.uliga_backend.user.service;
 
 import org.springframework.stereotype.Service;
 
-import com.uliga.uliga_backend.domain.user.dto.req.CreateUserDto;
-import com.uliga.uliga_backend.domain.user.dto.req.UpdateUserDto;
-import com.uliga.uliga_backend.domain.user.repository.UserRepository;
 import com.uliga.uliga_backend.jooq.tables.pojos.User;
+import com.uliga.uliga_backend.user.dto.req.CreateUserDto;
+import com.uliga.uliga_backend.user.dto.req.UpdateUserDto;
+import com.uliga.uliga_backend.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;

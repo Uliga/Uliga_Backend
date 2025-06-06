@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.user.dto.res;
+package com.uliga.uliga_backend.user.dto.res;
 
 public class UserDto {
 }

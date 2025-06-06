@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uliga.uliga_backend.common.annotation.Serialize;
-import com.uliga.uliga_backend.domain.fixed_expense.application.FixedExpenseService;
-import com.uliga.uliga_backend.domain.fixed_expense.dto.req.CreateFixedExpenseDto;
-import com.uliga.uliga_backend.domain.fixed_expense.dto.req.FixedExpenseQuery;
-import com.uliga.uliga_backend.domain.fixed_expense.dto.req.FixedExpenseSumQuery;
-import com.uliga.uliga_backend.domain.fixed_expense.dto.req.UpdateFixedExpenseDto;
-import com.uliga.uliga_backend.domain.fixed_expense.dto.res.FixedExpenseDto;
-import com.uliga.uliga_backend.domain.fixed_expense.dto.res.FixedExpenseSumDto;
+import com.uliga.uliga_backend.fixed_expense.dto.req.CreateFixedExpenseDto;
+import com.uliga.uliga_backend.fixed_expense.dto.req.FixedExpenseQuery;
+import com.uliga.uliga_backend.fixed_expense.dto.req.FixedExpenseSumQuery;
+import com.uliga.uliga_backend.fixed_expense.dto.req.UpdateFixedExpenseDto;
+import com.uliga.uliga_backend.fixed_expense.dto.res.FixedExpenseDto;
+import com.uliga.uliga_backend.fixed_expense.dto.res.FixedExpenseSumDto;
+import com.uliga.uliga_backend.fixed_expense.service.FixedExpenseService;
 import com.uliga.uliga_backend.jooq.tables.pojos.FixedExpense;
 
 import io.swagger.v3.oas.annotations.Operation;

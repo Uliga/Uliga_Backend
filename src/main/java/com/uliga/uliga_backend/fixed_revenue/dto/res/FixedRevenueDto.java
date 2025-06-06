@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.fixed_revenue.dto.res;
+package com.uliga.uliga_backend.fixed_revenue.dto.res;
 
 public class FixedRevenueDto {
 }

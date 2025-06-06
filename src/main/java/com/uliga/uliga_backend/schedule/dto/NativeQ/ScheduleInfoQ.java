@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.schedule.dto.NativeQ;
+package com.uliga.uliga_backend.schedule.dto.NativeQ;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -8,33 +8,33 @@ import lombok.Getter;
 @Data
 @Getter
 public class ScheduleInfoQ {
-    @Schema(description = "스케줄 아이디")
-    private Long id;
-    @Schema(description = "알림 받을 날짜", defaultValue = "3")
-    private Long notificationDay;
-    @Schema(description = "금융 일정 이름", defaultValue = "금융 일정 이름")
-    private String name;
-    @Schema(description = "수입/지출 여부")
-    private Boolean isIncome;
-    @Schema(description = "나가거나/들어오는 값(null이면 변동이라는 뜻)")
-    private Long value;
-    @Schema(description = "작성자 아이디")
-    private Long creatorId;
-    @Schema(description = "작성자", defaultValue = "creatorUsername")
-    private String creator;
-    @Schema(description = "가계부 이름", defaultValue = "accountBookName")
-    private String accountBookName;
+  @Schema(description = "스케줄 아이디")
+  private Long id;
+  @Schema(description = "알림 받을 날짜", defaultValue = "3")
+  private Long notificationDay;
+  @Schema(description = "금융 일정 이름", defaultValue = "금융 일정 이름")
+  private String name;
+  @Schema(description = "수입/지출 여부")
+  private Boolean isIncome;
+  @Schema(description = "나가거나/들어오는 값(null이면 변동이라는 뜻)")
+  private Long value;
+  @Schema(description = "작성자 아이디")
+  private Long creatorId;
+  @Schema(description = "작성자", defaultValue = "creatorUsername")
+  private String creator;
+  @Schema(description = "가계부 이름", defaultValue = "accountBookName")
+  private String accountBookName;
 
-    @Builder
-    public ScheduleInfoQ(Long id, Boolean isIncome, String name, Long nDay, Long value, Long creatorId, String creator,
-            String accountBookName) {
-        this.id = id;
-        this.isIncome = isIncome;
-        this.name = name;
-        this.notificationDay = nDay;
-        this.value = value;
-        this.creatorId = creatorId;
-        this.creator = creator;
-        this.accountBookName = accountBookName;
-    }
+  @Builder
+  public ScheduleInfoQ(Long id, Boolean isIncome, String name, Long nDay, Long value, Long creatorId, String creator,
+      String accountBookName) {
+    this.id = id;
+    this.isIncome = isIncome;
+    this.name = name;
+    this.notificationDay = nDay;
+    this.value = value;
+    this.creatorId = creatorId;
+    this.creator = creator;
+    this.accountBookName = accountBookName;
+  }
 }

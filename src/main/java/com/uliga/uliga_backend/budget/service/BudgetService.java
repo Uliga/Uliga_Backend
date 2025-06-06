@@ -3,10 +3,10 @@ package com.uliga.uliga_backend.budget.service;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.account_book.repository.AccountBookRepository;
-import com.uliga.uliga_backend.domain.budget.repository.BudgetRepository;
-import com.uliga.uliga_backend.domain.category.repository.CategoryRepository;
-import com.uliga.uliga_backend.domain.record.repository.RecordRepository;
+import com.uliga.uliga_backend.account_book.repository.AccountBookRepository;
+import com.uliga.uliga_backend.budget.repository.BudgetRepository;
+import com.uliga.uliga_backend.category.repository.CategoryRepository;
+import com.uliga.uliga_backend.record.repository.RecordRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

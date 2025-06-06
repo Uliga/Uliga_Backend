@@ -3,7 +3,7 @@ package com.uliga.uliga_backend.category.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.uliga.uliga_backend.domain.category.application.CategoryService;
+import com.uliga.uliga_backend.category.service.CategoryService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

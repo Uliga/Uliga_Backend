@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.category.dto;
+package com.uliga.uliga_backend.category.dto;
 
 public class CategoryDTO {
   // @Builder

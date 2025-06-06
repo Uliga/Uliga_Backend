@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.join_table.model;
+package com.uliga.uliga_backend.join_table.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,11 +1,13 @@
 package com.uliga.uliga_backend.fixed_revenue.service;
 
 import org.springframework.stereotype.Service;
-import com.uliga.uliga_backend.domain.fixed_revenue.dto.req.CreateFixedRevenueDto;
-import com.uliga.uliga_backend.domain.fixed_revenue.dto.req.FixedRevenueQueryDto;
-import com.uliga.uliga_backend.domain.fixed_revenue.dto.req.UpdateFixedRevenueDto;
-import com.uliga.uliga_backend.domain.fixed_revenue.repository.FixedRevenueRepository;
+
+import com.uliga.uliga_backend.fixed_revenue.dto.req.CreateFixedRevenueDto;
+import com.uliga.uliga_backend.fixed_revenue.dto.req.FixedRevenueQueryDto;
+import com.uliga.uliga_backend.fixed_revenue.dto.req.UpdateFixedRevenueDto;
+import com.uliga.uliga_backend.fixed_revenue.repository.FixedRevenueRepository;
 import com.uliga.uliga_backend.jooq.tables.pojos.FixedRevenue;
+
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

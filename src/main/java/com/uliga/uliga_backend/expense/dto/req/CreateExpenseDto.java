@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.expense.dto.req;
+package com.uliga.uliga_backend.expense.dto.req;
 
 public class CreateExpenseDto {
 }

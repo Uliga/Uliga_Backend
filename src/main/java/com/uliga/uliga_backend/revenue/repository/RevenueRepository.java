@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.revenue.repository;
+package com.uliga.uliga_backend.revenue.repository;
 
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;

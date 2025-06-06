@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.income.model;
+package com.uliga.uliga_backend.income.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

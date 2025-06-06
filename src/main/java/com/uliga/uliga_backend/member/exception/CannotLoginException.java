@@ -1,11 +1,11 @@
-package com.uliga.uliga_backend.domain.member.exception;
+package com.uliga.uliga_backend.member.exception;
 
 public class CannotLoginException extends IllegalArgumentException {
-    public CannotLoginException() {
-        super("잘못된 이메일, 비밀번호 입니다.");
-    }
+  public CannotLoginException() {
+    super("잘못된 이메일, 비밀번호 입니다.");
+  }
 
-    public CannotLoginException(String s) {
-        super(s);
-    }
+  public CannotLoginException(String s) {
+    super(s);
+  }
 }

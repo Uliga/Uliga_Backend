@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.record.dto;
+package com.uliga.uliga_backend.record.dto;
 
 // public class RecordDTO {
 

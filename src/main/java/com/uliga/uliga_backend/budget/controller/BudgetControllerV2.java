@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uliga.uliga_backend.budget.dto.req.BudgetQueryDto;
+import com.uliga.uliga_backend.budget.dto.req.CreateBudgetDto;
+import com.uliga.uliga_backend.budget.dto.req.UpdateBudgetDto;
+import com.uliga.uliga_backend.budget.dto.res.BudgetDto;
+import com.uliga.uliga_backend.budget.service.BudgetServiceV2;
 import com.uliga.uliga_backend.common.annotation.Serialize;
-import com.uliga.uliga_backend.domain.budget.application.BudgetServiceV2;
-import com.uliga.uliga_backend.domain.budget.dto.BudgetDTO.CreateBudgetDto;
-import com.uliga.uliga_backend.domain.budget.dto.req.BudgetQueryDto;
-import com.uliga.uliga_backend.domain.budget.dto.req.UpdateBudgetDto;
-import com.uliga.uliga_backend.domain.budget.dto.res.BudgetDto;
 import com.uliga.uliga_backend.jooq.tables.pojos.Budget;
 
 import io.swagger.v3.oas.annotations.Operation;

@@ -5,11 +5,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.uliga.uliga_backend.domain.member.dto.MemberDTO.CodeConfirmDto;
-import com.uliga.uliga_backend.domain.member.dto.MemberDTO.ConfirmEmailDto;
-import com.uliga.uliga_backend.domain.member.dto.MemberDTO.EmailConfirmCodeDto;
-import com.uliga.uliga_backend.domain.member.dto.MemberDTO.EmailSentDto;
-import com.uliga.uliga_backend.domain.member.repository.MemberRepository;
+import com.uliga.uliga_backend.member.dto.MemberDTO.CodeConfirmDto;
+import com.uliga.uliga_backend.member.dto.MemberDTO.ConfirmEmailDto;
+import com.uliga.uliga_backend.member.dto.MemberDTO.EmailConfirmCodeDto;
+import com.uliga.uliga_backend.member.dto.MemberDTO.EmailSentDto;
+import com.uliga.uliga_backend.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

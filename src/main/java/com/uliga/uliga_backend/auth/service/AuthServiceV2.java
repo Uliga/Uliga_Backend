@@ -4,15 +4,14 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.uliga.uliga_backend.domain.account_book.application.AccountBookService;
-import com.uliga.uliga_backend.domain.account_book.dto.AccountBookDTO.CreateRequestPrivate;
-import com.uliga.uliga_backend.domain.auth.dto.req.CreateUserDto;
-import com.uliga.uliga_backend.domain.category.application.CategoryService;
-import com.uliga.uliga_backend.domain.member.dto.MemberDTO.ExistsCheckDto;
-import com.uliga.uliga_backend.domain.member.dto.MemberDTO.LoginRequest;
-import com.uliga.uliga_backend.domain.member.dto.MemberDTO.LoginResult;
-import com.uliga.uliga_backend.domain.user.repository.UserRepository;
+import com.uliga.uliga_backend.account_book.service.AccountBookService;
+import com.uliga.uliga_backend.auth.dto.req.CreateUserDto;
+import com.uliga.uliga_backend.category.service.CategoryService;
 import com.uliga.uliga_backend.jooq.tables.pojos.User;
+import com.uliga.uliga_backend.member.dto.MemberDTO.ExistsCheckDto;
+import com.uliga.uliga_backend.member.dto.MemberDTO.LoginRequest;
+import com.uliga.uliga_backend.member.dto.MemberDTO.LoginResult;
+import com.uliga.uliga_backend.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;

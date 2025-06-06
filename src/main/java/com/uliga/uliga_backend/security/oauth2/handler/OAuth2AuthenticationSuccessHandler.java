@@ -21,12 +21,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.uliga.uliga_backend.domain.member.model.Member;
-import com.uliga.uliga_backend.domain.member.repository.MemberRepository;
-import com.uliga.uliga_backend.domain.token.dto.TokenDTO.TokenInfoDTO;
 import com.uliga.uliga_backend.error.exception.NotFoundByIdException;
 import com.uliga.uliga_backend.jwt.JwtTokenProvider;
+import com.uliga.uliga_backend.member.model.Member;
+import com.uliga.uliga_backend.member.repository.MemberRepository;
 import com.uliga.uliga_backend.security.oauth2.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
+import com.uliga.uliga_backend.token.dto.TokenDTO.TokenInfoDTO;
 import com.uliga.uliga_backend.util.CookieUtil;
 
 import jakarta.servlet.ServletException;

@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.expense_category.dto.res;
+package com.uliga.uliga_backend.expense_category.dto.res;
 
 public class ExpenseCategoryDto {
 

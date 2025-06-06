@@ -5,12 +5,12 @@ import org.springframework.stereotype.Service;
 import com.uliga.uliga_backend.common.dto.req.OrderByQuery;
 import com.uliga.uliga_backend.common.dto.req.PaginateQuery;
 import com.uliga.uliga_backend.common.dto.res.PaginatedDto;
-import com.uliga.uliga_backend.domain.expense.dto.req.CreateExpenseDto;
-import com.uliga.uliga_backend.domain.expense.dto.req.ExpenseQueryDto;
-import com.uliga.uliga_backend.domain.expense.dto.req.ExpenseSumQueryDto;
-import com.uliga.uliga_backend.domain.expense.dto.req.UpdateExpenseDto;
-import com.uliga.uliga_backend.domain.expense.dto.res.ExpenseSumDto;
-import com.uliga.uliga_backend.domain.expense.repository.ExpenseRepository;
+import com.uliga.uliga_backend.expense.dto.req.CreateExpenseDto;
+import com.uliga.uliga_backend.expense.dto.req.ExpenseQueryDto;
+import com.uliga.uliga_backend.expense.dto.req.ExpenseSumQueryDto;
+import com.uliga.uliga_backend.expense.dto.req.UpdateExpenseDto;
+import com.uliga.uliga_backend.expense.dto.res.ExpenseSumDto;
+import com.uliga.uliga_backend.expense.repository.ExpenseRepository;
 import com.uliga.uliga_backend.jooq.tables.pojos.Expense;
 
 import lombok.RequiredArgsConstructor;

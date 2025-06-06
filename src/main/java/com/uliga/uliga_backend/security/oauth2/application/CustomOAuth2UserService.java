@@ -1,5 +1,7 @@
 package com.uliga.uliga_backend.security.oauth2.application;
 
+import java.nio.file.attribute.UserPrincipal;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -8,16 +10,15 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.uliga.uliga_backend.domain.member.model.Authority;
-import com.uliga.uliga_backend.domain.member.model.Member;
-import com.uliga.uliga_backend.domain.member.model.UserLoginType;
-import com.uliga.uliga_backend.domain.member.model.UserPrincipal;
-import com.uliga.uliga_backend.domain.member.repository.MemberRepository;
+import com.uliga.uliga_backend.member.model.Authority;
+import com.uliga.uliga_backend.member.model.Member;
+import com.uliga.uliga_backend.member.model.UserLoginType;
+import com.uliga.uliga_backend.member.repository.MemberRepository;
 import com.uliga.uliga_backend.security.oauth2.OAuth2UserInfo;
 import com.uliga.uliga_backend.security.oauth2.OAuth2UserInfoFactory;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

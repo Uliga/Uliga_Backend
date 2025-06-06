@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.account_book.dto.NativeQ;
+package com.uliga.uliga_backend.account_book.dto.NativeQ;
 
 import com.uliga.uliga_backend.domain.account_book.AccountBookAuthority;
 

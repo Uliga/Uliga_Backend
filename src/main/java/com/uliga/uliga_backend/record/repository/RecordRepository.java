@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.record.repository;
+package com.uliga.uliga_backend.record.repository;
 
 public interface RecordRepository {
 

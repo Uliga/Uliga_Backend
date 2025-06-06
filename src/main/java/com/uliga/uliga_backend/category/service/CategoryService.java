@@ -6,9 +6,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.account_book.repository.AccountBookRepository;
-import com.uliga.uliga_backend.domain.category.repository.CategoryRepository;
-import com.uliga.uliga_backend.domain.join_table.repository.AccountBookMemberRepository;
+import com.uliga.uliga_backend.account_book.repository.AccountBookRepository;
+import com.uliga.uliga_backend.category.repository.CategoryRepository;
+import com.uliga.uliga_backend.join_table.repository.AccountBookMemberRepository;
 import com.uliga.uliga_backend.jooq.tables.pojos.AccountBook;
 import com.uliga.uliga_backend.jooq.tables.pojos.ExpenseCategory;
 

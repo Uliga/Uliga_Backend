@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.member.dto;
+package com.uliga.uliga_backend.member.dto;
 
 import static com.uliga.uliga_backend.domain.member.model.Authority.ROLE_USER;
 
@@ -7,11 +7,11 @@ import java.util.List;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.uliga.uliga_backend.domain.member.dto.NativeQ.MemberInfoNativeQ;
-import com.uliga.uliga_backend.domain.member.model.Member;
-import com.uliga.uliga_backend.domain.member.model.UserLoginType;
-import com.uliga.uliga_backend.domain.token.dto.TokenDTO.TokenIssueDTO;
+import com.uliga.uliga_backend.jooq.enums.UserLoginType;
 import com.uliga.uliga_backend.jooq.tables.pojos.User;
+import com.uliga.uliga_backend.member.dto.NativeQ.MemberInfoNativeQ;
+import com.uliga.uliga_backend.member.model.Member;
+import com.uliga.uliga_backend.token.dto.TokenDTO.TokenIssueDTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;

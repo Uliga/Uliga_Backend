@@ -1,11 +1,11 @@
-package com.uliga.uliga_backend.domain.account_book.dto;
+package com.uliga.uliga_backend.account_book.dto;
 
 import java.util.List;
 
-import com.uliga.uliga_backend.domain.account_book.dto.NativeQ.AccountBookInfoQ;
-import com.uliga.uliga_backend.domain.account_book.dto.NativeQ.AccountBookMemberInfoQ;
-import com.uliga.uliga_backend.domain.account_book.dto.NativeQ.MembersQ;
-import com.uliga.uliga_backend.domain.category.dto.NativeQ.AccountBookCategoryInfoQ;
+import com.uliga.uliga_backend.account_book.dto.NativeQ.AccountBookInfoQ;
+import com.uliga.uliga_backend.account_book.dto.NativeQ.AccountBookMemberInfoQ;
+import com.uliga.uliga_backend.account_book.dto.NativeQ.MembersQ;
+import com.uliga.uliga_backend.category.dto.NativeQ.AccountBookCategoryInfoQ;
 import com.uliga.uliga_backend.jooq.tables.pojos.AccountBook;
 
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.account_book_data.dto;
+package com.uliga.uliga_backend.account_book_data.dto;
 
 public class AccountBookDataDTO {
   // @Builder

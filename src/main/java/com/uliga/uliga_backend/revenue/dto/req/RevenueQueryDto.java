@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.revenue.dto.req;
+package com.uliga.uliga_backend.revenue.dto.req;
 
 import java.time.LocalDate;
 

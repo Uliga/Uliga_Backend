@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.category.exception;
+package com.uliga.uliga_backend.category.exception;
 
 public class CategoryException {
 }

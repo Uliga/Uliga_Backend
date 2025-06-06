@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.record.exception;
+package com.uliga.uliga_backend.record.exception;
 
 public class RecordException {
 }

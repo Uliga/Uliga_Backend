@@ -1,11 +1,11 @@
-package com.uliga.uliga_backend.domain.income.exception;
+package com.uliga.uliga_backend.income.exception;
 
 public class InvalidIncomeDeleteRequest extends IllegalArgumentException {
-    public InvalidIncomeDeleteRequest() {
-        super("수입 생성자가 아니라서 삭제할 수 없습니다");
-    }
+  public InvalidIncomeDeleteRequest() {
+    super("수입 생성자가 아니라서 삭제할 수 없습니다");
+  }
 
-    public InvalidIncomeDeleteRequest(String s) {
-        super(s);
-    }
+  public InvalidIncomeDeleteRequest(String s) {
+    super(s);
+  }
 }

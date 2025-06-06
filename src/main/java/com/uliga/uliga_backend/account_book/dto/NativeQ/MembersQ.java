@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.account_book.dto.NativeQ;
+package com.uliga.uliga_backend.account_book.dto.NativeQ;
 
 import lombok.Data;
 import lombok.Getter;
@@ -6,9 +6,9 @@ import lombok.Getter;
 @Getter
 @Data
 public class MembersQ {
-    private Long count;
+  private Long count;
 
-    public MembersQ(Long count) {
-        this.count = count;
-    }
+  public MembersQ(Long count) {
+    this.count = count;
+  }
 }

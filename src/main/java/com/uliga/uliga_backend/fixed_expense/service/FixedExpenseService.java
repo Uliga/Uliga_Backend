@@ -2,12 +2,12 @@ package com.uliga.uliga_backend.fixed_expense.service;
 
 import org.springframework.stereotype.Service;
 
-import com.uliga.uliga_backend.domain.fixed_expense.dto.req.CreateFixedExpenseDto;
-import com.uliga.uliga_backend.domain.fixed_expense.dto.req.FixedExpenseQuery;
-import com.uliga.uliga_backend.domain.fixed_expense.dto.req.FixedExpenseSumQuery;
-import com.uliga.uliga_backend.domain.fixed_expense.dto.req.UpdateFixedExpenseDto;
-import com.uliga.uliga_backend.domain.fixed_expense.dto.res.FixedExpenseSumDto;
-import com.uliga.uliga_backend.domain.fixed_expense.repository.FixedExpenseRepository;
+import com.uliga.uliga_backend.fixed_expense.dto.req.CreateFixedExpenseDto;
+import com.uliga.uliga_backend.fixed_expense.dto.req.FixedExpenseQuery;
+import com.uliga.uliga_backend.fixed_expense.dto.req.FixedExpenseSumQuery;
+import com.uliga.uliga_backend.fixed_expense.dto.req.UpdateFixedExpenseDto;
+import com.uliga.uliga_backend.fixed_expense.dto.res.FixedExpenseSumDto;
+import com.uliga.uliga_backend.fixed_expense.repository.FixedExpenseRepository;
 import com.uliga.uliga_backend.jooq.tables.pojos.FixedExpense;
 
 import lombok.RequiredArgsConstructor;

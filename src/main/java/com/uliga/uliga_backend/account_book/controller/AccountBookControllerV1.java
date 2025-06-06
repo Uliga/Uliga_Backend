@@ -4,13 +4,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.account_book.application.AccountBookService;
-import com.uliga.uliga_backend.domain.account_book_data.application.AccountBookDataService;
-import com.uliga.uliga_backend.domain.budget.application.BudgetService;
-import com.uliga.uliga_backend.domain.category.application.CategoryService;
-import com.uliga.uliga_backend.domain.income.application.IncomeService;
-import com.uliga.uliga_backend.domain.record.application.RecordService;
-import com.uliga.uliga_backend.domain.schedule.application.ScheduleService;
+import com.uliga.uliga_backend.account_book.service.AccountBookService;
+import com.uliga.uliga_backend.account_book_data.service.AccountBookDataService;
+import com.uliga.uliga_backend.budget.service.BudgetService;
+import com.uliga.uliga_backend.category.service.CategoryService;
+import com.uliga.uliga_backend.income.service.IncomeService;
+import com.uliga.uliga_backend.record.service.RecordService;
+import com.uliga.uliga_backend.schedule.service.ScheduleService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

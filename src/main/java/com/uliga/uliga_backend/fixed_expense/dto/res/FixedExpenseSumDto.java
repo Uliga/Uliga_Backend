@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.fixed_expense.dto.res;
+package com.uliga.uliga_backend.fixed_expense.dto.res;
 
 public class FixedExpenseSumDto {
 

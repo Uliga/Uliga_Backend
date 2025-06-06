@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.member.repository;
+package com.uliga.uliga_backend.member.repository;
 
 public interface MemberCustomRepository {
 

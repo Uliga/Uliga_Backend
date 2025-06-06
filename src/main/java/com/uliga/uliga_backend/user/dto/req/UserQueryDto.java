@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.user.dto.req;
+package com.uliga.uliga_backend.user.dto.req;
 
 public class UserQueryDto {
 }

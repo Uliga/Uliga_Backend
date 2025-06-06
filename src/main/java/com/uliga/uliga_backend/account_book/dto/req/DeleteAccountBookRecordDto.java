@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.account_book.dto.req;
+package com.uliga.uliga_backend.account_book.dto.req;
 
 public class DeleteAccountBookRecordDto {
 

@@ -5,9 +5,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.domain.account_book.repository.AccountBookRepository;
-import com.uliga.uliga_backend.domain.join_table.repository.AccountBookMemberRepository;
-import com.uliga.uliga_backend.domain.member.repository.MemberRepository;
+import com.uliga.uliga_backend.account_book.repository.AccountBookRepository;
+import com.uliga.uliga_backend.join_table.repository.AccountBookMemberRepository;
+import com.uliga.uliga_backend.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

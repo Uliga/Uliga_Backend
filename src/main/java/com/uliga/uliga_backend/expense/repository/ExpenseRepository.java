@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.expense.repository;
+package com.uliga.uliga_backend.expense.repository;
 
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.schedule.dto.NativeQ;
+package com.uliga.uliga_backend.schedule.dto.NativeQ;
 
 import lombok.Data;
 import lombok.Getter;
@@ -6,13 +6,13 @@ import lombok.Getter;
 @Data
 @Getter
 public class ScheduleAnalyzeQ {
-    private String name;
-    private Long day;
-    private Long value;
+  private String name;
+  private Long day;
+  private Long value;
 
-    public ScheduleAnalyzeQ(String name, Long day, Long value) {
-        this.name = name;
-        this.day = day;
-        this.value = value;
-    }
+  public ScheduleAnalyzeQ(String name, Long day, Long value) {
+    this.name = name;
+    this.day = day;
+    this.value = value;
+  }
 }

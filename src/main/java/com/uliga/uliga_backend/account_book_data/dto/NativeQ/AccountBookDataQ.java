@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.account_book_data.dto.NativeQ;
+package com.uliga.uliga_backend.account_book_data.dto.NativeQ;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;

@@ -1,9 +1,9 @@
-package com.uliga.uliga_backend.domain.member.mapper;
+package com.uliga.uliga_backend.member.mapper;
 
 import java.util.HashMap;
 import java.util.List;
 
-import com.uliga.uliga_backend.domain.member.dto.NativeQ.MemberInfoNativeQ;
+import com.uliga.uliga_backend.member.dto.NativeQ.MemberInfoNativeQ;
 
 public interface MemberMapper {
 

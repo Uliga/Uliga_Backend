@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.token.exception.handler;
+package com.uliga.uliga_backend.token.exception.handler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
-import com.uliga.uliga_backend.domain.token.exception.ExpireRefreshTokenException;
-import com.uliga.uliga_backend.domain.token.exception.InvalidRefreshTokenException;
 import com.uliga.uliga_backend.error.response.ErrorResponse;
+import com.uliga.uliga_backend.token.exception.ExpireRefreshTokenException;
+import com.uliga.uliga_backend.token.exception.InvalidRefreshTokenException;
 
 import lombok.extern.slf4j.Slf4j;
 

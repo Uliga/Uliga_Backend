@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.fixed_revenue.dto.req;
+package com.uliga.uliga_backend.fixed_revenue.dto.req;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

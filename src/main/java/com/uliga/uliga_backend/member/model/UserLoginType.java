@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.member.model;
+package com.uliga.uliga_backend.member.model;
 
 import java.util.Arrays;
 
@@ -7,21 +7,21 @@ import lombok.Getter;
 @Getter
 public enum UserLoginType {
 
-    EMAIL(1, "EMAIL"), GOOGLE(2, "GOOGLE"), KAKAO(3, "KAKAO"), NAVER(4, "NAVER");
+  EMAIL(1, "EMAIL"), GOOGLE(2, "GOOGLE"), KAKAO(3, "KAKAO"), NAVER(4, "NAVER");
 
-    private long id;
-    private String type;
+  private long id;
+  private String type;
 
-    UserLoginType(long id, String type) {
-        this.id = id;
-        this.type = type;
-    }
+  UserLoginType(long id, String type) {
+    this.id = id;
+    this.type = type;
+  }
 
-    public static UserLoginType valueOfLabel(String label) {
-        return Arrays.stream(values())
-                .filter(value -> value.type.equals(label))
-                .findAny()
-                .orElse(null);
-    }
+  public static UserLoginType valueOfLabel(String label) {
+    return Arrays.stream(values())
+        .filter(value -> value.type.equals(label))
+        .findAny()
+        .orElse(null);
+  }
 
 }

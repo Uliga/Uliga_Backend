@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.income.exception;
+package com.uliga.uliga_backend.income.exception;
 
 public class IncomeException {
 }
