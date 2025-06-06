@@ -1,12 +1,12 @@
-package com.uliga.uliga_backend.domain.account_book.exception;
+package com.uliga.uliga_backend.account_book.exception;
 
 public class InvitationSaveError extends IllegalArgumentException {
 
-    public InvitationSaveError() {
-        super("레디스 저장과정에서 오류가 발생하였습니다");
-    }
+  public InvitationSaveError() {
+    super("레디스 저장과정에서 오류가 발생하였습니다");
+  }
 
-    public InvitationSaveError(String s) {
-        super(s);
-    }
+  public InvitationSaveError(String s) {
+    super(s);
+  }
 }

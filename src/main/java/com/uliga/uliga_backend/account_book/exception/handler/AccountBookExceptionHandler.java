@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.account_book.exception.handler;
+package com.uliga.uliga_backend.account_book.exception.handler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -6,14 +6,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
-import com.uliga.uliga_backend.domain.account_book.dto.AccountBookDTO.SimpleAccountBookInfo;
-import com.uliga.uliga_backend.domain.account_book.exception.BudgetAlreadyExists;
-import com.uliga.uliga_backend.domain.account_book.exception.CategoryNotFoundException;
-import com.uliga.uliga_backend.domain.account_book.exception.InvalidAccountBookDeleteRequest;
-import com.uliga.uliga_backend.domain.account_book.exception.InvitationSaveError;
-import com.uliga.uliga_backend.domain.account_book.exception.InvitationSaveErrorWithCreation;
-import com.uliga.uliga_backend.domain.account_book.exception.UnauthorizedAccountBookAccessException;
-import com.uliga.uliga_backend.domain.account_book.exception.UnauthorizedAccountBookCategoryCreateException;
+import com.uliga.uliga_backend.account_book.dto.AccountBookDTO.SimpleAccountBookInfo;
+import com.uliga.uliga_backend.account_book.exception.BudgetAlreadyExists;
+import com.uliga.uliga_backend.account_book.exception.CategoryNotFoundException;
+import com.uliga.uliga_backend.account_book.exception.InvalidAccountBookDeleteRequest;
+import com.uliga.uliga_backend.account_book.exception.InvitationSaveError;
+import com.uliga.uliga_backend.account_book.exception.InvitationSaveErrorWithCreation;
+import com.uliga.uliga_backend.account_book.exception.UnauthorizedAccountBookAccessException;
+import com.uliga.uliga_backend.account_book.exception.UnauthorizedAccountBookCategoryCreateException;
 import com.uliga.uliga_backend.error.response.ErrorResponse;
 
 import lombok.extern.slf4j.Slf4j;

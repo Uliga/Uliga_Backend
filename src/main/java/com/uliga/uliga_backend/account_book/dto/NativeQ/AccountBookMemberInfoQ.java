@@ -1,6 +1,6 @@
 package com.uliga.uliga_backend.account_book.dto.NativeQ;
 
-import com.uliga.uliga_backend.domain.account_book.AccountBookAuthority;
+import com.uliga.uliga_backend.jooq.enums.AccountBookAuthority;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
