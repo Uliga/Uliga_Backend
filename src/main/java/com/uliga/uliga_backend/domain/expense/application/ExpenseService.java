@@ -1,13 +1,18 @@
 package com.uliga.uliga_backend.domain.expense.application;
 
-package com.uliga.uliga_backend.domain.expense.application;
-
 import org.springframework.stereotype.Service;
+
 import com.uliga.uliga_backend.domain.expense.dto.req.CreateExpenseDto;
 import com.uliga.uliga_backend.domain.expense.dto.req.ExpenseQueryDto;
+import com.uliga.uliga_backend.domain.expense.dto.req.ExpenseSumQueryDto;
 import com.uliga.uliga_backend.domain.expense.dto.req.UpdateExpenseDto;
+import com.uliga.uliga_backend.domain.expense.dto.res.ExpenseSumDto;
 import com.uliga.uliga_backend.domain.expense.repository.ExpenseRepository;
+import com.uliga.uliga_backend.global.common.dto.req.OrderByQuery;
+import com.uliga.uliga_backend.global.common.dto.req.PaginateQuery;
+import com.uliga.uliga_backend.global.common.dto.res.PaginatedDto;
 import com.uliga.uliga_backend.jooq.tables.pojos.Expense;
+
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -17,7 +22,7 @@ import reactor.core.publisher.Mono;
 public class ExpenseService {
   private final ExpenseRepository expenseRepository;
 
-  public Flux<Expense> getExpenses(ExpenseQueryDto query) {
+  public Mono<PaginatedDto<Expense>> getExpenses(ExpenseQueryDto query, PaginateQuery paginate, OrderByQuery orderBy) {
     throw new UnsupportedOperationException("Unimplemented method 'getExpenses'");
   }
 
@@ -31,5 +36,15 @@ public class ExpenseService {
 
   public Mono<Expense> deleteExpense(Long expenseId) {
     throw new UnsupportedOperationException("Unimplemented method 'deleteExpense'");
+  }
+
+  public Flux<ExpenseSumDto> getExpenseSums(ExpenseSumQueryDto query) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'getExpenseSums'");
+  }
+
+  public Mono<Expense> getExpense(Long expenseId) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'getExpense'");
   }
 }

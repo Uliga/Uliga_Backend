@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.fixed_revenue.dto.req;
+package com.uliga.uliga_backend.domain.fixed_expense.dto.req;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class FixedRevenueQueryDto {
+public class FixedExpenseQuery {
   @NotNull
   private Long accountBookId;
 }

@@ -1,11 +1,15 @@
 package com.uliga.uliga_backend.domain.fixed_expense.application;
 
 import org.springframework.stereotype.Service;
+
 import com.uliga.uliga_backend.domain.fixed_expense.dto.req.CreateFixedExpenseDto;
-import com.uliga.uliga_backend.domain.fixed_expense.dto.req.FixedExpenseQueryDto;
+import com.uliga.uliga_backend.domain.fixed_expense.dto.req.FixedExpenseQuery;
+import com.uliga.uliga_backend.domain.fixed_expense.dto.req.FixedExpenseSumQuery;
 import com.uliga.uliga_backend.domain.fixed_expense.dto.req.UpdateFixedExpenseDto;
+import com.uliga.uliga_backend.domain.fixed_expense.dto.res.FixedExpenseSumDto;
 import com.uliga.uliga_backend.domain.fixed_expense.repository.FixedExpenseRepository;
 import com.uliga.uliga_backend.jooq.tables.pojos.FixedExpense;
+
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -15,7 +19,7 @@ import reactor.core.publisher.Mono;
 public class FixedExpenseService {
   private final FixedExpenseRepository fixedExpenseRepository;
 
-  public Flux<FixedExpense> getFixedExpenses(FixedExpenseQueryDto query) {
+  public Flux<FixedExpense> getFixedExpenses(FixedExpenseQuery query) {
     throw new UnsupportedOperationException("Unimplemented method 'getFixedExpenses'");
   }
 
@@ -29,5 +33,10 @@ public class FixedExpenseService {
 
   public Mono<FixedExpense> deleteFixedExpense(Long fixedExpenseId) {
     throw new UnsupportedOperationException("Unimplemented method 'deleteFixedExpense'");
+  }
+
+  public Mono<FixedExpenseSumDto> getFixedExpenseSum(FixedExpenseSumQuery query) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'getFixedExpenseSum'");
   }
 }

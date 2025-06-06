@@ -1,7 +1,8 @@
-package com.uliga.uliga_backend.domain.revenue.dto.req;
+package com.uliga.uliga_backend.domain.account_book.dto.req;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,10 +10,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class RevenueQueryDto {
-  private LocalDate date;
+public class AccountBookRecordQueryDto {
+  @NotNull
   private Long accountBookId;
-  private Long userId;
+  private Long categoryId;
+  @NotNull
   private LocalDate from;
+  @NotNull
   private LocalDate to;
 }
