@@ -1,42 +1,36 @@
 package com.uliga.uliga_backend.domain.member.model;
 
-import com.uliga.uliga_backend.domain.common.BaseTimeEntity;
-
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "member_base", catalog = "uliga_db")
-@Inheritance(strategy = InheritanceType.JOINED)
-public class MemberBase extends BaseTimeEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
-    private Long id;
+public class MemberBase {
+  // @Id
+  // @GeneratedValue(strategy = GenerationType.IDENTITY)
+  // @Column(name = "member_id")
+  // private Long id;
 
-    private String email;
+  // private String email;
 
-    private String password;
-    @Column(name = "application_password")
-    private String applicationPassword;
+  // private String password;
+  // @Column(name = "application_password")
+  // private String applicationPassword;
 
-    @Enumerated(EnumType.STRING)
-    protected Authority authority;
+  // @Enumerated(EnumType.STRING)
+  // protected Authority authority;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "user_login_type")
-    private UserLoginType userLoginType;
+  // @Enumerated(EnumType.STRING)
+  // @Column(name = "user_login_type")
+  // private UserLoginType userLoginType;
 
-    public void updatePassword(String newPassword) {
-        this.password = newPassword;
-    }
+  // public void updatePassword(String newPassword) {
+  // this.password = newPassword;
+  // }
 
-    public void updateApplicationPassword(String newPassword) {
-        this.applicationPassword = newPassword;
-    }
+  // public void updateApplicationPassword(String newPassword) {
+  // this.applicationPassword = newPassword;
+  // }
 }
