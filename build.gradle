@@ -5,7 +5,7 @@ plugins {
     id 'org.springframework.boot' version '3.2.5'
     id 'io.spring.dependency-management' version '1.1.0'
     id "org.asciidoctor.jvm.convert" version "3.3.2"
-    id 'nu.studer.jooq' version '8.0'
+    id 'nu.studer.jooq' version '10.1'
     id 'org.flywaydb.flyway' version '9.22.3'
     id 'co.uzzu.dotenv.gradle' version '4.0.0'
 }
@@ -34,14 +34,13 @@ dependencies {
     //reactive stack
 
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
-    implementation 'org.postgresql:r2dbc-postgresql:1.0.7.RELEASE'
     implementation 'org.postgresql:postgresql:42.6.2'
 
-    implementation 'org.jooq:jooq:3.17.4'
-    implementation 'org.jooq:jooq-meta:3.17.4'
-    implementation 'org.jooq:jooq-codegen:3.17.4'
+    implementation 'org.jooq:jooq:3.20.4'
+    implementation 'org.jooq:jooq-meta:3.20.4'
+    implementation 'org.jooq:jooq-codegen:3.20.4'
     implementation 'org.flywaydb:flyway-core:9.22.3'
 
     implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.3.0'
@@ -151,7 +150,7 @@ jooq {
     def dbUser     = env.DB_USER.value
     def dbPassword = env.DB_PASSWORD.value
 
-    version = '3.17.4'
+    version = '3.20.4'
 
     configurations {
         main {
@@ -174,6 +173,11 @@ jooq {
                         daos           = true
                         pojos          = true
                         fluentSetters  = true
+                        immutablePojos = true
+                        javaTimeTypes = true
+                        interfaces = true
+                        fluentSetters  = true
+                        validationAnnotations = true
                     }
                     target {
                         packageName = 'com.uliga.uliga_backend.jooq'
