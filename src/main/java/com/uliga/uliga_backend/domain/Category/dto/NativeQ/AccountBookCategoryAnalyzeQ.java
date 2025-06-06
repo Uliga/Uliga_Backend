@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Category.dto.NativeQ;
+package com.uliga.uliga_backend.domain.category.dto.NativeQ;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -14,6 +14,7 @@ public class AccountBookCategoryAnalyzeQ {
     private String name;
 
     private Long value;
+
     @Builder
     public AccountBookCategoryAnalyzeQ(Long id, String name, Long value) {
         this.id = id;

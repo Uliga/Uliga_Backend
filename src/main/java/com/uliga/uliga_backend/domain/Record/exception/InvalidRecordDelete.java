@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Record.exception;
+package com.uliga.uliga_backend.domain.record.exception;
 
 public class InvalidRecordDelete extends IllegalArgumentException {
     public InvalidRecordDelete() {

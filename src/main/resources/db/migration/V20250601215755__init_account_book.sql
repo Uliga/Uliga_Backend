@@ -1,0 +1,15 @@
+-- Migration: init_account_book
+CREATE TABLE account_book (
+    id BIGSERIAL PRIMARY KEY,
+    is_private BOOLEAN NOT NULL,
+    name TEXT NOT NULL,
+    relation_ship TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT now(),
+    updated_at TIMESTAMP DEFAULT now()
+);
+
+
+CREATE TYPE account_book_authority AS ENUM (
+  'USER',
+  'ADMIN'
+);

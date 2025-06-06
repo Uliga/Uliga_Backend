@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Member.dto.NativeQ;
+package com.uliga.uliga_backend.domain.member.dto.NativeQ;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -16,8 +16,9 @@ public class MemberInfoNativeQ {
     private String nickName;
     @Schema(description = "유저 이메일", defaultValue = "사용자 이메일")
     private String email;
+
     @Builder
-    public MemberInfoNativeQ(Long id,Long privateAccountBookId, String userName, String nickName, String email) {
+    public MemberInfoNativeQ(Long id, Long privateAccountBookId, String userName, String nickName, String email) {
         this.id = id;
         this.privateAccountBookId = privateAccountBookId;
         this.userName = userName;

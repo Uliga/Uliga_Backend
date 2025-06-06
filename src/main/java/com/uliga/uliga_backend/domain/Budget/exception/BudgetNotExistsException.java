@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Budget.exception;
+package com.uliga.uliga_backend.domain.budget.exception;
 
 public class BudgetNotExistsException extends IllegalArgumentException {
     public BudgetNotExistsException() {

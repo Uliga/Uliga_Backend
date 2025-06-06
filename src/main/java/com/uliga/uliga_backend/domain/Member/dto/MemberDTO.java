@@ -1,24 +1,26 @@
-package com.uliga.uliga_backend.domain.Member.dto;
+package com.uliga.uliga_backend.domain.member.dto;
 
-import com.uliga.uliga_backend.domain.Member.dto.NativeQ.MemberInfoNativeQ;
-import com.uliga.uliga_backend.domain.Member.model.Member;
-import com.uliga.uliga_backend.domain.Member.model.UserLoginType;
-import com.uliga.uliga_backend.domain.Token.dto.TokenDTO.TokenIssueDTO;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.*;
+import static com.uliga.uliga_backend.domain.member.model.Authority.ROLE_USER;
+
+import java.util.List;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.List;
+import com.uliga.uliga_backend.domain.member.dto.NativeQ.MemberInfoNativeQ;
+import com.uliga.uliga_backend.domain.member.model.Member;
+import com.uliga.uliga_backend.domain.member.model.UserLoginType;
+import com.uliga.uliga_backend.domain.token.dto.TokenDTO.TokenIssueDTO;
 
-import static com.uliga.uliga_backend.domain.Member.model.Authority.ROLE_USER;
-import static java.lang.Integer.parseInt;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 public class MemberDTO {
     @Builder
@@ -116,7 +118,6 @@ public class MemberDTO {
         @Schema(description = "비밀번호", defaultValue = "12345678")
         private String password;
 
-
         public UsernamePasswordAuthenticationToken toAuthentication() {
             return new UsernamePasswordAuthenticationToken(email, password);
         }
@@ -170,7 +171,6 @@ public class MemberDTO {
         @Schema(name = "토큰 정보")
         private TokenIssueDTO tokenInfo;
     }
-
 
     @Builder
     @AllArgsConstructor
@@ -244,7 +244,6 @@ public class MemberDTO {
         private UserLoginType loginType;
     }
 
-
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
@@ -253,7 +252,6 @@ public class MemberDTO {
         @Schema(description = "비밀번호 초기화할 이메일", defaultValue = "test@email.com")
         private String email;
     }
-
 
     @Builder
     @AllArgsConstructor
@@ -335,7 +333,6 @@ public class MemberDTO {
         private String avatarUrl;
     }
 
-
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
@@ -362,7 +359,6 @@ public class MemberDTO {
         private String newNickname;
     }
 
-
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
@@ -375,7 +371,6 @@ public class MemberDTO {
         @Schema(defaultValue = "초대 받은 가계부", description = "testUser님의 가계부")
         private String accountBookName;
     }
-
 
     @Builder
     @NoArgsConstructor
@@ -412,7 +407,6 @@ public class MemberDTO {
             return Math.toIntExact(info.day - this.day);
         }
     }
-
 
     @Builder
     @NoArgsConstructor

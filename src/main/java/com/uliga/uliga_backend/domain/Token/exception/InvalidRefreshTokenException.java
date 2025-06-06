@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Token.exception;
+package com.uliga.uliga_backend.domain.token.exception;
 
 public class InvalidRefreshTokenException extends IllegalArgumentException {
     public InvalidRefreshTokenException() {

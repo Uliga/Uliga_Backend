@@ -1,8 +1,9 @@
-package com.uliga.uliga_backend.domain.Like.application;
+package com.uliga.uliga_backend.domain.like.application;
+
+import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service

@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Like.dto;
+package com.uliga.uliga_backend.domain.like.dto;
 
 public class LikeDTO {
 }

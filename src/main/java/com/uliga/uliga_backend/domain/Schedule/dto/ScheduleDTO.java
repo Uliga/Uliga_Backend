@@ -1,14 +1,19 @@
-package com.uliga.uliga_backend.domain.Schedule.dto;
-
-import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleAnalyzeQ;
-import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleInfoQ;
-import com.uliga.uliga_backend.domain.Schedule.dto.NativeQ.ScheduleMemberInfoQ;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
+package com.uliga.uliga_backend.domain.schedule.dto;
 
 import java.util.List;
 import java.util.Map;
+
+import com.uliga.uliga_backend.domain.schedule.dto.NativeQ.ScheduleAnalyzeQ;
+import com.uliga.uliga_backend.domain.schedule.dto.NativeQ.ScheduleInfoQ;
+import com.uliga.uliga_backend.domain.schedule.dto.NativeQ.ScheduleMemberInfoQ;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 public class ScheduleDTO {
     @Builder
@@ -57,7 +62,6 @@ public class ScheduleDTO {
         @Schema(description = "할당량")
         private Long value;
     }
-
 
     @Builder
     @Getter
@@ -108,7 +112,6 @@ public class ScheduleDTO {
         @Schema(description = "삭제할 금융 일정 아이디")
         private Long id;
     }
-
 
     @Builder
     @Getter

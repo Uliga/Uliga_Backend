@@ -1,20 +1,21 @@
-package com.uliga.uliga_backend.domain.Category.exception.handler;
+package com.uliga.uliga_backend.domain.category.exception.handler;
 
-import com.uliga.uliga_backend.domain.Category.exception.DuplicateCategoryException;
-import com.uliga.uliga_backend.global.error.response.ErrorResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
+import com.uliga.uliga_backend.domain.category.exception.DuplicateCategoryException;
+import com.uliga.uliga_backend.global.error.response.ErrorResponse;
+
+import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 @RestControllerAdvice
 public class CategoryExceptionHandler {
 
-    @ExceptionHandler(DuplicateCategoryException.class)
-    protected final ResponseEntity<ErrorResponse> handleDuplicateCategory(
+    @ExceptionHandler(DuplicateCategoryException.class)protected final ResponseEntity<ErrorResponse> handleDuplicateCategory(
             DuplicateCategoryException ex, WebRequest request
     ) {
         log.info("중복 카테고리");

@@ -1,8 +1,9 @@
-package com.uliga.uliga_backend.domain.Like.api;
+package com.uliga.uliga_backend.domain.like.api;
+
+import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController

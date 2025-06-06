@@ -1,5 +1,4 @@
-package com.uliga.uliga_backend.domain.Schedule.dto.NativeQ;
-
+package com.uliga.uliga_backend.domain.schedule.dto.NativeQ;
 
 import lombok.Data;
 import lombok.Getter;

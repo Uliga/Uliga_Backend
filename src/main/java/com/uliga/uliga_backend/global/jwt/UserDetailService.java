@@ -1,9 +1,8 @@
 package com.uliga.uliga_backend.global.jwt;
 
-import com.uliga.uliga_backend.domain.Member.repository.MemberRepository;
-import com.uliga.uliga_backend.domain.Member.model.Member;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Collections;
+import java.util.Optional;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -12,9 +11,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Optional;
+import com.uliga.uliga_backend.domain.member.model.Member;
+import com.uliga.uliga_backend.domain.member.repository.MemberRepository;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -39,7 +40,6 @@ public class UserDetailService implements UserDetailsService {
         return new User(
                 String.valueOf(member.getId()),
                 member.getPassword(),
-                Collections.singleton(grantedAuthority)
-        );
+                Collections.singleton(grantedAuthority));
     }
 }

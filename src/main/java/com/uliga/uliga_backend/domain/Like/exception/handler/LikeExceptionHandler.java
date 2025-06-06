@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Like.exception.handler;
+package com.uliga.uliga_backend.domain.like.exception.handler;
 
 public class LikeExceptionHandler {
 }

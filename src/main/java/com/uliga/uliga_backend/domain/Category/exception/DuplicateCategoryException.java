@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.domain.Category.exception;
+package com.uliga.uliga_backend.domain.category.exception;
 
 public class DuplicateCategoryException extends IllegalArgumentException {
     public DuplicateCategoryException() {
