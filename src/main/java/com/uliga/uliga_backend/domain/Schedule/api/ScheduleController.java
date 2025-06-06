@@ -1,31 +1,10 @@
 package com.uliga.uliga_backend.domain.schedule.api;
 
-import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
-
-import java.util.Map;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uliga.uliga_backend.domain.schedule.application.ScheduleService;
-import com.uliga.uliga_backend.domain.schedule.dto.ScheduleDTO;
-import com.uliga.uliga_backend.domain.schedule.dto.ScheduleDTO.GetMemberSchedules;
-import com.uliga.uliga_backend.domain.schedule.dto.ScheduleDTO.ScheduleDetail;
-import com.uliga.uliga_backend.global.error.response.ErrorResponse;
-import com.uliga.uliga_backend.global.util.SecurityUtil;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,50 +15,63 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @RequestMapping(value = "/schedule")
 public class ScheduleController {
-    private final ScheduleService scheduleService;
+  private final ScheduleService scheduleService;
 
-    @Operation(summary = "멤버 금융일정 조회 API", description = "멤버 금융일정 조회 API 입니다")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = GetMemberSchedules.class))),
-            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-    })
-    @GetMapping(value = "")
-    public ResponseEntity<GetMemberSchedules> getAccountBookSchedules() {
+  // @Operation(summary = "멤버 금융일정 조회 API", description = "멤버 금융일정 조회 API 입니다")
+  // @ApiResponses(value = {
+  // @ApiResponse(responseCode = "200", description = "조회 성공시", content =
+  // @Content(schema = @Schema(implementation = GetMemberSchedules.class))),
+  // @ApiResponse(responseCode = "401", description = "엑세스 만료시", content =
+  // @Content(schema = @Schema(implementation = ErrorResponse.class)))
+  // })
+  // @GetMapping(value = "")
+  // public ResponseEntity<GetMemberSchedules> getAccountBookSchedules() {
 
-        Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(scheduleService.getMemberSchedule(currentMemberId));
-    }
+  // Long currentMemberId = SecurityUtil.getCurrentMemberId();
+  // return ResponseEntity.ok(scheduleService.getMemberSchedule(currentMemberId));
+  // }
 
-    @Operation(summary = "금융일정 세부 내용 조회 API", description = "금융 일정 세부 내용 조회 API 입니다")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "조회 성공시", content = @Content(schema = @Schema(implementation = ScheduleDetail.class))),
-            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-    })
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<ScheduleDetail> getScheduleDetail(
-            @Parameter(name = "id", description = "금융일정 아이디", in = PATH) @PathVariable("id") Long id) {
+  // @Operation(summary = "금융일정 세부 내용 조회 API", description = "금융 일정 세부 내용 조회 API
+  // 입니다")
+  // @ApiResponses(value = {
+  // @ApiResponse(responseCode = "200", description = "조회 성공시", content =
+  // @Content(schema = @Schema(implementation = ScheduleDetail.class))),
+  // @ApiResponse(responseCode = "401", description = "엑세스 만료시", content =
+  // @Content(schema = @Schema(implementation = ErrorResponse.class)))
+  // })
+  // @GetMapping(value = "/{id}")
+  // public ResponseEntity<ScheduleDetail> getScheduleDetail(
+  // @Parameter(name = "id", description = "금융일정 아이디", in = PATH)
+  // @PathVariable("id") Long id) {
 
-        return ResponseEntity.ok(scheduleService.getScheduleDetails(id));
-    }
+  // return ResponseEntity.ok(scheduleService.getScheduleDetails(id));
+  // }
 
-    @Operation(summary = "금융 일정 업데이트 API")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "업데이트 성공시", content = @Content(schema = @Schema(implementation = ScheduleDTO.UpdateScheduleRequest.class))),
-            @ApiResponse(responseCode = "401", description = "엑세스 만료시", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-    })
-    @PatchMapping(value = "")
-    public ResponseEntity<ScheduleDTO.UpdateScheduleRequest> updateSchedule(
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "금융일정 업데이트 요청", content = @Content(schema = @Schema(implementation = ScheduleDTO.UpdateScheduleRequest.class))) @RequestBody Map<String, Object> updates) {
+  // @Operation(summary = "금융 일정 업데이트 API")
+  // @ApiResponses(value = {
+  // @ApiResponse(responseCode = "200", description = "업데이트 성공시", content =
+  // @Content(schema = @Schema(implementation =
+  // ScheduleDTO.UpdateScheduleRequest.class))),
+  // @ApiResponse(responseCode = "401", description = "엑세스 만료시", content =
+  // @Content(schema = @Schema(implementation = ErrorResponse.class)))
+  // })
+  // @PatchMapping(value = "")
+  // public ResponseEntity<ScheduleDTO.UpdateScheduleRequest> updateSchedule(
+  // @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "금융일정
+  // 업데이트 요청", content = @Content(schema = @Schema(implementation =
+  // ScheduleDTO.UpdateScheduleRequest.class))) @RequestBody Map<String, Object>
+  // updates) {
 
-        return ResponseEntity.ok(scheduleService.updateSchedule(updates));
-    }
+  // return ResponseEntity.ok(scheduleService.updateSchedule(updates));
+  // }
 
-    @Operation(summary = "금융 일정 삭제 API")
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<String> deleteSchedule(
-            @Parameter(name = "id", description = "금융 일정 아이디", in = PATH) @PathVariable("id") Long id) {
-        Long currentMemberId = SecurityUtil.getCurrentMemberId();
-        scheduleService.deleteSchedule(id, currentMemberId);
-        return ResponseEntity.ok("DELETED");
-    }
+  // @Operation(summary = "금융 일정 삭제 API")
+  // @DeleteMapping(value = "/{id}")
+  // public ResponseEntity<String> deleteSchedule(
+  // @Parameter(name = "id", description = "금융 일정 아이디", in = PATH)
+  // @PathVariable("id") Long id) {
+  // Long currentMemberId = SecurityUtil.getCurrentMemberId();
+  // scheduleService.deleteSchedule(id, currentMemberId);
+  // return ResponseEntity.ok("DELETED");
+  // }
 }
