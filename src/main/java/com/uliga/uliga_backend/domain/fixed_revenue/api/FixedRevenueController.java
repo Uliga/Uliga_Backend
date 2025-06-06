@@ -54,7 +54,7 @@ public class FixedRevenueController {
   }
 
   @Operation(summary = "고정 수익 삭제 API")
-  @DeleteMapping("{fixedRevenueId}")
+  @DeleteMapping("/{fixedRevenueId}")
   @Serialize(dto = FixedRevenueDto.class)
   public ResponseEntity<Mono<FixedRevenue>> deleteFixedRevenue(@PathVariable("fixedRevenueId") Long fixedRevenueId) {
     return ResponseEntity.ok(fixedRevenueService.deleteFixedRevenue(fixedRevenueId));

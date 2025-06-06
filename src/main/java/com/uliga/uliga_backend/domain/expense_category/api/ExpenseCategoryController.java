@@ -54,7 +54,7 @@ public class ExpenseCategoryController {
   }
 
   @Operation(summary = "지출 카테고리 삭제 API")
-  @DeleteMapping("{expenseCategoryId}")
+  @DeleteMapping("/{expenseCategoryId}")
   @Serialize(dto = ExpenseCategoryDto.class)
   public ResponseEntity<Mono<ExpenseCategory>> deleteExpenseCategory(
       @PathVariable("expenseCategoryId") Long expenseCategoryId) {

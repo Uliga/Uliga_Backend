@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.uliga.uliga_backend.domain.fixed_expense.application.FixedExpenseService;
 import com.uliga.uliga_backend.domain.fixed_expense.dto.req.CreateFixedExpenseDto;
-import com.uliga.uliga_backend.domain.fixed_expense.dto.req.FixedExpenseQueryDto;
+import com.uliga.uliga_backend.domain.fixed_expense.dto.req.FixedExpenseQuery;
+import com.uliga.uliga_backend.domain.fixed_expense.dto.req.FixedExpenseSumQuery;
 import com.uliga.uliga_backend.domain.fixed_expense.dto.req.UpdateFixedExpenseDto;
 import com.uliga.uliga_backend.domain.fixed_expense.dto.res.FixedExpenseDto;
+import com.uliga.uliga_backend.domain.fixed_expense.dto.res.FixedExpenseSumDto;
 import com.uliga.uliga_backend.global.common.annotation.Serialize;
 import com.uliga.uliga_backend.jooq.tables.pojos.FixedExpense;
 
@@ -35,8 +37,14 @@ public class FixedExpenseController {
   @Operation(summary = "고정 지출 조회 API")
   @GetMapping()
   @Serialize(dto = FixedExpenseDto.class)
-  public ResponseEntity<Flux<FixedExpense>> getFixedExpenses(@ModelAttribute FixedExpenseQueryDto query) {
+  public ResponseEntity<Flux<FixedExpense>> getFixedExpenses(@ModelAttribute FixedExpenseQuery query) {
     return ResponseEntity.ok(fixedExpenseService.getFixedExpenses(query));
+  }
+
+  @Operation(summary = "기간 단위 고정 지출 합 조회 API")
+  @GetMapping("/sum")
+  public ResponseEntity<Mono<FixedExpenseSumDto>> getFixedExpenseSum(@ModelAttribute FixedExpenseSumQuery query) {
+    return ResponseEntity.ok(fixedExpenseService.getFixedExpenseSum(query));
   }
 
   @Operation(summary = "고정 지출 생성 API")
@@ -54,7 +62,7 @@ public class FixedExpenseController {
   }
 
   @Operation(summary = "고정 지출 삭제 API")
-  @DeleteMapping("{fixedExpenseId}")
+  @DeleteMapping("/{fixedExpenseId}")
   @Serialize(dto = FixedExpenseDto.class)
   public ResponseEntity<Mono<FixedExpense>> deleteFixedExpense(@PathVariable("fixedExpenseId") Long fixedExpenseId) {
     return ResponseEntity.ok(fixedExpenseService.deleteFixedExpense(fixedExpenseId));

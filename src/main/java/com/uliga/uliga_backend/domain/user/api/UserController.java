@@ -42,7 +42,7 @@ public class UserController {
   }
 
   @Operation(summary = "사용자 삭제 API")
-  @DeleteMapping("{userId}")
+  @DeleteMapping("/{userId}")
   @Serialize(dto = UserDto.class)
   public ResponseEntity<Mono<User>> deleteUser(@PathVariable("userId") Long userId) {
     return ResponseEntity.ok(userService.deleteUser(userId));

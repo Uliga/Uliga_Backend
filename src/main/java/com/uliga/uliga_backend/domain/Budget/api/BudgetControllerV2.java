@@ -1,6 +1,7 @@
 package com.uliga.uliga_backend.domain.budget.api;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -35,7 +36,7 @@ public class BudgetControllerV2 {
   @Operation(summary = "예산 조회 API")
   @GetMapping()
   @Serialize(dto = BudgetDto.class)
-  public ResponseEntity<Flux<Budget>> getBudgets(@ModelAttribute BudgetQueryDto query) {
+  public ResponseEntity<Flux<Budget>> getBudgets(@ModelAttribute @Validated BudgetQueryDto query) {
     return ResponseEntity.ok(budgetService.getBudgets(query));
   }
 

@@ -1,5 +1,8 @@
 package com.uliga.uliga_backend.global.aspect;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -8,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.global.common.annotation.Serialize;
+import com.uliga.uliga_backend.global.common.annotation.SerializePaginated;
+import com.uliga.uliga_backend.global.common.dto.res.PaginatedDto;
 
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
@@ -54,6 +59,35 @@ public class SerializeAspect implements Ordered {
 
     // 5) 그 외(동기 반환 등)일 경우 직접 변환
     return objectMapper.convertValue(returnValue, dtoClass);
+  }
+
+  /**
+   * @SerializePaginated(dto = SomeDto.class) 애노테이션이 붙은 메서드를 가로채서,
+   *                         PaginatedDto<Entity> → PaginatedDto<Dto> 로 변환합니다.
+   */
+  @Around("@annotation(serializePaginated)")
+  public Object serializePaginatedReturn(ProceedingJoinPoint pjp, SerializePaginated serializePaginated)
+      throws Throwable {
+    Object returnValue = pjp.proceed();
+    Class<?> dtoClass = serializePaginated.dto();
+
+    if (returnValue instanceof PaginatedDto<?>) {
+      @SuppressWarnings("unchecked")
+      PaginatedDto<Object> original = (PaginatedDto<Object>) returnValue;
+
+      // 1) 원본 엔티티 리스트 (nodes) 가져오기
+      List<Object> originalNodes = original.getNodes();
+      // 2) 각 엔티티를 DTO로 변환
+      List<Object> convertedNodes = originalNodes.stream()
+          .map(entity -> objectMapper.convertValue(entity, dtoClass))
+          .collect(Collectors.toList());
+
+      // 3) 새로운 PaginatedDto<Dto> 객체 생성하여 반환
+      return new PaginatedDto<>(convertedNodes, original.getTotalCount());
+    }
+
+    // PaginatedDto가 아닌 경우 그대로 반환
+    return returnValue;
   }
 
   /**
