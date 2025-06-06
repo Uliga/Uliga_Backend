@@ -48,6 +48,8 @@ dependencies {
 
     jooqGenerator 'org.postgresql:postgresql:42.6.2'
 
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+
     // thymeleaf
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     // 스프링 부트 3
