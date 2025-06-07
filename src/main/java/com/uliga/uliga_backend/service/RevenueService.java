@@ -5,13 +5,13 @@ import org.springframework.stereotype.Service;
 import com.uliga.uliga_backend.common.dto.req.OrderByQuery;
 import com.uliga.uliga_backend.common.dto.req.PaginateQuery;
 import com.uliga.uliga_backend.common.dto.res.PaginatedDto;
+import com.uliga.uliga_backend.dto.revenue.req.CreateRevenueDto;
+import com.uliga.uliga_backend.dto.revenue.req.RevenueQueryDto;
+import com.uliga.uliga_backend.dto.revenue.req.RevenueSumQueryDto;
+import com.uliga.uliga_backend.dto.revenue.req.UpdateRevenueDto;
+import com.uliga.uliga_backend.dto.revenue.res.RevenueSumDto;
 import com.uliga.uliga_backend.entity.RevenueEntity;
 import com.uliga.uliga_backend.repository.RevenueRepository;
-import com.uliga.uliga_backend.revenue.dto.req.CreateRevenueDto;
-import com.uliga.uliga_backend.revenue.dto.req.RevenueQueryDto;
-import com.uliga.uliga_backend.revenue.dto.req.RevenueSumQueryDto;
-import com.uliga.uliga_backend.revenue.dto.req.UpdateRevenueDto;
-import com.uliga.uliga_backend.revenue.dto.res.RevenueSumDto;
 
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
@@ -22,19 +22,20 @@ import reactor.core.publisher.Mono;
 public class RevenueService {
   private final RevenueRepository revenueRepository;
 
-  public Mono<PaginatedDto<Revenue>> getRevenues(RevenueQueryDto query, PaginateQuery paginate, OrderByQuery orderBy) {
+  public Mono<PaginatedDto<RevenueEntity>> getRevenues(RevenueQueryDto query, PaginateQuery paginate,
+      OrderByQuery orderBy) {
     throw new UnsupportedOperationException("Unimplemented method 'getRevenues'");
   }
 
-  public Mono<Revenue> createRevenue(CreateRevenueDto dto) {
+  public Mono<RevenueEntity> createRevenue(CreateRevenueDto dto) {
     throw new UnsupportedOperationException("Unimplemented method 'createRevenue'");
   }
 
-  public Mono<Revenue> updateRevenue(UpdateRevenueDto dto) {
+  public Mono<RevenueEntity> updateRevenue(UpdateRevenueDto dto) {
     throw new UnsupportedOperationException("Unimplemented method 'updateRevenue'");
   }
 
-  public Mono<Revenue> deleteRevenue(Long revenueId) {
+  public Mono<RevenueEntity> deleteRevenue(Long revenueId) {
     throw new UnsupportedOperationException("Unimplemented method 'deleteRevenue'");
   }
 
@@ -43,7 +44,7 @@ public class RevenueService {
     throw new UnsupportedOperationException("Unimplemented method 'getRevenueSums'");
   }
 
-  public Mono<Revenue> getRevenue(Long revenueId) {
+  public Mono<RevenueEntity> getRevenue(Long revenueId) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'getRevenue'");
   }

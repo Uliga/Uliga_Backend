@@ -2,7 +2,6 @@ package com.uliga.uliga_backend.service;
 
 import org.springframework.stereotype.Service;
 
-import com.uliga.uliga_backend.auth.dto.req.CreateUserDto;
 import com.uliga.uliga_backend.dto.user.req.UpdateUserDto;
 import com.uliga.uliga_backend.entity.UserEntity;
 import com.uliga.uliga_backend.repository.UserRepository;
@@ -17,10 +16,6 @@ public class UserService {
 
   public Mono<UserEntity> getCurrentUser() {
     throw new UnsupportedOperationException("Unimplemented method 'getUsers'");
-  }
-
-  public Mono<UserEntity> createUser(CreateUserDto dto) {
-    throw new UnsupportedOperationException("Unimplemented method 'createUser'");
   }
 
   public Mono<UserEntity> updateUser(UpdateUserDto dto) {

@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.uliga.uliga_backend.auth.dto.req.CreateUserDto;
 import com.uliga.uliga_backend.common.annotation.Serialize;
+import com.uliga.uliga_backend.dto.auth.req.SignupUserDto;
 import com.uliga.uliga_backend.dto.member.MemberDTO.CodeConfirmDto;
 import com.uliga.uliga_backend.dto.member.MemberDTO.ConfirmEmailDto;
 import com.uliga.uliga_backend.dto.member.MemberDTO.EmailConfirmCodeDto;
@@ -44,7 +44,8 @@ public class AuthControllerV2 {
   @Operation(summary = "회원 가입 API")
   @PostMapping("signup")
   @Serialize(dto = UserDto.class)
-  public ResponseEntity<Mono<UserEntity>> signUp(@Valid @RequestBody CreateUserDto dto) {
+  public ResponseEntity<Mono<UserEntity>> signUp(
+      @Valid @RequestBody SignupUserDto dto) {
     return ResponseEntity.ok(authService.signup(dto));
   }
 

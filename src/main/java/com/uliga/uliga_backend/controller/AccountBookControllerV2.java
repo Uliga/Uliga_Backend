@@ -29,7 +29,6 @@ import com.uliga.uliga_backend.dto.account_book_user.res.AccountBookUserDto;
 import com.uliga.uliga_backend.entity.AccountBookEntity;
 import com.uliga.uliga_backend.entity.AccountBookUserEntity;
 import com.uliga.uliga_backend.service.AccountBookServiceV2;
-import com.uliga.uliga_backend.util.SecurityUtil;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -56,16 +55,18 @@ public class AccountBookControllerV2 {
   @GetMapping()
   @Serialize(dto = AccountBookDto.class)
   public ResponseEntity<Flux<AccountBookEntity>> getAccountBooks() {
-    Long memberId = SecurityUtil.getCurrentMemberId();
-    return ResponseEntity.ok(accountBookService.getMemberAccountBooks(memberId));
+    Long userId = null;
+    // Long memberId = SecurityUtil.getCurrentMemberId();
+    return ResponseEntity.ok(accountBookService.getMemberAccountBooks(userId));
   }
 
   @Operation(summary = "가계부 상세 조회 API")
   @GetMapping("/{accountBookId}")
   @Serialize(dto = AccountBookDto.class)
   public ResponseEntity<Mono<AccountBookEntity>> getAccountBook(@PathVariable("accountBookId") Long accountBookId) {
-    Long memberId = SecurityUtil.getCurrentMemberId();
-    return ResponseEntity.ok(accountBookService.getAccountBookDetail(memberId, accountBookId));
+    Long userId = null;
+    // Long memberId = SecurityUtil.getCurrentMemberId();
+    return ResponseEntity.ok(accountBookService.getAccountBookDetail(userId, accountBookId));
   }
 
   @Operation(summary = "가계부 업데이트 API")

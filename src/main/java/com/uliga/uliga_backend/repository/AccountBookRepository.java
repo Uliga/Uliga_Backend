@@ -2,8 +2,11 @@ package com.uliga.uliga_backend.repository;
 
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.uliga.uliga_backend.entity.AccountBookEntity;
 import com.uliga.uliga_backend.jooq.tables.daos.AccountBookDao;
+import com.uliga.uliga_backend.jooq.tables.pojos.AccountBook;
 
 import lombok.RequiredArgsConstructor;
 
@@ -12,6 +15,13 @@ import lombok.RequiredArgsConstructor;
 public class AccountBookRepository {
   private final AccountBookDao dao;
   private final DSLContext dsl;
+
+  @Transactional
+  public AccountBookEntity save(AccountBookEntity accountBookEntity) {
+    AccountBook accountBook = new AccountBook(accountBookEntity);
+    dao.insert(accountBook);
+    return new AccountBookEntity(accountBook);
+  }
 
   /*
    * 

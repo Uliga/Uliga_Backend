@@ -20,7 +20,7 @@ import reactor.core.publisher.Mono;
 
 @Tag(name = "가계부 초대 API")
 @RestController
-@RequestMapping("v2/account-book-invitation")
+@RequestMapping("v2/accountBookInvitation")
 @RequiredArgsConstructor
 public class AccountBookInvitationController {
   private final AccountBookInvitationService accountBookInvitationService;

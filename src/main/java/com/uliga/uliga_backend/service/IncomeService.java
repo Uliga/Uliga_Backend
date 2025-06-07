@@ -3,12 +3,7 @@ package com.uliga.uliga_backend.service;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.category.repository.CategoryRepository;
-import com.uliga.uliga_backend.income.mapper.IncomeMapper;
 import com.uliga.uliga_backend.repository.AccountBookRepository;
-import com.uliga.uliga_backend.repository.IncomeRepository;
-import com.uliga.uliga_backend.repository.MemberRepository;
-import com.uliga.uliga_backend.repository.RecordRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,12 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class IncomeService {
   private final AccountBookRepository accountBookRepository;
-  private final IncomeRepository incomeRepository;
-  private final RecordRepository recordRepository;
-  private final CategoryRepository categoryRepository;
-  private final MemberRepository memberRepository;
+  // private final IncomeRepository incomeRepository;
+  // private final RecordRepository recordRepository;
+  // private final CategoryRepository categoryRepository;
+  // private final MemberRepository memberRepository;
   private final ObjectMapper objectMapper;
-  private final IncomeMapper incomeMapper;
+  // private final IncomeMapper incomeMapper;
 
   // /**
   // * 한달 가계부 수입 총합 조회

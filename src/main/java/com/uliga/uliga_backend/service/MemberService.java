@@ -1,13 +1,10 @@
 package com.uliga.uliga_backend.service;
 
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.join_table.repository.AccountBookMemberRepository;
 import com.uliga.uliga_backend.repository.AccountBookRepository;
-import com.uliga.uliga_backend.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,10 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-  private final MemberRepository memberRepository;
+  // private final MemberRepository memberRepository;
   private final AccountBookRepository accountBookRepository;
-  private final AccountBookMemberRepository accountBookMemberRepository;
-  private final PasswordEncoder passwordEncoder;
+  // private final AccountBookMemberRepository accountBookMemberRepository;
+  // private final PasswordEncoder passwordEncoder;
   private final RedisTemplate<String, String> redisTemplate;
   private final RedisTemplate<String, Object> objectRedisTemplate;
   private final ObjectMapper objectMapper;

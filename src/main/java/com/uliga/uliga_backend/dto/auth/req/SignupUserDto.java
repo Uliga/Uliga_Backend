@@ -1,8 +1,8 @@
 package com.uliga.uliga_backend.dto.auth.req;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import com.uliga.uliga_backend.jooq.tables.pojos.User;
+import com.uliga.uliga_backend.entity.UserEntity;
+import com.uliga.uliga_backend.jooq.enums.Authority;
+import com.uliga.uliga_backend.jooq.enums.UserLoginType;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
@@ -34,24 +34,21 @@ public class SignupUserDto {
   @NotNull
   private String userName;
 
-  public void encrypt(PasswordEncoder passwordEncoder) {
-    this.password = passwordEncoder.encode(this.password);
-    this.appPassword = passwordEncoder.encode(this.appPassword);
-  }
+  // public void encrypt(PasswordEncoder passwordEncoder) {
+  // this.password = passwordEncoder.encode(this.password);
+  // this.appPassword = passwordEncoder.encode(this.appPassword);
+  // }
 
-  public User toEntity() {
-
-    // User user = new User();
-    // user.setAppPassword(appPassword);
-    // user.setAuthority(Authority.ROLE_USER);
-    // user.setEmail(email);
-    // user.setPassword(password);
-    // user.setUserLoginType(UserLoginType.EMAIL);
-    // user.setNickName(nickName);
-    // user.setUserName(userName);
-    // user.setIsActive(true);
-    return User.builder()
-    .;
+  public UserEntity toEntity() {
+    return UserEntity.builder()
+        .email(email)
+        .password(password)
+        .appPassword(appPassword)
+        .nickName(nickName)
+        .userName(userName)
+        .userLoginType(UserLoginType.EMAIL)
+        .authority(Authority.ROLE_USER)
+        .build();
   }
 
 }

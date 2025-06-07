@@ -4,16 +4,14 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.category.repository.CategoryRepository;
-import com.uliga.uliga_backend.join_table.repository.AccountBookMemberRepository;
 import com.uliga.uliga_backend.entity.AccountBookEntity;
 import com.uliga.uliga_backend.entity.UserEntity;
 import com.uliga.uliga_backend.repository.AccountBookRepository;
-import com.uliga.uliga_backend.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 @Slf4j
 @Service
@@ -21,9 +19,9 @@ import reactor.core.publisher.Mono;
 public class AccountBookService {
 
   private final AccountBookRepository accountBookRepository;
-  private final AccountBookMemberRepository accountBookMemberRepository;
-  private final MemberRepository memberRepository;
-  private final CategoryRepository categoryRepository;
+  // private final AccountBookMemberRepository accountBookMemberRepository;
+  // private final MemberRepository memberRepository;
+  // private final CategoryRepository categoryRepository;
   private final RedisTemplate<String, Object> redisTemplate;
   private final ObjectMapper objectMapper;
 
@@ -72,8 +70,15 @@ public class AccountBookService {
   // return new GetAccountBookInfos(result);
   // }
 
-  public Mono<AccountBook> createPrivateAccountBook(User user) {
+  public Mono<AccountBookEntity> createPrivateAccountBook(UserEntity user) {
+    AccountBookEntity accountBookEntity = AccountBookEntity.builder()
+        .name(user.getUserName() + " 님의 가계부")
+        .aliasName("개인")
+        .isPrivate(true)
+        .build();
 
+    return Mono.fromCallable(() -> accountBookRepository.save(accountBookEntity))
+        .subscribeOn(Schedulers.boundedElastic());
   }
 
   // /**

@@ -1,15 +1,12 @@
 package com.uliga.uliga_backend.service;
 
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.uliga.uliga_backend.dto.member.MemberDTO.CodeConfirmDto;
 import com.uliga.uliga_backend.dto.member.MemberDTO.ConfirmEmailDto;
 import com.uliga.uliga_backend.dto.member.MemberDTO.EmailConfirmCodeDto;
 import com.uliga.uliga_backend.dto.member.MemberDTO.EmailSentDto;
-import com.uliga.uliga_backend.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,10 +16,10 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 @Service
 public class EmailCertificationService {
-  private final JavaMailSender emailSender;
+  // private final JavaMailSender emailSender;
   private final RedisTemplate<String, String> redisTemplate;
-  private final MemberRepository memberRepository;
-  private final PasswordEncoder passwordEncoder;
+  // private final MemberRepository memberRepository;
+  // private final PasswordEncoder passwordEncoder;
   // 인증 번호
   private String ePw;
 

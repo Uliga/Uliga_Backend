@@ -1,13 +1,10 @@
 package com.uliga.uliga_backend.service;
 
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.uliga.uliga_backend.category.service.CategoryService;
 import com.uliga.uliga_backend.repository.MemberRepository;
-import com.uliga.uliga_backend.security.jwt.JwtTokenProvider;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,12 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-  private final MemberRepository memberRepository;
-  private final PasswordEncoder passwordEncoder;
-  private final JwtTokenProvider jwtTokenProvider;
+  // private final MemberRepository memberRepository;
+  // private final PasswordEncoder passwordEncoder;
+  // private final JwtTokenProvider jwtTokenProvider;
   private final RedisTemplate<String, String> redisTemplate;
-  private final AuthenticationManagerBuilder authenticationManagerBuilder;
-  private final CategoryService categoryService;
+  // private final AuthenticationManagerBuilder authenticationManagerBuilder;
+  // private final CategoryService categoryService;
   private final AccountBookService accountBookService;
 
   // /**

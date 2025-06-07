@@ -4,11 +4,11 @@ import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.uliga.uliga_backend.entity.UserEntity;
 import com.uliga.uliga_backend.jooq.tables.daos.UserDao;
 import com.uliga.uliga_backend.jooq.tables.pojos.User;
 
 import lombok.RequiredArgsConstructor;
-import reactor.core.publisher.Mono;
 
 @Repository
 @RequiredArgsConstructor
@@ -17,7 +17,9 @@ public class UserRepository {
   private final UserDao dao;
 
   @Transactional
-  public Mono<User> save(User user) {
-
+  public UserEntity save(UserEntity userEntity) {
+    User user = new User(userEntity);
+    dao.insert(user);
+    return new UserEntity(user);
   }
 }

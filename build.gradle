@@ -49,10 +49,11 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-aop'
 
+    testImplementation 'org.springframework.restdocs:spring-restdocs-webtestclient'
+
+
     // thymeleaf
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    // 스프링 부트 3
-    implementation 'org.springframework.boot:spring-boot-starter-web'
     // configuration
     implementation 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
@@ -63,12 +64,10 @@ dependencies {
     // Validation 모듈 추가
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     // 스프링 시큐리티
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.security:spring-security-test'
+    // implementation 'org.springframework.boot:spring-boot-starter-security'
+    // implementation 'org.springframework.security:spring-security-test'
     // OAuth
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    // Swagger
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.3'
+    // implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     // actuator`
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     // cookie
@@ -83,8 +82,6 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    // MockMvc
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
     // Junit
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

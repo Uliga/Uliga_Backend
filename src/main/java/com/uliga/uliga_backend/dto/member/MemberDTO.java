@@ -1,17 +1,9 @@
 package com.uliga.uliga_backend.dto.member;
 
-import static com.uliga.uliga_backend.domain.member.model.Authority.ROLE_USER;
-
 import java.util.List;
-
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.uliga.uliga_backend.dto.member.NativeQ.MemberInfoNativeQ;
 import com.uliga.uliga_backend.jooq.enums.UserLoginType;
-import com.uliga.uliga_backend.jooq.tables.pojos.User;
-import com.uliga.uliga_backend.member.model.Member;
-import com.uliga.uliga_backend.token.dto.TokenDTO.TokenIssueDTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
@@ -48,26 +40,26 @@ public class MemberDTO {
     @NotNull
     private String applicationPassword;
 
-    public void encrypt(PasswordEncoder passwordEncoder) {
-      this.password = passwordEncoder.encode(this.password);
-      this.applicationPassword = passwordEncoder.encode(this.applicationPassword);
-    }
+    // public void encrypt(PasswordEncoder passwordEncoder) {
+    // this.password = passwordEncoder.encode(this.password);
+    // this.applicationPassword = passwordEncoder.encode(this.applicationPassword);
+    // }
 
-    public User toEntity() {
+    // public User toEntity() {
 
-      User user = new User();
+    // User user = new User();
 
-      return user;
-      // return Member.builder()
-      // .applicationPassword(applicationPassword)
-      // .authority(ROLE_USER)
-      // .email(email)
-      // .userLoginType(UserLoginType.EMAIL)
-      // .nickName(nickName)
-      // .userName(userName)
-      // .deleted(false)
-      // .password(password).build();
-    }
+    // return user;
+    // // return Member.builder()
+    // // .applicationPassword(applicationPassword)
+    // // .authority(ROLE_USER)
+    // // .email(email)
+    // // .userLoginType(UserLoginType.EMAIL)
+    // // .nickName(nickName)
+    // // .userName(userName)
+    // // .deleted(false)
+    // // .password(password).build();
+    // }
 
   }
 
@@ -83,18 +75,18 @@ public class MemberDTO {
 
     private String password;
 
-    public void encrypt(PasswordEncoder passwordEncoder) {
-      this.password = passwordEncoder.encode(this.password);
-    }
+    // public void encrypt(PasswordEncoder passwordEncoder) {
+    // this.password = passwordEncoder.encode(this.password);
+    // }
 
-    public Member toEntity() {
-      return Member.builder()
-          .userName(userName)
-          .userLoginType(userLoginType)
-          .authority(ROLE_USER)
-          .email(email)
-          .password(password).build();
-    }
+    // public Member toEntity() {
+    // return Member.builder()
+    // .userName(userName)
+    // .userLoginType(userLoginType)
+    // .authority(ROLE_USER)
+    // .email(email)
+    // .password(password).build();
+    // }
 
   }
 
@@ -123,9 +115,9 @@ public class MemberDTO {
     @Schema(description = "비밀번호", defaultValue = "12345678")
     private String password;
 
-    public UsernamePasswordAuthenticationToken toAuthentication() {
-      return new UsernamePasswordAuthenticationToken(email, password);
-    }
+    // public UsernamePasswordAuthenticationToken toAuthentication() {
+    // return new UsernamePasswordAuthenticationToken(email, password);
+    // }
 
   }
 
@@ -147,22 +139,22 @@ public class MemberDTO {
     @Schema(description = "유저 애플리케이션 비밀번호")
     private String applicationPassword;
 
-    public Member toEntity(PasswordEncoder passwordEncoder) {
-      return Member.builder()
-          .email(email)
-          .nickName(nickName)
-          .userName(userName)
-          .applicationPassword(passwordEncoder.encode(applicationPassword))
-          .password(passwordEncoder.encode(applicationPassword))
-          .deleted(false)
-          .authority(ROLE_USER)
-          .userLoginType(loginType)
-          .build();
-    }
+    // public Member toEntity(PasswordEncoder passwordEncoder) {
+    // // return Member.builder()
+    // // .email(email)
+    // // .nickName(nickName)
+    // // .userName(userName)
+    // // .applicationPassword(passwordEncoder.encode(applicationPassword))
+    // // .password(passwordEncoder.encode(applicationPassword))
+    // // .deleted(false)
+    // // .authority(ROLE_USER)
+    // // .userLoginType(loginType)
+    // // .build();
+    // }
 
-    public UsernamePasswordAuthenticationToken toAuthentication() {
-      return new UsernamePasswordAuthenticationToken(email, applicationPassword);
-    }
+    // public UsernamePasswordAuthenticationToken toAuthentication() {
+    // return new UsernamePasswordAuthenticationToken(email, applicationPassword);
+    // }
   }
 
   @Builder
@@ -173,8 +165,8 @@ public class MemberDTO {
   public static class LoginResult {
     @Schema(name = "멤버 정보")
     private MemberInfoNativeQ memberInfo;
-    @Schema(name = "토큰 정보")
-    private TokenIssueDTO tokenInfo;
+    // @Schema(name = "토큰 정보")
+    // private TokenIssueDTO tokenInfo;
   }
 
   @Builder
@@ -265,9 +257,9 @@ public class MemberDTO {
   public static class UpdateApplicationPasswordDto {
     private String newPassword;
 
-    public void encrypt(PasswordEncoder passwordEncoder) {
-      this.newPassword = passwordEncoder.encode(this.newPassword);
-    }
+    // public void encrypt(PasswordEncoder passwordEncoder) {
+    // this.newPassword = passwordEncoder.encode(this.newPassword);
+    // }
   }
 
   @Builder
@@ -288,9 +280,9 @@ public class MemberDTO {
     @Size(min = 8)
     private String newPassword;
 
-    public void encrypt(PasswordEncoder passwordEncoder) {
-      this.newPassword = passwordEncoder.encode(this.newPassword);
-    }
+    // public void encrypt(PasswordEncoder passwordEncoder) {
+    // this.newPassword = passwordEncoder.encode(this.newPassword);
+    // }
   }
 
   @Builder

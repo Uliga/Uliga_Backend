@@ -4,12 +4,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.join_table.repository.AccountBookMemberRepository;
-import com.uliga.uliga_backend.join_table.repository.ScheduleMemberRepository;
 import com.uliga.uliga_backend.repository.AccountBookRepository;
-import com.uliga.uliga_backend.repository.MemberRepository;
-import com.uliga.uliga_backend.repository.ScheduleRepository;
-import com.uliga.uliga_backend.schedule.mapper.ScheduleMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,12 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
-  private final ScheduleRepository scheduleRepository;
-  private final ScheduleMapper scheduleMapper;
-  private final ScheduleMemberRepository scheduleMemberRepository;
-  private final MemberRepository memberRepository;
+  // private final ScheduleRepository scheduleRepository;
+  // private final ScheduleMapper scheduleMapper;
+  // private final ScheduleMemberRepository scheduleMemberRepository;
+  // private final MemberRepository memberRepository;
   private final AccountBookRepository accountBookRepository;
-  private final AccountBookMemberRepository accountBookMemberRepository;
+  // private final AccountBookMemberRepository accountBookMemberRepository;
   private final RedisTemplate<String, String> redisTemplate;
   private final ObjectMapper mapper;
 
