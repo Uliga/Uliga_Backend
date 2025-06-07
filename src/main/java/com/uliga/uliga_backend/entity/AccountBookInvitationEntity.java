@@ -18,23 +18,14 @@ public class AccountBookInvitationEntity implements IAccountBookInvitation {
   private final InvitationStatus status;
 
   public AccountBookInvitationEntity(IAccountBookInvitation value) {
-    this.id = value.getId();
-    this.accountBookId = value.getAccountBookId();
-    this.inviterUserId = value.getInviterUserId();
-    this.inviteeUserId = value.getInviteeUserId();
-    this.createdAt = value.getCreatedAt();
-    this.updatedAt = value.getUpdatedAt();
-    this.status = value.getStatus();
-  }
 
-  private AccountBookInvitationEntity(Builder value) {
-    if (value.accountBookId == null) {
+    if (value.getAccountBookId() == null) {
       throw new IllegalArgumentException("초대할 가계부 아이디가 설정되어야함");
     }
-    if (value.inviterUserId == null) {
+    if (value.getInviterUserId() == null) {
       throw new IllegalArgumentException("초대한 사람의 아이디가 설정되야함");
     }
-    if (value.inviteeUserId == null) {
+    if (value.getInviteeUserId() == null) {
       throw new IllegalArgumentException("초대할 사람의 아이디가 설정되야함");
     }
     this.id = value.getId();

@@ -29,17 +29,6 @@ public class AccountBookUserEntity implements IAccountBookUser {
     this.updatedAt = value.getUpdatedAt();
   }
 
-  private AccountBookUserEntity(Builder value) {
-    this.id = value.getId();
-    this.accountBookId = value.getAccountBookId();
-    this.userId = value.getUserId();
-    this.profileUrl = value.getProfileUrl();
-    this.notificationsEnabled = value.getNotificationsEnabled();
-    this.accountBookAuthority = value.getAccountBookAuthority();
-    this.createdAt = value.getCreatedAt();
-    this.updatedAt = value.getUpdatedAt();
-  }
-
   public static Builder builder() {
     return new Builder();
   }

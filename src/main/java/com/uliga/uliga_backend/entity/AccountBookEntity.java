@@ -17,27 +17,18 @@ public class AccountBookEntity implements IAccountBook {
   private final LocalDateTime updatedAt;
 
   public AccountBookEntity(IAccountBook value) {
-    this.id = value.getId();
-    this.isPrivate = value.getIsPrivate();
-    this.name = value.getName();
-    this.createdAt = value.getCreatedAt();
-    this.updatedAt = value.getUpdatedAt();
-    this.aliasName = value.getAliasName();
-  }
-
-  private AccountBookEntity(Builder value) {
-    if (value.name == null) {
+    if (value.getName() == null) {
       throw new IllegalArgumentException("가계부 이름은 필수입니다.");
     }
-    if (value.isPrivate == null) {
+    if (value.getIsPrivate() == null) {
       throw new IllegalArgumentException("가계부 공개 여부는 필수 입니다.");
     }
     this.id = value.getId();
-    this.name = value.getName();
-    this.aliasName = value.getAliasName();
     this.isPrivate = value.getIsPrivate();
+    this.name = value.getName();
     this.createdAt = value.getCreatedAt();
     this.updatedAt = value.getUpdatedAt();
+    this.aliasName = value.getAliasName();
   }
 
   public static Builder builder() {
