@@ -83,6 +83,40 @@ public class KstDateUtils {
   }
 
   /**
+   * LocalDate 기반 메서드 추가: KST 기준 주차를 "YYYY-WW" 형식으로 반환합니다.
+   *
+   * @param localDate KST 기준 날짜 (년-월-일)
+   * @return "연도-주차" 예: "2025-23"
+   */
+  public static String getWeekString(LocalDate localDate) {
+    ZonedDateTime kst = localDate.atStartOfDay(KST);
+    WeekFields wf = WeekFields.ISO;
+    int weekYear = kst.get(wf.weekBasedYear());
+    int weekNum = kst.get(wf.weekOfWeekBasedYear());
+    return String.format("%d-%02d", weekYear, weekNum);
+  }
+
+  /**
+   * LocalDate 기반 메서드 추가: KST 기준 연도를 반환합니다.
+   *
+   * @param localDate KST 기준 날짜 (년-월-일)
+   * @return 연도 (int)
+   */
+  public static String getYearString(LocalDate localDate) {
+    return Integer.toString(localDate.getYear());
+  }
+
+  /**
+   * LocalDate 기반 메서드 추가: KST 기준 연도-월("YYYY-MM") 형식 문자열을 반환합니다.
+   *
+   * @param localDate KST 기준 날짜 (년-월-일)
+   * @return "연도-월" 예: "2025-06"
+   */
+  public static String getMonthString(LocalDate localDate) {
+    return String.format("%d-%02d", localDate.getYear(), localDate.getMonthValue());
+  }
+
+  /**
    * UTC 기준 Date를 받아, 해당 일(KST 기준)의 시작 시각(00:00:00.000 KST)을 UTC로 변환하여 Date로
    * 반환합니다.
    *
