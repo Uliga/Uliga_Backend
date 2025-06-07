@@ -29,15 +29,15 @@ public class AccountBookUserEntity implements IAccountBookUser {
     this.updatedAt = value.getUpdatedAt();
   }
 
-  private AccountBookUserEntity(Builder builder) {
-    this.id = builder.getId();
-    this.accountBookId = builder.getAccountBookId();
-    this.userId = builder.getUserId();
-    this.profileUrl = builder.getProfileUrl();
-    this.notificationsEnabled = builder.getNotificationsEnabled();
-    this.accountBookAuthority = builder.getAccountBookAuthority();
-    this.createdAt = builder.getCreatedAt();
-    this.updatedAt = builder.getUpdatedAt();
+  private AccountBookUserEntity(Builder value) {
+    this.id = value.getId();
+    this.accountBookId = value.getAccountBookId();
+    this.userId = value.getUserId();
+    this.profileUrl = value.getProfileUrl();
+    this.notificationsEnabled = value.getNotificationsEnabled();
+    this.accountBookAuthority = value.getAccountBookAuthority();
+    this.createdAt = value.getCreatedAt();
+    this.updatedAt = value.getUpdatedAt();
   }
 
   public static Builder builder() {

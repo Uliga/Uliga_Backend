@@ -27,23 +27,23 @@ public class AccountBookInvitationEntity implements IAccountBookInvitation {
     this.status = value.getStatus();
   }
 
-  private AccountBookInvitationEntity(Builder builder) {
-    if (builder.accountBookId == null) {
+  private AccountBookInvitationEntity(Builder value) {
+    if (value.accountBookId == null) {
       throw new IllegalArgumentException("초대할 가계부 아이디가 설정되어야함");
     }
-    if (builder.inviterUserId == null) {
+    if (value.inviterUserId == null) {
       throw new IllegalArgumentException("초대한 사람의 아이디가 설정되야함");
     }
-    if (builder.inviteeUserId == null) {
+    if (value.inviteeUserId == null) {
       throw new IllegalArgumentException("초대할 사람의 아이디가 설정되야함");
     }
-    this.id = builder.getId();
-    this.accountBookId = builder.getAccountBookId();
-    this.inviterUserId = builder.getInviterUserId();
-    this.inviteeUserId = builder.getInviteeUserId();
-    this.createdAt = builder.getCreatedAt();
-    this.updatedAt = builder.getUpdatedAt();
-    this.status = builder.getStatus();
+    this.id = value.getId();
+    this.accountBookId = value.getAccountBookId();
+    this.inviterUserId = value.getInviterUserId();
+    this.inviteeUserId = value.getInviteeUserId();
+    this.createdAt = value.getCreatedAt();
+    this.updatedAt = value.getUpdatedAt();
+    this.status = value.getStatus();
   }
 
   public static Builder builder() {

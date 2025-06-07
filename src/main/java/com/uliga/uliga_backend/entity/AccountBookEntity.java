@@ -25,19 +25,19 @@ public class AccountBookEntity implements IAccountBook {
     this.aliasName = value.getAliasName();
   }
 
-  private AccountBookEntity(Builder builder) {
-    if (builder.name == null) {
+  private AccountBookEntity(Builder value) {
+    if (value.name == null) {
       throw new IllegalArgumentException("가계부 이름은 필수입니다.");
     }
-    if (builder.isPrivate == null) {
+    if (value.isPrivate == null) {
       throw new IllegalArgumentException("가계부 공개 여부는 필수 입니다.");
     }
-    this.id = builder.getId();
-    this.name = builder.getName();
-    this.aliasName = builder.getAliasName();
-    this.isPrivate = builder.getIsPrivate();
-    this.createdAt = builder.getCreatedAt();
-    this.updatedAt = builder.getUpdatedAt();
+    this.id = value.getId();
+    this.name = value.getName();
+    this.aliasName = value.getAliasName();
+    this.isPrivate = value.getIsPrivate();
+    this.createdAt = value.getCreatedAt();
+    this.updatedAt = value.getUpdatedAt();
   }
 
   public static Builder builder() {

@@ -28,15 +28,15 @@ public class BudgetEntity implements IBudget {
     this.expenseCategoryId = value.getExpenseCategoryId();
   }
 
-  private BudgetEntity(Builder builder) {
-    this.id = builder.getId();
-    this.value = builder.getValue();
-    this.year = builder.getYear();
-    this.month = builder.getMonth();
-    this.accountBookId = builder.getMonth();
-    this.createdAt = builder.getCreatedAt();
-    this.updatedAt = builder.getUpdatedAt();
-    this.expenseCategoryId = builder.getExpenseCategoryId();
+  private BudgetEntity(Builder value) {
+    this.id = value.getId();
+    this.value = value.getValue();
+    this.year = value.getYear();
+    this.month = value.getMonth();
+    this.accountBookId = value.getMonth();
+    this.createdAt = value.getCreatedAt();
+    this.updatedAt = value.getUpdatedAt();
+    this.expenseCategoryId = value.getExpenseCategoryId();
   }
 
   public static Builder builder() {
