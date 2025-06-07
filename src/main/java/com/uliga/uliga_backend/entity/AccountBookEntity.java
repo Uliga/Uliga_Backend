@@ -16,6 +16,15 @@ public class AccountBookEntity implements IAccountBook {
   private final LocalDateTime createdAt;
   private final LocalDateTime updatedAt;
 
+  public AccountBookEntity(IAccountBook pojo) {
+    this.id = pojo.getId();
+    this.isPrivate = pojo.getIsPrivate();
+    this.name = pojo.getName();
+    this.createdAt = pojo.getCreatedAt();
+    this.updatedAt = pojo.getUpdatedAt();
+    this.aliasName = pojo.getAliasName();
+  }
+
   private AccountBookEntity(Builder builder) {
     if (builder.name == null) {
       throw new IllegalArgumentException("가계부 이름은 필수입니다.");
@@ -58,7 +67,7 @@ public class AccountBookEntity implements IAccountBook {
   }
 
   @Getter
-  public static class Builder {
+  public static class Builder implements IAccountBook {
     private Long id;
     private Boolean isPrivate;
     private String name;
