@@ -1,5 +1,165 @@
 package com.uliga.uliga_backend.entity;
 
-public class RevenueEntity {
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+import com.uliga.uliga_backend.jooq.tables.interfaces.IRevenue;
+import com.uliga.uliga_backend.util.KstDateUtils;
+
+import lombok.Getter;
+
+@Getter
+public class RevenueEntity implements IRevenue {
+  private final Long id;
+  private final Long value;
+  private final String revenueSource;
+  private final String memo;
+  private final LocalDate date;
+  private final Long userId;
+  private final Long revenueCategoryId;
+  private final Long accountBookId;
+  private final LocalDateTime createdAt;
+  private final LocalDateTime updatedAt;
+  private final String year;
+  private final String month;
+  private final String week;
+
+  public RevenueEntity(IRevenue value) {
+    this.id = value.getId();
+    this.value = value.getValue();
+    this.revenueSource = value.getRevenueSource();
+    this.memo = value.getMemo();
+    this.date = value.getDate();
+    this.userId = value.getUserId();
+    this.revenueCategoryId = value.getRevenueCategoryId();
+    this.accountBookId = value.getAccountBookId();
+    this.createdAt = value.getCreatedAt();
+    this.updatedAt = value.getUpdatedAt();
+    this.year = value.getYear();
+    this.month = value.getMonth();
+    this.week = value.getWeek();
+  }
+
+  private RevenueEntity(Builder value) {
+    this.id = value.getId();
+    this.value = value.getValue();
+    this.revenueSource = value.getRevenueSource();
+    this.memo = value.getMemo();
+    this.date = value.getDate();
+    this.userId = value.getUserId();
+    this.revenueCategoryId = value.getRevenueCategoryId();
+    this.accountBookId = value.getAccountBookId();
+    this.createdAt = value.getCreatedAt();
+    this.updatedAt = value.getUpdatedAt();
+    this.year = value.getYear();
+    this.month = value.getMonth();
+    this.week = value.getWeek();
+  }
+
+  private Builder toBuilder() {
+    return new Builder()
+        .id(id)
+        .value(value)
+        .revenueSource(revenueSource)
+        .memo(memo)
+        .date(date)
+        .userId(userId)
+        .revenueCategoryId(revenueCategoryId)
+        .accountBookId(accountBookId)
+        .createdAt(createdAt)
+        .updatedAt(updatedAt);
+  }
+
+  public RevenueEntity updateValue(Long value) {
+    return toBuilder().value(value).build();
+  }
+
+  public RevenueEntity updateMemo(String memo) {
+    return toBuilder().memo(memo).build();
+  }
+
+  public RevenueEntity updateRevenueCategoryId(Long revenueCategoryId) {
+    return toBuilder().revenueCategoryId(revenueCategoryId).build();
+  }
+
+  public RevenueEntity updateDate(LocalDate date) {
+    return toBuilder().date(date).build();
+  }
+
+  @Getter
+  public static class Builder implements IRevenue {
+    private Long id;
+    private Long value;
+    private String revenueSource;
+    private String memo;
+    private LocalDate date;
+    private Long userId;
+    private Long revenueCategoryId;
+    private Long accountBookId;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private String year;
+    private String month;
+    private String week;
+
+    private Builder() {
+    }
+
+    public Builder id(Long id) {
+      this.id = id;
+      return this;
+    }
+
+    public Builder value(Long value) {
+      this.value = value;
+      return this;
+    }
+
+    public Builder revenueSource(String revenueSource) {
+      this.revenueSource = revenueSource;
+      return this;
+    }
+
+    public Builder memo(String memo) {
+      this.memo = memo;
+      return this;
+    }
+
+    public Builder date(LocalDate date) {
+      this.date = date;
+      this.year = KstDateUtils.getYearString(date);
+      this.month = KstDateUtils.getMonthString(date);
+      this.week = KstDateUtils.getWeekString(date);
+      return this;
+    }
+
+    public Builder userId(Long userId) {
+      this.userId = userId;
+      return this;
+    }
+
+    public Builder revenueCategoryId(Long revenueCategoryId) {
+      this.revenueCategoryId = revenueCategoryId;
+      return this;
+    }
+
+    public Builder accountBookId(Long accountBookId) {
+      this.accountBookId = accountBookId;
+      return this;
+    }
+
+    public Builder createdAt(LocalDateTime createdAt) {
+      this.createdAt = createdAt;
+      return this;
+    }
+
+    public Builder updatedAt(LocalDateTime updatedAt) {
+      this.updatedAt = updatedAt;
+      return this;
+    }
+
+    public RevenueEntity build() {
+      return new RevenueEntity(this);
+    }
+  }
 }

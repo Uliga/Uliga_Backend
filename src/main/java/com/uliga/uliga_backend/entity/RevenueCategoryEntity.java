@@ -2,26 +2,22 @@ package com.uliga.uliga_backend.entity;
 
 import java.time.LocalDateTime;
 
-import com.uliga.uliga_backend.jooq.tables.interfaces.IFixedExpenseUser;
+import com.uliga.uliga_backend.jooq.tables.interfaces.IRevenueCategory;
 
 import lombok.Getter;
 
 @Getter
-public class FixedExpenseUserEntity implements IFixedExpenseUser {
+public class RevenueCategoryEntity implements IRevenueCategory {
   private final Long id;
-  private final Long userId;
+  private final String name;
   private final Long accountBookId;
-  private final Long fixedExpenseId;
-  private final Long value;
   private final LocalDateTime createdAt;
   private final LocalDateTime updatedAt;
 
-  public FixedExpenseUserEntity(IFixedExpenseUser value) {
+  public RevenueCategoryEntity(IRevenueCategory value) {
     this.id = value.getId();
-    this.userId = value.getUserId();
+    this.name = value.getName();
     this.accountBookId = value.getAccountBookId();
-    this.fixedExpenseId = value.getFixedExpenseId();
-    this.value = value.getValue();
     this.createdAt = value.getCreatedAt();
     this.updatedAt = value.getUpdatedAt();
   }
@@ -33,25 +29,21 @@ public class FixedExpenseUserEntity implements IFixedExpenseUser {
   private Builder toBuilder() {
     return new Builder()
         .id(id)
-        .userId(userId)
         .accountBookId(accountBookId)
-        .fixedExpenseId(fixedExpenseId)
-        .value(value)
+        .name(name)
         .createdAt(createdAt)
         .updatedAt(updatedAt);
   }
 
-  public FixedExpenseUserEntity updateValue(Long value) {
-    return toBuilder().value(value).build();
+  public RevenueCategoryEntity updateName(String name) {
+    return toBuilder().name(name).build();
   }
 
   @Getter
-  public static class Builder implements IFixedExpenseUser {
+  public static class Builder implements IRevenueCategory {
     private Long id;
-    private Long userId;
+    private String name;
     private Long accountBookId;
-    private Long fixedExpenseId;
-    private Long value;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -63,23 +55,13 @@ public class FixedExpenseUserEntity implements IFixedExpenseUser {
       return this;
     }
 
-    public Builder userId(Long userId) {
-      this.userId = userId;
+    public Builder name(String name) {
+      this.name = name;
       return this;
     }
 
     public Builder accountBookId(Long accountBookId) {
       this.accountBookId = accountBookId;
-      return this;
-    }
-
-    public Builder fixedExpenseId(Long fixedExpenseId) {
-      this.fixedExpenseId = fixedExpenseId;
-      return this;
-    }
-
-    public Builder value(Long value) {
-      this.value = value;
       return this;
     }
 
@@ -93,9 +75,8 @@ public class FixedExpenseUserEntity implements IFixedExpenseUser {
       return this;
     }
 
-    public FixedExpenseUserEntity build() {
-      return new FixedExpenseUserEntity(this);
+    public RevenueCategoryEntity build() {
+      return new RevenueCategoryEntity(this);
     }
-
   }
 }
