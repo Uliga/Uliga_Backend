@@ -5,7 +5,7 @@ plugins {
     id 'org.springframework.boot' version '3.2.5'
     id 'io.spring.dependency-management' version '1.1.0'
     id "org.asciidoctor.jvm.convert" version "3.3.2"
-    id 'nu.studer.jooq' version '8.0'
+    id 'nu.studer.jooq' version '10.1'
     id 'org.flywaydb.flyway' version '9.22.3'
     id 'co.uzzu.dotenv.gradle' version '4.0.0'
 }
@@ -34,14 +34,13 @@ dependencies {
     //reactive stack
 
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
-    implementation 'org.postgresql:r2dbc-postgresql:1.0.7.RELEASE'
     implementation 'org.postgresql:postgresql:42.6.2'
 
-    implementation 'org.jooq:jooq:3.17.4'
-    implementation 'org.jooq:jooq-meta:3.17.4'
-    implementation 'org.jooq:jooq-codegen:3.17.4'
+    implementation 'org.jooq:jooq:3.18.14'
+    implementation 'org.jooq:jooq-meta:3.18.14'
+    implementation 'org.jooq:jooq-codegen:3.18.14'
     implementation 'org.flywaydb:flyway-core:9.22.3'
 
     implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.3.0'
@@ -50,10 +49,11 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-aop'
 
+    testImplementation 'org.springframework.restdocs:spring-restdocs-webtestclient'
+
+
     // thymeleaf
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    // 스프링 부트 3
-    implementation 'org.springframework.boot:spring-boot-starter-web'
     // configuration
     implementation 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
@@ -64,12 +64,10 @@ dependencies {
     // Validation 모듈 추가
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     // 스프링 시큐리티
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.security:spring-security-test'
+    // implementation 'org.springframework.boot:spring-boot-starter-security'
+    // implementation 'org.springframework.security:spring-security-test'
     // OAuth
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    // Swagger
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.3'
+    // implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     // actuator`
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     // cookie
@@ -84,8 +82,6 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    // MockMvc
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
     // Junit
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -151,7 +147,7 @@ jooq {
     def dbUser     = env.DB_USER.value
     def dbPassword = env.DB_PASSWORD.value
 
-    version = '3.17.4'
+    version = '3.18.14'
 
     configurations {
         main {
@@ -174,6 +170,11 @@ jooq {
                         daos           = true
                         pojos          = true
                         fluentSetters  = true
+                        immutablePojos = true
+                        javaTimeTypes = true
+                        interfaces = true
+                        fluentSetters  = true
+                        validationAnnotations = true
                     }
                     target {
                         packageName = 'com.uliga.uliga_backend.jooq'
