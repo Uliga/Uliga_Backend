@@ -91,26 +91,10 @@ public class AccountBookUserRecord extends UpdatableRecordImpl<AccountBookUserRe
     }
 
     /**
-     * Setter for <code>public.account_book_user.get_notification</code>.
-     */
-    public AccountBookUserRecord setGetNotification(Boolean value) {
-        set(4, value);
-        return this;
-    }
-
-    /**
-     * Getter for <code>public.account_book_user.get_notification</code>.
-     */
-    @Override
-    public Boolean getGetNotification() {
-        return (Boolean) get(4);
-    }
-
-    /**
      * Setter for <code>public.account_book_user.account_book_authority</code>.
      */
     public AccountBookUserRecord setAccountBookAuthority(AccountBookAuthority value) {
-        set(5, value);
+        set(4, value);
         return this;
     }
 
@@ -119,14 +103,14 @@ public class AccountBookUserRecord extends UpdatableRecordImpl<AccountBookUserRe
      */
     @Override
     public AccountBookAuthority getAccountBookAuthority() {
-        return (AccountBookAuthority) get(5);
+        return (AccountBookAuthority) get(4);
     }
 
     /**
      * Setter for <code>public.account_book_user.created_at</code>.
      */
     public AccountBookUserRecord setCreatedAt(LocalDateTime value) {
-        set(6, value);
+        set(5, value);
         return this;
     }
 
@@ -135,14 +119,14 @@ public class AccountBookUserRecord extends UpdatableRecordImpl<AccountBookUserRe
      */
     @Override
     public LocalDateTime getCreatedAt() {
-        return (LocalDateTime) get(6);
+        return (LocalDateTime) get(5);
     }
 
     /**
      * Setter for <code>public.account_book_user.updated_at</code>.
      */
     public AccountBookUserRecord setUpdatedAt(LocalDateTime value) {
-        set(7, value);
+        set(6, value);
         return this;
     }
 
@@ -151,7 +135,24 @@ public class AccountBookUserRecord extends UpdatableRecordImpl<AccountBookUserRe
      */
     @Override
     public LocalDateTime getUpdatedAt() {
-        return (LocalDateTime) get(7);
+        return (LocalDateTime) get(6);
+    }
+
+    /**
+     * Setter for <code>public.account_book_user.notifications_enabled</code>.
+     */
+    public AccountBookUserRecord setNotificationsEnabled(Boolean value) {
+        set(7, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>public.account_book_user.notifications_enabled</code>.
+     */
+    @NotNull
+    @Override
+    public Boolean getNotificationsEnabled() {
+        return (Boolean) get(7);
     }
 
     // -------------------------------------------------------------------------
@@ -172,10 +173,10 @@ public class AccountBookUserRecord extends UpdatableRecordImpl<AccountBookUserRe
         setAccountBookId(from.getAccountBookId());
         setUserId(from.getUserId());
         setProfileUrl(from.getProfileUrl());
-        setGetNotification(from.getGetNotification());
         setAccountBookAuthority(from.getAccountBookAuthority());
         setCreatedAt(from.getCreatedAt());
         setUpdatedAt(from.getUpdatedAt());
+        setNotificationsEnabled(from.getNotificationsEnabled());
         resetChangedOnNotNull();
     }
 
@@ -193,17 +194,17 @@ public class AccountBookUserRecord extends UpdatableRecordImpl<AccountBookUserRe
     /**
      * Create a detached, initialised AccountBookUserRecord
      */
-    public AccountBookUserRecord(Long id, Long accountBookId, Long userId, String profileUrl, Boolean getNotification, AccountBookAuthority accountBookAuthority, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public AccountBookUserRecord(Long id, Long accountBookId, Long userId, String profileUrl, AccountBookAuthority accountBookAuthority, LocalDateTime createdAt, LocalDateTime updatedAt, Boolean notificationsEnabled) {
         super(AccountBookUser.ACCOUNT_BOOK_USER);
 
         setId(id);
         setAccountBookId(accountBookId);
         setUserId(userId);
         setProfileUrl(profileUrl);
-        setGetNotification(getNotification);
         setAccountBookAuthority(accountBookAuthority);
         setCreatedAt(createdAt);
         setUpdatedAt(updatedAt);
+        setNotificationsEnabled(notificationsEnabled);
         resetChangedOnNotNull();
     }
 
@@ -218,10 +219,10 @@ public class AccountBookUserRecord extends UpdatableRecordImpl<AccountBookUserRe
             setAccountBookId(value.getAccountBookId());
             setUserId(value.getUserId());
             setProfileUrl(value.getProfileUrl());
-            setGetNotification(value.getGetNotification());
             setAccountBookAuthority(value.getAccountBookAuthority());
             setCreatedAt(value.getCreatedAt());
             setUpdatedAt(value.getUpdatedAt());
+            setNotificationsEnabled(value.getNotificationsEnabled());
             resetChangedOnNotNull();
         }
     }

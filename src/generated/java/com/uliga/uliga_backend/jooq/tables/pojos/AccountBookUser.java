@@ -24,20 +24,20 @@ public class AccountBookUser implements IAccountBookUser {
     private final Long accountBookId;
     private final Long userId;
     private final String profileUrl;
-    private final Boolean getNotification;
     private final AccountBookAuthority accountBookAuthority;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
+    private final Boolean notificationsEnabled;
 
     public AccountBookUser(IAccountBookUser value) {
         this.id = value.getId();
         this.accountBookId = value.getAccountBookId();
         this.userId = value.getUserId();
         this.profileUrl = value.getProfileUrl();
-        this.getNotification = value.getGetNotification();
         this.accountBookAuthority = value.getAccountBookAuthority();
         this.createdAt = value.getCreatedAt();
         this.updatedAt = value.getUpdatedAt();
+        this.notificationsEnabled = value.getNotificationsEnabled();
     }
 
     public AccountBookUser(
@@ -45,19 +45,19 @@ public class AccountBookUser implements IAccountBookUser {
         Long accountBookId,
         Long userId,
         String profileUrl,
-        Boolean getNotification,
         AccountBookAuthority accountBookAuthority,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        Boolean notificationsEnabled
     ) {
         this.id = id;
         this.accountBookId = accountBookId;
         this.userId = userId;
         this.profileUrl = profileUrl;
-        this.getNotification = getNotification;
         this.accountBookAuthority = accountBookAuthority;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.notificationsEnabled = notificationsEnabled;
     }
 
     /**
@@ -95,14 +95,6 @@ public class AccountBookUser implements IAccountBookUser {
     }
 
     /**
-     * Getter for <code>public.account_book_user.get_notification</code>.
-     */
-    @Override
-    public Boolean getGetNotification() {
-        return this.getNotification;
-    }
-
-    /**
      * Getter for <code>public.account_book_user.account_book_authority</code>.
      */
     @Override
@@ -124,6 +116,15 @@ public class AccountBookUser implements IAccountBookUser {
     @Override
     public LocalDateTime getUpdatedAt() {
         return this.updatedAt;
+    }
+
+    /**
+     * Getter for <code>public.account_book_user.notifications_enabled</code>.
+     */
+    @NotNull
+    @Override
+    public Boolean getNotificationsEnabled() {
+        return this.notificationsEnabled;
     }
 
     @Override
@@ -159,12 +160,6 @@ public class AccountBookUser implements IAccountBookUser {
         }
         else if (!this.profileUrl.equals(other.profileUrl))
             return false;
-        if (this.getNotification == null) {
-            if (other.getNotification != null)
-                return false;
-        }
-        else if (!this.getNotification.equals(other.getNotification))
-            return false;
         if (this.accountBookAuthority == null) {
             if (other.accountBookAuthority != null)
                 return false;
@@ -183,6 +178,12 @@ public class AccountBookUser implements IAccountBookUser {
         }
         else if (!this.updatedAt.equals(other.updatedAt))
             return false;
+        if (this.notificationsEnabled == null) {
+            if (other.notificationsEnabled != null)
+                return false;
+        }
+        else if (!this.notificationsEnabled.equals(other.notificationsEnabled))
+            return false;
         return true;
     }
 
@@ -194,10 +195,10 @@ public class AccountBookUser implements IAccountBookUser {
         result = prime * result + ((this.accountBookId == null) ? 0 : this.accountBookId.hashCode());
         result = prime * result + ((this.userId == null) ? 0 : this.userId.hashCode());
         result = prime * result + ((this.profileUrl == null) ? 0 : this.profileUrl.hashCode());
-        result = prime * result + ((this.getNotification == null) ? 0 : this.getNotification.hashCode());
         result = prime * result + ((this.accountBookAuthority == null) ? 0 : this.accountBookAuthority.hashCode());
         result = prime * result + ((this.createdAt == null) ? 0 : this.createdAt.hashCode());
         result = prime * result + ((this.updatedAt == null) ? 0 : this.updatedAt.hashCode());
+        result = prime * result + ((this.notificationsEnabled == null) ? 0 : this.notificationsEnabled.hashCode());
         return result;
     }
 
@@ -209,10 +210,10 @@ public class AccountBookUser implements IAccountBookUser {
         sb.append(", ").append(accountBookId);
         sb.append(", ").append(userId);
         sb.append(", ").append(profileUrl);
-        sb.append(", ").append(getNotification);
         sb.append(", ").append(accountBookAuthority);
         sb.append(", ").append(createdAt);
         sb.append(", ").append(updatedAt);
+        sb.append(", ").append(notificationsEnabled);
 
         sb.append(")");
         return sb.toString();

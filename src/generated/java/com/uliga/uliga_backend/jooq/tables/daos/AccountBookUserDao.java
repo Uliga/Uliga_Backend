@@ -116,21 +116,6 @@ public class AccountBookUserDao extends DAOImpl<AccountBookUserRecord, com.uliga
     }
 
     /**
-     * Fetch records that have <code>get_notification BETWEEN lowerInclusive AND
-     * upperInclusive</code>
-     */
-    public List<com.uliga.uliga_backend.jooq.tables.pojos.AccountBookUser> fetchRangeOfGetNotification(Boolean lowerInclusive, Boolean upperInclusive) {
-        return fetchRange(AccountBookUser.ACCOUNT_BOOK_USER.GET_NOTIFICATION, lowerInclusive, upperInclusive);
-    }
-
-    /**
-     * Fetch records that have <code>get_notification IN (values)</code>
-     */
-    public List<com.uliga.uliga_backend.jooq.tables.pojos.AccountBookUser> fetchByGetNotification(Boolean... values) {
-        return fetch(AccountBookUser.ACCOUNT_BOOK_USER.GET_NOTIFICATION, values);
-    }
-
-    /**
      * Fetch records that have <code>account_book_authority BETWEEN
      * lowerInclusive AND upperInclusive</code>
      */
@@ -173,5 +158,20 @@ public class AccountBookUserDao extends DAOImpl<AccountBookUserRecord, com.uliga
      */
     public List<com.uliga.uliga_backend.jooq.tables.pojos.AccountBookUser> fetchByUpdatedAt(LocalDateTime... values) {
         return fetch(AccountBookUser.ACCOUNT_BOOK_USER.UPDATED_AT, values);
+    }
+
+    /**
+     * Fetch records that have <code>notifications_enabled BETWEEN
+     * lowerInclusive AND upperInclusive</code>
+     */
+    public List<com.uliga.uliga_backend.jooq.tables.pojos.AccountBookUser> fetchRangeOfNotificationsEnabled(Boolean lowerInclusive, Boolean upperInclusive) {
+        return fetchRange(AccountBookUser.ACCOUNT_BOOK_USER.NOTIFICATIONS_ENABLED, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>notifications_enabled IN (values)</code>
+     */
+    public List<com.uliga.uliga_backend.jooq.tables.pojos.AccountBookUser> fetchByNotificationsEnabled(Boolean... values) {
+        return fetch(AccountBookUser.ACCOUNT_BOOK_USER.NOTIFICATIONS_ENABLED, values);
     }
 }

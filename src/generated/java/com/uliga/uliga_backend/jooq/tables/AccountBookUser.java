@@ -72,11 +72,6 @@ public class AccountBookUser extends TableImpl<AccountBookUserRecord> {
     public final TableField<AccountBookUserRecord, String> PROFILE_URL = createField(DSL.name("profile_url"), SQLDataType.CLOB, this, "");
 
     /**
-     * The column <code>public.account_book_user.get_notification</code>.
-     */
-    public final TableField<AccountBookUserRecord, Boolean> GET_NOTIFICATION = createField(DSL.name("get_notification"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field(DSL.raw("false"), SQLDataType.BOOLEAN)), this, "");
-
-    /**
      * The column <code>public.account_book_user.account_book_authority</code>.
      */
     public final TableField<AccountBookUserRecord, AccountBookAuthority> ACCOUNT_BOOK_AUTHORITY = createField(DSL.name("account_book_authority"), SQLDataType.VARCHAR.nullable(false).defaultValue(DSL.field(DSL.raw("'USER'::account_book_authority"), SQLDataType.VARCHAR)).asEnumDataType(com.uliga.uliga_backend.jooq.enums.AccountBookAuthority.class), this, "");
@@ -90,6 +85,11 @@ public class AccountBookUser extends TableImpl<AccountBookUserRecord> {
      * The column <code>public.account_book_user.updated_at</code>.
      */
     public final TableField<AccountBookUserRecord, LocalDateTime> UPDATED_AT = createField(DSL.name("updated_at"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), this, "");
+
+    /**
+     * The column <code>public.account_book_user.notifications_enabled</code>.
+     */
+    public final TableField<AccountBookUserRecord, Boolean> NOTIFICATIONS_ENABLED = createField(DSL.name("notifications_enabled"), SQLDataType.BOOLEAN.nullable(false), this, "");
 
     private AccountBookUser(Name alias, Table<AccountBookUserRecord> aliased) {
         this(alias, aliased, null);
