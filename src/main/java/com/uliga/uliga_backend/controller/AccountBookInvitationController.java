@@ -10,7 +10,7 @@ import com.uliga.uliga_backend.common.annotation.Serialize;
 import com.uliga.uliga_backend.dto.account_book.req.CreateInvitationDto;
 import com.uliga.uliga_backend.dto.account_book.req.InvitationReplyDto;
 import com.uliga.uliga_backend.dto.account_book.res.AccountBookInvitationDto;
-import com.uliga.uliga_backend.jooq.tables.pojos.AccountBookInvitation;
+import com.uliga.uliga_backend.entity.AccountBookInvitationEntity;
 import com.uliga.uliga_backend.service.AccountBookInvitationService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,14 +28,14 @@ public class AccountBookInvitationController {
   @Operation(summary = "가계부 멤버 초대 API")
   @PostMapping()
   @Serialize(dto = AccountBookInvitationDto.class)
-  public ResponseEntity<Mono<AccountBookInvitation>> inviteUser(@RequestBody CreateInvitationDto dto) {
+  public ResponseEntity<Mono<AccountBookInvitationEntity>> inviteUser(@RequestBody CreateInvitationDto dto) {
     return ResponseEntity.ok(accountBookInvitationService.createInvitation(dto));
   }
 
   @Operation(summary = "가계부 초대 응답 API")
   @PostMapping("/reply")
   @Serialize(dto = AccountBookInvitationDto.class)
-  public ResponseEntity<Mono<AccountBookInvitation>> replyToInvitation(@RequestBody InvitationReplyDto dto) {
+  public ResponseEntity<Mono<AccountBookInvitationEntity>> replyToInvitation(@RequestBody InvitationReplyDto dto) {
     return ResponseEntity.ok(accountBookInvitationService.replyToInvitation(dto));
   }
 }

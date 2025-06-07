@@ -10,7 +10,7 @@ import com.uliga.uliga_backend.dto.expense.req.ExpenseQueryDto;
 import com.uliga.uliga_backend.dto.expense.req.ExpenseSumQueryDto;
 import com.uliga.uliga_backend.dto.expense.req.UpdateExpenseDto;
 import com.uliga.uliga_backend.dto.expense.res.ExpenseSumDto;
-import com.uliga.uliga_backend.jooq.tables.pojos.Expense;
+import com.uliga.uliga_backend.entity.ExpenseEntity;
 import com.uliga.uliga_backend.repository.ExpenseRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -22,19 +22,20 @@ import reactor.core.publisher.Mono;
 public class ExpenseService {
   private final ExpenseRepository expenseRepository;
 
-  public Mono<PaginatedDto<Expense>> getExpenses(ExpenseQueryDto query, PaginateQuery paginate, OrderByQuery orderBy) {
+  public Mono<PaginatedDto<ExpenseEntity>> getExpenses(ExpenseQueryDto query, PaginateQuery paginate,
+      OrderByQuery orderBy) {
     throw new UnsupportedOperationException("Unimplemented method 'getExpenses'");
   }
 
-  public Mono<Expense> createExpense(CreateExpenseDto dto) {
+  public Mono<ExpenseEntity> createExpense(CreateExpenseDto dto) {
     throw new UnsupportedOperationException("Unimplemented method 'createExpense'");
   }
 
-  public Mono<Expense> updateExpense(UpdateExpenseDto dto) {
+  public Mono<ExpenseEntity> updateExpense(UpdateExpenseDto dto) {
     throw new UnsupportedOperationException("Unimplemented method 'updateExpense'");
   }
 
-  public Mono<Expense> deleteExpense(Long expenseId) {
+  public Mono<ExpenseEntity> deleteExpense(Long expenseId) {
     throw new UnsupportedOperationException("Unimplemented method 'deleteExpense'");
   }
 
@@ -43,7 +44,7 @@ public class ExpenseService {
     throw new UnsupportedOperationException("Unimplemented method 'getExpenseSums'");
   }
 
-  public Mono<Expense> getExpense(Long expenseId) {
+  public Mono<ExpenseEntity> getExpense(Long expenseId) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'getExpense'");
   }

@@ -9,7 +9,7 @@ import com.uliga.uliga_backend.category.service.CategoryService;
 import com.uliga.uliga_backend.dto.member.MemberDTO.ExistsCheckDto;
 import com.uliga.uliga_backend.dto.member.MemberDTO.LoginRequest;
 import com.uliga.uliga_backend.dto.member.MemberDTO.LoginResult;
-import com.uliga.uliga_backend.jooq.tables.pojos.User;
+import com.uliga.uliga_backend.entity.UserEntity;
 import com.uliga.uliga_backend.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -23,9 +23,9 @@ public class AuthServiceV2 {
   private final AccountBookService accountBookService;
   private final CategoryService categoryService;
 
-  public Mono<User> signup(CreateUserDto dto) {
+  public Mono<UserEntity> signup(CreateUserDto dto) {
     dto.encrypt(passwordEncoder);
-    User user = dto.toEntity();
+    UserEntity user = dto.toEntity();
     return userRepository.save(user) // Mono<User>
         .flatMap(savedUser -> {
 

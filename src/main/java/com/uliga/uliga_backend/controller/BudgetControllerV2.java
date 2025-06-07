@@ -17,7 +17,7 @@ import com.uliga.uliga_backend.dto.budget.req.BudgetQueryDto;
 import com.uliga.uliga_backend.dto.budget.req.CreateBudgetDto;
 import com.uliga.uliga_backend.dto.budget.req.UpdateBudgetDto;
 import com.uliga.uliga_backend.dto.budget.res.BudgetDto;
-import com.uliga.uliga_backend.jooq.tables.pojos.Budget;
+import com.uliga.uliga_backend.entity.BudgetEntity;
 import com.uliga.uliga_backend.service.BudgetServiceV2;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,28 +36,28 @@ public class BudgetControllerV2 {
   @Operation(summary = "예산 조회 API")
   @GetMapping()
   @Serialize(dto = BudgetDto.class)
-  public ResponseEntity<Flux<Budget>> getBudgets(@ModelAttribute @Validated BudgetQueryDto query) {
+  public ResponseEntity<Flux<BudgetEntity>> getBudgets(@ModelAttribute @Validated BudgetQueryDto query) {
     return ResponseEntity.ok(budgetService.getBudgets(query));
   }
 
   @Operation(summary = "예산 추가 API")
   @PostMapping()
   @Serialize(dto = BudgetDto.class)
-  public ResponseEntity<Mono<Budget>> createBudget(@RequestBody CreateBudgetDto dto) {
+  public ResponseEntity<Mono<BudgetEntity>> createBudget(@RequestBody CreateBudgetDto dto) {
     return ResponseEntity.ok(budgetService.createBudget(dto));
   }
 
   @Operation(summary = "예산 업데이트 API")
   @PatchMapping()
   @Serialize(dto = BudgetDto.class)
-  public ResponseEntity<Mono<Budget>> updateBudget(@RequestBody UpdateBudgetDto dto) {
+  public ResponseEntity<Mono<BudgetEntity>> updateBudget(@RequestBody UpdateBudgetDto dto) {
     return ResponseEntity.ok(budgetService.updateBudget(dto));
   }
 
   @Operation(summary = "예산 삭제 API")
   @DeleteMapping("{budgetId}")
   @Serialize(dto = BudgetDto.class)
-  public ResponseEntity<Mono<Budget>> deleteBudget(@PathVariable("budgetId") Long budgetId) {
+  public ResponseEntity<Mono<BudgetEntity>> deleteBudget(@PathVariable("budgetId") Long budgetId) {
     return ResponseEntity.ok(budgetService.deleteBudget(budgetId));
   }
 }

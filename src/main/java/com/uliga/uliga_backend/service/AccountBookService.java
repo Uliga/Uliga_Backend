@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uliga.uliga_backend.category.repository.CategoryRepository;
 import com.uliga.uliga_backend.join_table.repository.AccountBookMemberRepository;
-import com.uliga.uliga_backend.jooq.tables.pojos.AccountBook;
-import com.uliga.uliga_backend.jooq.tables.pojos.User;
+import com.uliga.uliga_backend.entity.AccountBookEntity;
+import com.uliga.uliga_backend.entity.UserEntity;
 import com.uliga.uliga_backend.repository.AccountBookRepository;
 import com.uliga.uliga_backend.repository.MemberRepository;
 

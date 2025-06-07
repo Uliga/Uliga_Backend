@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import com.uliga.uliga_backend.common.dto.req.OrderByQuery;
 import com.uliga.uliga_backend.common.dto.req.PaginateQuery;
 import com.uliga.uliga_backend.common.dto.res.PaginatedDto;
-import com.uliga.uliga_backend.jooq.tables.pojos.Revenue;
+import com.uliga.uliga_backend.entity.RevenueEntity;
 import com.uliga.uliga_backend.repository.RevenueRepository;
 import com.uliga.uliga_backend.revenue.dto.req.CreateRevenueDto;
 import com.uliga.uliga_backend.revenue.dto.req.RevenueQueryDto;

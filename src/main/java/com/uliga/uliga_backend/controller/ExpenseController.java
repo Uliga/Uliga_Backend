@@ -23,7 +23,7 @@ import com.uliga.uliga_backend.dto.expense.req.ExpenseSumQueryDto;
 import com.uliga.uliga_backend.dto.expense.req.UpdateExpenseDto;
 import com.uliga.uliga_backend.dto.expense.res.ExpenseDto;
 import com.uliga.uliga_backend.dto.expense.res.ExpenseSumDto;
-import com.uliga.uliga_backend.jooq.tables.pojos.Expense;
+import com.uliga.uliga_backend.entity.ExpenseEntity;
 import com.uliga.uliga_backend.service.ExpenseService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,7 +42,7 @@ public class ExpenseController {
   @Operation(summary = "지출 조회 API")
   @GetMapping()
   @SerializePaginated(dto = ExpenseDto.class)
-  public ResponseEntity<Mono<PaginatedDto<Expense>>> getExpenses(@ModelAttribute @Validated ExpenseQueryDto query,
+  public ResponseEntity<Mono<PaginatedDto<ExpenseEntity>>> getExpenses(@ModelAttribute @Validated ExpenseQueryDto query,
       @ModelAttribute PaginateQuery paginate, @ModelAttribute OrderByQuery orderBy) {
     return ResponseEntity.ok(expenseService.getExpenses(query, paginate, orderBy));
   }
@@ -50,7 +50,7 @@ public class ExpenseController {
   @Operation(summary = "지출 상세 조회 API")
   @GetMapping("/{expenseId}")
   @Serialize(dto = ExpenseDto.class)
-  public ResponseEntity<Mono<Expense>> getExpense(@PathVariable("expenseId") Long expenseId) {
+  public ResponseEntity<Mono<ExpenseEntity>> getExpense(@PathVariable("expenseId") Long expenseId) {
     return ResponseEntity.ok(expenseService.getExpense(expenseId));
   }
 
@@ -64,21 +64,21 @@ public class ExpenseController {
   @Operation(summary = "지출 생성 API")
   @PostMapping()
   @Serialize(dto = ExpenseDto.class)
-  public ResponseEntity<Mono<Expense>> createExpense(@RequestBody CreateExpenseDto dto) {
+  public ResponseEntity<Mono<ExpenseEntity>> createExpense(@RequestBody CreateExpenseDto dto) {
     return ResponseEntity.ok(expenseService.createExpense(dto));
   }
 
   @Operation(summary = "지출 수정 API")
   @PatchMapping()
   @Serialize(dto = ExpenseDto.class)
-  public ResponseEntity<Mono<Expense>> updateExpense(@RequestBody UpdateExpenseDto dto) {
+  public ResponseEntity<Mono<ExpenseEntity>> updateExpense(@RequestBody UpdateExpenseDto dto) {
     return ResponseEntity.ok(expenseService.updateExpense(dto));
   }
 
   @Operation(summary = "지출 삭제 API")
   @DeleteMapping("/{expenseId}")
   @Serialize(dto = ExpenseDto.class)
-  public ResponseEntity<Mono<Expense>> deleteExpense(@PathVariable("expenseId") Long expenseId) {
+  public ResponseEntity<Mono<ExpenseEntity>> deleteExpense(@PathVariable("expenseId") Long expenseId) {
     return ResponseEntity.ok(expenseService.deleteExpense(expenseId));
   }
 

@@ -16,7 +16,8 @@ import com.uliga.uliga_backend.dto.revenue_category.req.CreateRevenueCategoryDto
 import com.uliga.uliga_backend.dto.revenue_category.req.RevenueCategoryQuery;
 import com.uliga.uliga_backend.dto.revenue_category.req.UpdateRevenueCategoryDto;
 import com.uliga.uliga_backend.dto.revenue_category.res.RevenueCategoryDto;
-import com.uliga.uliga_backend.jooq.tables.pojos.ExpenseCategory;
+import com.uliga.uliga_backend.entity.ExpenseCategoryEntity;
+import com.uliga.uliga_backend.entity.RevenueCategoryEntity;
 import com.uliga.uliga_backend.service.RevenueCategoryService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,28 +36,28 @@ public class RevenueCategoryController {
   @Operation(summary = "지출 카테고리 조회 API")
   @GetMapping()
   @Serialize(dto = RevenueCategoryDto.class)
-  public ResponseEntity<Flux<ExpenseCategory>> getExpenseCategories(@ModelAttribute RevenueCategoryQuery query) {
+  public ResponseEntity<Flux<RevenueCategoryEntity>> getExpenseCategories(@ModelAttribute RevenueCategoryQuery query) {
     return ResponseEntity.ok(revenueCategoryService.getExpenseCategories(query));
   }
 
   @Operation(summary = "지출 카테고리 생성 API")
   @PostMapping()
   @Serialize(dto = RevenueCategoryDto.class)
-  public ResponseEntity<Mono<ExpenseCategory>> createExpenseCategory(@RequestBody CreateRevenueCategoryDto dto) {
+  public ResponseEntity<Mono<RevenueCategoryEntity>> createExpenseCategory(@RequestBody CreateRevenueCategoryDto dto) {
     return ResponseEntity.ok(revenueCategoryService.createExpenseCategory(dto));
   }
 
   @Operation(summary = "지출 카테고리 수정 API")
   @PatchMapping()
   @Serialize(dto = RevenueCategoryDto.class)
-  public ResponseEntity<Mono<ExpenseCategory>> updateExpenseCategory(@RequestBody UpdateRevenueCategoryDto dto) {
+  public ResponseEntity<Mono<RevenueCategoryEntity>> updateExpenseCategory(@RequestBody UpdateRevenueCategoryDto dto) {
     return ResponseEntity.ok(revenueCategoryService.updateExpenseCategory(dto));
   }
 
   @Operation(summary = "지출 카테고리 삭제 API")
   @DeleteMapping("/{expenseCategoryId}")
   @Serialize(dto = RevenueCategoryDto.class)
-  public ResponseEntity<Mono<ExpenseCategory>> deleteExpenseCategory(
+  public ResponseEntity<Mono<RevenueCategoryEntity>> deleteExpenseCategory(
       @PathVariable("expenseCategoryId") Long expenseCategoryId) {
     return ResponseEntity.ok(revenueCategoryService.deleteExpenseCategory(expenseCategoryId));
   }

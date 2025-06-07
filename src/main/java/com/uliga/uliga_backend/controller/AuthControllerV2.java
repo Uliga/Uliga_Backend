@@ -18,7 +18,7 @@ import com.uliga.uliga_backend.dto.member.MemberDTO.ExistsCheckDto;
 import com.uliga.uliga_backend.dto.member.MemberDTO.LoginRequest;
 import com.uliga.uliga_backend.dto.member.MemberDTO.LoginResult;
 import com.uliga.uliga_backend.dto.user.res.UserDto;
-import com.uliga.uliga_backend.jooq.tables.pojos.User;
+import com.uliga.uliga_backend.entity.UserEntity;
 import com.uliga.uliga_backend.service.AuthServiceV2;
 import com.uliga.uliga_backend.service.EmailCertificationService;
 
@@ -44,7 +44,7 @@ public class AuthControllerV2 {
   @Operation(summary = "회원 가입 API")
   @PostMapping("signup")
   @Serialize(dto = UserDto.class)
-  public ResponseEntity<Mono<User>> signUp(@Valid @RequestBody CreateUserDto dto) {
+  public ResponseEntity<Mono<UserEntity>> signUp(@Valid @RequestBody CreateUserDto dto) {
     return ResponseEntity.ok(authService.signup(dto));
   }
 

@@ -18,7 +18,7 @@ import com.uliga.uliga_backend.dto.fixed_expense.req.FixedExpenseSumQuery;
 import com.uliga.uliga_backend.dto.fixed_expense.req.UpdateFixedExpenseDto;
 import com.uliga.uliga_backend.dto.fixed_expense.res.FixedExpenseDto;
 import com.uliga.uliga_backend.dto.fixed_expense.res.FixedExpenseSumDto;
-import com.uliga.uliga_backend.jooq.tables.pojos.FixedExpense;
+import com.uliga.uliga_backend.entity.FixedExpenseEntity;
 import com.uliga.uliga_backend.service.FixedExpenseService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,7 +37,7 @@ public class FixedExpenseController {
   @Operation(summary = "고정 지출 조회 API")
   @GetMapping()
   @Serialize(dto = FixedExpenseDto.class)
-  public ResponseEntity<Flux<FixedExpense>> getFixedExpenses(@ModelAttribute FixedExpenseQuery query) {
+  public ResponseEntity<Flux<FixedExpenseEntity>> getFixedExpenses(@ModelAttribute FixedExpenseQuery query) {
     return ResponseEntity.ok(fixedExpenseService.getFixedExpenses(query));
   }
 
@@ -50,21 +50,22 @@ public class FixedExpenseController {
   @Operation(summary = "고정 지출 생성 API")
   @PostMapping()
   @Serialize(dto = FixedExpenseDto.class)
-  public ResponseEntity<Mono<FixedExpense>> createFixedExpense(@RequestBody CreateFixedExpenseDto dto) {
+  public ResponseEntity<Mono<FixedExpenseEntity>> createFixedExpense(@RequestBody CreateFixedExpenseDto dto) {
     return ResponseEntity.ok(fixedExpenseService.createFixedExpense(dto));
   }
 
   @Operation(summary = "고정 지출 수정 API")
   @PatchMapping()
   @Serialize(dto = FixedExpenseDto.class)
-  public ResponseEntity<Mono<FixedExpense>> updateFixedExpense(@RequestBody UpdateFixedExpenseDto dto) {
+  public ResponseEntity<Mono<FixedExpenseEntity>> updateFixedExpense(@RequestBody UpdateFixedExpenseDto dto) {
     return ResponseEntity.ok(fixedExpenseService.updateFixedExpense(dto));
   }
 
   @Operation(summary = "고정 지출 삭제 API")
   @DeleteMapping("/{fixedExpenseId}")
   @Serialize(dto = FixedExpenseDto.class)
-  public ResponseEntity<Mono<FixedExpense>> deleteFixedExpense(@PathVariable("fixedExpenseId") Long fixedExpenseId) {
+  public ResponseEntity<Mono<FixedExpenseEntity>> deleteFixedExpense(
+      @PathVariable("fixedExpenseId") Long fixedExpenseId) {
     return ResponseEntity.ok(fixedExpenseService.deleteFixedExpense(fixedExpenseId));
   }
 }

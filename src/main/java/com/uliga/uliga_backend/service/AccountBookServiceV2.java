@@ -15,9 +15,9 @@ import com.uliga.uliga_backend.dto.account_book.req.InvitationReplyDto;
 import com.uliga.uliga_backend.dto.account_book.req.UpdateAccountBookDto;
 import com.uliga.uliga_backend.dto.account_book.res.AccountBookRecordDto;
 import com.uliga.uliga_backend.dto.account_book_user.req.DeleteAccountBookUserDto;
-import com.uliga.uliga_backend.jooq.tables.pojos.AccountBook;
-import com.uliga.uliga_backend.jooq.tables.pojos.AccountBookInvitation;
-import com.uliga.uliga_backend.jooq.tables.pojos.AccountBookUser;
+import com.uliga.uliga_backend.entity.AccountBookEntity;
+import com.uliga.uliga_backend.entity.AccountBookInvitationEntity;
+import com.uliga.uliga_backend.entity.AccountBookUserEntity;
 import com.uliga.uliga_backend.repository.AccountBookRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -29,33 +29,33 @@ import reactor.core.publisher.Mono;
 public class AccountBookServiceV2 {
   private final AccountBookRepository accountBookRepository;
 
-  public Mono<AccountBook> getAccountBook(Long accountBookId) {
+  public Mono<AccountBookEntity> getAccountBook(Long accountBookId) {
     // return accountBookRepository.findById(accountBookId);
     throw new UnsupportedOperationException();
   }
 
-  public Flux<AccountBook> getMemberAccountBooks(Long memberId) {
+  public Flux<AccountBookEntity> getMemberAccountBooks(Long memberId) {
     // return accountBookRepository.findAllByMemberId(memberId);
     throw new UnsupportedOperationException();
   }
 
-  public Mono<AccountBook> getAccountBookDetail(Long memberId, Long accountBookId) {
+  public Mono<AccountBookEntity> getAccountBookDetail(Long memberId, Long accountBookId) {
     throw new UnsupportedOperationException();
   }
 
-  public Mono<AccountBook> createAccountBook(CreateAccountBookDto dto) {
+  public Mono<AccountBookEntity> createAccountBook(CreateAccountBookDto dto) {
     throw new UnsupportedOperationException();
   }
 
-  public Mono<AccountBook> updateAccountBook(UpdateAccountBookDto dto) {
+  public Mono<AccountBookEntity> updateAccountBook(UpdateAccountBookDto dto) {
     throw new UnsupportedOperationException();
   }
 
-  public Mono<AccountBookInvitation> createInvitation(CreateInvitationDto dto) {
+  public Mono<AccountBookInvitationEntity> createInvitation(CreateInvitationDto dto) {
     throw new UnsupportedOperationException();
   }
 
-  public Mono<AccountBookInvitation> replyToInvitation(InvitationReplyDto dto) {
+  public Mono<AccountBookInvitationEntity> replyToInvitation(InvitationReplyDto dto) {
     throw new UnsupportedOperationException();
   }
 
@@ -69,12 +69,12 @@ public class AccountBookServiceV2 {
     throw new UnsupportedOperationException("Unimplemented method 'createAccountBookItems'");
   }
 
-  public Flux<AccountBookUser> getAccountBookUsers(Long accountBookId) {
+  public Flux<AccountBookUserEntity> getAccountBookUsers(Long accountBookId) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'getAccountBookUsers'");
   }
 
-  public Mono<AccountBook> deleteAccountBook(Long accountBookId) {
+  public Mono<AccountBookEntity> deleteAccountBook(Long accountBookId) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'deleteAccountBook'");
   }
@@ -124,7 +124,7 @@ public class AccountBookServiceV2 {
      */
   }
 
-  public Mono<AccountBookUser> deleteAccountBookUser(DeleteAccountBookUserDto dto) {
+  public Mono<AccountBookUserEntity> deleteAccountBookUser(DeleteAccountBookUserDto dto) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'deleteAccountBookUser'");
   }

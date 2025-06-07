@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uliga.uliga_backend.common.annotation.Serialize;
-import com.uliga.uliga_backend.jooq.tables.pojos.User;
+import com.uliga.uliga_backend.dto.user.req.UpdateUserDto;
+import com.uliga.uliga_backend.dto.user.res.UserDto;
+import com.uliga.uliga_backend.entity.UserEntity;
 import com.uliga.uliga_backend.service.UserService;
-import com.uliga.uliga_backend.user.dto.req.UpdateUserDto;
-import com.uliga.uliga_backend.user.dto.res.UserDto;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,21 +30,21 @@ public class UserController {
   @Operation(summary = "사용자 조회 API")
   @GetMapping()
   @Serialize(dto = UserDto.class)
-  public ResponseEntity<Mono<User>> getCurrentUser() {
+  public ResponseEntity<Mono<UserEntity>> getCurrentUser() {
     return ResponseEntity.ok(userService.getCurrentUser());
   }
 
   @Operation(summary = "사용자 수정 API")
   @PatchMapping()
   @Serialize(dto = UserDto.class)
-  public ResponseEntity<Mono<User>> updateUser(@RequestBody UpdateUserDto dto) {
+  public ResponseEntity<Mono<UserEntity>> updateUser(@RequestBody UpdateUserDto dto) {
     return ResponseEntity.ok(userService.updateUser(dto));
   }
 
   @Operation(summary = "사용자 삭제 API")
   @DeleteMapping("/{userId}")
   @Serialize(dto = UserDto.class)
-  public ResponseEntity<Mono<User>> deleteUser(@PathVariable("userId") Long userId) {
+  public ResponseEntity<Mono<UserEntity>> deleteUser(@PathVariable("userId") Long userId) {
     return ResponseEntity.ok(userService.deleteUser(userId));
   }
 }

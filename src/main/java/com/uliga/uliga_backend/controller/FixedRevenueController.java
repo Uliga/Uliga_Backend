@@ -16,7 +16,7 @@ import com.uliga.uliga_backend.dto.fixed_revenue.req.CreateFixedRevenueDto;
 import com.uliga.uliga_backend.dto.fixed_revenue.req.FixedRevenueQueryDto;
 import com.uliga.uliga_backend.dto.fixed_revenue.req.UpdateFixedRevenueDto;
 import com.uliga.uliga_backend.dto.fixed_revenue.res.FixedRevenueDto;
-import com.uliga.uliga_backend.jooq.tables.pojos.FixedRevenue;
+import com.uliga.uliga_backend.entity.FixedRevenueEntity;
 import com.uliga.uliga_backend.service.FixedRevenueService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,28 +35,29 @@ public class FixedRevenueController {
   @Operation(summary = "고정 수익 조회 API")
   @GetMapping()
   @Serialize(dto = FixedRevenueDto.class)
-  public ResponseEntity<Flux<FixedRevenue>> getFixedRevenues(@ModelAttribute FixedRevenueQueryDto query) {
+  public ResponseEntity<Flux<FixedRevenueEntity>> getFixedRevenues(@ModelAttribute FixedRevenueQueryDto query) {
     return ResponseEntity.ok(fixedRevenueService.getFixedRevenues(query));
   }
 
   @Operation(summary = "고정 수익 생성 API")
   @PostMapping()
   @Serialize(dto = FixedRevenueDto.class)
-  public ResponseEntity<Mono<FixedRevenue>> createFixedRevenue(@RequestBody CreateFixedRevenueDto dto) {
+  public ResponseEntity<Mono<FixedRevenueEntity>> createFixedRevenue(@RequestBody CreateFixedRevenueDto dto) {
     return ResponseEntity.ok(fixedRevenueService.createFixedRevenue(dto));
   }
 
   @Operation(summary = "고정 수익 수정 API")
   @PatchMapping()
   @Serialize(dto = FixedRevenueDto.class)
-  public ResponseEntity<Mono<FixedRevenue>> updateFixedRevenue(@RequestBody UpdateFixedRevenueDto dto) {
+  public ResponseEntity<Mono<FixedRevenueEntity>> updateFixedRevenue(@RequestBody UpdateFixedRevenueDto dto) {
     return ResponseEntity.ok(fixedRevenueService.updateFixedRevenue(dto));
   }
 
   @Operation(summary = "고정 수익 삭제 API")
   @DeleteMapping("/{fixedRevenueId}")
   @Serialize(dto = FixedRevenueDto.class)
-  public ResponseEntity<Mono<FixedRevenue>> deleteFixedRevenue(@PathVariable("fixedRevenueId") Long fixedRevenueId) {
+  public ResponseEntity<Mono<FixedRevenueEntity>> deleteFixedRevenue(
+      @PathVariable("fixedRevenueId") Long fixedRevenueId) {
     return ResponseEntity.ok(fixedRevenueService.deleteFixedRevenue(fixedRevenueId));
   }
 }

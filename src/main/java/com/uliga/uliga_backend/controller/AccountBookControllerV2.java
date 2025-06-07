@@ -26,8 +26,8 @@ import com.uliga.uliga_backend.dto.account_book.res.AccountBookDto;
 import com.uliga.uliga_backend.dto.account_book.res.AccountBookRecordDto;
 import com.uliga.uliga_backend.dto.account_book_user.req.DeleteAccountBookUserDto;
 import com.uliga.uliga_backend.dto.account_book_user.res.AccountBookUserDto;
-import com.uliga.uliga_backend.jooq.tables.pojos.AccountBook;
-import com.uliga.uliga_backend.jooq.tables.pojos.AccountBookUser;
+import com.uliga.uliga_backend.entity.AccountBookEntity;
+import com.uliga.uliga_backend.entity.AccountBookUserEntity;
 import com.uliga.uliga_backend.service.AccountBookServiceV2;
 import com.uliga.uliga_backend.util.SecurityUtil;
 
@@ -47,7 +47,7 @@ public class AccountBookControllerV2 {
   @Operation(summary = "가계부 생성 API")
   @PostMapping()
   @Serialize(dto = AccountBookDto.class)
-  public ResponseEntity<Mono<AccountBook>> createAccountBook(
+  public ResponseEntity<Mono<AccountBookEntity>> createAccountBook(
       @RequestBody CreateAccountBookDto dto) {
     return ResponseEntity.ok(accountBookService.createAccountBook(dto));
   }
@@ -55,7 +55,7 @@ public class AccountBookControllerV2 {
   @Operation(summary = "가계부 조회 API")
   @GetMapping()
   @Serialize(dto = AccountBookDto.class)
-  public ResponseEntity<Flux<AccountBook>> getAccountBooks() {
+  public ResponseEntity<Flux<AccountBookEntity>> getAccountBooks() {
     Long memberId = SecurityUtil.getCurrentMemberId();
     return ResponseEntity.ok(accountBookService.getMemberAccountBooks(memberId));
   }
@@ -63,7 +63,7 @@ public class AccountBookControllerV2 {
   @Operation(summary = "가계부 상세 조회 API")
   @GetMapping("/{accountBookId}")
   @Serialize(dto = AccountBookDto.class)
-  public ResponseEntity<Mono<AccountBook>> getAccountBook(@PathVariable("accountBookId") Long accountBookId) {
+  public ResponseEntity<Mono<AccountBookEntity>> getAccountBook(@PathVariable("accountBookId") Long accountBookId) {
     Long memberId = SecurityUtil.getCurrentMemberId();
     return ResponseEntity.ok(accountBookService.getAccountBookDetail(memberId, accountBookId));
   }
@@ -71,7 +71,7 @@ public class AccountBookControllerV2 {
   @Operation(summary = "가계부 업데이트 API")
   @PatchMapping()
   @Serialize(dto = AccountBookDto.class)
-  public ResponseEntity<Mono<AccountBook>> updateAccountBook(
+  public ResponseEntity<Mono<AccountBookEntity>> updateAccountBook(
       @RequestBody UpdateAccountBookDto dto) {
     return ResponseEntity.ok(accountBookService.updateAccountBook(dto));
   }
@@ -99,7 +99,7 @@ public class AccountBookControllerV2 {
   @Operation(summary = "가계부 유저 조회 API")
   @GetMapping("/{accountBookId}/user")
   @Serialize(dto = AccountBookUserDto.class)
-  public ResponseEntity<Flux<AccountBookUser>> getAccountBookUsers(
+  public ResponseEntity<Flux<AccountBookUserEntity>> getAccountBookUsers(
       @PathVariable("accountBookId") Long accountBookId) {
     return ResponseEntity.ok(accountBookService.getAccountBookUsers(accountBookId));
   }
@@ -107,14 +107,14 @@ public class AccountBookControllerV2 {
   @Operation(summary = "가계부 유저 삭제 API")
   @DeleteMapping("/{accountBookId}/user")
   @Serialize(dto = AccountBookUserDto.class)
-  public ResponseEntity<Mono<AccountBookUser>> deleteAccountBookUser(@RequestBody DeleteAccountBookUserDto dto) {
+  public ResponseEntity<Mono<AccountBookUserEntity>> deleteAccountBookUser(@RequestBody DeleteAccountBookUserDto dto) {
     return ResponseEntity.ok(accountBookService.deleteAccountBookUser(dto));
   }
 
   @Operation(summary = "가계부 삭제 API")
   @DeleteMapping("/{accountBookId}")
   @Serialize(dto = AccountBookDto.class)
-  public ResponseEntity<Mono<AccountBook>> deleteAccountBook(@PathVariable("accountBookId") Long accountBookId) {
+  public ResponseEntity<Mono<AccountBookEntity>> deleteAccountBook(@PathVariable("accountBookId") Long accountBookId) {
     return ResponseEntity.ok(accountBookService.deleteAccountBook(accountBookId));
   }
 

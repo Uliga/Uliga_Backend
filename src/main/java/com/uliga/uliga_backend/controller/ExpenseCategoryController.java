@@ -16,7 +16,7 @@ import com.uliga.uliga_backend.dto.expense_category.req.CreateExpenseCategoryDto
 import com.uliga.uliga_backend.dto.expense_category.req.ExpenseCategoryQuery;
 import com.uliga.uliga_backend.dto.expense_category.req.UpdateExpenseCategoryDto;
 import com.uliga.uliga_backend.dto.expense_category.res.ExpenseCategoryDto;
-import com.uliga.uliga_backend.jooq.tables.pojos.ExpenseCategory;
+import com.uliga.uliga_backend.entity.ExpenseCategoryEntity;
 import com.uliga.uliga_backend.service.ExpenseCategoryService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,28 +35,28 @@ public class ExpenseCategoryController {
   @Operation(summary = "지출 카테고리 조회 API")
   @GetMapping()
   @Serialize(dto = ExpenseCategoryDto.class)
-  public ResponseEntity<Flux<ExpenseCategory>> getExpenseCategories(@ModelAttribute ExpenseCategoryQuery query) {
+  public ResponseEntity<Flux<ExpenseCategoryEntity>> getExpenseCategories(@ModelAttribute ExpenseCategoryQuery query) {
     return ResponseEntity.ok(expenseCategoryService.getExpenseCategories(query));
   }
 
   @Operation(summary = "지출 카테고리 생성 API")
   @PostMapping()
   @Serialize(dto = ExpenseCategoryDto.class)
-  public ResponseEntity<Mono<ExpenseCategory>> createExpenseCategory(@RequestBody CreateExpenseCategoryDto dto) {
+  public ResponseEntity<Mono<ExpenseCategoryEntity>> createExpenseCategory(@RequestBody CreateExpenseCategoryDto dto) {
     return ResponseEntity.ok(expenseCategoryService.createExpenseCategory(dto));
   }
 
   @Operation(summary = "지출 카테고리 수정 API")
   @PatchMapping()
   @Serialize(dto = ExpenseCategoryDto.class)
-  public ResponseEntity<Mono<ExpenseCategory>> updateExpenseCategory(@RequestBody UpdateExpenseCategoryDto dto) {
+  public ResponseEntity<Mono<ExpenseCategoryEntity>> updateExpenseCategory(@RequestBody UpdateExpenseCategoryDto dto) {
     return ResponseEntity.ok(expenseCategoryService.updateExpenseCategory(dto));
   }
 
   @Operation(summary = "지출 카테고리 삭제 API")
   @DeleteMapping("/{expenseCategoryId}")
   @Serialize(dto = ExpenseCategoryDto.class)
-  public ResponseEntity<Mono<ExpenseCategory>> deleteExpenseCategory(
+  public ResponseEntity<Mono<ExpenseCategoryEntity>> deleteExpenseCategory(
       @PathVariable("expenseCategoryId") Long expenseCategoryId) {
     return ResponseEntity.ok(expenseCategoryService.deleteExpenseCategory(expenseCategoryId));
   }

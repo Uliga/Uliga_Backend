@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import com.uliga.uliga_backend.dto.expense_category.req.CreateExpenseCategoryDto;
 import com.uliga.uliga_backend.dto.expense_category.req.ExpenseCategoryQuery;
 import com.uliga.uliga_backend.dto.expense_category.req.UpdateExpenseCategoryDto;
-import com.uliga.uliga_backend.jooq.tables.pojos.ExpenseCategory;
+import com.uliga.uliga_backend.entity.ExpenseCategoryEntity;
 import com.uliga.uliga_backend.repository.ExpenseCategoryRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -17,22 +17,22 @@ import reactor.core.publisher.Mono;
 public class ExpenseCategoryService {
   private final ExpenseCategoryRepository expenseCategoryRepository;
 
-  public Flux<ExpenseCategory> getExpenseCategories(ExpenseCategoryQuery query) {
+  public Flux<ExpenseCategoryEntity> getExpenseCategories(ExpenseCategoryQuery query) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'getExpenseCategories'");
   }
 
-  public Mono<ExpenseCategory> createExpenseCategory(CreateExpenseCategoryDto dto) {
+  public Mono<ExpenseCategoryEntity> createExpenseCategory(CreateExpenseCategoryDto dto) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'createExpenseCategory'");
   }
 
-  public Mono<ExpenseCategory> updateExpenseCategory(UpdateExpenseCategoryDto dto) {
+  public Mono<ExpenseCategoryEntity> updateExpenseCategory(UpdateExpenseCategoryDto dto) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'updateExpenseCategory'");
   }
 
-  public Mono<ExpenseCategory> deleteExpenseCategory(Long expenseCategoryId) {
+  public Mono<ExpenseCategoryEntity> deleteExpenseCategory(Long expenseCategoryId) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'deleteExpenseCategory'");
   }
