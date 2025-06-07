@@ -38,9 +38,9 @@ dependencies {
 
     implementation 'org.postgresql:postgresql:42.6.2'
 
-    implementation 'org.jooq:jooq:3.20.4'
-    implementation 'org.jooq:jooq-meta:3.20.4'
-    implementation 'org.jooq:jooq-codegen:3.20.4'
+    implementation 'org.jooq:jooq:3.18.14'
+    implementation 'org.jooq:jooq-meta:3.18.14'
+    implementation 'org.jooq:jooq-codegen:3.18.14'
     implementation 'org.flywaydb:flyway-core:9.22.3'
 
     implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.3.0'
@@ -150,7 +150,7 @@ jooq {
     def dbUser     = env.DB_USER.value
     def dbPassword = env.DB_PASSWORD.value
 
-    version = '3.20.4'
+    version = '3.18.14'
 
     configurations {
         main {
