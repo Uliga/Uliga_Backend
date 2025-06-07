@@ -1,4 +1,4 @@
-package com.uliga.uliga_backend.dto.account_book;
+package com.uliga.uliga_backend.account_book.dto;
 
 import java.util.List;
 
