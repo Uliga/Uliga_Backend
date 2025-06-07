@@ -2,11 +2,10 @@ package com.uliga.uliga_backend.account_book.dto;
 
 import java.util.List;
 
-import com.uliga.uliga_backend.account_book.dto.NativeQ.AccountBookInfoQ;
-import com.uliga.uliga_backend.account_book.dto.NativeQ.AccountBookMemberInfoQ;
-import com.uliga.uliga_backend.account_book.dto.NativeQ.MembersQ;
 import com.uliga.uliga_backend.category.dto.NativeQ.AccountBookCategoryInfoQ;
-import com.uliga.uliga_backend.jooq.tables.pojos.AccountBook;
+import com.uliga.uliga_backend.dto.account_book.NativeQ.AccountBookInfoQ;
+import com.uliga.uliga_backend.dto.account_book.NativeQ.AccountBookMemberInfoQ;
+import com.uliga.uliga_backend.dto.account_book.NativeQ.MembersQ;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -35,13 +34,13 @@ public class AccountBookDTO {
     @Schema(description = "가계부 별칭", defaultValue = "relationship")
     private String relationship;
 
-    public AccountBook toEntity() {
-      AccountBook entity = new AccountBook();
-      entity.setName(name);
-      entity.setRelationShip(relationship);
-      entity.setIsPrivate(false);
-      return entity;
-    }
+    // public AccountBook toEntity() {
+    // AccountBook entity = new AccountBook();
+    // entity.setName(name);
+    // entity.setRelationShip(relationship);
+    // entity.setIsPrivate(false);
+    // return entity;
+    // }
   }
 
   @Builder
@@ -55,12 +54,12 @@ public class AccountBookDTO {
 
     private String relationship;
 
-    public AccountBook toEntity() {
-      return AccountBook.builder()
-          .isPrivate(isPrivate)
-          .relationShip(relationship)
-          .name(name).build();
-    }
+    // public AccountBook toEntity() {
+    // return AccountBook.builder()
+    // .isPrivate(isPrivate)
+    // .relationShip(relationship)
+    // .name(name).build();
+    // }
   }
 
   @Builder

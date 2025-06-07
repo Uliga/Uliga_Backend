@@ -38,9 +38,9 @@ dependencies {
 
     implementation 'org.postgresql:postgresql:42.6.2'
 
-    implementation 'org.jooq:jooq:3.20.4'
-    implementation 'org.jooq:jooq-meta:3.20.4'
-    implementation 'org.jooq:jooq-codegen:3.20.4'
+    implementation 'org.jooq:jooq:3.18.14'
+    implementation 'org.jooq:jooq-meta:3.18.14'
+    implementation 'org.jooq:jooq-codegen:3.18.14'
     implementation 'org.flywaydb:flyway-core:9.22.3'
 
     implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.3.0'
@@ -49,10 +49,11 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-aop'
 
+    testImplementation 'org.springframework.restdocs:spring-restdocs-webtestclient'
+
+
     // thymeleaf
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    // 스프링 부트 3
-    implementation 'org.springframework.boot:spring-boot-starter-web'
     // configuration
     implementation 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
@@ -63,12 +64,10 @@ dependencies {
     // Validation 모듈 추가
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     // 스프링 시큐리티
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.security:spring-security-test'
+    // implementation 'org.springframework.boot:spring-boot-starter-security'
+    // implementation 'org.springframework.security:spring-security-test'
     // OAuth
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    // Swagger
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.3'
+    // implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     // actuator`
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     // cookie
@@ -83,8 +82,6 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    // MockMvc
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
     // Junit
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -150,7 +147,7 @@ jooq {
     def dbUser     = env.DB_USER.value
     def dbPassword = env.DB_PASSWORD.value
 
-    version = '3.20.4'
+    version = '3.18.14'
 
     configurations {
         main {

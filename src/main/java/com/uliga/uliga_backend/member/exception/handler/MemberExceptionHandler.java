@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
+import com.uliga.uliga_backend.dto.member.MemberDTO.SearchEmailResult;
 import com.uliga.uliga_backend.error.response.ErrorResponse;
-import com.uliga.uliga_backend.member.dto.MemberDTO.SearchEmailResult;
 import com.uliga.uliga_backend.member.exception.CannotLoginException;
 import com.uliga.uliga_backend.member.exception.EmailCertificationExpireException;
 import com.uliga.uliga_backend.member.exception.InvalidApplicationPasswordException;

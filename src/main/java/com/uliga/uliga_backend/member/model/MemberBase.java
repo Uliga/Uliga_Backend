@@ -1,12 +1,5 @@
 package com.uliga.uliga_backend.member.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
 public class MemberBase {
   // @Id
   // @GeneratedValue(strategy = GenerationType.IDENTITY)

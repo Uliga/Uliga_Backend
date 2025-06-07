@@ -1,16 +1,10 @@
 package com.uliga.uliga_backend.category.service;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.account_book.repository.AccountBookRepository;
 import com.uliga.uliga_backend.category.repository.CategoryRepository;
-import com.uliga.uliga_backend.join_table.repository.AccountBookMemberRepository;
-import com.uliga.uliga_backend.jooq.tables.pojos.AccountBook;
-import com.uliga.uliga_backend.jooq.tables.pojos.ExpenseCategory;
+import com.uliga.uliga_backend.repository.AccountBookRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,16 +16,7 @@ public class CategoryService {
   private final AccountBookRepository accountBookRepository;
   private final CategoryRepository categoryRepository;
   private final ObjectMapper mapper;
-  private final AccountBookMemberRepository accountBookMemberRepository;
-
-  private final List<String> defaultCategories = Arrays.asList("\uD83C\uDF7D️ 식비", "☕ 카페 ·간식", "\uD83C\uDFE0생활",
-      "\uD83C\uDF59편의점,마트,잡화", "\uD83D\uDC55쇼핑", "기타");
-
-  public void createDefaultCategories(AccountBook accountBook) {
-      List<ExpenseCategory> categories = defaultCategories.stream().map((category)-> {
-        return new ExpenseCategory()
-      })
-    }
+  // private final AccountBookMemberRepository accountBookMemberRepository;
 
   // /**
   // * 가계부 기본 카테고리 생성
