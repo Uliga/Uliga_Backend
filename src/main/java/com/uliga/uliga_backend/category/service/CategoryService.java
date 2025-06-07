@@ -6,11 +6,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uliga.uliga_backend.account_book.repository.AccountBookRepository;
 import com.uliga.uliga_backend.category.repository.CategoryRepository;
 import com.uliga.uliga_backend.join_table.repository.AccountBookMemberRepository;
 import com.uliga.uliga_backend.jooq.tables.pojos.AccountBook;
 import com.uliga.uliga_backend.jooq.tables.pojos.ExpenseCategory;
+import com.uliga.uliga_backend.repository.AccountBookRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

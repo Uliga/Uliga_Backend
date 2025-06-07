@@ -3,7 +3,7 @@ package com.uliga.uliga_backend.member.mapper;
 import java.util.HashMap;
 import java.util.List;
 
-import com.uliga.uliga_backend.member.dto.NativeQ.MemberInfoNativeQ;
+import com.uliga.uliga_backend.dto.member.NativeQ.MemberInfoNativeQ;
 
 public interface MemberMapper {
 

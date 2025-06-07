@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.uliga.uliga_backend.member.model.Member;
-import com.uliga.uliga_backend.member.repository.MemberRepository;
+import com.uliga.uliga_backend.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

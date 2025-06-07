@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.uliga.uliga_backend.member.model.Authority;
 import com.uliga.uliga_backend.member.model.Member;
 import com.uliga.uliga_backend.member.model.UserLoginType;
-import com.uliga.uliga_backend.member.repository.MemberRepository;
+import com.uliga.uliga_backend.repository.MemberRepository;
 import com.uliga.uliga_backend.security.oauth2.OAuth2UserInfo;
 import com.uliga.uliga_backend.security.oauth2.OAuth2UserInfoFactory;
 
