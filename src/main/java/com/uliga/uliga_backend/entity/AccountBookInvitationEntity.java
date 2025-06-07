@@ -17,14 +17,14 @@ public class AccountBookInvitationEntity implements IAccountBookInvitation {
   private final LocalDateTime updatedAt;
   private final InvitationStatus status;
 
-  public AccountBookInvitationEntity(IAccountBookInvitation pojo) {
-    this.id = pojo.getId();
-    this.accountBookId = pojo.getAccountBookId();
-    this.inviterUserId = pojo.getInviterUserId();
-    this.inviteeUserId = pojo.getInviteeUserId();
-    this.createdAt = pojo.getCreatedAt();
-    this.updatedAt = pojo.getUpdatedAt();
-    this.status = pojo.getStatus();
+  public AccountBookInvitationEntity(IAccountBookInvitation value) {
+    this.id = value.getId();
+    this.accountBookId = value.getAccountBookId();
+    this.inviterUserId = value.getInviterUserId();
+    this.inviteeUserId = value.getInviteeUserId();
+    this.createdAt = value.getCreatedAt();
+    this.updatedAt = value.getUpdatedAt();
+    this.status = value.getStatus();
   }
 
   private AccountBookInvitationEntity(Builder builder) {

@@ -16,13 +16,13 @@ public class AccountBookEntity implements IAccountBook {
   private final LocalDateTime createdAt;
   private final LocalDateTime updatedAt;
 
-  public AccountBookEntity(IAccountBook pojo) {
-    this.id = pojo.getId();
-    this.isPrivate = pojo.getIsPrivate();
-    this.name = pojo.getName();
-    this.createdAt = pojo.getCreatedAt();
-    this.updatedAt = pojo.getUpdatedAt();
-    this.aliasName = pojo.getAliasName();
+  public AccountBookEntity(IAccountBook value) {
+    this.id = value.getId();
+    this.isPrivate = value.getIsPrivate();
+    this.name = value.getName();
+    this.createdAt = value.getCreatedAt();
+    this.updatedAt = value.getUpdatedAt();
+    this.aliasName = value.getAliasName();
   }
 
   private AccountBookEntity(Builder builder) {
@@ -55,15 +55,15 @@ public class AccountBookEntity implements IAccountBook {
   }
 
   public AccountBookEntity updateName(String name) {
-    return toBuilder().name(name).updatedAt(LocalDateTime.now()).build();
+    return toBuilder().name(name).build();
   }
 
   public AccountBookEntity updateAliasName(String aliasName) {
-    return toBuilder().aliasName(aliasName).updatedAt(LocalDateTime.now()).build();
+    return toBuilder().aliasName(aliasName).build();
   }
 
   public AccountBookEntity updateIsPrivate(Boolean isPrivate) {
-    return toBuilder().isPrivate(isPrivate).updatedAt(LocalDateTime.now()).build();
+    return toBuilder().isPrivate(isPrivate).build();
   }
 
   @Getter
