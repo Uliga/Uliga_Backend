@@ -37,3 +37,10 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### private files ###
+.env
+.env.**
+private.**
+.tsbuildinfo
+node_modules
