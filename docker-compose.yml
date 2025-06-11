@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: dev-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: rlaehdwns99@
+      POSTGRES_DB: uliga_dev
+    ports:
+      - "15432:5432"
+    volumes:
+      - postgres_data_uliga_dev:/var/lib/postgresql/data
+    networks:
+      - dev
+
+  redis:
+    image: redis:7
+    container_name: dev-redis
+    restart: unless-stopped
+    ports:
+      - "16379:6379"
+    networks:
+      - dev
+
+  mysql:
+    image: mysql:8.0
+    container_name: dev-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: uliga_dev
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: rlaehdwns99@
+      MYSQL_ROOT_PASSWORD: rlaehdwns99@
+    ports:
+      - "13306:3306"
+    volumes:
+      - mysql_data_uliga_dev:/var/lib/mysql
+      - ./mysql-init/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - dev
+
+networks:
+  dev:
+
+volumes:
+  postgres_data_uliga_dev:
+  mysql_data_uliga_dev:

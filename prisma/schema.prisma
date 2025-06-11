@@ -1,0 +1,232 @@
+// Prisma schema file
+// See https://www.prisma.io/docs/concepts/components/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+enum AccountBookAuthority {
+  USER
+  ADMIN
+}
+
+enum Authority {
+  USER
+  ADMIN
+}
+
+enum UserLoginType {
+  EMAIL
+  KAKAO
+}
+
+enum Frequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+enum invitationStatus {
+  PENDING
+  DECLINED
+  ACCEPTED
+}
+
+model AccountBook {
+  id        Int     @id @default(autoincrement())
+  isPrivate Boolean @default(true)
+  name      String  @db.VarChar(255)
+  aliasName String  @db.VarChar(255)
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+}
+
+model Budget {
+  id                Int @id @default(autoincrement())
+  value             Int
+  year              Int
+  month             Int
+  expenseCategoryId Int
+  accountBookId     Int
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+
+  @@index([expenseCategoryId])
+  @@index([accountBookId])
+}
+
+model RevenueCategory {
+  id            Int    @id @default(autoincrement())
+  name          String @db.VarChar(255)
+  accountBookId Int
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+
+  @@index([accountBookId])
+}
+
+model ExpenseCategory {
+  id            Int    @id @default(autoincrement())
+  name          String @db.VarChar(255)
+  accountBookId Int
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+
+  @@index([accountBookId])
+}
+
+model Revenue {
+  id                Int      @id @default(autoincrement())
+  value             Int
+  revenueSource     String   @db.VarChar(255)
+  memo              String   @db.Text
+  date              DateTime @db.Date
+  userId            Int
+  revenueCategoryId Int
+  accountBookId     Int
+  year              String   @db.VarChar(255)
+  month             String   @db.VarChar(255)
+  week              String   @db.VarChar(255)
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+
+  @@index([accountBookId])
+  @@index([userId])
+  @@index([revenueCategoryId])
+}
+
+model Expense {
+  id                Int      @id @default(autoincrement())
+  value             Int
+  expensePayee      String   @db.VarChar(255)
+  memo              String   @db.Text
+  date              DateTime @db.Date
+  userId            Int
+  expenseCategoryId Int
+  accountBookId     Int
+  year              String   @db.VarChar(255)
+  month             String   @db.VarChar(255)
+  week              String   @db.VarChar(255)
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+
+  @@index([accountBookId])
+  @@index([userId])
+  @@index([expenseCategoryId])
+}
+
+model User {
+  id            Int           @id @default(autoincrement())
+  email         String        @db.VarChar(255)
+  password      String        @db.VarChar(255)
+  appPassword   String        @db.VarChar(255)
+  authority     Authority     @default(USER)
+  userLoginType UserLoginType
+  userName      String        @db.VarChar(255)
+  nickName      String        @db.VarChar(255)
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+}
+
+model FixedRevenue {
+  id            Int       @id @default(autoincrement())
+  name          String    @db.VarChar(255)
+  value         Int
+  startDate     DateTime  @db.Date
+  frequency     Frequency
+  userId        Int
+  accountBookId Int
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+
+  @@index([userId])
+  @@index([accountBookId])
+}
+
+model FixedExpense {
+  id            Int       @id @default(autoincrement())
+  name          String    @db.VarChar(255)
+  value         Int
+  startDate     DateTime  @db.Date
+  frequency     Frequency
+  userId        Int
+  accountBookId Int
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+
+  @@index([userId])
+  @@index([accountBookId])
+}
+
+model AccountBookUser {
+  id                   Int                  @id @default(autoincrement())
+  accountBookId        Int
+  userId               Int
+  profileUrl           String               @db.VarChar(500)
+  getNotification      Boolean              @default(false)
+  accountBookAuthority AccountBookAuthority
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+
+  @@index([accountBookId])
+  @@index([userId])
+}
+
+model FixedExpenseUser {
+  id             Int @id @default(autoincrement())
+  userId         Int
+  accountBookId  Int
+  fixedExpenseId Int
+  value          Int
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+
+  @@index([userId])
+  @@index([accountBookId])
+  @@index([fixedExpenseId])
+}
+
+model AccountBookInvitation {
+  id               Int              @id @default(autoincrement())
+  accountBookId    Int
+  inviterUserId    Int
+  inviteeUserId    Int
+  invitationStatus invitationStatus
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+
+  @@index([accountBookId])
+  @@index([inviterUserId])
+  @@index([inviteeUserId])
+}
