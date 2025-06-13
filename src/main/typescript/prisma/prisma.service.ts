@@ -4,8 +4,8 @@ import {
   OnModuleDestroy,
   OnModuleInit,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { PrismaClient } from '@prisma/client';
+import { TypedConfigService } from '../typed-config/typed-config.service';
 
 /**
  * Prisma service for write operations.
@@ -18,13 +18,13 @@ export class PrismaService
 {
   private readonly logger = new Logger(PrismaService.name);
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(private readonly configService: TypedConfigService) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     super({
       datasources: {
-        db: { url: configService.get<string>('DATABASE_WRITE_URL') },
+        db: { url: configService.databaseWriteUrl },
       },
-      ...(configService.getOrThrow<boolean>('LOG_PRISMA_QUERY') && {
+      ...(configService.logPrismaQuery && {
         log: ['query', 'info', 'warn', 'error'],
       }),
     });
@@ -60,13 +60,13 @@ export class PrismaReadService
 {
   private readonly logger = new Logger(PrismaReadService.name);
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(private readonly configService: TypedConfigService) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     super({
       datasources: {
-        db: { url: configService.get<string>('DATABASE_READ_URL') },
+        db: { url: configService.databaseReadUrl },
       },
-      ...(configService.getOrThrow<boolean>('LOG_PRISMA_QUERY') && {
+      ...(configService.logPrismaQuery && {
         log: ['query', 'info', 'warn', 'error'],
       }),
     });
