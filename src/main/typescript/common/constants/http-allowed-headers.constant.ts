@@ -1,0 +1,19 @@
+const ACCEPT_HEADER = 'Accept';
+const CONTENT_TYPE_HEADER = 'Content-Type';
+const X_CSRF_TOKEN_HEADER = 'X-CSRF-Token';
+const ACCEPT_VERSION_HEADER = 'Accept-Version';
+const CONTENT_LENGTH_HEADER = 'Content-Length';
+const CONTENT_MD5_HEADER = 'Content-MD5';
+const DATE_HEADER = 'Date';
+const AUTHORIZATION_HEADER = 'Authorization';
+
+export const ALLOWED_HEADERS = [
+  ACCEPT_HEADER,
+  ACCEPT_VERSION_HEADER,
+  CONTENT_LENGTH_HEADER,
+  CONTENT_MD5_HEADER,
+  CONTENT_TYPE_HEADER,
+  DATE_HEADER,
+  X_CSRF_TOKEN_HEADER,
+  AUTHORIZATION_HEADER,
+].join(', ');
