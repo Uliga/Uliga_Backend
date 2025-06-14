@@ -18,8 +18,8 @@ module.exports = {
     es2022: true,
   },
   rules: {
-    '@typescript-eslint/no-explicit-any': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/no-explicit-any': 'error',
+    '@typescript-eslint/explicit-module-boundary-types': 'error',
   },
   ignorePatterns: ['dist', 'node_modules', '.eslintrc.js'],
 };
