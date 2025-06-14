@@ -1,5 +1,6 @@
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { CORS_ORIGIN } from './common/constants/cors-origin.constant';
 import { ALLOWED_HEADERS } from './common/constants/http-allowed-headers.constant';
@@ -16,6 +17,8 @@ async function bootstrap() {
   const typedConfigService = app.get<TypedConfigService>(TypedConfigService);
 
   const port = typedConfigService.port;
+
+  app.use(helmet());
 
   app.enableCors({
     origin: CORS_ORIGIN,
