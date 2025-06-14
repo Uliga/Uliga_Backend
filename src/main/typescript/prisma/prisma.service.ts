@@ -19,7 +19,6 @@ export class PrismaService
   private readonly logger = new Logger(PrismaService.name);
 
   constructor(private readonly configService: TypedConfigService) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     super({
       datasources: {
         db: { url: configService.databaseWriteUrl },
@@ -34,7 +33,6 @@ export class PrismaService
    * Connect to the database on module initialization
    */
   async onModuleInit(): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     await this.$connect();
     this.logger.log('PrismaWriteService connected');
   }
@@ -43,7 +41,6 @@ export class PrismaService
    * Disconnect from the database on module destroy
    */
   async onModuleDestroy(): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     await this.$disconnect();
     this.logger.log('PrismaWriteService disconnected');
   }
@@ -61,7 +58,6 @@ export class PrismaReadService
   private readonly logger = new Logger(PrismaReadService.name);
 
   constructor(private readonly configService: TypedConfigService) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     super({
       datasources: {
         db: { url: configService.databaseReadUrl },
@@ -76,7 +72,6 @@ export class PrismaReadService
    * Connect to the read-replica on module initialization
    */
   async onModuleInit(): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     await this.$connect();
     this.logger.log('PrismaReadService connected');
   }
@@ -85,7 +80,6 @@ export class PrismaReadService
    * Disconnect from the read-replica on module destroy
    */
   async onModuleDestroy(): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     await this.$disconnect();
     this.logger.log('PrismaReadService disconnected');
   }

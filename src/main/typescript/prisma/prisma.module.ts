@@ -1,9 +1,7 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { PrismaReadService, PrismaService } from './prisma.service';
 
-/**
- * Module that provides separate Prisma write and read services.
- */
+@Global()
 @Module({
   providers: [PrismaService, PrismaReadService],
   exports: [PrismaService, PrismaReadService],

@@ -1,12 +1,36 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller, Get, Res, Version, VERSION_NEUTRAL } from '@nestjs/common';
+import { Response } from 'express';
+
+type ServerUptime = {
+  name: string;
+  uptime: number;
+};
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  @Get()
+  @Version('1')
+  getUptimeV1(): ServerUptime {
+    return {
+      name: 'uliga-api',
+      uptime: process.uptime(),
+    };
+  }
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Version('2')
+  getUptimeV2(): ServerUptime & { version: string; timestamp: string } {
+    return {
+      name: 'uliga-api',
+      uptime: process.uptime(),
+      version: '2.0',
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  @Get('favicon.ico')
+  @Version(VERSION_NEUTRAL)
+  getFavicon(@Res() response: Response): void {
+    response.status(204).end();
   }
 }
