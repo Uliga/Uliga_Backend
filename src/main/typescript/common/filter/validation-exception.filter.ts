@@ -17,7 +17,11 @@ export class ValidationExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response<HttpExceptionJsonResponse>>();
     const request = ctx.getRequest<AuthenticatedRequest>();
     const status = exception.getStatus();
-    const errorMessage = exception.message;
+    const exceptionResponse = exception.getResponse();
+    const errorMessage =
+      typeof exceptionResponse === 'object' && 'message' in exceptionResponse
+        ? (exceptionResponse.message as string)
+        : exception.message;
 
     const errorDetails: HttpExceptionJsonResponse = {
       statusCode: status,
