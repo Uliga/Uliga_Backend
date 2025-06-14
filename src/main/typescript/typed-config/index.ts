@@ -15,6 +15,7 @@ export interface EnvironmentVariables {
   REDIS_HOST: string;
   REDIS_PORT: number;
   LOG_PRISMA_QUERY: boolean;
+  JWT_PRIVATE_KEY_BASE64: string;
 }
 
 export const configValidationSchema = Joi.object({
@@ -38,6 +39,8 @@ export const configValidationSchema = Joi.object({
   // API_KEY: Joi.string().required(),
 
   LOG_PRISMA_QUERY: Joi.boolean().default(false),
+
+  JWT_PRIVATE_KEY_BASE64: Joi.string().required(),
 });
 
 export const validateConfig = (

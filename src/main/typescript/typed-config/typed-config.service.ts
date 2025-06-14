@@ -52,16 +52,7 @@ export class TypedConfigService {
     return this.nodeEnv === Environment.Test;
   }
 
-  get databaseConfig() {
-    return {
-      url: this.databaseUrl,
-    };
-  }
-
-  get redisConfig() {
-    return {
-      host: this.redisHost,
-      port: this.redisPort,
-    };
+  get jwtSecret(): string {
+    return this.configService.get('JWT_PRIVATE_KEY_BASE64');
   }
 }
