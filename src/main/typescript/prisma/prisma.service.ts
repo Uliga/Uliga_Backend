@@ -7,10 +7,6 @@ import {
 import { PrismaClient } from '@prisma/client';
 import { TypedConfigService } from '../typed-config/typed-config.service';
 
-/**
- * Prisma service for write operations.
- * Establishes connection on module init and disconnects on destroy.
- */
 @Injectable()
 export class PrismaService
   extends PrismaClient
@@ -29,27 +25,17 @@ export class PrismaService
     });
   }
 
-  /**
-   * Connect to the database on module initialization
-   */
   async onModuleInit(): Promise<void> {
     await this.$connect();
     this.logger.log('PrismaWriteService connected');
   }
 
-  /**
-   * Disconnect from the database on module destroy
-   */
   async onModuleDestroy(): Promise<void> {
     await this.$disconnect();
     this.logger.log('PrismaWriteService disconnected');
   }
 }
 
-/**
- * Prisma service for read operations (read-replica).
- * Uses a separate read-only database connection.
- */
 @Injectable()
 export class PrismaReadService
   extends PrismaClient
@@ -68,17 +54,11 @@ export class PrismaReadService
     });
   }
 
-  /**
-   * Connect to the read-replica on module initialization
-   */
   async onModuleInit(): Promise<void> {
     await this.$connect();
     this.logger.log('PrismaReadService connected');
   }
 
-  /**
-   * Disconnect from the read-replica on module destroy
-   */
   async onModuleDestroy(): Promise<void> {
     await this.$disconnect();
     this.logger.log('PrismaReadService disconnected');
