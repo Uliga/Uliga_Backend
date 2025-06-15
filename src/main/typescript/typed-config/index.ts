@@ -1,0 +1,73 @@
+import * as Joi from 'joi';
+
+export enum Environment {
+  Development = 'development',
+  Production = 'production',
+  Test = 'test',
+}
+
+export interface EnvironmentVariables {
+  NODE_ENV: Environment;
+  PORT: number;
+  DATABASE_URL: string;
+  DATABASE_WRITE_URL: string;
+  DATABASE_READ_URL: string;
+  REDIS_HOST: string;
+  REDIS_PORT: number;
+  LOG_PRISMA_QUERY: boolean;
+  JWT_PRIVATE_KEY_BASE64: string;
+  ACCESS_DURATION: string;
+  REFRESH_DURATION: string;
+  SESSION_SECRET: string;
+  SESSION_EXTENSION_DURATION: string;
+}
+
+export const configValidationSchema = Joi.object({
+  NODE_ENV: Joi.string()
+    .valid(...Object.values(Environment))
+    .default(Environment.Development),
+
+  PORT: Joi.number().port().default(3000),
+
+  DATABASE_URL: Joi.string().required(),
+  DATABASE_WRITE_URL: Joi.string().required(),
+  DATABASE_READ_URL: Joi.string().required(),
+
+  // JWT_SECRET: Joi.string().min(32).required(),
+
+  // JWT_EXPIRATION_TIME: Joi.number().positive().default(3600),
+
+  REDIS_HOST: Joi.string().required(),
+  REDIS_PORT: Joi.number().default(6379),
+
+  // API_KEY: Joi.string().required(),
+
+  LOG_PRISMA_QUERY: Joi.boolean().default(false),
+
+  JWT_PRIVATE_KEY_BASE64: Joi.string().required(),
+
+  ACCESS_DURATION: Joi.string().required(),
+  REFRESH_DURATION: Joi.string().required(),
+
+  SESSION_SECRET: Joi.string().required(),
+  SESSION_EXTENSION_DURATION: Joi.string().default('7d'),
+});
+
+export const validateConfig = (
+  config: Record<string, unknown>,
+): EnvironmentVariables => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const { error, value } = configValidationSchema.validate(config, {
+    allowUnknown: true,
+    abortEarly: false,
+  });
+
+  if (error) {
+    const errorMessages = error.details
+      .map((detail) => detail.message)
+      .join(', ');
+    throw new Error(`Configuration validation failed: ${errorMessages}`);
+  }
+
+  return value as EnvironmentVariables;
+};
