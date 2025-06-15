@@ -44,4 +44,6 @@ export class BaseUserDto implements User {
     description: 'updatedAt',
   })
   updatedAt!: Date;
+
+  profileImageUrl!: string | null;
 }

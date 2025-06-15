@@ -1,3 +1,4 @@
+import { User } from '@prisma/client';
 import { Request } from 'express';
 
 export interface HttpExceptionJsonResponse {
@@ -11,8 +12,5 @@ export interface HttpExceptionJsonResponse {
 }
 
 export interface AuthenticatedRequest extends Request {
-  user?: {
-    id: number;
-    email: string;
-  };
+  user: User;
 }

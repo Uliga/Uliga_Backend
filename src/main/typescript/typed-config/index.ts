@@ -16,6 +16,10 @@ export interface EnvironmentVariables {
   REDIS_PORT: number;
   LOG_PRISMA_QUERY: boolean;
   JWT_PRIVATE_KEY_BASE64: string;
+  ACCESS_DURATION: string;
+  REFRESH_DURATION: string;
+  SESSION_SECRET: string;
+  SESSION_EXTENSION_DURATION: string;
 }
 
 export const configValidationSchema = Joi.object({
@@ -41,6 +45,12 @@ export const configValidationSchema = Joi.object({
   LOG_PRISMA_QUERY: Joi.boolean().default(false),
 
   JWT_PRIVATE_KEY_BASE64: Joi.string().required(),
+
+  ACCESS_DURATION: Joi.string().required(),
+  REFRESH_DURATION: Joi.string().required(),
+
+  SESSION_SECRET: Joi.string().required(),
+  SESSION_EXTENSION_DURATION: Joi.string().default('7d'),
 });
 
 export const validateConfig = (

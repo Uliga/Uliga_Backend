@@ -55,4 +55,20 @@ export class TypedConfigService {
   get jwtSecret(): string {
     return this.configService.get('JWT_PRIVATE_KEY_BASE64');
   }
+
+  get accessDuration(): string {
+    return this.configService.get('ACCESS_DURATION');
+  }
+
+  get refreshDuration(): string {
+    return this.configService.get('REFRESH_DURATION');
+  }
+
+  get sessionSecret(): string {
+    return this.configService.get('SESSION_SECRET');
+  }
+
+  get sessionExtensionDuration(): string {
+    return this.configService.get('SESSION_EXTENSION_DURATION');
+  }
 }

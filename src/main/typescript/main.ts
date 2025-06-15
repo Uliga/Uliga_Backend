@@ -1,5 +1,6 @@
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { CORS_ORIGIN } from './common/constants/cors-origin.constant';
@@ -19,6 +20,7 @@ async function bootstrap() {
   const port = typedConfigService.port;
 
   app.use(helmet());
+  app.use(cookieParser());
 
   app.enableCors({
     origin: CORS_ORIGIN,
