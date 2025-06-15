@@ -23,7 +23,10 @@ enum Authority {
 
 enum UserLoginType {
   EMAIL
+  GOOGLE
   KAKAO
+  GITHUB
+  OIDC
 }
 
 enum Frequency {
@@ -45,9 +48,19 @@ model AccountBook {
   name      String  @db.VarChar(255)
   aliasName String  @db.VarChar(255)
 
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+  accountBookUsers       AccountBookUser[]
+  accountBookInvitations AccountBookInvitation[]
+  budgets                Budget[]
+  expenses               Expense[]
+  expenseCategories      ExpenseCategory[]
+  fixedExpenses          FixedExpense[]
+  fixedRevenues          FixedRevenue[]
+  revenueCategories      RevenueCategory[]
+
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt DateTime  @default(now()) @updatedAt @db.Timestamp(0)
+  Revenue   Revenue[]
 }
 
 model Budget {
@@ -62,6 +75,9 @@ model Budget {
   createdAt DateTime @default(now()) @db.Timestamp(0)
   updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
 
+  accountBook     AccountBook     @relation(fields: [accountBookId], references: [id])
+  expenseCategory ExpenseCategory @relation(fields: [expenseCategoryId], references: [id])
+
   @@index([expenseCategoryId])
   @@index([accountBookId])
 }
@@ -71,9 +87,11 @@ model RevenueCategory {
   name          String @db.VarChar(255)
   accountBookId Int
 
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime    @default(now()) @updatedAt @db.Timestamp(0)
+  accountBook AccountBook @relation(fields: [accountBookId], references: [id])
+  Revenue     Revenue[]
 
   @@index([accountBookId])
 }
@@ -83,9 +101,12 @@ model ExpenseCategory {
   name          String @db.VarChar(255)
   accountBookId Int
 
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime    @default(now()) @updatedAt @db.Timestamp(0)
+  accountBook AccountBook @relation(fields: [accountBookId], references: [id])
+  budgets     Budget[]
+  expenses    Expense[]
 
   @@index([accountBookId])
 }
@@ -107,6 +128,10 @@ model Revenue {
   createdAt DateTime @default(now()) @db.Timestamp(0)
   updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
 
+  user            User            @relation(fields: [userId], references: [id])
+  accountBook     AccountBook     @relation(fields: [accountBookId], references: [id])
+  revenueCategory RevenueCategory @relation(fields: [revenueCategoryId], references: [id])
+
   @@index([accountBookId])
   @@index([userId])
   @@index([revenueCategoryId])
@@ -125,9 +150,12 @@ model Expense {
   month             String   @db.VarChar(255)
   week              String   @db.VarChar(255)
 
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+  isActive        Boolean         @default(true)
+  createdAt       DateTime        @default(now()) @db.Timestamp(0)
+  updatedAt       DateTime        @default(now()) @updatedAt @db.Timestamp(0)
+  accountBook     AccountBook     @relation(fields: [accountBookId], references: [id])
+  user            User            @relation(fields: [userId], references: [id])
+  expenseCategory ExpenseCategory @relation(fields: [expenseCategoryId], references: [id])
 
   @@index([accountBookId])
   @@index([userId])
@@ -135,18 +163,33 @@ model Expense {
 }
 
 model User {
-  id            Int           @id @default(autoincrement())
-  email         String        @db.VarChar(255)
-  password      String        @db.VarChar(255)
-  appPassword   String        @db.VarChar(255)
-  authority     Authority     @default(USER)
-  userLoginType UserLoginType
-  userName      String        @db.VarChar(255)
-  nickName      String        @db.VarChar(255)
+  id              Int           @id @default(autoincrement())
+  email           String        @db.VarChar(255)
+  password        String?       @db.VarChar(255)
+  appPassword     String?       @db.VarChar(255)
+  authority       Authority     @default(USER)
+  userLoginType   UserLoginType
+  userName        String        @db.VarChar(255)
+  nickName        String        @db.VarChar(255)
+  profileImageUrl String?       @db.VarChar(500)
+
+  // OAuth/OIDC fields
+  oauthProviders OAuthProvider[]
+
+  sessions            UserSession[]
+  revenues            Revenue[]
+  expenses            Expense[]
+  fixedRevenues       FixedRevenue[]
+  fixedExpenses       FixedExpense[]
+  fixedExpenseUsers   FixedExpenseUser[]
+  sentInvitations     AccountBookInvitation[] @relation("InviterUser")
+  receivedInvitations AccountBookInvitation[] @relation("InviteeUser")
 
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now()) @db.Timestamp(0)
   updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+
+  @@unique([email, isActive])
 }
 
 model FixedRevenue {
@@ -158,9 +201,11 @@ model FixedRevenue {
   userId        Int
   accountBookId Int
 
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime    @default(now()) @updatedAt @db.Timestamp(0)
+  user        User        @relation(fields: [userId], references: [id])
+  accountBook AccountBook @relation(fields: [accountBookId], references: [id])
 
   @@index([userId])
   @@index([accountBookId])
@@ -175,9 +220,12 @@ model FixedExpense {
   userId        Int
   accountBookId Int
 
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+  isActive         Boolean            @default(true)
+  createdAt        DateTime           @default(now()) @db.Timestamp(0)
+  updatedAt        DateTime           @default(now()) @updatedAt @db.Timestamp(0)
+  accountBook      AccountBook        @relation(fields: [accountBookId], references: [id])
+  user             User               @relation(fields: [userId], references: [id])
+  FixedExpenseUser FixedExpenseUser[]
 
   @@index([userId])
   @@index([accountBookId])
@@ -191,9 +239,10 @@ model AccountBookUser {
   getNotification      Boolean              @default(false)
   accountBookAuthority AccountBookAuthority
 
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime    @default(now()) @updatedAt @db.Timestamp(0)
+  accountBook AccountBook @relation(fields: [accountBookId], references: [id])
 
   @@index([accountBookId])
   @@index([userId])
@@ -210,6 +259,9 @@ model FixedExpenseUser {
   createdAt DateTime @default(now()) @db.Timestamp(0)
   updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
 
+  user         User         @relation(fields: [userId], references: [id])
+  fixedExpense FixedExpense @relation(fields: [fixedExpenseId], references: [id])
+
   @@index([userId])
   @@index([accountBookId])
   @@index([fixedExpenseId])
@@ -222,11 +274,52 @@ model AccountBookInvitation {
   inviteeUserId    Int
   invitationStatus invitationStatus
 
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now()) @db.Timestamp(0)
+  updatedAt   DateTime    @default(now()) @updatedAt @db.Timestamp(0)
+  accountBook AccountBook @relation(fields: [accountBookId], references: [id])
+  inviter     User        @relation("InviterUser", fields: [inviterUserId], references: [id])
+  invitee     User        @relation("InviteeUser", fields: [inviteeUserId], references: [id])
 
   @@index([accountBookId])
   @@index([inviterUserId])
   @@index([inviteeUserId])
+}
+
+model UserSession {
+  id           String   @id @default(uuid())
+  userId       Int
+  refreshToken String   @db.Text
+  userAgent    String?  @db.VarChar(500)
+  ipAddress    String?  @db.VarChar(45)
+  expiresAt    DateTime @db.Timestamp(0)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model OAuthProvider {
+  id           Int           @id @default(autoincrement())
+  userId       Int
+  provider     UserLoginType
+  providerId   String        @db.VarChar(255)
+  accessToken  String?       @db.Text
+  refreshToken String?       @db.Text
+  idToken      String?       @db.Text
+  metadata     String?       @db.Text // JSON field for additional provider data
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamp(0)
+
+  @@unique([provider, providerId])
+  @@index([userId])
 }
